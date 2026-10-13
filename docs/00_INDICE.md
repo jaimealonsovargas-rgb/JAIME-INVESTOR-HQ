@@ -12,3 +12,5 @@
 | P7 | 16_TESTS_ACEPTACION, 17_AUDITORIA_PREVIA, 18_MODELOS_Y_TOKENS |
 
 Siempre: AGENTS.md, STATUS.md y tasks/Px_*.md correspondiente. **No cargar todos los documentos a la vez.**
+
+Evidencias P0: [ARQUITECTURA_P0](ARQUITECTURA_P0.md), [LICENCIAS_P0](LICENCIAS_P0.md) y [STATUS](../STATUS.md). Arranque reproducible: [README](../README.md).

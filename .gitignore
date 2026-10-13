@@ -8,6 +8,9 @@
 *.pfx
 # Python
 .venv/
+.tools/
+.ruff_cache/
+*.egg-info/
 __pycache__/
 .pytest_cache/
 *.py[cod]
@@ -17,6 +20,7 @@ dist/
 build/
 coverage/
 .playwright/
+.playwright-cli/
 # Base de datos y logs
 *.db
 *.sqlite
@@ -28,3 +32,6 @@ coverage/
 .DS_Store
 Thumbs.db
 .vscode/settings.json
+
+/output/
+/data/

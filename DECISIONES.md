@@ -8,3 +8,9 @@
 - D007: Las imágenes Runway son referencias, no GLB, y deben exportarse antes de uso offline.
 - D008: La calidad visual 3D es criterio de aceptación de P1, no deuda técnica aplazada.
 - D009: En P6, una orden de estado UNKNOWN nunca se reenvía sin conciliación.
+- D010 (P0): Monorepo frontend/ y backend/, scripts Python multiplataforma con validación real en Windows; uv 0.13.0 y npm ci con lockfiles. Python 3.14.x por ser el entorno disponible y probado. No instalar infraestructura ni servicios.
+- D011 (P0): La página temporal es una comprobación técnica explícita de P0. No crea una oficina simplificada ni sustituye la entrada 3D exigida para P1. R3F/Drei/Three, Zustand, Tailwind y gráficos se incorporarán al desarrollar sus funciones; no anticipar su stack de assets.
+- D012 (P0): Denegación incondicional de órdenes, sin transporte HTTP de ejecución. Settings inmutables rechazan live; guard separado valida bases PAPER/DEMO exactas. Este guard no sustituye la futura verificación de cada petición/redirect, preflight, kill switch e idempotencia de P6.
+- D013 (P0): SQLite WAL con Alembic explícito y sin seed. Registro con clave UUID y unicidad symbol/venue/currency. Payload Pydantic versionado por código, Decimal serializado como texto. P2 ampliará el catálogo y normalizará capacidades según necesidades reales.
+- D014 (P0): Ningún saldo se crea hasta P3. MASTER, ALPACA_PAPER y T212_DEMO son ámbitos distintos de contrato; no hay suma de cuentas ni NAV provisional.
+- D015 (P0): API solo local, hosts y CORS restringidos, access log desactivado. OpenAPI local sin interfaces que descarguen JavaScript de CDNs. Frontend no expone variables de entorno (envPrefix vacío).
