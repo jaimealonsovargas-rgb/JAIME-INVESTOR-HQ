@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+<rect width="1200" height="900" fill="#071019"/>
+<text x="70" y="72" font-size="42" font-family="Arial" font-weight="bold" fill="#f4eadb">JAIME INVESTOR HQ</text>
+<text x="70" y="112" font-size="21" font-family="Arial" fill="#b9ad97">Blueprint de circulación · planta única · aprox. 34 × 28 m</text>
+<text x="1090" y="114" font-size="23" font-family="Arial" fill="#e0b57d">N ↑</text>
+<g fill="#152431" stroke="#b58a57" stroke-width="3">
+<rect x="70" y="160" width="330" height="175" rx="13"/><rect x="435" y="160" width="330" height="175" rx="13"/><rect x="800" y="160" width="330" height="175" rx="13"/>
+<rect x="70" y="362" width="330" height="175" rx="13"/><rect x="435" y="362" width="330" height="175" rx="13"/><rect x="800" y="362" width="330" height="175" rx="13"/>
+<rect x="70" y="564" width="330" height="175" rx="13"/><rect x="435" y="564" width="330" height="175" rx="13"/><rect x="800" y="564" width="330" height="175" rx="13"/>
+</g>
+<g font-family="Arial" font-size="26" font-weight="bold" fill="#f3e5ce" text-anchor="middle">
+<text x="235" y="235">RESEARCH</text><text x="600" y="222">COMITÉ DE</text><text x="600" y="256">INVERSIÓN</text><text x="965" y="235">QUANT LAB</text>
+<text x="235" y="438">RIESGOS</text><text x="600" y="438">TRADING FLOOR</text><text x="965" y="438">EJECUCIÓN</text>
+<text x="235" y="640">PERFORMANCE</text><text x="600" y="640">RECEPCIÓN</text><text x="965" y="640">SISTEMAS</text>
+</g>
+<g font-family="Arial" font-size="17" fill="#8eb8c9" text-anchor="middle">
+<text x="235" y="280">Tesis · fundamental · crédito</text><text x="600" y="290">Votación · crítica · actas</text><text x="965" y="280">Señales · backtest</text>
+<text x="235" y="482">Límites · veto</text><text x="600" y="482">Posiciones · mercados</text><text x="965" y="482">Órdenes · fills</text>
+<text x="235" y="685">NAV · atribución</text><text x="600" y="685">Spawn del avatar</text><text x="965" y="685">APIs · calidad · jobs</text>
+</g>
+<text x="70" y="804" font-size="19" font-family="Arial" fill="#b9ad97">Tabiques de cristal · pasillos abiertos · pantallas clicables · navegación 3D</text>
+<text x="70" y="842" font-size="16" font-family="Arial" fill="#82909b">Esquema funcional, no render fotorrealista ni plano constructivo.</text>
+</svg>

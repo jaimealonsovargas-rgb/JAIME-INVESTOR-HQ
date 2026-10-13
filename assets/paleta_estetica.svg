@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430">
+<rect width="1200" height="430" fill="#08131d"/>
+<text x="54" y="64" font-size="38" fill="#f5eee4" font-family="Arial" font-weight="bold">Dirección artística · JAIME INVESTOR HQ</text>
+<g font-family="Arial" font-size="18" fill="#f5eee4" text-anchor="middle">
+<rect x="55" y="110" width="205" height="180" rx="10" fill="#0b1624"/><text x="157" y="325">Azul noche</text><text x="157" y="355">#0B1624</text>
+<rect x="275" y="110" width="205" height="180" rx="10" fill="#39271e"/><text x="377" y="325">Nogal oscuro</text><text x="377" y="355">#39271E</text>
+<rect x="495" y="110" width="205" height="180" rx="10" fill="#1e252b"/><text x="597" y="325">Piedra negra</text><text x="597" y="355">#1E252B</text>
+<rect x="715" y="110" width="205" height="180" rx="10" fill="#b9915e"/><text x="817" y="325">Bronce cálido</text><text x="817" y="355">#B9915E</text>
+<rect x="935" y="110" width="205" height="180" rx="10" fill="#376477"/><text x="1037" y="325">Monitores</text><text x="1037" y="355">#376477</text>
+</g>
+</svg>

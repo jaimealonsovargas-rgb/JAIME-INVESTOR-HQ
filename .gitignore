@@ -1,0 +1,30 @@
+# Secretos y entorno
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+# Node/build
+node_modules/
+dist/
+build/
+coverage/
+.playwright/
+# Base de datos y logs
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+*.log
+# SO/editor
+.DS_Store
+Thumbs.db
+.vscode/settings.json
