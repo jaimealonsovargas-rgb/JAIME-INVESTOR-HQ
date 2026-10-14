@@ -13,6 +13,8 @@
 
 **Encargo vigente (2026-10-14):** [correcciones P1 + P2](PLAN_EJECUCION_P1_P2.md) y [checkpoints P2](PLAN_P2_CHECKPOINTS.md). Estos documentos sustituyen controles antiguos incompatibles y el STOP histórico antes de P2.
 
+**P2 cobertura ampliada:** [catálogo de 34 fuentes candidatas](P2_CATALOGO_MAXIMO_FUENTES.md), clasificado por clave, tipo, licencia, prioridad y pruebas.
+
 Siempre: AGENTS.md, STATUS.md y tasks/Px_*.md correspondiente. **No cargar todos los documentos a la vez.**
 
 Evidencias P0: [ARQUITECTURA_P0](ARQUITECTURA_P0.md), [LICENCIAS_P0](LICENCIAS_P0.md) y [STATUS](../STATUS.md). Arranque reproducible: [README](../README.md).

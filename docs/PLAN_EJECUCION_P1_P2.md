@@ -23,7 +23,9 @@
 
 ## 3. P2: checkpoints obligatorios
 
-Seguir [PLAN_P2_CHECKPOINTS.md](PLAN_P2_CHECKPOINTS.md) sin rediseñar P0: **P2.0** preflight/permisos → **P2.1** registry/capabilities → **P2.2** observaciones/cache/calidad/cuotas → **P2.3** SEC/ECB/Treasury → **P2.4** Alpaca Paper/T212 Demo/Twelve Data/FRED GET-only opcionales → **P2.5** selección/API/Sistemas → **P2.6** QA. Sin claves, implementar con mocks HTTP y estado NO DISPONIBLE; no inventar conectividad ni derechos de visualización. Cero órdenes.
+Seguir [PLAN_P2_CHECKPOINTS.md](PLAN_P2_CHECKPOINTS.md) sin rediseñar P0: **P2.0** preflight/permisos → **P2.1** registry/capabilities → **P2.2** observaciones/cache/calidad/cuotas → **P2.3** fuentes públicas A en tres sublotes (19 candidatas) → **P2.4** fuentes con clave B en tres sublotes (15 candidatas, algunas condicionadas) → **P2.5** selección/API/Sistemas → **P2.6** QA. Sin claves, implementar con mocks HTTP y estado NO DISPONIBLE; no inventar conectividad ni derechos de visualización. Cero órdenes.
+
+**Ampliación de alcance pedida por el usuario:** máxima cobertura de datos a 0 EUR. Leer [P2_CATALOGO_MAXIMO_FUENTES.md](P2_CATALOGO_MAXIMO_FUENTES.md) **al entrar en P2.0**, no antes. Priorizar fuentes públicas sin clave y habilitarlas bajo demanda tras comprobar derechos; no pedir claves para todas. Las 34 fuentes son **candidatas**, no promesa de 34 conexiones. Continuar si un proveedor no está disponible; registrar estado y evidencia. Solo OpenFIGI/BLS v2 pueden usar POST estadístico read-only con allowlist estricta; **nunca POST a bróker ni órdenes**.
 
 ## 4. Gates, salida y economía de tokens
 

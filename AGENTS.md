@@ -24,6 +24,13 @@
 - Recepción sin sofás; cristales sin bloqueo de paso; Performance y Sistemas redistribuidos; mejor caminar/iluminación/calidad sin degradación grave Intel.
 - Excepción de alcance expresamente autorizada: **corrección final P1 + inicio P2 en una ejecución con gates separados**, siguiendo `docs/PLAN_EJECUCION_P1_P2.md` y `docs/PLAN_P2_CHECKPOINTS.md`. STOP antes de P3. Preservar el código LOCAL.
 
+## P2 — conectividad máxima viable (petición posterior del usuario)
+
+- **No limitar P2 a siete fuentes.** Seguir el catálogo [docs/P2_CATALOGO_MAXIMO_FUENTES.md](docs/P2_CATALOGO_MAXIMO_FUENTES.md): **34 candidatas** (19 públicas, 15 con registro o gratuitas condicionadas), más fuentes oficiales especializadas.
+- Priorizar integraciones públicas sin clave, **activación bajo demanda** con cache/cuotas y derechos verificados. Preparar conectores opcionales con clave, sin registrarse ni comprar por el usuario. Diferenciar **candidata / implementada / conectada real / utilizable**. No declarar conexión solo por mock.
+- Si un proveedor falla, registrar motivo y continuar con otros. No crear decenas de stubs. Reutilizar parser/HTTP/SDMX compartidos.
+- Excepción muy limitada de **POST estadístico de solo lectura** para OpenFIGI mapping y BLS v2, únicamente host+ruta+verbo allowlisted y testeados; **nunca POST a bróker, exchange, cuentas, órdenes ni trading**. Mantener POST /api/orders = 403.
+
 ## Protocolo de ahorro de tokens
 - Leer docs/00_INDICE.md y el ticket activo; abrir **solo los documentos relevantes**.
 - Trabajar una fase o sub-tarea acotada por turno, salvo el encargo P1 final + P2 expresamente autorizado con checkpoints; no cargar todo el repositorio sin necesidad.

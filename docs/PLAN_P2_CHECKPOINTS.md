@@ -4,11 +4,21 @@
 
 ## 0. Resultado y límites
 
-P2 construye una **tubería de datos reales verificables**, NO cartera, saldo de 10.000 EUR, trading, NAV, P&L, señales, agentes ni jobs. Flujo: proveedor GET-only → validación de respuesta → normalización y procedencia → cache/cuotas → selección por derechos y frescura → API local → Sistemas/Data Quality. Si no hay fuente, licencia, credencial o permiso: **NO DISPONIBLE con motivo**, nunca número inventado.
+P2 construye una **tubería de datos reales verificables**, NO cartera, saldo de 10.000 EUR, trading, NAV, P&L, señales, agentes ni jobs. Flujo: proveedor de consulta read-only (GET por defecto; solo dos POST estadísticos de consulta con allowlist estricta) → validación de respuesta → normalización y procedencia → cache/cuotas → selección por derechos y frescura → API local → Sistemas/Data Quality. Si no hay fuente, licencia, credencial o permiso: **NO DISPONIBLE con motivo**, nunca número inventado.
 
 **Backend remoto publicado P0, no necesariamente LOCAL:** backend/app/contracts.py ya define Instrument, ProviderCapability, Quote y ProviderStatus (status literal NO DISPONIBLE); backend/app/providers.py devuelve UnavailableProvider; backend/app/database.py tiene InstrumentRecord JSON y revisión 0001_instruments; backend/app/main.py ofrece GET /health, /api/providers/status, /api/instruments y POST /api/orders denegado. frontend/src/api.ts exige phase=P0, trading_mode=PAPER_ONLY, orders_enabled=false. **Extender, no reemplazar ni romper P0; la versión LOCAL prevalece.**
 
 Distinguir siempre: (a) cotización bursátil market_quote, (b) fundamental_fact SEC, (c) macro_series FRED, (d) fx_reference ECB, (e) yield_curve Treasury, (f) metadata de instrumento. Un fixing ECB NO es FX ejecutable; curva Treasury NO es cotización de un bono; IEX NO es SIP consolidado. Los datos demo de pruebas nunca entran en la DB de usuario.
+
+## Ampliación prioritaria: **34 fuentes candidatas, máxima conectividad real**
+
+**Petición posterior del usuario:** conectar el **máximo posible** de fuentes gratuitas y legales, no solo los siete proveedores originales. **Catálogo y plan operativo vinculantes:** [P2_CATALOGO_MAXIMO_FUENTES.md](P2_CATALOGO_MAXIMO_FUENTES.md). Incluye **19 candidatas públicas sin clave o consulta pública** y **15 con registro/key gratis o gratuidad condicionada**, más investigación CNMV, BoE, Fed, IR y mercados restringidos. **No afirmar 34 conexiones**: distinguir candidata, implementada, conectada realmente y utilizable con derechos.
+
+**Regla de prioridad:** construir núcleo compartido, después **P2.3a España/Europa** (ECB, BdE, INE, Eurostat, OECD), **P2.3b mundo/US** (World Bank, BIS, Treasury, SEC, BLS v1, IMF), **P2.3c cripto/identidad/noticias** (Kraken, Binance data-only, Coinbase public, CoinPaprika, CoinGecko Public, OpenFIGI, GDELT, ESMA selectivo); después **P2.4a claves macro** (FRED, BEA, BLS v2, EIA, Alpha Vantage, CoinGecko Demo, OpenFIGI key), **P2.4b broker/data** (Alpaca, T212 Demo, Twelve), **P2.4c free tier a verificar** (Finnhub, FMP, Massive, Tiingo, Nasdaq Data Link). **No crear stubs vacíos para inflar cobertura.**
+
+**Conectividad:** las fuentes públicas **sin clave y con uso legal comprobado** se consultan automáticamente **bajo demanda** al abrir la vista correspondiente, con cache/cuota y botón desactivar; no 34 requests al arranque. SEC requiere contacto real para User-Agent. Fuentes con clave permanecen NO_CREDENTIALS hasta configuración local. Registrar **un smoke test HTTP real** por proveedor si el entorno y términos lo permiten, con hora/resultado, o NOT_VERIFIED si no se puede. Si un proveedor falla, **continuar con el siguiente**; bloquear solo el conector afectado. No sacrificar P1 ni seguridad.
+
+**Excepción técnica limitada:** OpenFIGI `POST /v3/mapping` y BLS v2 `POST /publicAPI/v2/timeseries/data/` son **consultas read-only** documentadas; permitirlas **solo** con allowlist exacta de host/ruta/verbo, payload acotado y tests. Ningún POST/PUT/PATCH/DELETE hacia brókeres/exchanges, cuentas, transferencias ni órdenes. `POST /api/orders` local sigue 403. Si la separación no es segura, dejar estas excepciones pendientes.
 
 ## 1. Secuencia de checkpoints y gates
 
@@ -17,8 +27,8 @@ Distinguir siempre: (a) cotización bursátil market_quote, (b) fundamental_fact
 | **P2.0** Preflight y derechos | Inspección Git/local, matriz de proveedores, licencias, endpoints, límites, claves, arquitectura | Sin cambios destructivos ni accesos no autorizados |
 | **P2.1** Instrumentos | Registry existente ampliado, alias de proveedores, capabilities independientes, migración Alembic | Identidad única, migración conservadora y tests |
 | **P2.2** Observaciones | Contratos Decimal/UTC, fuente, feed, derechos, cache, TTL, stale, cuotas, errores | Sin números huérfanos ni cuotas ignoradas |
-| **P2.3** Fuentes oficiales | SEC EDGAR, ECB y US Treasury GET-only con parsers/fixtures y opt-in de red | Fuentes etiquetadas; sin inventar precios |
-| **P2.4** Proveedores opcionales | Alpaca PAPER/IEX, Trading 212 DEMO, Twelve Data Basic, FRED; GET-only, mocks sin claves | Ningún live host ni secreto filtrado |
+| **P2.3** Fuentes oficiales | 19 fuentes públicas A en sublotes P2.3a/b/c (España/Europa, macro global/US, cripto/identidad/noticias), según catálogo; parsers/fixtures y smoke tests legales | Fuentes etiquetadas; sin inventar precios |
+| **P2.4** Proveedores opcionales | 15 candidatas B por sublotes P2.4a/b/c; claves opcionales y free tier comprobado, no stubs | Ningún live host ni secreto filtrado |
 | **P2.5** Orquestación/UI | Selección de observación por derechos/calidad; API tipada; panel Sistemas real | No romper oficina 3D ni inventar cartera |
 | **P2.6** QA y cierre | Tests offline, integración, seguridad P0, auditoría, evidencia y STATUS | No declarar verificado lo que no se comprobó |
 
@@ -61,13 +71,13 @@ Validación: UTC aware, ISO currency, no NaN/Inf, no precio negativo/cero donde 
 
 **Cache:** clave provider+feed+instrument/series+parámetros+rights, TTL configurable **por feed y tipo**, invalidación y límite de tamaño, no cachear contenido sin derechos; datos stale solo etiquetados histórico y **no elegibles como precio de ejecución**. Cache no convierte IEX en SIP ni retrasado en realtime.
 
-**Rate limits:** presupuesto por proveedor/endpoint, token bucket o ventana conservadora, `Retry-After` y headers oficiales, 429→RATE_LIMITED, reintentos GET limitados con jitter, circuit breaker ante fallos repetidos. Nada de polling masivo por panel/NPC. HTTP exclusivamente backend, GET, HTTPS y hosts exactos allowlisted; redirects fuera de allowlist bloqueados, timeout y límite de tamaño, sin SSRF.
+**Rate limits:** presupuesto por proveedor/endpoint, token bucket o ventana conservadora, `Retry-After` y headers oficiales, 429→RATE_LIMITED, reintentos GET limitados con jitter, circuit breaker ante fallos repetidos. Nada de polling masivo por panel/NPC. HTTP exclusivamente backend, GET por defecto (excepciones read-only POST solo OpenFIGI/BLS v2 según catálogo), HTTPS y hosts/rutas exactos allowlisted; redirects fuera de allowlist bloqueados, timeout y límite de tamaño, sin SSRF.
 
 **Estados tipados:** AVAILABLE_VERIFIED, DELAYED, STALE, NO_DATA, NO_CREDENTIALS, AUTH_FAILED, RATE_LIMITED, RIGHTS_RESTRICTED, OFFLINE, TIMEOUT, INVALID_PAYLOAD, ERROR, NOT_IMPLEMENTED. Exponer estado y motivo en español; no declarar AVAILABLE por existir URL.
 
 **Gate:** fixtures HTTP mock, Decimal/UTC, bid-ask, stale, cache hit/miss/expiry, 401/403/429/500/timeout, reloj simulado, cuota, no fuga de headers privados.
 
-## 5. P2.3 — fuentes oficiales gratuitas
+## 5. P2.3 — fuentes oficiales gratuitas **y otras públicas sin clave (19 candidatas A)**
 
 | Fuente | Adaptador read-only y tratamiento | Restricciones |
 |---|---|---|
@@ -77,11 +87,13 @@ Validación: UTC aware, ISO currency, no NaN/Inf, no precio negativo/cero donde 
 
 Fuentes oficiales: https://www.sec.gov/search-filings/edgar-application-programming-interfaces ; https://www.sec.gov/search-filings/edgar-search-assistance/accessing-edgar-data ; https://data.ecb.europa.eu/help/api/data ; https://data.ecb.europa.eu/help/api/content-negotiation ; https://home.treasury.gov/resource-center/data-chart-center/interest-rates .
 
+**Ampliación obligatoria P2.3:** no detenerse en estas tres. Seguir el catálogo: P2.3a ECB, Banco de España, INE, Eurostat, OECD; P2.3b World Bank, BIS, Treasury, SEC, BLS v1, IMF; P2.3c Kraken, Binance data-only, Coinbase Public, CoinPaprika, CoinGecko Public, GDELT, OpenFIGI y ESMA FIRDS selectivo. Aplicar gate por proveedor: parser + test + smoke test real cuando sea posible, registro de derechos y motivo si no. No instalar 19 SDKs ni descargar bases gigantes. Si un endpoint requiere clave/licencia no verificada, marcar NO DISPONIBLE y continuar.
+
 **Implementar parsers con fixtures etiquetados y tests sin red**. Solo ejecutar smoke tests de red pública si opt-in y condiciones comprobadas; registrar resultado, hora y fuente. No inventar contacto SEC ni afirmar conectividad sin llamada real. Revisar derechos de almacenamiento/visualización de cada fuente antes de persistir valores.
 
 **Gate:** CIK, unidades XBRL, ECB FX reference, Treasury tenor/fecha/serie, 304 y errores, formato inválido, no confusión de instrumentos.
 
-## 6. P2.4 — proveedores gratuitos opcionales, SOLO GET
+## 6. P2.4 — proveedores gratuitos opcionales y free tiers (15 candidatas B)
 
 | Proveedor | Hechos de documentación oficial y decisión |
 |---|---|
@@ -92,6 +104,8 @@ Fuentes oficiales: https://www.sec.gov/search-filings/edgar-application-programm
 
 Fuentes: https://docs.alpaca.markets/us/docs/about-market-data-api ; https://docs.alpaca.markets/us/docs/market-data-faq ; https://docs.trading212.com/api/positions ; https://docs.trading212.com/api/accounts ; https://twelvedata.com/pricing ; https://support.twelvedata.com/en/articles/5615854-credits ; https://support.twelvedata.com/en/articles/5713553-control-over-api-usage ; https://fred.stlouisfed.org/docs/api/api_key.html .
 
+**Ampliación obligatoria P2.4:** P2.4a FRED, BEA, BLS v2, EIA, Alpha Vantage, CoinGecko Demo, OpenFIGI key; P2.4b Alpaca, Trading 212 Demo, Twelve Data; P2.4c Finnhub, FMP, Massive/Polygon, Tiingo, Nasdaq Data Link **solo con endpoint gratuito y términos verificados**. No gastar tokens creando adaptadores vacíos para planes de pago. Sin claves, tests y estado NO_CREDENTIALS. Las excepciones POST de datos no se aplican a ningún bróker.
+
 **No se ha verificado** cuenta, residencia, credenciales, permiso de API, derechos de display ni límites efectivos del usuario. Crear adaptadores con HTTP mock, sin conectarlos realmente si falta autorización/clave. P0 paper-host allowlist sigue estricta; data-host allowlist separada y GET-only.
 
 **Gate:** auth en backend, no claves en frontend/logs, IEX vs SIP, paginación T212 sin host live, 429 y headers, cuotas, derechos, sin métodos de órdenes.
@@ -101,7 +115,7 @@ Fuentes: https://docs.alpaca.markets/us/docs/about-market-data-api ; https://doc
 - Servicio de selección: usar solo feeds con capability comprobada, instrumento+venue+moneda coincidentes, clase de dato correcta, derechos suficientes y frescura adecuada; registrar `selection_reason`. Si ninguno: NO_DATA / STALE / RIGHTS_RESTRICTED, no estimar ni hacer fallback silencioso.
 - Conservar GET /api/instruments y GET /api/providers/status; evolucionar ProviderStatus (actual literal NO DISPONIBLE) sin romper validadores. GET /health sigue `PAPER_ONLY` y `orders_enabled=false`. **No cambiar phase=P0 a P2 unilateralmente**, frontend lo valida de forma estricta; añadir campo opcional data_phase o endpoint separado, con tests de compatibilidad.
 - Si se añaden GET /api/quotes, /api/data/series o /api/data/quality, respuesta Pydantic/TS validada con proveedor, feed, hora, unidad/divisa, retraso, calidad y derechos; **si display no autorizado, no incluir valor en payload visible**.
-- Panel Sistemas/Data Quality: proveedor, estado real, cuota/latencia solo si medida, último check, razón, feed, licencia, stale, derechos. Opcional ficha de instrumento con metadatos P2 reales en Research/Trading, sin habilitar P3/P4/P6. No crear dashboard inicial ni activar NPC IA.
+- Panel Sistemas/Data Quality: **todos los candidatos con contadores separados Candidatos / Implementados / Conectados reales / Utilizables**, filtros por activo/país/tipo; proveedor, estado real, cuota/latencia solo si medida, último check, razón, feed, licencia, stale, derechos. Opcional ficha de instrumento con metadatos P2 reales en Research/Trading, sin habilitar P3/P4/P6. No crear dashboard inicial ni activar NPC IA.
 - Deduplicación y refetch controlado con TanStack Query; no un poller por monitor o NPC; backend offline no rompe oficina 3D.
 
 **Gate:** panel real con respuestas tipadas, no datos inventados, derechos/latencia/fecha honestos, P1 3D estable, modal accesible y tests de frontend.
@@ -111,7 +125,7 @@ Fuentes: https://docs.alpaca.markets/us/docs/about-market-data-api ; https://doc
 1. Alembic incremental desde 0001 con instrumentos existentes y DB vacía; no drop ni seed ficticio; rollback en DB de test.
 2. Contratos Decimal, UTC, fuente, moneda/unidad, delay, rights, display, hash y quality flags; 0 no sustituye ausencia.
 3. Mock HTTP: 200/204/304/400/401/403/404/429/500, timeout, desconexión, payload corrupto, timestamp ausente, cuota agotada; **no usar red para tests**.
-4. SSRF, redirects, allowlists, GET-only, no host live, secretos en .env backend, no logs de auth; paper guard y POST /api/orders 403.
+4. SSRF, redirects, allowlists, GET por defecto y solo excepciones read-only POST OpenFIGI/BLS con test, no host de trading, secretos en .env backend, no logs de auth; paper guard y POST /api/orders 403.
 5. Frontend: nueve departamentos intactos, Sistemas muestra fuentes y motivos, backend desconectado sin crash, sin P&L/NAV/jobs ficticios, sin caída significativa por polling.
 6. Ejecutar y anotar resultados REALES de `python scripts/manage.py check`, `python scripts/manage.py audit`, `git diff --check`, pruebas de navegador y benchmark de P1 cuando disponible.
 7. Documentar matriz de proveedores en docs/P2_PROVIDERS_VERIFICACION.md, evidencias en docs/evidencias/P2/ si procede, commits por gate y STATUS.md con completado/pendiente/bloqueos. **STOP antes de P3**.
@@ -128,6 +142,6 @@ Fuentes: https://docs.alpaca.markets/us/docs/about-market-data-api ; https://doc
 | backend/app/security.py | Mantener bloqueo órdenes y separación host paper/data |
 | backend/tests/ | Dominio, HTTP mock, permisos, cuota, migración, seguridad |
 | frontend/src/api.ts + panel Sistemas local | Validación TS, fuentes/estado reales, sin dashboard de inicio |
-| docs/P2_PROVIDERS_VERIFICACION.md + STATUS.md | Evidencia verificable y handoff |
+| docs/P2_PROVIDERS_VERIFICACION.md + STATUS.md | Matriz de los 34 candidatos, evidencia verificable, recuento REAL y handoff |
 
 **Regla de ahorro de tokens:** inspeccionar → diff mínimo → tests → gate → STATUS → siguiente. No leer P3–P7 salvo contrato puntual. No rehacer el mundo 3D. Guía de coordinación: [PLAN_EJECUCION_P1_P2.md](PLAN_EJECUCION_P1_P2.md).
