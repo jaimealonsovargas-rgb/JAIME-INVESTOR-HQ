@@ -5,6 +5,7 @@ import { DEPARTMENTS, FLOOR, type Department, type Vec3 } from './layout';
 import { textTexture, type Materials } from './materials';
 import { chairBack, chairSeat, facadeGeometry, leafGeometry, planterGeometry } from './details';
 import type { Collider } from './collisions';
+import { WORKSPACES,SEAT_OFFSET } from './workspaces';
 
 // Modelado original en metros. Las piezas se fusionan por material y departamento.
 // Conserva cada departamento como nodo independiente para fases posteriores.
@@ -122,7 +123,9 @@ function desk(b: Builder, x: number, z: number, m: Materials, screen: Material, 
   t.cylinder([.75, .865, .2], .038, .115, m.cream);
   t.cylinder([.75,.925,.2],.030,.001,m.dark);
   t.part(geometry('cup-handle', () => new TorusGeometry(.032,.008,6,14,Math.PI*1.6)),m.cream,[.79,.87,.2],[1,1,1],[0,0,-.8]);
-  chair(t, 0, .92, Math.PI, m);
+  t.box([-.3,.828,.43],[.18,.012,.26],m.paper,.004);
+  t.box([-.31,.838,.43],[.006,.006,.15],m.bronze,.002,[0,.35,0]);
+  chair(t, 0, SEAT_OFFSET, Math.PI, m);
   transfer(b, t, [x, 0, z], facing);
 }
 function plant(b: Builder, x: number, z: number, m: Materials, height = 1.8) {
@@ -151,20 +154,11 @@ function sculpture(b:Builder,x:number,z:number,m:Materials,y=.99) {
   b.part(geometry('sculpture',()=>new TorusGeometry(.17,.018,8,32)),m.bronze,[x,y+.19,z],[1,1.2,1],[.2,.55,.3]);
   b.part(geometry('sculpture',()=>new TorusGeometry(.17,.018,8,32)),m.bronze,[x,y+.20,z],[.65,1,1],[.2,-.7,-.3]);
 }
-function sofa(b: Builder, x: number, z: number, rotation: number, m: Materials) {
-  const s = new Builder('sofa');
-  s.part(geometry('plane', () => new PlaneGeometry()), m.contact, [0, .034, 0], [3.3, 1.65, 1], [-Math.PI / 2, 0, 0]);
-  s.box([0, .32, 0], [2.45, .26, .88], m.dark, .06);
-  s.box([0, .69, -.34], [2.45, .62, .22], m.cognac, .1);
-  for (const x of [-.8, 0, .8]) { s.box([x, .49, .07], [.76, .19, .65], m.cognac, .07); s.box([x, .78, -.17], [.75, .38, .14], m.cognac, .06, [-.09, 0, 0]); }
-  for (const side of [-1, 1]) { s.box([side * 1.18, .65, 0], [.16, .46, .88], m.cognac, .075); s.box([side * 1.02, .12, 0], [.055, .22, .66], m.bronze); }
-  transfer(b, s, [x, 0, z], rotation);
-}
-function glassRun(b: Builder, length: number, p: Vec3, m: Materials, angle = 0) {
+function glassRun(b: Builder, length: number, p: Vec3, m: Materials, angle = 0,height=3.98) {
   const g = new Builder('glazing');
-  g.box([0, 2.02, 0], [length, 3.98, .014], m.glass);
-  for (const y of [.045, 4.01]) g.box([0, y, 0], [length, .045, .065], m.bronze);
-  for (let i = 0; i <= Math.ceil(length / 1.5); i++) g.box([-length / 2 + length * i / Math.ceil(length / 1.5), 2.02, 0], [.026, 4.0, .04], m.dark);
+  g.box([0, height/2+.03, 0], [length, height, .014], m.glass);
+  for (const y of [.045, height+.03]) g.box([0, y, 0], [length, .045, .065], m.bronze);
+  for (let i = 0; i <= Math.ceil(length / 1.5); i++) g.box([-length / 2 + length * i / Math.ceil(length / 1.5), height/2+.03, 0], [.026, height, .04], m.dark);
   g.box([0, 1.2, .012], [length, .009, .01], m.cream);
   transfer(b, g, p, angle);
 }
@@ -172,16 +166,14 @@ function roomShell(b: Builder, d: Department, m: Materials) {
   b.box([0, .009, 0], [8.35, .018, 6.35], m.carpet);
   if (d.id === 'trading' || d.id === 'reception') return;
   for (const side of [-1, 1]) {
-    glassRun(b, 2.9, [side * 2.75, 0, 3.2], m);
-    glassRun(b, 6.4, [side * 4.2, 0, 0], m, Math.PI / 2);
+    glassRun(b, 2.0, [side * 3.2, 0, 3.2], m,0,2.45);
+    glassRun(b, 6.4, [side * 4.2, 0, 0], m, Math.PI / 2,2.45);
   }
-  // Portail abierto de 2.6 m y puerta de vidrio estacionada a 90°, fuera del paso.
+  // Portal libre de 4,4 m: sin hoja estacionada dentro del recorrido.
   b.box([0, 4.08, 3.2], [8.5, .18, .16], m.wood);
-  glassRun(b, 1.2, [-1.35, 0, 2.55], m, Math.PI / 2);
-  b.box([-1.31, 1.13, 2.6], [.035, .38, .04], m.bronze);
-  b.box([2.65, 1.83, 3.223], [2.0,.30,.028],m.wood,.014);
-  b.box([2.65,1.68,3.24],[1.96,.008,.008],m.bronze);
-  b.label([2.65, 1.83, 3.242], 1.90, .2375, `${d.number}  /  ${d.label}`, d.use);
+  b.box([3.2, 2.04, 3.223], [1.85,.30,.028],m.wood,.014);
+  b.box([3.2,1.89,3.24],[1.81,.008,.008],m.bronze);
+  b.label([3.2, 2.04, 3.242], 1.76, .2375, `${d.number}  /  ${d.label}`, d.use);
 }
 function shelves(b: Builder, x: number, z: number, m: Materials) {
   b.box([x, 1.32, z], [3.35, 2.6, .14], m.wood);
@@ -208,8 +200,7 @@ function department(d: Department, m: Materials) {
     for (let i = 0; i < 39; i++) b.box([-2.76 + i * .114, .64, .404], [.035, .92, .025], m.bronze);
     b.label([-.6, .73, .431], 2.7, .675, 'JAIME', 'I N V E S T O R   H Q', 'brand');
     monitor(b, -.7, -.4, m, screen, 0, 1.23);
-    sofa(b, -3.1, 1.85, Math.PI / 2, m); sofa(b, 2.35, 1.9, -Math.PI / 2, m);
-    b.cylinder([2.3, .39, .05], .56, .07, m.stone); b.cylinder([2.3, .2, .05], .24, .35, m.bronze);
+    // Recepción despejada y puesto lateral real; sin sofás ni mesas auxiliares.
     plant(b, -3.8, -2.1, m); plant(b, 3.7, -2.1, m);
   } else if (d.id === 'committee') {
     b.box([0, .8, -.3], [2.65, .12, 4.6], m.wood, .3);
@@ -223,34 +214,36 @@ function department(d: Department, m: Materials) {
     wallScreen(b, 0, -3.04, d, m, 2.8);
     plant(b, -3.2, -2.4, m); plant(b, 3.2, -2.4, m);
   } else if (d.id === 'trading') {
-    for (const x of [-2.65, 0, 2.65]) for (const z of [-1.95, 1.95]) desk(b, x, z, m, screen, z < 0 ? 0 : Math.PI, true);
+    // Dos bancadas laterales conservan seis puestos y liberan el eje central.
     for (const x of [-3.8, 3.8]) plant(b, x, -3.1, m, 1.7);
     b.label([0, .031, 3.05], 2.4, .30, '05 / TRADING FLOOR', 'INVESTIGACIÓN MULTIACTIVO', 'sign',[-Math.PI/2,0,0]);
   } else if (d.id === 'research') {
-    shelves(b, 0, -2.9, m); desk(b, -2, .6, m, screen); desk(b, 1.5, .6, m, screen);
+    shelves(b, 0, -2.9, m);
     b.cylinder([2.7, .7, -1.8], .75, .09, m.wood); b.cylinder([2.7, .35, -1.8], .08, .7, m.bronze);
     plant(b, -3.3, -1.8, m);
   } else if (d.id === 'systems') {
-    for (const x of [-2.6, -1.2, .2]) {
-      b.box([x, 1.17, -2.35], [1, 2.25, .8], m.dark, .04);
-      for (let i = 0; i < 11; i++) { b.box([x, .28 + i * .17, -1.935], [.86, .135, .026], m.book); b.box([x - .3, .28 + i * .17, -1.917], [.16, .012, .009], m.bronze); }
+    for (const z of [-2.25,-.95,.35]) {
+      b.box([-2.9, 1.17, z], [1, 2.25, .88], m.dark, .04);
+      for (let i = 0; i < 11; i++) { b.box([-2.9, .28 + i * .17, z+.455], [.86, .135, .026], m.book); b.box([-3.2, .28 + i * .17, z+.473], [.16, .012, .009], m.bronze); }
     }
-    desk(b, .6, .75, m, screen, 0, true); plant(b, 3.3, -2.3, m);
-    b.label([-1.2, 2.16, -1.928], .85, .106, 'DATA QUALITY', '', 'sign');
+    plant(b, 3.3, -2.3, m);
+    wallScreen(b,1.5,-2.95,d,m,2.6);
+    b.label([-2.9, 2.36, -1.795], .85, .106, 'INFRAESTRUCTURA', '', 'sign');
   } else if (d.id === 'performance') {
     wallScreen(b, 0, -2.95, d, m, 3.8);
-    sofa(b, -2.8, .1, Math.PI / 2, m); sofa(b, 2.8, .1, -Math.PI / 2, m);
-    b.box([0, .38, 0], [1.9, .09, .95], m.stone, .18); b.box([0, .2, 0], [.8, .33, .5], m.bronze, .05);
-    desk(b, 0, 2.0, m, screen); plant(b, -3.5, -2.2, m);
+    b.box([2.8,.8,-2.65],[1.25,1.55,.42],m.wood,.045);for(const x of [2.5,3.1])b.box([x,.8,-2.425],[.54,1.35,.024],m.leather,.009);sculpture(b,2.8,-2.65,m,1.58);plant(b,-3.5,-2.2,m);
+    b.box([2.5,.76,.05],[1.1,.08,1.6],m.stone,.06);
+    b.box([2.5,.38,.05],[.48,.72,.65],m.bronze,.03);
+    b.box([2.5,.817,-.2],[.36,.015,.48],m.paper);
   } else {
     wallScreen(b, 0, -2.98, d, m, d.id === 'risk' ? 3.5 : 2.8);
-    desk(b, -2, .15, m, screen, 0, true); desk(b, 1.5, .15, m, screen, 0, true);
     b.box([0, .48, -2.65], [4.4, .9, .6], m.wood, .04);
     for (const x of [-1.5, -.5, .5, 1.5]) b.box([x, .48, -2.34], [.9, .74, .014], m.wood);
     sculpture(b,1.4,-2.60,m);
     plant(b, 3.5, 2.0, m);
   }
-  b.group.userData = { department: d.id, center: d.center, monitor: true, phase: d.phase };
+  for(const w of WORKSPACES.filter(w=>w.department===d.id))desk(b,w.x,w.z,m,screen,w.yaw,w.dual);
+  b.group.userData = { department: d.id, center: d.center, monitor: true, phase: d.phase,sofas:0,portalWidth:4.4 };
   const group = b.finish(); group.position.set(...d.center); return group;
 }
 

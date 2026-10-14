@@ -27,7 +27,7 @@ export default function World() {
   const [panel,setPanel]=useState<string>();
   const [near,setNear]=useState<string>();
   const openPanel=useCallback((id:string)=>{const monitor=MONITOR_DEFINITIONS.find(m=>m.id===id);if(monitor&&canInteract(player,monitor)){player.paused=true;player.speed=0;player.invalidate?.();setPanel(id);}},[player]);
-  const closePanel=useCallback(()=>{player.paused=false;player.invalidate?.();setPanel(undefined);document.querySelector('canvas')?.focus();},[player]);
+  const closePanel=useCallback(()=>{player.paused=false;player.holdCamera=true;player.invalidate?.();setPanel(undefined);document.querySelector('canvas')?.focus();},[player]);
   player.mode=mode;
   const [view, setView] = useState<View>('interior');
   const [quality, setQuality] = useState<Quality>('balanced');
@@ -61,12 +61,12 @@ export default function World() {
       <a href="?diagnostico=1">Abrir comprobación de P0 ↗</a>
     </aside> : null}
     {mode==='play'?<PlayerHud player={player}/>:null}
-    {mode==='play'&&near&&!panel?<button className="terminal-prompt" onClick={()=>openPanel(near)}>E · Abrir {MONITOR_DEFINITIONS.find(m=>m.id===near)?.label}</button>:null}
+    {mode==='play'&&near&&!panel?<p className="terminal-prompt">Acércate al agente principal para abrir su panel</p>:null}
     {panel?<MonitorOverlay id={panel} onClose={closePanel}/>:null}
     <footer className="world-toolbar">
       <nav aria-label="Cámara"><button aria-pressed={mode==='play'} onClick={()=>{setMode('play');document.querySelector('canvas')?.focus();}}>Recorrer</button>{Object.entries(VIEWS).map(([key, value]) => <button key={key} aria-pressed={mode==='inspection'&&view === key} onClick={() => { setMode('inspection');setView(key as View); setMetrics(m => m ? {...m, samples: 0} : m); }}>{value.label}</button>)}</nav>
       <div className="world-tools"><label>Gráficos <select value={quality} onChange={e => { setQuality(e.target.value as Quality); setMetrics(m => m ? {...m, samples: 0} : m); }}><option value="balanced">Equilibrado</option><option value="detail">Detalle</option></select></label><button disabled={measuring} onClick={() => setMeasuring(true)}>{measuring ? 'Midiendo…' : 'Medir FPS'}</button><output aria-label="Fotogramas por segundo">{metrics && metrics.samples > 10 ? `${measuring ? '' : 'Última: '}${metrics.fps.toFixed(0)} FPS` : 'En reposo'}</output></div>
-      <p className="world-help">{mode==='play'?'WASD · Mayús caminar rápido · Botón derecho + ratón mirar · Rueda zoom · E terminal':'Arrastrar para observar · Rueda para acercar'} <span>PERSONAL OFFLINE · AGENTES NO DISPONIBLES — P4</span></p>
+      <p className="world-help">{mode==='play'?'↑↓ caminar · ←→ girar · Cámara automática · Acércate al agente':'Arrastrar para observar · Rueda para acercar'} <span>PERSONAL OFFLINE · AGENTES NO DISPONIBLES — P4</span></p>
     </footer>
   </main>;
 }

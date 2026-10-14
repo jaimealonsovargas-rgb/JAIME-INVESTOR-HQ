@@ -1,15 +1,19 @@
 {
   "file": "professional.glb",
-  "sha256": "5475f5e0368bbe846ada559a9987b629486c30995b446689feaf09851aa156c5",
-  "bytes": 1624404,
+  "sha256": "562030daf06bd7819e34bd10fdc09687ab0965fd4e9da6dfece39f9a02f108a7",
+  "bytes": 1776968,
   "triangles": 41114,
   "bones": 163,
   "height": 1.78,
   "animations": [
     "idle",
     "walk",
+    "turn",
     "observe",
-    "focus"
+    "focus",
+    "typing",
+    "reading",
+    "writing"
   ],
   "license": "CC0-1.0",
   "source_manifest": "assets/source-humans/SOURCE_MANIFEST.json",
@@ -52,9 +56,10 @@
   ],
   "lods": {
     "file": "professional-lods.json",
-    "bytes": 249734,
-    "sha256": "5343325105255cef1fc0ec8b023288528bc1b34ed416ebaf376a81ce44621df1",
+    "bytes": 607376,
+    "sha256": "f5ae5b570616204bfa338a42cf428a7be50be94d31faf42dc8b844ab1ba9b790",
     "nearTriangles": 41114,
+    "npcNearTriangles": 24714,
     "mediumTriangles": 13240,
     "farTriangles": 4040,
     "license": "CC0-1.0",

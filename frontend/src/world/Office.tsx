@@ -32,7 +32,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
     '/materials/marble_01_diffuse.jpg', '/materials/marble_01_nor_gl.jpg', '/materials/marble_01_rough.jpg',
   ]);
   const materials = useMemo(() => makeMaterials(maps), [maps[0], maps[1], maps[2], maps[3], maps[4], maps[5]]);
-  const model = useMemo(() => createOffice(materials), [materials]);
+  const model = useMemo(() => {const office=createOffice(materials);office.updateMatrixWorld(true);office.traverse(object=>{object.matrixAutoUpdate=false;});return office;}, [materials]);
   const lightTargets=useMemo(()=>[8.5,-8.5].map(z=>{const target=new Object3D();target.position.set(0,0,z);return target;}),[]);
   const { gl, scene, camera, invalidate, size } = useThree();
   const controls = useRef<OrbitControlsImpl>(null);
@@ -104,14 +104,14 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
   });
 
   return <>
-    <hemisphereLight args={['#e6e8e3', '#807565', 1.8]} />
+    <hemisphereLight args={['#e6e8e3', '#807565', 2.05]} />
     <directionalLight position={[-20, 25, 16]} color="#ffe9c9" intensity={2.65} castShadow
       shadow-mapSize={[QUALITY[quality].shadows, QUALITY[quality].shadows]} shadow-camera-left={-25} shadow-camera-right={25}
       shadow-camera-top={24} shadow-camera-bottom={-24} shadow-camera-near={1} shadow-camera-far={85}
       shadow-normalBias={.035} shadow-bias={-.00015} />
     {lightTargets.map((target,i)=><primitive key={i} object={target} />)}
-    <spotLight position={[0, 4.08, 8.5]} target={lightTargets[0]} color="#ffe0b1" intensity={95} distance={18} decay={2} angle={.95} penumbra={1} />
-    <spotLight position={[0, 4.08, -8.5]} target={lightTargets[1]} color="#ffe7c6" intensity={75} distance={17} decay={2} angle={.95} penumbra={1} />
+    <spotLight position={[0, 4.08, 8.5]} target={lightTargets[0]} color="#ffe0b1" intensity={105} distance={18} decay={2} angle={.95} penumbra={1} />
+    <spotLight position={[0, 4.08, -8.5]} target={lightTargets[1]} color="#ffe7c6" intensity={85} distance={17} decay={2} angle={.95} penumbra={1} />
     <primitive object={model} />
     <Player runtime={player} contact={materials.contact}/>
     <Personnel contact={materials.contact}/>

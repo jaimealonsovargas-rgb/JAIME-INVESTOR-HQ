@@ -84,7 +84,7 @@ export function makeMaterials(maps: Texture[]) {
     cream: new MeshStandardMaterial({ color: '#d0c5ac', roughness: .78 }),
     ceiling: new MeshStandardMaterial({ color: '#50504c', roughness: .92 }),
     soffit: new MeshStandardMaterial({ color: '#20282d', roughness: 1, metalness: 0 }),
-    glass: new MeshPhysicalMaterial({ color: '#e1e8e3', transparent: true, opacity: .085, roughness: .07, metalness: .15, depthWrite: false, side: 2 }),
+    glass: new MeshPhysicalMaterial({ color: '#e1e8e3', transparent: true, opacity: .085, roughness: .07, metalness: .15, depthWrite: false, side: 2,forceSinglePass:true }),
     light: new MeshBasicMaterial({ color: new Color('#ffe2b5').multiplyScalar(1.1), toneMapped: false }),
     green: new MeshStandardMaterial({ color: '#233d2c', roughness: .48, side: 2 }),
     greenLight: new MeshStandardMaterial({ color: '#496342', roughness: .57, side: 2 }),

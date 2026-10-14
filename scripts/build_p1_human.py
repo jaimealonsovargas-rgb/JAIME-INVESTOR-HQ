@@ -151,28 +151,11 @@ def main():
         g['materials'].append(material);mi=len(g['meshes']);g['meshes'].append({'name':name,'primitives':[{'attributes':ai,'indices':glb.accessor(indices,5123 if len(pout)<65536 else 5125,'SCALAR',34963),'material':mat}]})
         g['nodes'].append({'name':name,'mesh':mi,'skin':0});triangles+=len(indices)//3
     g['scene']=0;g['scenes']=[{'nodes':[index['root']]+list(range(len(names),len(g['nodes'])))}]
-    def quaternion(x,y,z):
-        a,b,c=[v/2 for v in [x,y,z]];s1,s2,s3=math.sin(a),math.sin(b),math.sin(c);c1,c2,c3=math.cos(a),math.cos(b),math.cos(c)
-        return [s1*c2*c3+c1*s2*s3,c1*s2*c3-s1*c2*s3,c1*c2*s3+s1*s2*c3,c1*c2*c3-s1*s2*s3]
-    for clip,duration in [('idle',4.),('walk',1.15),('observe',6.),('focus',5.)]:
-        times=[duration*i/32 for i in range(33)];time=glb.accessor(times,5126,'SCALAR');anim={'name':clip,'samplers':[],'channels':[]}
-        for name in ['upperarm01.L','upperarm01.R','lowerarm01.L','lowerarm01.R','upperleg01.L','upperleg01.R','lowerleg01.L','lowerleg01.R','spine05','head']:
-            values=[]
-            for t in times:
-                phase=t/duration*2*math.pi;side=1 if name.endswith('.L') else -1;x=y=z=0.
-                if name.startswith('upperarm'):z=-side*.62;x=side*.28*math.sin(phase) if clip=='walk' else .015*math.sin(phase)
-                if name.startswith('lowerarm'):x=-.08+(.12*max(0,-side*math.sin(phase)) if clip=='walk' else 0)
-                if name.startswith('upperleg') and clip=='walk':x=-side*.34*math.sin(phase)
-                if name.startswith('lowerleg') and clip=='walk':x=.5*max(0,side*math.sin(phase))
-                if name=='spine05':y=.018*math.sin(phase);x=.008*math.sin(phase)
-                if name=='head':y=(.14 if clip=='observe' else .014)*math.sin(phase);x=.025*math.sin(phase) if clip=='focus' else 0.
-                if clip=='focus' and name=='lowerarm01.R':x=-.20-.06*math.sin(phase)
-                values.append(quaternion(x,y,z))
-            output=glb.accessor(values,5126,'VEC4');si=len(anim['samplers']);anim['samplers'].append({'input':time,'output':output,'interpolation':'LINEAR'});anim['channels'].append({'sampler':si,'target':{'node':index[name],'path':'rotation'}})
-        g['animations'].append(anim)
+    from human_motion import build_motion
+    animations=build_motion(glb,index,head)
     g['asset']['extras']={'license':'CC0-1.0','height':1.78,'source':'MakeHuman core + Margaret Toigo formal suit','triangles':triangles}
     data=glb.write(DEST/'professional.glb')
-    manifest={'file':'professional.glb','sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),'triangles':triangles,'bones':len(names),'height':1.78,'animations':['idle','walk','observe','focus'],'license':'CC0-1.0','source_manifest':'assets/source-humans/SOURCE_MANIFEST.json'}
+    manifest={'file':'professional.glb','sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),'triangles':triangles,'bones':len(names),'height':1.78,'animations':animations,'license':'CC0-1.0','source_manifest':'assets/source-humans/SOURCE_MANIFEST.json'}
     manifest['textures']=[{'file':str(p.relative_to(DEST)).replace('\\','/'),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'license':'CC0-1.0','derived':'Canvas resample max 1024 px; fuentes en SOURCE_MANIFEST.json'} for p in sorted((DEST/'textures').glob('*')) if p.is_file()]
     (ROOT/'assets/P1_HUMAN_MANIFEST.json').write_text(json.dumps(manifest,indent=2),encoding='utf-8');print(json.dumps(manifest))
 

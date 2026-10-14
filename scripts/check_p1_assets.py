@@ -52,7 +52,7 @@ def values(index):
     fmt={5123:'H',5125:'I',5126:'f'}[a['componentType']]
     return struct.unpack_from('<'+fmt*(a['count']*size),binary,v.get('byteOffset',0)+a.get('byteOffset',0))
 
-triangles=0;heights=[];counts=[0,0]
+triangles=0;heights=[];counts=[0,0,0]
 for mesh in g['meshes']:
     p=mesh['primitives'][0];a=p['attributes'];positions=values(a['POSITION']);indices=values(p['indices'])
     vertices=len(positions)//3;assert max(indices)<vertices
@@ -65,7 +65,7 @@ for mesh in g['meshes']:
         assert len(indices_lod)%3==0 and min(indices_lod)>=0 and max(indices_lod)<vertices
         counts[level]+=len(indices_lod)//3
 assert triangles==manifest['triangles']==manifest['lods']['nearTriangles']
-assert counts==[manifest['lods']['mediumTriangles'],manifest['lods']['farTriangles']]
+assert counts==[manifest['lods']['npcNearTriangles'],manifest['lods']['mediumTriangles'],manifest['lods']['farTriangles']]
 height=max(heights)-min(heights)
 assert 1.7<height<1.9
 print(json.dumps({'source_files_verified':len(sources),'material_maps_verified':len(materials),'textures_verified':len(manifest['textures']),'glb_sha256':manifest['sha256'],'height_mesh_m':round(height,4),'mesh_min_y':round(min(heights),4),'mesh_max_y':round(max(heights),4),'bones':manifest['bones'],'triangles':[triangles,*counts],'animations':manifest['animations'],'license':'CC0-1.0 graphical assets; MIT offline optimizer','network_requests':0}))

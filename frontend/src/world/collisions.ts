@@ -1,7 +1,7 @@
 import { Vector3 } from 'three';
 import type { Vec3 } from './layout';
 
-export interface Collider { center: Vec3; half: Vec3; yaw: number; kind: 'glass' | 'solid' }
+export interface Collider { center: Vec3; half: Vec3; yaw: number; kind: 'glass' | 'solid';agentId?:string }
 export const PLAYER_RADIUS=.35;
 export const PLAYER_HEIGHT=1.78;
 function local(x:number,z:number,c:Collider) {const dx=x-c.center[0],dz=z-c.center[2],s=Math.sin(c.yaw),co=Math.cos(c.yaw);return [co*dx-s*dz,s*dx+co*dz];}

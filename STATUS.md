@@ -1,5 +1,23 @@
 # Estado del proyecto
 
+## 2026-10-14 · Correcciones P1 y P2 autorizadas · en ejecución
+
+Encargo vigente: `PLAN_EJECUCION_P1_P2`, issue #1 actualizado e issue #2. Sustituye WASD/ratón, E/clic, NPC de pie y STOP antes de P2; **STOP antes de P3**. P1 correctiva todavía no completada; P2 todavía no implementada.
+
+Preflight: `git status --short`, log de cinco commits, rama main y diff revisados. **205 archivos locales** preservados y hashes comprobados en `output/p1-p2-preflight-20261014.zip` (50.183.199 bytes). Snapshot local **57f5595** conserva íntegra la entrega anterior, incluidos fuentes/GLB/capturas/tests. Merge documental **ab830a5** incorpora `origin/main` **fb38420** sin conflictos, sin reset/clean/force/push. Working tree limpio tras sincronizar; centros/arquitectura locales conservados. Documentos obligatorios e issues revisados por apartados pertinentes.
+
+Secuencia pendiente: baseline local nueva → B redistribución/puestos/vidrio → C flechas/cámara/marcha → D proximidad/histéresis → E diez NPC sentados → F QA real y FPS → P2.0–P2.6 por sublotes. No integrar datos en Sistemas hasta estabilizar P1. P2 distinguirá **34 modalidades / 31 proveedores** candidatos de implementados/conectados/utilizables; ningún mock cuenta como conexión. Coste 0 EUR, PAPER ONLY y órdenes 403 obligatorios.
+
+Correcciones B–E implementadas: Recepción sin sofás; Trading con eje central libre; Performance con puesto accesible y aparador; Sistemas con tres racks separados del escritorio. Portales de 4,4 m, mamparas interiores a 2,45 m, sin hojas de cristal aparcadas en puertas. Se conservan materiales locales, nueve salas y arquitectura. Exactamente diez NPC sentados (uno por departamento y segundo en Trading), ocho clips originales y anchors de silla compartidos. Control exclusivo por flechas, giro suavizado, cámara automática elevada y apertura por proximidad al NPC principal con LOS, pausa e histéresis 2/2,8 m.
+
+Pruebas ejecutadas: **47 pytest + 27 Vitest**, TypeScript/build correctos; FK sobre keyframes exportados verifica la trayectoria de apoyo de los pies y la pose sentada; nueve paneles comprobados en navegador mediante flechas reales, incluyendo 18 aperturas, foco, pausa, cierre, reentrada y WASD ignorado. Evidencias en `docs/evidencias/P1_CORRECTIVO/`. Estas pruebas usaron teletransportes entre departamentos: todavía falta el recorrido continuo sin teletransporte y la comprobación offline actualizada.
+
+**Gate F pendiente por rendimiento:** baseline aislada de esta sesión: Trading 22,71, Recepción 20,49 y pasillo 24,66 FPS en movimiento. Tras correcciones y LOD: Trading 27,18, Recepción 29,79, pasillo 26,07, giro 26,37 y Comité 22,68. Intel/D3D11, 1920×1080, Equilibrado/DPR 1, cargador conectado y ahorro desactivado. No reutilizar los FPS históricos como aceptación actual. Ensayo FXAA: Trading 24,90; retirado por no aportar mejora. Perfil CPU real guardado. No se declara P1 correctiva completada ni se integra P2 visualmente.
+
+P2.0: documentos/contratos existentes revisados e investigación de fuentes oficiales iniciada; matriz y conectores todavía pendientes. Siguiente paso exacto: optimizar coste de escena estática/animaciones y cerrar F; preparar en paralelo temporal el núcleo backend P2 sin modificar los paneles 3D hasta superar ese gate. Coste 0 EUR, PAPER ONLY, órdenes bloqueadas, STOP antes de P3.
+
+---
+
 ## 2026-10-14 · P1.B–F completadas · STOP antes de P2
 
 Autorización actual: issue #1 y `docs/PLAN_CIERRE_P1_BF.md`, sincronizados con `origin/main` **abda9b6** mediante fast-forward. Sustituye los STOP históricos tras B/C. Antes de sincronizar se creó `output/p1-preclosure-20261014-131948.zip` con 24 archivos y hashes; los 23 archivos no solapados quedaron idénticos y `docs/02_MUNDO_3D.md` se combinó sin conflictos. La reserva arquitectónica local se conserva; stash de ese documento retenido como respaldo.

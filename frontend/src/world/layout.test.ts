@@ -10,6 +10,8 @@ import {MONITOR_DEFINITIONS,canInteract} from './terminals';
 import {createPlayer} from './navigation';
 import {PANEL_CONTENT} from './panels';
 import {PERSONNEL,PERSONNEL_COLLIDERS} from './staffLayout';
+import {PRIMARY_AGENT_INTERACTIONS,ProximityLatch,canApproach} from './agentInteractions';
+import {tankStep} from './navigation';
 import {humanLodLevel} from './humanLods';
 import {frameStats} from './frameStats';
 
@@ -80,7 +82,7 @@ describe('planta P1.B conforme al plano', () => {
         seats++;
       }
     }
-    expect(seats).toBe(23);
+    expect(seats).toBe(24);
     for(const id of Object.keys(SAFE_SPAWNS))expect(validTeleport(id,office.userData.colliders),`spawn ocupado: ${id}`).toBeDefined();
     for(const [id,p] of Object.entries(SAFE_SPAWNS))expect(findWalkingPath([0,11],[p[0],p[2]],office.userData.colliders),`no existe recorrido peatonal: ${id}`).toBeDefined();
     expect(MONITOR_DEFINITIONS).toHaveLength(9);
@@ -91,14 +93,14 @@ describe('planta P1.B conforme al plano', () => {
       expect(isFree(player.position.x,player.position.z,player.colliders),`acceso ocupado: ${monitor.id}`).toBe(true);
       expect(findWalkingPath([0,11],[player.position.x,player.position.z],player.colliders),`terminal inaccesible: ${monitor.id}`).toBeDefined();
       expect(canInteract(player,monitor),`terminal sin línea de visión: ${monitor.id}`).toBe(true);
-      player.yaw+=Math.PI;expect(canInteract(player,monitor)).toBe(false);player.yaw=monitor.yaw;
+      player.yaw+=Math.PI;expect(canInteract(player,monitor)).toBe(true);player.yaw=monitor.yaw;
       player.paused=true;expect(canInteract(player,monitor)).toBe(false);player.paused=false;
       player.position.z+=10;expect(canInteract(player,monitor)).toBe(false);
       expect(PANEL_CONTENT[monitor.id]).toBeDefined();
     }
     expect(PERSONNEL).toHaveLength(10);expect(new Set(PERSONNEL.map(p=>p.id)).size).toBe(10);
     const occupied=[...office.userData.colliders,...PERSONNEL_COLLIDERS];
-    for(const person of PERSONNEL){expect(isFree(person.position[0],person.position[2],office.userData.colliders,.3),`NPC superpuesto: ${person.id}`).toBe(true);expect(person.state).toBe('OFFLINE');expect(person.work).toBe('NO DISPONIBLE — P4');}
+    for(const person of PERSONNEL){expect(person.seated).toBe(true);const node=office.getObjectByName(`department:${person.department}`)!;expect(node.userData.seats.some((s:{position:[number,number,number]})=>{const seat=new Vector3(...s.position).applyMatrix4(node.matrixWorld);return Math.hypot(seat.x-person.position[0],seat.z-person.position[2])<1e-6;}),`NPC fuera de su silla: ${person.id}`).toBe(true);expect(person.state).toBe('OFFLINE');expect(person.work).toBe('NO DISPONIBLE — P4');}
     for(const [id,p] of Object.entries(SAFE_SPAWNS)){expect(validTeleport(id,occupied),`NPC ocupa spawn: ${id}`).toBeDefined();expect(findWalkingPath([0,11],[p[0],p[2]],occupied),`NPC bloquea departamento: ${id}`).toBeDefined();}
     for(const monitor of MONITOR_DEFINITIONS){expect(findWalkingPath([0,11],[monitor.approach[0],monitor.approach[2]],occupied),`NPC bloquea terminal: ${monitor.id}`).toBeDefined();player.position.set(...monitor.approach);player.yaw=monitor.yaw;player.colliders=occupied;expect(canInteract(player,monitor),`NPC bloquea LOS: ${monitor.id}`).toBe(true);}
     expect(meshes).toBeLessThan(250); expect(triangles).toBeLessThan(450000);
@@ -115,10 +117,17 @@ describe('navegación determinista',()=>{
   });
   it('incluye las pausas largas en el promedio real de fotogramas',()=>{expect(frameStats([10,10,1000]).fps).toBeCloseTo(3000/1020);expect(frameStats([10,10,1000]).p95).toBe(1000);expect(frameStats([]).fps).toBe(0);});
   it('evita oscilación del LOD en sus umbrales',()=>{expect(humanLodLevel(8.2,0)).toBe(0);expect(humanLodLevel(8.2,1)).toBe(1);expect(humanLodLevel(16.2,1)).toBe(1);expect(humanLodLevel(16.2,2)).toBe(2);expect(humanLodLevel(3,2)).toBe(0);});
-  it('impide abrir terminales a través del cristal o desde atrás',()=>{
+  it('abre por agente y evita cristal, distancia y salas equivocadas',()=>{
     const m=MONITOR_DEFINITIONS.find(m=>m.id==='performance')!,p=createPlayer();p.position.set(...m.approach);
-    expect(canInteract(p,m)).toBe(true);p.colliders=[{center:[-11,2,6.7],half:[2,2,.03],yaw:0,kind:'glass'}];expect(canInteract(p,m)).toBe(false);
+    expect(canInteract(p,m)).toBe(true);p.colliders=[{center:[-11.5,1.5,9.5],half:[.03,1.5,2],yaw:0,kind:'glass'}];expect(canInteract(p,m)).toBe(false);
     p.colliders=[];p.position.z=5.5;p.yaw=Math.PI;expect(canInteract(p,m)).toBe(false);
+  });
+  it('no reabre hasta salir del radio de rearme y volver',()=>{
+    expect(PRIMARY_AGENT_INTERACTIONS).toHaveLength(9);expect(new Set(PERSONNEL.filter(p=>p.primary).map(p=>p.department)).size).toBe(9);expect(PERSONNEL.filter(p=>p.department==='trading')).toHaveLength(2);
+    const p=createPlayer(),agent=PRIMARY_AGENT_INTERACTIONS.find(a=>a.id==='trading')!;p.position.set(...agent.approach);const latch=new ProximityLatch();expect(latch.next(p)).toBe('trading');p.paused=true;expect(latch.next(p)).toBeUndefined();p.paused=false;expect(latch.next(p)).toBeUndefined();p.position.set(0,0,3.05);expect(latch.next(p)).toBeUndefined();p.position.set(...agent.approach);expect(latch.next(p)).toBe('trading');p.position.set(-4.3,0,-1.16);expect(canApproach(p,agent)).toBe(false);
+  });
+  it('flechas con aceleración, giro suave y retroceso sin girar 180 grados',()=>{
+    const p=createPlayer();let distance=0;for(let i=0;i<60;i++)distance+=tankStep(p,1,0,1/60).length();expect(distance).toBeGreaterThan(1.2);expect(distance).toBeLessThan(1.45);expect(p.yaw).toBe(0);for(let i=0;i<60;i++)tankStep(p,0,1,1/60);expect(p.yaw).toBeGreaterThan(1);expect(p.yaw).toBeLessThan(1.25);const heading=p.yaw;for(let i=0;i<60;i++)tankStep(p,-1,0,1/60);expect(p.direction).toBe(-1);expect(Math.abs(p.yaw-heading)).toBeLessThan(.2);
   });
   it('normaliza diagonales y hace el movimiento relativo al yaw',()=>{expect(movementVector(1,1,0).length()).toBeCloseTo(1);expect(movementVector(1,0,Math.PI/2).x).toBeCloseTo(-1);});
   it('impide atravesar cristal incluso en un salto grande y permite deslizar',()=>{
