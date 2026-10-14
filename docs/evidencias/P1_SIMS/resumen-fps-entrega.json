@@ -1,0 +1,108 @@
+{
+  "method": "Consecutive moving-frame intervals, window >=5000ms; excludes paused dialogue; not a per-frame minimum.",
+  "scenarios": [
+    {
+      "id": "recepcion",
+      "evidence": "controles-fps-entrega80.json",
+      "at": "2026-10-14T23:30:06.594Z",
+      "moving_fps": 36.37632578033968,
+      "worst_moving_5s_fps": 32.72799840506944,
+      "moving_p95_ms": 62.200000047683716,
+      "moving_samples": 344,
+      "dpr": 0.8,
+      "renderer": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "calls": 172,
+      "triangles": 355202
+    },
+    {
+      "id": "trading",
+      "evidence": "controles-fps-entrega80.json",
+      "at": "2026-10-14T23:30:29.497Z",
+      "moving_fps": 46.60097797651878,
+      "worst_moving_5s_fps": 43.746629115399614,
+      "moving_p95_ms": 42.5,
+      "moving_samples": 507,
+      "dpr": 0.8,
+      "renderer": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "calls": 116,
+      "triangles": 323902
+    },
+    {
+      "id": "comite",
+      "evidence": "controles-fps-entrega80.json",
+      "at": "2026-10-14T23:30:58.434Z",
+      "moving_fps": 41.68530643824224,
+      "worst_moving_5s_fps": 38.915164941540816,
+      "moving_p95_ms": 49.59999990463257,
+      "moving_samples": 410,
+      "dpr": 0.8,
+      "renderer": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "calls": 147,
+      "triangles": 408578
+    },
+    {
+      "id": "sistemas",
+      "evidence": "controles-fps-entrega80.json",
+      "at": "2026-10-14T23:31:20.723Z",
+      "moving_fps": 46.12856065958435,
+      "worst_moving_5s_fps": 43.3393249430132,
+      "moving_p95_ms": 37.60000014305115,
+      "moving_samples": 508,
+      "dpr": 0.8,
+      "renderer": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "calls": 171,
+      "triangles": 340816
+    },
+    {
+      "id": "pasillo",
+      "evidence": "controles-fps-combinado80.json",
+      "at": "2026-10-14T23:32:50.950Z",
+      "moving_fps": 40.75615677944554,
+      "worst_moving_5s_fps": 36.966729941290126,
+      "moving_p95_ms": 53.59999990463257,
+      "moving_samples": 423,
+      "dpr": 0.8,
+      "renderer": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "calls": 178,
+      "triangles": 400896
+    },
+    {
+      "id": "recorrido-panel",
+      "evidence": "controles-fps-combinado80.json",
+      "at": "2026-10-14T23:33:06.329Z",
+      "moving_fps": 40.933600977901506,
+      "worst_moving_5s_fps": 40.15021373458621,
+      "moving_p95_ms": 49.39999985694885,
+      "moving_samples": 312,
+      "dpr": 0.8,
+      "renderer": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "calls": 172,
+      "triangles": 364402
+    }
+  ],
+  "measured_windows_pass_30": true
+}
