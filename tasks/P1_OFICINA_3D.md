@@ -10,7 +10,7 @@ Esta autorización **sustituye las instrucciones históricas** de trabajar una s
 
 La especificación detallada B/C está en [issue #1](https://github.com/jaimealonsovargas-rgb/JAIME-INVESTOR-HQ/issues/1); D/E/F y aceptación final en [docs/PLAN_CIERRE_P1_BF.md](../docs/PLAN_CIERRE_P1_BF.md). Leer por etapa, sin duplicar investigación ni documentación.
 
-**ÚLTIMA APROBACIÓN VISUAL (PREVALECE):** [plan maestro Sims + videowall + 16 NPC + 30 roles IA](../docs/PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md). Cámara principal **isométrica elevada**, flechas screen-relative (no girar con flechas), 16 NPC sentados y pantalla enorme superior. Instrucciones históricas de cámara detrás, 16 NPC y mármol oscuro NO prevalecen. Ejecución P1+P2; STOP antes de P3.
+**ÚLTIMA APROBACIÓN VISUAL (PREVALECE):** [plan maestro Sims + videowall + 16 NPC + 30 roles IA](../docs/PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md). Cámara principal **isométrica elevada**, flechas screen-relative (no girar con flechas), 16 NPC sentados y pantalla enorme superior. Instrucciones históricas de cámara detrás, **10 NPC** y mármol oscuro NO prevalecen. Ejecución P1+P2; STOP antes de P3.
 
 ## Revisión final + ampliación a P2 (autorización posterior, prevalente)
 
@@ -71,7 +71,7 @@ Estética premium minimalista estilo Los Sims, madera clara/marfil/plantas y pan
 1. `python scripts/manage.py check` sigue pasando (registrar resultado REAL, no asumir 56 tests).
 2. La app abre directamente en 3D, sin pantalla de diagnóstico previa.
 3. Los 9 departamentos están presentes, accesibles y reconocibles; mapa concuerda con plano.
-4. La **vista inicial es cámara isométrica elevada estilo Los Sims**, avatar visible, seguimiento suave y orientación fija; solo flechas screen-relative funcionan y el avatar se orienta automáticamente, la cámara evita obstáculos y no se atraviesan paredes, techos o muebles ni se pierde el personaje. Capturas de inspección panorámica NO cumplen este criterio.
+4. La **vista inicial es cámara isométrica elevada estilo Los Sims**, avatar visible, seguimiento suave y orientación fija; solo flechas screen-relative funcionan y el avatar se orienta automáticamente, la cámara evita obstáculos y no se atraviesan paredes, techos o muebles ni se pierde el personaje. Capturas de inspección estáticas sin recorrido jugable NO cumplen este criterio.
 5. Los 9 paneles React se abren al acercarse al NPC principal de cada sala; monitores físicos presentes, sin E/clic obligatorio y sin reapertura inmediata tras cerrar.
 6. Los 16 NPC tienen aspecto humano profesional y estados honestos, sin trabajos falsos.
 7. Licencias/atribuciones registradas; **coste adicional 0 EUR**; no se descargan assets de pago.

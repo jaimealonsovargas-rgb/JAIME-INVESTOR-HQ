@@ -34,10 +34,10 @@
 
 ## Checkpoint C — cámara isométrica Sims definitiva (texto histórico debajo no prevalece)
 
-- Inicio en Recepción con **avatar humano profesional de cuerpo entero** y cámara de seguimiento detrás y claramente por encima de la cabeza; no aérea, isométrica, primera persona ni panorámica. Punto inicial ajustable: cámara **3,2 m sobre suelo**, **3,8 m detrás**, **FOV 65°** (rangos documentados: 2,8–3,8 m / 3–4,5 m / 60–75°).
-- Flechas ↑↓←→, cámara automática sin ratón en modo normal, Escape, minimapa 3×3 y teletransportes opcionales a **safe spawns verificados**. Combinar avance+giro suavemente y usar `useFrame`/refs con delta; evitar `setState` React a 60 Hz.
+- Inicio en Recepción con **avatar humano visible de cuerpo entero y cámara isométrica elevada estilo Los Sims**, orientación fija, seguimiento suave, flechas screen-relative, paredes cutaway. La antigua cámara detrás/FOV 65° está descartada.
+- Flechas ↑↓←→, cámara automática sin ratón en modo normal, Escape, minimapa 3×3 y teletransportes opcionales a **safe spawns verificados**. Combinar movimientos diagonales screen-relative y giro automático del avatar suavemente y usar `useFrame`/refs con delta; evitar `setState` React a 60 Hz.
 - **Colliders semánticos XZ** para paredes, cristal, columnas, mesas y mobiliario; puertas visualmente abiertas deben ser transitables. No usar la malla fusionada entera como física ni instalar motor pesado sin necesidad.
-- Cámara con spring arm/raycast, prevención de oclusión, pitch limitado, transiciones suaves y comprobación bajo techo. Vistas OrbitControls solo en modo inspección, nunca simultáneas al follow camera.
+- Cámara isométrica fija en orientación con seguimiento suave, cutaway de paredes/techos y prevención de oclusión; sin spring arm detrás del avatar. Vista general DOM opcional, sin OrbitControls en juego.
 - Pruebas reales de navegación por las nueve zonas y cámara/avatar en las capturas.
 
 ## Checkpoint D — nueve monitores físicos y nueve paneles React
