@@ -36,7 +36,7 @@ function Diagnostics() {
       </section>
       <aside aria-label="Límites de P0">
         <p><strong>PAPER ONLY</strong><span>Todas las órdenes bloqueadas por código.</span></p>
-        <p><strong>DATOS EXTERNOS</strong><span>NO DISPONIBLE · proveedores sin conectar.</span></p>
+        <p><strong>EJECUCIÓN P0</strong><span>NO DISPONIBLE · órdenes bloqueadas. Fuentes P2 en Sistemas.</span></p>
         <p><strong>0 € EN SERVICIOS</strong><span>Ejecución en este ordenador, sin nube.</span></p>
       </aside>
       <footer>Fase P0 · Sin cotizaciones, actividad de agentes ni saldos simulados. Ledger maestro previsto para P3.</footer>
