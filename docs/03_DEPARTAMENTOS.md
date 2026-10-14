@@ -16,4 +16,4 @@
 Cabecera con resumen; después secciones expandibles: instrumento, hipótesis, fuentes, valoración, catalizadores, escenarios, contraargumentos, invalidación, sizing, riesgos, opiniones de agentes, comité, orden/fills, historial de cambios, P&L y postmortem.
 
 ## Reglas de UI
-Cifras con fecha/fuente/divisa; ausencia = «Sin datos», no «0» inventado. Datos de ejemplo solo en modo DEMO claramente etiquetado y nunca mezclados con mercado real. Pantallas nítidas en React, accesibles al clicar el monitor sin hablar con NPC.
+Cifras con fecha/fuente/divisa; ausencia = «Sin datos», no «0» inventado. Datos de ejemplo solo en modo DEMO claramente etiquetado y nunca mezclados con mercado real. Pantallas nítidas en React; cada sala tiene un agente principal sentado que activa automáticamente su panel al aproximarse el jugador. Los monitores siguen presentes físicamente, pero no requieren E/clic. Diez NPC: uno por sala y un segundo en Trading; sus animaciones de trabajo son solo ambientación P1, no trabajos reales de agentes P4.

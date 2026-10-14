@@ -2,7 +2,7 @@
 
 **P0:** frontend y backend arrancan localmente; lockfiles, scripts Windows, health, tests base, SQLite migrable, paper guard, .env sin secretos, coste 0.
 
-**P1:** inicio directo en 3D **con cámara de seguimiento en tercera persona detrás de un avatar humano visible** (no cámara aérea/isométrica ni panorámica fija); WASD y ratón, seguimiento suave, colisiones de personaje y cámara, ausencia de oclusiones graves por techo/cristales, HUD; nueve zonas accesibles caminando, nueve monitores con overlays distintos utilizables desde la posición del avatar; capturas reales desde la vista de juego y FPS medido **mientras se mueve**; calidad visual premium, no dashboard plano. Las vistas panorámicas de P1.B son auxiliares y no sustituyen esta prueba.
+**P1:** inicio directo en 3D con avatar humano y cámara de seguimiento elevada detrás, **sin WASD ni control manual de cámara**: solo flechas ↑↓←→ para mover/girar; colisiones y oclusión reales; Recepción sin sofás, cristales transitables, Performance/Sistemas redistribuidos, animación de caminar natural; **10 NPC profesionales sentados** (uno principal por departamento + segundo Trading) con animación puramente ambiental. Nueve zonas accesibles caminando y **nueve paneles DOM activados automáticamente por proximidad al agente principal de cada sala**, con histéresis, accesibilidad y retorno sin reapertura inmediata. Capturas reales desde cámara de juego, FPS en movimiento y calidad premium Intel; vistas panorámicas solo auxiliares.
 
 **P2:** proveedores y capabilities verificables; sin claves no crashea; cada dato con fuente/timestamp/calidad; cuota/latencia visibles; no precios inventados.
 

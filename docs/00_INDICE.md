@@ -11,6 +11,8 @@
 | P6 | 06_DATOS_APIS, 07_CARTERA_LEDGER, 11_CONTRATOS, 13_SEGURIDAD |
 | P7 | 16_TESTS_ACEPTACION, 17_AUDITORIA_PREVIA, 18_MODELOS_Y_TOKENS |
 
+**Encargo vigente (2026-10-14):** [correcciones P1 + P2](PLAN_EJECUCION_P1_P2.md) y [checkpoints P2](PLAN_P2_CHECKPOINTS.md). Estos documentos sustituyen controles antiguos incompatibles y el STOP histórico antes de P2.
+
 Siempre: AGENTS.md, STATUS.md y tasks/Px_*.md correspondiente. **No cargar todos los documentos a la vez.**
 
 Evidencias P0: [ARQUITECTURA_P0](ARQUITECTURA_P0.md), [LICENCIAS_P0](LICENCIAS_P0.md) y [STATUS](../STATUS.md). Arranque reproducible: [README](../README.md).
