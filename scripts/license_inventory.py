@@ -35,9 +35,10 @@ for path, meta in sorted(lock["packages"].items()):
     if not path:
         continue
     name = path.split("node_modules/")[-1]
-    if not meta.get("license"):
+    license = meta.get("license") or ("MIT (LICENSE distribuido)" if name == "webgl-constants" else None)
+    if not license:
         raise RuntimeError(f"Revisión manual de licencia pendiente: {name}")
-    lines.append(f"| [{name}](https://www.npmjs.com/package/{name}/v/{meta['version']}) | {meta['version']} | {meta['license']} |")
+    lines.append(f"| [{name}](https://www.npmjs.com/package/{name}/v/{meta['version']}) | {meta['version']} | {license} |")
 lines += ["", "## Fuentes técnicas consultadas", "",
     "- [Requisitos de Vite](https://vite.dev/guide/): runtime compatible; probado en el Node instalado.",
     "- [FastAPI local](https://fastapi.tiangolo.com/deployment/manually/), [SQLite/SQLAlchemy](https://docs.sqlalchemy.org/en/20/dialects/sqlite.html), [lock y sincronización uv](https://docs.astral.sh/uv/concepts/projects/sync/).",

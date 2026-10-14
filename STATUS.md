@@ -1,5 +1,49 @@
 # Estado del proyecto
 
+## 2026-10-14 · P1.A y P1.B terminadas para revisión visual
+
+**Alcance alcanzado:** la ruta inicial abre una oficina 3D real en React Three Fiber/Three.js. Una sola planta de 34 × 28 m contiene los nueve departamentos según el plano: Research, Comité y Quant al norte; Riesgos, Trading y Ejecución en el centro; Performance, Recepción y Sistemas al sur. Hay pasillos y umbrales abiertos, mamparas de vidrio, mobiliario propio de cada sala, luminarias, piedra, madera oscura, bronce y skyline geométrico. Las cámaras Recepción/Trading/Comité/Planta sirven para inspeccionar el diseño. El diagnóstico P0 sigue en `/?diagnostico=1`.
+
+**Límite de fase:** las cámaras de inspección no son la navegación jugable. Avatar, WASD, colisiones y teletransporte corresponden a P1.C; paneles clicables a P1.D; diez NPC y pulido posterior a P1.E–F. Los monitores actuales son objetos 3D con rótulos `NO DISPONIBLE`, sin cotizaciones, posiciones, NAV, P&L, órdenes, saldos ni trabajos ficticios. **Detenido antes de P1.C para aprobación visual del usuario.**
+
+**Hardware comprobado:** Windows 11; Intel Core 5 120U (10 núcleos/12 hilos); 16.847.925.248 bytes de RAM instalados; Intel Graphics, driver 31.0.101.4953; pantalla 1920 × 1080. Chrome expone `ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)`. WMI informa 1 GiB de AdapterRAM, que no representa toda la memoria compartida de esta iGPU. Arquitectura y presupuesto: [ARQUITECTURA_P1_AB.md](docs/ARQUITECTURA_P1_AB.md).
+
+**Licencias/coste:** seis mapas JPG 1K de Dark Wood y Marble 01 (Poly Haven, CC0) guardados localmente, con autores, URL, MD5 publicado y SHA-256 por archivo en [LICENSES.md](assets/LICENSES.md) y [P1_ASSET_MANIFEST.json](assets/P1_ASSET_MANIFEST.json). Geometría, skyline y señalética originales; Three.js/R3F/Drei y sus dependencias gratuitas inventariadas en [LICENCIAS_P1.md](docs/LICENCIAS_P1.md). Recursos solicitados en runtime: solo origen `127.0.0.1`, sin CDN ni claves. **Coste adicional de servicios: 0 EUR**; ninguna compra, despliegue ni API de pago.
+
+### Pruebas y seguridad de P1.A–B
+
+| Comprobación | Resultado real, 14-10-2026 |
+|---|---|
+| `python scripts/manage.py check` | **47/47 pytest, 13/13 Vitest, TypeScript y build Vite correctos.** Los cuatro tests nuevos comprueban plano, pasillos/cota única, cámaras y presupuesto geométrico. |
+| `python scripts/manage.py audit` | pip-audit: sin vulnerabilidades conocidas; npm audit: 0 vulnerabilidades en las bases consultadas. |
+| Navegador Chrome, build de producción | Arranque directo en WebGL; nueve nodos 3D presentes; vistas y selector gráfico funcionales. Capturas reales a 1920 × 1080: [Recepción](docs/evidencias/P1B/01-recepcion.png), [planta completa](docs/evidencias/P1B/02-planta.png), [Trading Floor](docs/evidencias/P1B/03-trading.png), [Comité](docs/evidencias/P1B/04-comite.png). Sin errores de renderizado en la carga normal; dos avisos se describen abajo. |
+| Backend ausente | `/health` sustituido **solo en el navegador de prueba** por HTTP 503; la escena siguió visible y la información marcó «Servicios locales: NO DISPONIBLE». [Captura de esta simulación](docs/evidencias/P1B/05-backend-no-disponible-simulado.png). Se retiró la sustitución al terminar. |
+| P0 y paper trading | GET `/health`: 200, `PAPER_ONLY`, `orders_enabled=false`, SQLite/migración correctas. POST local `/api/orders` con `mode=LIVE`: **403 P0_EXECUTION_DISABLED**. El diagnóstico P0 volvió a mostrar `BASE LOCAL DISPONIBLE`. Backend y ruta de órdenes sin cambios de código en P1.A–B. |
+| Red, assets y secretos | Solicitudes inspeccionadas: solo JS/CSS/mapas locales y `/health` en `127.0.0.1:5174` (preview con proxy local); los seis archivos coinciden con tamaño y SHA-256 del manifiesto. Sin peticiones a brókeres, fuentes externas ni claves en el frontend. `git diff --check` sin errores. |
+
+### Rendimiento medido
+
+Chrome/ANGLE sobre la Intel integrada, viewport 1920 × 1080, perfil Equilibrado DPR 1 y sombras 1024, benchmark visible de 12 s de render continuo. Se guardó cada lectura completa en [evidencias P1.B](docs/evidencias/P1B/). El modo quieto renderiza bajo demanda: no se anuncia un FPS de reposo.
+
+| Vista | FPS medio | p95/frame | Llamadas de dibujo | Triángulos | Condición |
+|---|---:|---:|---:|---:|---|
+| Recepción | 35,0 | 66,7 ms | 137 | 161.184 | Primera medición, compilación/carga del navegador y otras tareas simultáneas. |
+| Recepción | **59,1** | 18,3 ms | 137 | 161.184 | Nueva medición con build final ya calentado. |
+| Planta completa | 60,0 | 18,2 ms | 157 | 166.892 | Equilibrado. |
+| Trading Floor | 47,5 | 38,8 ms | 94 | 123.556 | Equilibrado. |
+| Comité | 60,0 | 17,2 ms | 60 | 79.572 | Equilibrado. |
+| Comité, Detalle | **34,9** | 60,6 ms | 60 | 79.572 | DPR 1,35/sombras 2048; conviene usar Equilibrado en esta iGPU. |
+
+En una navegación nueva, `loadMs` (escena preparada) fue 3,21 s y `firstFrameMs` (primer frame WebGL sincronizado) 5,35 s; otra recarga con respuesta de salud simulada tardó 9,89 s al primer frame bajo distinta carga. No se garantiza este tiempo en otros equipos. En las mediciones la escena contiene 153–154 geometrías y 28–34 texturas según vista/calentamiento; el plano muestra las nueve zonas.
+
+**Incidencias y límites:** Vite advierte un chunk Three/R3F de 918,45 kB minificados (244,62 kB gzip), que eleva el arranque frío. Chrome muestra un aviso de API `THREE.Clock` de la dependencia y uno de precisión del shader en el driver Intel; cero errores en carga normal. El perfil Detalle cae por debajo del objetivo de 45 FPS; Equilibrado queda por defecto. La pérdida simulada de `/health` produce el error HTTP esperado en consola, sin bloquear la oficina. La revisión visual del usuario y la calidad final de toda P1 siguen pendientes. No se ha iniciado P1.C–F.
+
+**Para comprobar:** `python scripts/manage.py check`; arrancar `python scripts/manage.py backend` y `python scripts/manage.py frontend` en dos terminales, abrir `http://127.0.0.1:5173`, cambiar las cuatro cámaras y pulsar «Medir FPS» en Equilibrado. Abrir `/?diagnostico=1` para P0. Al cerrar esta verificación, backend y frontend dev escuchaban exclusivamente en `127.0.0.1:8000` y `127.0.0.1:5173`; pueden no persistir entre sesiones y no requieren credenciales.
+
+---
+
+## Checkpoint P0 (histórico)
+
 - **2026-10-13 · P0_BASE terminada técnicamente; pendiente de revisión del usuario. P1 NO iniciada.**
 - Aplicación ejecutable: **SÍ**, base técnica local de frontend, backend y SQLite. Sin oficina 3D simplificada ni assets 3D incorporados.
 - Servicios contratados, créditos comprados y despliegues: **NINGUNO**. Coste adicional de servicios: **0 EUR**.

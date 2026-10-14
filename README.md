@@ -2,7 +2,7 @@
 
 **Oficina 3D jugable de un fondo de inversión virtual multiactivo.**
 
-**Estado:** P0 implementada: base local funcional de frontend, API y SQLite. La oficina 3D todavía no está implementada.
+**Estado:** P0 conservada y P1.A–B implementadas para revisión: oficina 3D real de nueve departamentos en una sola planta. Avatar, desplazamiento y paneles de monitores pendientes de P1.C–F.
 **Capital inicial:** 10.000 EUR virtuales. **Órdenes:** exclusivamente PAPER/DEMO. **Gasto obligatorio de servicios:** 0 EUR.
 
 ## Arranque local de P0 (Windows / PowerShell)
@@ -30,7 +30,11 @@ En otra terminal:
 python scripts/manage.py frontend
 ```
 
-Abre **http://127.0.0.1:5173**. Debe aparecer la página técnica de P0 y «BASE LOCAL DISPONIBLE». El botón «Comprobar conexión» consulta realmente el backend. No es la experiencia de producto de P1 ni un prototipo 3D.
+Abre **http://127.0.0.1:5173**. Entra directamente en la oficina 3D. Usa las vistas Recepción, Trading Floor, Comité y Planta completa para revisar la arquitectura; arrastra para observar y usa la rueda para acercar. Son cámaras de inspección, aún sin avatar ni colisiones. «Sobre esta entrega» explica el alcance.
+
+El perfil Equilibrado limita DPR a 1 y las sombras a 1024; Detalle usa DPR 1,35 y sombras 2048. «Medir FPS» renderiza durante 12 segundos y muestra la última medición real. En reposo la escena renderiza bajo demanda. No se garantiza 60 FPS; resultados del equipo en STATUS.md.
+
+El diagnóstico P0 sigue en **http://127.0.0.1:5173/?diagnostico=1**, con «Comprobar conexión» y el estado real del backend. La oficina se puede inspeccionar aunque el backend no esté disponible.
 
 - Salud: http://127.0.0.1:8000/health
 - Contrato de API: http://127.0.0.1:8000/openapi.json (sin Swagger/CDN remoto).
@@ -76,4 +80,4 @@ Las funciones incluyen: universo multiactivo; análisis fundamental, técnico, m
 
 No hay ejecución real, ni garantías de feeds profesionales en tiempo real para todos los activos, ni servicios remotos 24/7 con el ordenador apagado. Las imágenes conceptuales de Runway no son archivos 3D ni la aplicación terminada. Codex puede estar sujeto a límites de uso del plan existente. No activar recursos de pago sin autorización.
 
-**Siguiente paso: revisión del usuario de P0. P1 requiere autorización y no se ha iniciado.**
+**Siguiente paso: aprobación visual de P1.B. P1.C–F no se han iniciado.** Arquitectura gráfica: [docs/ARQUITECTURA_P1_AB.md](docs/ARQUITECTURA_P1_AB.md). Recursos: [assets/LICENSES.md](assets/LICENSES.md). Capturas y medidas: [docs/evidencias/P1B](docs/evidencias/P1B).

@@ -1,7 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchHealth } from './api';
+import { lazy, Suspense } from 'react';
+
+const World = lazy(() => import('./world/World'));
 
 export function App() {
+  return new URLSearchParams(window.location.search).has('diagnostico')
+    ? <Diagnostics />
+    : <Suspense fallback={<div role="status">Preparando oficina 3D…</div>}><World /></Suspense>;
+}
+
+function Diagnostics() {
   const health = useQuery({
     queryKey: ['health'], queryFn: ({ signal }) => fetchHealth(signal),
     retry: false, refetchOnWindowFocus: true, staleTime: 0,
@@ -14,7 +23,7 @@ export function App() {
       <section aria-labelledby="title">
         <p className="eyebrow">ENTORNO DE COMPROBACIÓN</p>
         <h1 id="title">La base, antes<br />del mundo.</h1>
-        <p className="intro">Fundación técnica local para investigación y paper trading. La oficina 3D y sus nueve departamentos se construirán en P1, tras la revisión de esta fase.</p>
+        <p className="intro">Comprobación técnica local conservada desde P0. <a href="/">Volver a la oficina 3D</a></p>
         <div className="status" role="status" aria-live="polite">
           <span className={available ? 'dot ready' : 'dot'} aria-hidden="true" />
           <div><strong>{health.isFetching ? 'COMPROBANDO…' : available ? 'BASE LOCAL DISPONIBLE' : 'NO DISPONIBLE'}</strong>
