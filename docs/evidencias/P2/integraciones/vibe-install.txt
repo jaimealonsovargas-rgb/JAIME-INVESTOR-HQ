@@ -1,0 +1,2 @@
+Using Python 3.14.4 environment at: .venv-vibe
+Checked 1 package in 4ms

@@ -46,6 +46,7 @@ FIXTURES={
 }
 
 def body(parser):
+    if parser=='rss':return b'<rss><channel><item><title>TEST_ONLY</title><link>https://www.ecb.europa.eu/TEST_ONLY</link><pubDate>Tue, 01 Sep 2026 10:00:00 GMT</pubDate></item></channel></rss>'
     if parser=='sdmx_csv':return b'KEY,TIME_PERIOD,OBS_VALUE,UNIT_MEASURE,UNIT_MULT\nTEST_ONLY,2026-09,1.234567890123456789,index,0\n'
     if parser=='treasury':return b'<feed><entry><NEW_DATE>2026-09-01T00:00:00</NEW_DATE><BC_10YEAR>1.5</BC_10YEAR></entry></feed>'
     if parser=='firds_index':return b'<response><result><doc><str name="download_link">https://example.org/TEST_ONLY.zip</str><date name="publication_date">2026-09-01T00:00:00Z</date><str name="file_name">TEST_ONLY.zip</str></doc></result></response>'
@@ -59,8 +60,8 @@ def test_each_useful_adapter_normalizes_its_response(source):
     assert all(not isinstance(o.value,float) for o in rows)
 
 def test_catalog_counts_do_not_inflate():
-    assert len(CATALOG)==34 and len({s.provider for s in CATALOG.values()})==31
-    assert sum(s.implemented for s in CATALOG.values())==32
+    assert len(CATALOG)==35 and len({s.provider for s in CATALOG.values()})==31
+    assert sum(s.implemented for s in CATALOG.values())==33
 
 def http(settings,handler):
     return SafeDataHttp(settings,httpx.MockTransport(handler),resolver=lambda _h:None)
@@ -145,7 +146,7 @@ def test_registry_identity_asset_class_and_null_macro(migrated):
 
 def test_quality_does_not_query_or_expose_secrets(client):
     result=client.get('/api/data/quality');assert result.status_code==200
-    assert result.json()['counts']['candidate_access_modes']==34
+    assert result.json()['counts']['candidate_access_modes']==35
     assert result.json()['counts']['verified_connections']==0
     assert client.get('/api/data/sources/https://evil.test').status_code==404
     assert client.post('/api/orders',json={'mode':'LIVE'}).status_code==403

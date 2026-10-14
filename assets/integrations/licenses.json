@@ -1,0 +1,20 @@
+[
+  {
+    "project": "agent-reach",
+    "commit": "94f06c1969dfc1834001269d79d3ad0972d9dee6",
+    "path": "assets/integrations/agent-reach-LICENSE.txt",
+    "sha256": "e94c131ac1c2f78cfd8f7e69da354c0ff58e4e54071697703d56856c036de402"
+  },
+  {
+    "project": "vibe-trading",
+    "commit": "d7f1b9e22b42c10197497a8e2cac4f0e2cc9ca1e",
+    "path": "assets/integrations/vibe-trading-LICENSE.txt",
+    "sha256": "b155549b8bc4e43a9b96b2288dbf4eb1bc0c697f14b3f5ec6b36bf64d5a18679"
+  },
+  {
+    "project": "vibe-trading",
+    "commit": "d7f1b9e22b42c10197497a8e2cac4f0e2cc9ca1e",
+    "path": "assets/integrations/vibe-trading-NOTICE.txt",
+    "sha256": "a898503c041b27d1046748144666a1309b6b25fa4d75a1b0a06ce2f8acd3b07c"
+  }
+]

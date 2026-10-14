@@ -42,7 +42,7 @@ class Source:
         return bool(self.url and self.parser)
 
 SOURCES = (
-    Source('A01','ECB','BCE','https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A','sdmx_csv','fx_reference','EXR/D.USD.EUR.SP00.A',rights('BCE · atribución','https://www.ecb.europa.eu/services/using-our-site/disclaimer/html/index.en.html'),'https://data.ecb.europa.eu/help/api/data',country='EU',asset_class='FX',params={'lastNObservations':'5'},headers={'Accept':'text/csv'}),
+    Source('A01','ECB','BCE','https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A','sdmx_csv','fx_reference','EXR/D.USD.EUR.SP00.A',rights('BCE · atribución','https://www.ecb.europa.eu/services/using-our-site/disclaimer/html/index.en.html'),'https://data.ecb.europa.eu/help/api/data',country='EU',asset_class='FX',params={'lastNObservations':'10'},headers={'Accept':'text/csv'}),
     Source('A02','BDE','Banco de España','https://app.bde.es/bierest/resources/srdatosapp/favoritas','bde','macro_series','D_1NBAF472',rights('Banco de España · atribución','https://www.bde.es/wbe/es/pie/aviso-legal/'),'https://www.bde.es/webbe/es/estadisticas/recursos/api-estadisticas-bde.html',country='ES',params={'idioma':'es','series':'D_1NBAF472'}),
     Source('A03','INE','INE','https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/50902','ine','macro_series','50902',rights('INE · CC BY 4.0','https://www.ine.es/datosabiertos/'),'https://www.ine.es/dyngs/DAB/index.htm?cid=1100',country='ES',params={'nult':'1'}),
     Source('A04','EUROSTAT','Eurostat','https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_midx','jsonstat','macro_series','prc_hicp_midx',rights('Eurostat · atribución','https://ec.europa.eu/eurostat/en/help/copyright-notice'),'https://ec.europa.eu/eurostat/web/user-guides/data-browser/api-data-access/api-getting-started',country='ES',params={'geo':'ES','coicop':'CP00','unit':'I15','lastTimePeriod':'3'}),
@@ -80,4 +80,9 @@ OPTIONAL = (
  Source('B14','TIINGO','Tiingo Starter','https://api.tiingo.com/tiingo/daily/AAPL','tiingo','instrument_metadata','daily/AAPL/metadata',rights('Tiingo Starter · uso personal interno','https://www.tiingo.com/about/pricing',scope='personal',redistribution=False),'https://www.tiingo.com/documentation/end-of-day',country='US',asset_class='EQUITY',venue='REFERENCE',credentials=('tiingo_api_key',),auth='tiingo',limit=40,window=3600,quota_note='Starter $0: 50/h, 1000/día, 500 símbolos/mes, 1 GB/mes.'),
  Source('B15','NASDAQ','Nasdaq Data Link',None,None,'macro_series','dataset license pending',rights('Nasdaq · dataset gratis no confirmado','https://docs.data.nasdaq.com/',access=False,display=False,storage=False,redistribution=False),'https://docs.data.nasdaq.com/',block='PLAN_REQUIRED'),
 )
-CATALOG = {s.id:s for s in (*SOURCES,*OPTIONAL)}
+PUBLIC_NEWS = Source('A20','ECB','BCE · noticias RSS / Agent Reach auditado',
+    'https://www.ecb.europa.eu/rss/press.html','rss','news_metadata','ECB/press/RSS',
+    rights('BCE · atribución; metadatos RSS propios','https://www.ecb.europa.eu/services/using-our-site/disclaimer/html/index.en.html'),
+    'https://www.ecb.europa.eu/home/html/rss.en.html',country='EU',asset_class='NEWS',venue='PUBLISHER',ttl=1800,limit=2,
+    quota_note='Canal público auditado; 2/min local, cache 30 min. Sin artículos completos, cookies ni sesión.')
+CATALOG = {s.id:s for s in (*SOURCES,*OPTIONAL,PUBLIC_NEWS)}

@@ -1,12 +1,12 @@
 # P2 · Verificación de proveedores
 
-34 modalidades de acceso / 31 proveedores distintos. La documentación acredita un endpoint o derecho; **solo un HTTP 200 con respuesta válida acredita conexión**. Mocks, 401/403, cuerpos inválidos y existencia de documentación no cuentan. Uso exclusivo local; no redistribuir feeds personales/internos. No se han creado cuentas ni contratado planes.
+35 modalidades de acceso / 31 proveedores distintos (catálogo original de 34 más RSS oficial BCE). La documentación acredita un endpoint o derecho; **solo un HTTP 200 con respuesta válida acredita conexión**. Mocks, 401/403, cuerpos inválidos y existencia de documentación no cuentan. Uso exclusivo local; no redistribuir feeds personales/internos. No se han creado cuentas ni contratado planes.
 
-Esta matriz describe un preset acotado por adaptador, no cobertura universal. Catálogo ejecutable: `backend/app/data_catalog.py`. Último smoke: 2026-10-14T20:17:22.173322+00:00. Latencia incluye DNS/TLS/descarga real; no se inventa retraso del feed.
+Esta matriz describe un preset acotado por adaptador, no cobertura universal. Catálogo ejecutable: `backend/app/data_catalog.py`. Último smoke: 2026-10-14T23:10:20.937175+00:00. Latencia incluye DNS/TLS/descarga real; no se inventa retraso del feed.
 
 | ID / proveedor | Endpoint de consulta | Dato / mercado | Auth / cuota | Adaptador / HTTP / usable | Última comprobación / latencia |
 |---|---|---|---|---|---|
-| A01 · BCE | GET `https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A` · [documentación](https://data.ecb.europa.eu/help/api/data) | fx_reference / STATISTICS / EU | público · Presupuesto local conservador; límite oficial no publicado. | sí / 200 / sí · AVAILABLE_VERIFIED | 2026-10-14T19:18:38.321559Z / 21868 ms |
+| A01 · BCE | GET `https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A` · [documentación](https://data.ecb.europa.eu/help/api/data) | fx_reference / STATISTICS / EU | público · Presupuesto local conservador; límite oficial no publicado. | sí / 200 / sí · AVAILABLE_VERIFIED | 2026-10-14T23:09:46.279487Z / 20791 ms |
 | A02 · Banco de España | GET `https://app.bde.es/bierest/resources/srdatosapp/favoritas` · [documentación](https://www.bde.es/webbe/es/estadisticas/recursos/api-estadisticas-bde.html) | macro_series / STATISTICS / ES | público · Presupuesto local conservador; límite oficial no publicado. | sí / 200 / sí · AVAILABLE_VERIFIED | 2026-10-14T19:18:46.427990Z / 7398 ms |
 | A03 · INE | GET `https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/50902` · [documentación](https://www.ine.es/dyngs/DAB/index.htm?cid=1100) | macro_series / STATISTICS / ES | público · Presupuesto local conservador; límite oficial no publicado. | sí / 200 / sí · AVAILABLE_VERIFIED | 2026-10-14T19:19:12.391282Z / 23685 ms |
 | A04 · Eurostat | GET `https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_midx` · [documentación](https://ec.europa.eu/eurostat/web/user-guides/data-browser/api-data-access/api-getting-started) | macro_series / STATISTICS / ES | público · Presupuesto local conservador; límite oficial no publicado. | sí / 200 / sí · AVAILABLE_VERIFIED | 2026-10-14T19:19:17.752198Z / 4943 ms |
@@ -22,7 +22,7 @@ Esta matriz describe un preset acotado por adaptador, no cobertura universal. Ca
 | A14 · Binance data-only | GET `https://data-api.binance.vision/api/v3/aggTrades` · [documentación](https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints) | market_quote / BINANCE / global | público · Presupuesto local conservador; límite oficial no publicado. | sí / 200 / no · RIGHTS_RESTRICTED | 2026-10-14T19:23:56.365226Z / 15097 ms |
 | A15 · CoinPaprika Free | GET `https://api.coinpaprika.com/v1/tickers/btc-bitcoin` · [documentación](https://docs.coinpaprika.com/) | market_quote / AGGREGATED / global | público · 20.000/mes; presupuesto local 5/min. | sí / 200 / sí · AVAILABLE_VERIFIED | 2026-10-14T19:24:15.130114Z / 18621 ms |
 | A16 · CoinGecko Public | GET `https://api.coingecko.com/api/v3/simple/price` · [documentación](https://docs.coingecko.com/docs/keyless-public-api) | market_quote / AGGREGATED / global | público · Presupuesto local conservador; límite oficial no publicado. | sí / 200 / no · RIGHTS_RESTRICTED | 2026-10-14T19:24:26.335714Z / 11106 ms |
-| A17 · GDELT DOC | GET `https://api.gdeltproject.org/api/v2/doc/doc` · [documentación](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/) | news_metadata / NEWS / global | público · Presupuesto local conservador; límite oficial no publicado. | sí / — / no · TIMEOUT | 2026-10-14T20:17:22.151494Z / 8326 ms |
+| A17 · GDELT DOC | GET `https://api.gdeltproject.org/api/v2/doc/doc` · [documentación](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/) | news_metadata / NEWS / global | público · Presupuesto local conservador; límite oficial no publicado. | sí / — / no · TIMEOUT | 2026-10-14T23:10:20.715316Z / 15093 ms |
 | A18 · Coinbase Exchange Public | GET `https://api.exchange.coinbase.com/products/BTC-USD/ticker` · [documentación](https://docs.cdp.coinbase.com/api-reference/exchange-api/rest-api/products/get-product-ticker) | market_quote / COINBASE / global | público · Presupuesto local conservador; límite oficial no publicado. | sí / 200 / sí · AVAILABLE_VERIFIED | 2026-10-14T19:25:14.360144Z / 40482 ms |
 | A19 · OpenFIGI público | POST `https://api.openfigi.com/v3/mapping` · [documentación](https://www.openfigi.com/api/documentation) | instrument_metadata / MAPPING / global | público · 25/min, 10 jobs/petición sin clave; local 10/min. | sí / 200 / sí · AVAILABLE_VERIFIED | 2026-10-14T19:25:30.871156Z / 15517 ms |
 | B01 · FRED | GET `https://api.stlouisfed.org/fred/series/observations` · [documentación](https://fred.stlouisfed.org/docs/api/fred/series_observations.html) | macro_series / STATISTICS / US | fred_api_key · Presupuesto local conservador; límite oficial no publicado. | sí / — / no · NO_CREDENTIALS | sin petición / — |
@@ -40,6 +40,7 @@ Esta matriz describe un preset acotado por adaptador, no cobertura universal. Ca
 | B13 · Massive Basic | GET `https://api.massive.com/v1/marketstatus/now` · [documentación](https://massive.com/docs/rest/stocks/market-operations/market-status) | instrument_metadata / MARKET_STATUS / US | massive_api_key · Basic 5/min; market status gratuito, no realtime quote. | sí / — / no · NO_CREDENTIALS | sin petición / — |
 | B14 · Tiingo Starter | GET `https://api.tiingo.com/tiingo/daily/AAPL` · [documentación](https://www.tiingo.com/documentation/end-of-day) | instrument_metadata / REFERENCE / US | tiingo_api_key · Starter $0: 50/h, 1000/día, 500 símbolos/mes, 1 GB/mes. | sí / — / no · NO_CREDENTIALS | sin petición / — |
 | B15 · Nasdaq Data Link | GET `Endpoint pendiente` · [documentación](https://docs.data.nasdaq.com/) | macro_series / STATISTICS / global | público · Presupuesto local conservador; límite oficial no publicado. | no / — / no · PLAN_REQUIRED | sin petición / — |
+| A20 · BCE · noticias RSS / Agent Reach auditado | GET `https://www.ecb.europa.eu/rss/press.html` · [documentación](https://www.ecb.europa.eu/home/html/rss.en.html) | news_metadata / PUBLISHER / EU | público · Canal público auditado; 2/min local, cache 30 min. Sin artículos completos, cookies ni sesión. | sí / 200 / sí · AVAILABLE_VERIFIED | 2026-10-14T23:10:05.543793Z / 18939 ms |
 
 ## Derechos por modalidad
 
@@ -81,6 +82,7 @@ D = visualización local; C = cache local; R = redistribución. “Sí” depend
 | B13 | Massive Basic · personal, display pendiente / personal | no / no / no | [2026-10-14](https://massive.com/knowledge-base/article/does-massive-have-a-market-holiday-or-status-page) |
 | B14 | Tiingo Starter · uso personal interno / personal | sí / sí / no | [2026-10-14](https://www.tiingo.com/about/pricing) |
 | B15 | Nasdaq · dataset gratis no confirmado / open | no / no / no | [2026-10-14](https://docs.data.nasdaq.com/) |
+| A20 | BCE · atribución; metadatos RSS propios / open | sí / sí / sí | [2026-10-14](https://www.ecb.europa.eu/services/using-our-site/disclaimer/html/index.en.html) |
 
 ## Límites y pendientes
 

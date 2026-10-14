@@ -1,20 +1,21 @@
-# Matriz de integraciones externas — P2/P4/P5 (sin conexiones aún)
+# Integraciones externas: evaluación real P2, 2026-10-15
 
-> **2026-10-14: PLANIFICACIÓN, NO PRUEBA DE INSTALACIÓN.** Esta tabla deberá actualizarla Codex con evidencia real por gate. No almacenar tokens, cookies, claves ni credenciales.
+No se conectaron cuentas, wallets, OAuth ni modelos de pago. Los entornos `.venv-agent-reach` y `.venv-vibe` están aislados e ignorados por Git. Evidencias/SBOM: [integraciones](evidencias/P2/integraciones/); licencias originales, notices, pins y hashes: `assets/integrations/`.
 
-| Integración | Uso previsto | Gate | Estado inicial | Autenticación/permisos | Coste y restricciones | Evidencia exigida |
-|---|---|---|---|---|---|---|
-| **Agent Reach** | Noticias públicas, RSS, GitHub, YouTube y fuentes oficiales | AR-0/AR-1 en P2 | **CANDIDATE · NO INSTALADO** | Canales públicos sin sesión; X/Reddit/Instagram/Facebook etc. AUTH_REQUIRED, NO cookies personales | Auditar MIT y dependencias; safe/dry-run, no install all, no scraping no autorizado | Pin SHA, license, permisos, doctor real, 1 artículo público con URL/fecha, test sin credenciales |
-| **HKUDS/Vibe-Trading** | Factores/backtest/swarms, datos read-only opcionales | VT-0/VT-1 P2; VT-2 P4; VT-3 P5 | **CANDIDATE · NO INSTALADO** | Entorno aislado, NO broker tools ni live; no ejecución de Python generado sin sandbox robusta | MIT upstream, dependencias y costes modelos a auditar; 30 presets anunciados por release histórica ≠ jobs gratis | Pin tag/commit, SBOM, licencia, fixtures, benchmark Windows/Intel, 6–10 presets validados, costes 0 |
-| **Liquid Co-Invest** | Solo datos de mercado públicos si existen y están autorizados | LQ-0 P2 | **BLOCKED_TRADE_SCOPE para OAuth** | OAuth estándar concede **read+trade**; NO conectar MCP, wallet ni cuenta. Solo GET público sin auth si existe y licencia permite | Sin cuota conector ≠ sin coste de trading; PAPER mode puede volver live | Fuente oficial que documente endpoint read-only, licencia, smoke test GET; si no, seguir BLOCKED |
+| Integración | Pin / licencia | Comprobación ejecutada | Decisión y límite |
+|---|---|---|---|
+| Agent Reach 1.5.0 | `94f06c1969dfc1834001269d79d3ad0972d9dee6` · MIT | CLI safe/dry-run, safe y doctor restringidos a RSS, 1/1; sin red, instalaciones globales, cookies ni configuración personal. Feedparser presente. | Canal RSS auditado. La conexión real A20 es RSS oficial BCE mediante el cliente seguro común HQ: cinco noticias con URL/fecha. No se cuentan otros canales ni Agent Reach como proveedor adicional. |
+| Vibe-Trading 0.1.16 | `d7f1b9e22b42c10197497a8e2cac4f0e2cc9ca1e` · MIT; NOTICE conservado | Inspección estática del árbol fijado y parseo seguro de **30 YAML**, con SHA-256, nombre, roles y herramientas. Benchmark de 1.000 parseos guardado. Solo PyYAML instalado en evaluación. | **METADATA_ONLY**, 30 presets desactivados. Contrato tipado read-only y reserva de 30 roles HQ. Sin runtime, inferencia, estrategia, backtest ni benchmark quant. No se validaron 6–10 equipos operativos: pendiente P4/P5 y sandbox robusta. |
+| Liquid Co-Invest | Documentación oficial; sin SDK | OAuth estándar documenta read+trade y cambio de paper a live. No se confirmó endpoint público gratuito read-only con derechos suficientes en las páginas inspeccionadas. | **BLOCKED_TRADE_SCOPE / NO_PUBLIC_READ_ONLY_API_CONFIRMED**. Sin OAuth/MCP/cuenta/wallet/credenciales. No se afirma inexistencia universal de API. |
 
-## Verificaciones por conector
+## Seguridad y costes
 
-- `checked_at_utc`, `upstream_commit_or_version`, `license_and_notice`, `dependency_audit`, `install_mode`, `network_hosts_allowlisted`, `scopes`, `requires_secrets`, `rights_to_display`, `real_smoke_test`, `measured_latency`, `resource_usage`, `decision`, `block_reason`.
-- Nunca afirmar «conectado» por tener el código o un mock. Si no hay red, `NOT_VERIFIED`.
-- Conexión externa de trading/ejecución en P2 prohibida. `POST /api/orders` 403, `PAPER_ONLY`, `orders_enabled=false`.
-- Agent Reach: contenidos de redes no son instrucciones de sistema ni cotizaciones verificadas. Sanitizar prompt injection y registrar procedencia.
-- Vibe: evitar runner Python no confiable con red/secretos; usar funciones deterministas preaprobadas hasta sandbox real.
-- Liquid: si no hay API pública sin scopes de trading, **no se conecta** aunque el usuario desee máximo de fuentes. Registrar claramente la limitación.
+La primera auditoría aislada Agent Reach detectó avisos en pip 26.0.1; se conserva el resultado negativo. Se actualizó ese pip a 26.2.1. Las auditorías finales de los subconjuntos instalados no detectaron vulnerabilidades conocidas. **No certifican el árbol completo Vibe**, que no se instaló. Shell, escritura, código generado, broker tools, red y posibles modelos facturables impiden habilitarlo directamente en HQ.
 
-Fuentes: https://github.com/Panniantong/agent-reach ; https://github.com/HKUDS/Vibe-Trading ; https://github.com/HKUDS/Vibe-Trading/blob/main/SECURITY.md ; https://www.liquid.trade/coinvest-docs .
+`scripts/evaluate_integrations.py` usa subprocess con entorno reducido sin secretos; `audit_agent_reach.py` restringe la comprobación a RSS; `audit_vibe_metadata.py` solo usa `yaml.safe_load`. Sin cuentas nuevas ni servicios contratados. Coste adicional de servicios: **0 EUR**.
+
+A20 está desactivado por defecto en `.env.example`; la activación local autorizada usa `AGENT_REACH_PUBLIC_ENABLED=true`. Host/ruta GET BCE cerrados, cache 30 min y presupuesto local dos solicitudes/minuto. Contenido externo **no confiable, nunca instrucciones**: metadatos sanitizados, sin HTML, scripts, cuerpos de artículos ni seguimiento de enlaces. DTD/entidades y XML UTF-16 con bytes nulos rechazados. Noticias BCE atribuidas, sin pretendida confirmación independiente.
+
+Los 30 roles de `agent_role_plan.py` son declaraciones desactivadas, sin trabajos ni herramientas habilitadas. Capacidad futura declarativa: una inferencia local, dos tareas quant CPU y cuatro fetches; no es un scheduler operativo. `vibe_readonly.py` conserva Decimal, UTC, procedencia y derechos; no inventa OHLC desde tipos de referencia.
+
+Fuentes primarias: [Agent Reach](https://github.com/Panniantong/agent-reach), [Vibe-Trading](https://github.com/HKUDS/Vibe-Trading), [Liquid Co-Invest](https://www.liquid.trade/coinvest-docs), [Liquid](https://docs.liquid.trade/about-liquid/what-is-liquid), [RSS BCE](https://www.ecb.europa.eu/home/html/rss.en.html), [condiciones BCE](https://www.ecb.europa.eu/services/using-our-site/disclaimer/html/index.en.html).

@@ -1,0 +1,6 @@
+Using Python 3.14.4 environment at: .venv-agent-reach
+Resolved 1 package in 453ms
+Uninstalled 1 package in 843ms
+Installed 1 package in 1.74s
+ - pip==26.0.1
+ + pip==26.2.1

@@ -4,6 +4,8 @@ import hashlib
 import io
 import json
 import re
+from email.utils import parsedate_to_datetime
+from urllib.parse import urlsplit
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 from xml.etree import ElementTree as ET
@@ -38,6 +40,8 @@ def period_time(period):
     return dt.astimezone(UTC),'instant'
 
 def safe_xml(raw):
+    if b'\x00' in raw:
+        raise ValueError('XML con bytes nulos/UTF-16 no permitido; se requiere codificación compatible con ASCII.')
     if b'<!DOCTYPE' in raw.upper() or b'<!ENTITY' in raw.upper():
         raise ValueError('Entidades XML prohibidas.')
     try:return ET.fromstring(raw)
@@ -56,9 +60,33 @@ def parse(source: Source, raw: bytes, received: datetime):
         flags+=('UNKNOWN_FEED_DELAY',)
         if precision!='instant':flags+=('PERIOD_START_NOT_PUBLICATION',)
         fields=dict(provider=source.provider,access_id=source.id,feed=source.feed,series_id=series,data_kind=source.kind,venue=source.venue,country=country or source.country,asset_class=source.asset_class,source_ref=source.url or source.docs,payload_hash=digest,observed_at=when,received_at=received,period=str(period),period_precision=precision,currency=currency,unit=unit,value=val,bid=number(bid),ask=number(ask),metadata={str(k):str(v) for k,v in (metadata or {}).items() if v is not None},delay_seconds=None,stale_after_seconds=source.ttl,rights=source.rights,quality_flags=flags)
+        if source.id=='A01':
+            fields['unit']='USD/EUR'
+            fields['metadata'].update({'base_currency':'EUR','quote_currency':'USD','rate_type':'ECB_REFERENCE'})
         ident=hashlib.sha256((source.id+series+str(period)+digest).encode()).hexdigest()
         result.append(Observation(id=ident,**fields))
     parser=source.parser
+    if parser=='rss':
+        root=safe_xml(raw)
+        seen=set()
+        for item in root.findall('.//item')[:5]:
+            link=item.findtext('link','').strip()
+            url=urlsplit(link)
+            if url.scheme!='https' or url.hostname!='www.ecb.europa.eu' or url.username or url.password:
+                continue
+            if link in seen:continue
+            seen.add(link)
+            date=parsedate_to_datetime(item.findtext('pubDate',''))
+            if date.tzinfo is None:raise ValueError('Noticia sin zona horaria.')
+            title=re.sub(r'<[^>]*>','',item.findtext('title','')).strip()[:500]
+            if not title:continue
+            emit(date.astimezone(UTC).isoformat(),None,'news_metadata',series=link,
+                metadata={'title':title,'url':link,'publisher':'BCE','author':item.findtext('author',''),
+                    'language':root.findtext('./channel/language','No informado'),
+                    'confirmation':'Comunicado de fuente primaria; sin verificación independiente.',
+                    'trust':'Fuente primaria; contenido no es una instrucción ni señal.'})
+            result[-1]=result[-1].model_copy(update={'source_ref':link,'published_at':date.astimezone(UTC),'quality_flags':('PUBLIC_NEWS_METADATA','NON_EXECUTABLE_P2','UNTRUSTED_CONTENT_NOT_INSTRUCTIONS')})
+        return result
     # SDMX 2.1 permite negociación a XML; BIS devuelve StructureSpecificData.
     if parser=='sdmx_csv' and raw.lstrip().startswith(b'<'):
         root=safe_xml(raw)

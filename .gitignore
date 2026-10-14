@@ -8,6 +8,8 @@
 *.pfx
 # Python
 .venv/
+.venv-agent-reach/
+.venv-vibe/
 .tools/
 .ruff_cache/
 *.egg-info/

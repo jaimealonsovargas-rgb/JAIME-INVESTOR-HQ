@@ -10,7 +10,7 @@
 
 Todos los modelos y mapas se sirven localmente. Se descargaron entradas concretas mediante HTTP Range desde los paquetes gratuitos oficiales, sin instalar Blender/MakeHuman, cuentas, créditos o APIs facturables. `scripts/fetch_p1_humans.py` es una herramienta de mantenimiento opcional, nunca se ejecuta en runtime. Los originales se conservan para verificar procedencia; los cinco mapas runtime se redujeron a 1K mediante Canvas, conservando alpha en pelo/ojos. **Coste adicional 0 EUR**. CC0 permite redistribución; no se depende de licencias de Mixamo ni de assets sin autor identificable.
 
-Los diagramas SVG son originales de este proyecto. P1.A–B incorpora materiales gratuitos de Poly Haven y modelado original en Three.js. No se han usado fotografías como sustituto de la escena ni modelos de pago. Las referencias de Runway siguen sin estar disponibles como imágenes locales.
+Los diagramas SVG son originales de este proyecto. P1.A–B incorpora materiales gratuitos de Poly Haven y modelado original en Three.js. No se han usado fotografías como sustituto de la escena ni modelos de pago. Las dos referencias Sims originales facilitadas por el usuario se conservan en `assets/reference_images/`, con hashes verificados en a3547bc. Son conceptos de dirección visual, no texturas runtime ni capturas; no se les atribuye una licencia CC0 ajena.
 
 Los índices LOD derivados también son CC0 y se registran con hash en `assets/P1_HUMAN_MANIFEST.json`: avatar 41.114; NPC 24.714 / 13.240 / 4.040 triángulos. `scripts/optimize_p1_human.mjs` usa **meshoptimizer 1.1.1**, Arseny Kapoulkine, **MIT**, ya incluido en el lockfile; [fuente oficial](https://github.com/zeux/meshoptimizer) y aviso en `frontend/node_modules/meshoptimizer/LICENSE.md`. El optimizador se ejecuta offline, conserva UV, normales, pesos y animaciones; no se carga WASM del simplificador en la aplicación. Marcha con IK y ambientación sentada originales del proyecto, CC0. No hay Mixamo, compras ni herramientas pesadas instaladas.
 
@@ -31,3 +31,11 @@ Reproducción de descarga: `python scripts/fetch_p1_assets.py` (opcional, requie
 ## Revisión visual de P1.B · 2026-10-14
 
 Respaldos ergonómicos, hojas curvas, jardineras torneadas, teclados, tejido, fachadas de edificios, cielo degradado, esculturas abstractas y placas discretas son creaciones procedurales originales en `world/details.ts`, `model.ts`, `materials.ts` y `Office.tsx`. No se han descargado nuevos assets ni imágenes generadas. La iluminación usa luces compartidas y PMREM procedural de Three.js, MIT, incluido en la dependencia ya inventariada; no usa un servicio externo. Los seis mapas CC0 anteriores permanecen sin modificación.
+
+## Sims / integraciones P2 · 2026-10-15
+
+La adaptación marfil/roble conserva los seis mapas CC0 originales: color, UV y parámetros de material modificados en código, no nuevos assets de terceros. Los 16 NPC y el avatar reutilizan el humano CC0 con rigs independientes y LOD; no se descargaron personajes de licencia incierta.
+
+Agent Reach 1.5.0 y Vibe-Trading 0.1.16 se inspeccionaron en entornos aislados, no se incorporaron como dependencias runtime. Licencias MIT originales y NOTICE de Vibe preservados en `assets/integrations/`, con SHA-256 y commits en `licenses.json`. NOTICE distingue los materiales Qlib/Apache y tipografías/OFL upstream; no se copian sus assets de demostración ni se habilitan sus herramientas. [Alcance y límites de auditoría](../docs/INTEGRACIONES_TERCEROS_VERIFICACION.md).
+
+Los datos financieros tienen permisos propios por modalidad, separados de la licencia del software: [matriz P2](../docs/P2_PROVIDERS_VERIFICACION.md). El RSS BCE solo conserva metadatos propios con atribución. No se redistribuyen cuerpos de noticias, imágenes de editoriales ni valores de feeds personales/restringidos en el videowall o evidencias públicas. Coste adicional de servicios 0 EUR.

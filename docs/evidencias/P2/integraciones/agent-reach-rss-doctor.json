@@ -1,0 +1,21 @@
+{
+  "restricted_to": [
+    "rss"
+  ],
+  "network_allowed": false,
+  "browser_cookies": false,
+  "config_created": false,
+  "doctor": {
+    "rss": {
+      "status": "ok",
+      "name": "RSS/Atom 订阅源",
+      "message": "可读取 RSS/Atom 源",
+      "tier": 0,
+      "backends": [
+        "feedparser"
+      ],
+      "active_backend": "feedparser"
+    }
+  },
+  "safe_dry_run_output": "\nAgent Reach Installer\n========================================\nDRY RUN — showing what would be done (no changes)\n\nSAFE MODE — skipping automatic system changes\n\nEnvironment: Local computer (auto-detected)\n\n[dry-run] System dependency check:\n  ✅ gh CLI: already installed, skip\n  ✅ Node.js: already installed, skip\n\n[dry-run] Would install mcporter and configure Exa search\n\nDry run complete. No changes were made.\n\nAgent Reach Installer\n========================================\nSAFE MODE — skipping automatic system changes\n\nEnvironment: Local computer (auto-detected)\n\nChecking system dependencies (safe mode — no auto-install)...\n  ✅ GitHub CLI already installed\n  ✅ Node.js already installed\n  All system dependencies are installed!\n\nChecking mcporter (safe mode)...\n  -- mcporter not installed\n  To install: npm install -g mcporter\n  Then configure Exa: mcporter config add exa https://mcp.exa.ai/mcp --scope home\n\nTesting channels...\n\n[bold cyan]Agent Reach 状态[/bold cyan]\n[cyan]========================================[/cyan]\n图例：[green]✅[/green] 可用  [yellow][!][/yellow] 已装但需配置/登录  [red][X][/red] 未安装\n\n[bold]✅ 装好即用：[/bold]\n  [green]✅[/green] [bold]RSS/Atom 订阅源[/bold] — 可读取 RSS/Atom 源\n\n状态：[green]1/1[/green] 个渠道可用\n\nSafe mode check complete. No changes were made. 1/1 channels active.\n"
+}

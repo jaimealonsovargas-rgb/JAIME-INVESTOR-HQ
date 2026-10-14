@@ -29,6 +29,11 @@ REASONS = {
  'DISABLED':'Fuente desactivada por configuración local.', 'STALE':'Cache caducada; datos históricos, nunca ejecutables.',
 }
 
+def cache_key(source):
+    identity=repr((source.url,source.params,source.feed,source.rights.model_dump(mode='json')))
+    return 'cache:'+source.id+':'+hashlib.sha256(identity.encode()).hexdigest()[:32]
+
+
 class DataService:
     def __init__(self, engine, settings=None, http=None, clock=None):
         self.engine=engine;self.settings=settings or DataSettings()
@@ -36,6 +41,8 @@ class DataService:
         self.clock=clock or (lambda:datetime.now(timezone.utc));self.lock=threading.RLock()
 
     def initial(self, source):
+        if source.id == 'A20' and not self.settings.agent_reach_public_enabled:
+            return DataResult(access_id=source.id,state='DISABLED',reason='Canal público RSS auditado; activar AGENT_REACH_PUBLIC_ENABLED localmente.')
         state=source.block or ('NO_CREDENTIALS' if source.credentials and not all(self.settings.secret(k) for k in source.credentials) else 'NOT_VERIFIED')
         if source.auth=='sec' and state=='NO_CREDENTIALS':state='CONFIG_REQUIRED'
         if source.id in self.settings.data_disabled_sources.split(',') or (not source.credentials and not self.settings.data_public_enabled):state='DISABLED'
@@ -63,8 +70,7 @@ class DataService:
         if initial.state!='NOT_VERIFIED':return initial
         if not source.implemented:return initial.model_copy(update={'state':'NOT_IMPLEMENTED','reason':REASONS['NOT_IMPLEMENTED']})
         if not source.rights.access_allowed:return initial.model_copy(update={'state':'RIGHTS_RESTRICTED','reason':REASONS['RIGHTS_RESTRICTED']})
-        now=self.clock();identity=repr((source.url,source.params,source.feed,source.rights.model_dump(mode='json')))
-        key='cache:'+source.id+':'+hashlib.sha256(identity.encode()).hexdigest()[:32]
+        now=self.clock();key=cache_key(source)
         # RLock serializa consultas del proceso; SQLite protege cuotas de otros procesos.
         with self.lock:
             with Session(self.engine) as session, session.begin():

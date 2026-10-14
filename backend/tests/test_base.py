@@ -117,5 +117,5 @@ def test_decimal_and_quote_provenance():
 
 def test_api_schema_has_typed_contracts(client):
     schema = client.get("/openapi.json").json()
-    assert set(schema["paths"]) == {"/health", "/api/providers/status", "/api/instruments", "/api/orders", "/api/data/quality", "/api/data/sources/{access_id}"}
+    assert set(schema["paths"]) == {"/health", "/api/providers/status", "/api/instruments", "/api/orders", "/api/data/quality", "/api/data/sources/{access_id}", "/api/hq/overview"}
     assert schema["paths"]["/api/orders"]["post"]["responses"]["403"]

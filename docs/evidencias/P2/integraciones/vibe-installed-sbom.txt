@@ -1,0 +1,2 @@
+Using Python 3.14.4 environment at: .venv-vibe
+[{"name":"pyyaml","version":"6.0.3"}]

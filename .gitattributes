@@ -1,0 +1,3 @@
+# Preserve upstream licence bytes: SHA-256 in assets/integrations/licenses.json.
+assets/integrations/*-LICENSE.txt -text
+assets/integrations/*-NOTICE.txt -text
