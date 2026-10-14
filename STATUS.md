@@ -1,5 +1,99 @@
 # Estado del proyecto
 
+## 2026-10-14 · P1.B–F completadas · STOP antes de P2
+
+Autorización actual: issue #1 y `docs/PLAN_CIERRE_P1_BF.md`, sincronizados con `origin/main` **abda9b6** mediante fast-forward. Sustituye los STOP históricos tras B/C. Antes de sincronizar se creó `output/p1-preclosure-20261014-131948.zip` con 24 archivos y hashes; los 23 archivos no solapados quedaron idénticos y `docs/02_MUNDO_3D.md` se combinó sin conflictos. La reserva arquitectónica local se conserva; stash de ese documento retenido como respaldo.
+
+**Checkpoint B verde:** refinamientos anteriores preservados, techo/mamparas/marcos/lámparas elevados de forma coherente, señalética discreta y skyline mejorado. Se corrigieron las **23 sillas** de puestos/Comité para mirar hacia su mesa; prueba por raycast de la superficie real. Recepción utiliza mostrador para atención de pie y no tiene una silla de trabajo orientada incorrectamente. `python scripts/manage.py check`: **47 pytest + 13 Vitest**, TypeScript/build correctos. Capturas nuevas de [Recepción](docs/evidencias/P1B/cierre-integral/01-recepcion.png), [planta](docs/evidencias/P1B/cierre-integral/02-planta.png), [Trading](docs/evidencias/P1B/cierre-integral/03-trading.png) y [Comité](docs/evidencias/P1B/cierre-integral/04-comite.png). Chrome/Intel/D3D11, 1920×1080 Equilibrado, 12 s estáticos: Recepción **53,2**, Planta **53,1**, Trading **53,4**, Comité **56,5 FPS**. Estas cifras NO son aceptación en movimiento de F.
+
+Preparación de C: no había modelos humanos ni Blender/MakeHuman en las rutas locales comprobadas. Se verificaron las fuentes gráficas MakeHuman y el traje formal de Margaret Toigo **CC0**, descargadas selectivamente sin instalar software pesado. El GLB derivado se integró y revisó posteriormente en C/E/F.
+
+**Checkpoint C verde:** avatar humano MakeHuman/Margaret Toigo CC0 de 1,78 m, rig real y clips idle/walk originales; cámara elevada inicial 3,2 m / 3,8 m / FOV 65°, ratón derecho, zoom limitado, WASD relativo normalizado, giro suavizado, colisiones semánticas, spring arm, minimapa y nueve spawns libres comprobados. La inspección restaura el transform del jugador. Se añadió verificación de conectividad peatonal y se recorrieron **las nueve zonas con WASD real**, sin modificar posiciones desde automatización. [Controles](docs/evidencias/P1C/controles.json), [capturas y recorridos](docs/evidencias/P1C/). `python scripts/manage.py check`: **47 pytest + 15 Vitest**, TypeScript y build correctos.
+
+Incidencias corregidas de C: spawn de Performance ocupado, reinicio StrictMode de AnimationMixer y luz insuficiente desde la cámara de juego. Renderizado en reposo reducido a 20 Hz, completo al moverse; techo excluido del mapa de sombras para aproximar la iluminación interior sin GI costosa. Intel/D3D11 Equilibrado 1920×1080: primera medición fría **19,2 FPS** (p95 141 ms, 39 muestras con movimiento); segunda en Trading tras carga **35,0 FPS**, p95 **52,2 ms**, 198 muestras con movimiento de 215, 122 draw calls y 218.182 triángulos. Equipo con batería al 94%, otras apps abiertas; F repetirá y optimizará con NPC. Hubo timeouts de tests bajo carga gráfica; repetidos con el navegador de QA cerrado pasan. No se ocultan los resultados iniciales.
+
+**Checkpoint D verde:** nueve superficies físicas independientes, rango 2,25 m, cono 50°, cara frontal y LOS contra cristal/muebles. Nueve paneles React/DOM distintos, diálogo nativo con foco, Escape, Tab/Shift+Tab, cierre visible y mundo congelado; transform del jugador y cámara restaurado exactamente. Cliente tipado/validado de `/api/providers/status`, salud/proveedores P0 reales. Las interfaces financieras muestran las fases P3/P4/P5/P6 pendientes, sin filas, cotizaciones, curvas, votos u órdenes de ejemplo. Los nueve terminales se probaron con **E y clic físico**, caminando hasta su monitor desde cada spawn. [Capturas y pruebas D](docs/evidencias/P1D/).
+
+Incidencias D corregidas: pasillo interior de Trading bloqueado por las sillas (filas separadas a ±1,95 m, conservando los seis puestos y nueve departamentos); brazo de cámara acortado por sillas bajas (origen de colisión a altura de cabeza, mirada al torso). Comité ya admite clic físico desde la perspectiva elevada. Desconexión comprobada interceptando/abortando las dos peticiones locales: el panel muestra NO DISPONIBLE y el avatar sigue moviéndose; backend intacto. `python scripts/manage.py check`: **47 pytest + 22 Vitest**, TypeScript/build correctos. Advertencias históricas de Starlette/httpx y bundle 3D grande siguen sin ser errores.
+
+**Checkpoint E verde:** diez NPC humanos profesionales CC0 (Recepción 1, Trading 3, Research/Quant/Riesgos/Ejecución/Comité/Sistemas 1 cada uno), ropa formal y estados OFFLINE / trabajo NO DISPONIBLE — P4. Tres microanimaciones ambientales originales: idle, observe, focus; walk para el jugador. SkeletonUtils.clone con **once rigs independientes**, un solo Skeleton compartido entre las cinco piezas de cada actor, geometría/texturas compartidas. LOD con histéresis: **41.114 / 13.240 / 4.040 triángulos**, culling fuera de cámara y más de 26 m, mezcla/actualización de animación a 20/10/5 Hz por distancia. No luces ni sombras dinámicas por NPC; sombras de contacto suaves compartidas. Rutas, spawns y LOS de terminales siguen libres con los NPC como obstáculos semánticos. **24 Vitest + TypeScript/build correctos**; backend no modificado.
+
+E, Intel Graphics/D3D11, Equilibrado/DPR 1, 1920×1080: Trading **55,1 FPS solo en movimiento**, p95 **25,5 ms**, 351 muestras de desplazamiento; promedio total 55,5 FPS, 167 draw calls, 340.622 triángulos, 46 texturas y 196 geometrías. [Capturas y datos E](docs/evidencias/P1E/). La recogida final distingue muestras en movimiento y cuenta también pausas largas; no usa FPS estáticos para afirmar rendimiento caminando. Los NPC reutilizan una base anatómica de calidad con tintes/escala y animación distintos; no son agentes operativos.
+
+**Checkpoint F verde; P1 completada en el alcance autorizado. STOP antes de P2.** Se revisaron las capturas reales del build final: avatar humano de cuerpo entero, muebles/materiales, diez NPC, pasillos/techo, skyline, minimapa, Comité y paneles institucionales. [Entrega y comprobación](docs/ACEPTACION_P1.md) · [galería y evidencias completas](docs/evidencias/P1F/README.md).
+
+Pruebas finales: `python scripts/manage.py check` **47/47 pytest + 25/25 Vitest**, TypeScript/build correctos; `python scripts/manage.py audit`: **ninguna vulnerabilidad conocida en Python y 0 en npm**; `git diff --check`: sin errores. [Logs](docs/evidencias/P1F/tests-finales.txt). Persisten dos advertencias: deprecación Starlette/httpx y bundle Three/R3F de 937 kB minificado (251 kB gzip). No se han ocultado ni convertido en errores de aplicación.
+
+Aceptación en Chrome real con **ANGLE Intel Graphics / D3D11**, 1920×1080, Equilibrado/DPR 1: entrada directa en Recepción con avatar/cámara 3,2 m / 3,8 m; recorrido WASD por las nueve zonas sin modificar posiciones, nueve teletransportes seguros, nueve terminales por E y clic físico, foco/Tab/Escape, mundo pausado y restauración exacta de transform/cámara. Prueba adicional del avatar contra mostrador, mampara, columna y pared: **2.159 muestras sin penetraciones**, incluido deslizamiento lateral. [Colisiones reales](docs/evidencias/P1F/colisiones-avatar.json). Offline probado abortando únicamente las peticiones locales del navegador: interfaz NO DISPONIBLE y desplazamiento conservado. `/?diagnostico=1` disponible, `/health` 200/PAPER_ONLY/órdenes deshabilitadas, proveedores NO DISPONIBLE y POST local de órdenes LIVE **403 P0_EXECUTION_DISABLED**. Backend y App/diagnóstico P0 no modificados; ninguna orden externa.
+
+Incidencias F corregidas: la interpolación de cámara cortaba esquinas de columnas y vidrio. Se añadió barrido/deslizamiento de cámara y pasos cortos cuando el segmento encuentra un obstáculo; broadphase vertical sin alterar las guardas del avatar/LOS. Recorrido final: **5.980 muestras, altura 3,2 m, cero penetraciones y cero cruces**. El diálogo nativo dejaba un paso de Tab al foco de navegador; se añadió cierre explícito del ciclo entre controles visibles/habilitados. Prueba real final de Tab/Mayús+Tab, E/clic, bloqueo y restauración correcta en [accesibilidad](docs/evidencias/P1F/accesibilidad.json). Se conservan los resultados negativos anteriores en las evidencias.
+
+### Rendimiento final en movimiento
+
+Ventanas de 12 s, entrada real WASD/ratón, muestras de desplazamiento separadas del total; se cuentan las pausas largas, no se usa el FPS estático de B. GPU/viewport/contadores e intervalos completos en cada JSON. Las aperturas y cierres de monitor están comprobadas en el mismo flujo; la ventana de FPS no representa un render activo del diálogo pausado.
+
+| Escenario | FPS moviéndose | p95 movimiento | Muestras móviles | FPS total de ventana | Draw calls / triángulos |
+|---|---:|---:|---:|---:|---:|
+| Recepción | 41,5 | 41,3 ms | 274 | 37,8 | 204 / 346.188 |
+| Trading con NPC | 54,1 | 26,4 ms | 357 | 52,1 | 167 / 340.600 |
+| Giro de cámara | 59,9 | 18,4 ms | 393 | 52,9 | 162 / 367.192 |
+| Comité | 37,6 | 58,5 ms | 279 | 32,7 | 72 / 167.126 |
+| Pasillo acristalado | 34,7 | 62,9 ms | 258 | 32,8 | 143 / 330.794 |
+| Recorrido + monitor | 32,8 | 53,2 ms | 274 | 28,9 | 141 / 351.162 |
+
+No se promete 60 FPS constantes: se supera el mínimo de 30 durante desplazamiento en los seis escenarios, pero hay tirones y el total del flujo combinado cae a 28,9 FPS por pausas largas. E había medido 55,1 FPS caminando en Trading; las condiciones y vistas varían, no es una comparación controlada con B. Windows tenía ahorro de batería activo al 17% y una prueba combinada dio **29,8 FPS móviles**; quedó conservada. Tras conectar el cargador por el usuario se repitió: **32,8 FPS móviles**, AC conectado y ahorro desactivado comprobados por GetSystemPowerStatus. No se cambió el plan de energía. Los otros cinco escenarios se midieron antes de esa repetición y no se etiquetan como mediciones con cargador.
+
+Carga observada: primer callback de escena aproximadamente **1,9–2,1 s**, primer frame GPU sincronizado **6,1 s**; no es una certificación de arranque frío completo de todos los humanos. Texturas/geometrías residentes: 48–52 / 197–201 según navegación. CPU Intel Core 5 120U, 10 núcleos/12 hilos, memoria física 16.847.925.248 bytes, driver Intel 31.0.101.4953. Rendimiento dependiente de carga del equipo y energía; perfil Detalle no certificado para 45–60 FPS.
+
+Licencias/hashes verificados offline: **33 fuentes humanas, 6 mapas PBR, 5 mapas humanos**, GLB real con 163 huesos y cuatro clips, LOD 41.114/13.240/4.040 triángulos. Base anatómica nominal 1,78 m; altura medida del mesh vestido **1,803 m**. Assets gráficos MakeHuman/Margaret Toigo/Poly Haven **CC0**, meshoptimizer offline **MIT**. Licencia de código AGPL de MakeHuman separada: no se ha copiado ese código. Recursos runtime locales, sin CDN; ninguna dependencia o servicio de pago añadido. [Registro](assets/LICENSES.md) · [verificación](docs/evidencias/P1F/assets-verificados.json).
+
+Limitaciones declaradas: una base humana reutilizada con variaciones de traje/escala y animación, iluminación indirecta/reflejos aproximados y skyline conceptual; no GI/reflectores costosos ni personajes únicos escaneados. Los NPC están OFFLINE y no realizan trabajos de agentes. Los paneles son interfaces finales de P1 con estados vacíos honestos: datos de mercado P2, ledger/NAV P3, agentes P4, riesgo/estrategias P5 y ejecución paper P6 siguen NO DISPONIBLES. **No se ha comenzado P2 ni habilitado operaciones; coste adicional 0 EUR.**
+
+---
+
+## 2026-10-14 · Revisión visual de P1.B implementada; pendiente de nueva aprobación
+
+El usuario **aprobó la arquitectura general, los nueve departamentos y la paleta**. Esta revisión conserva la huella, los centros, pasillos, servicios P0 y controles existentes; refina únicamente el acabado de P1.B. **P1.C–F no iniciadas; detenerse para revisión visual.**
+
+- Mobiliario: respaldos ergonómicos de superficie continua, asientos moldeados, bases metálicas con ruedas, hojas curvas y macetas torneadas, monitores finos con carcasa y soporte, teclados detallados mediante textura, carpetas, tazas y esculturas originales. Se mantienen geometrías fusionadas; los pequeños radios y biseles usan menos polígonos.
+- Señalética: placas discretas de nogal/bronce integradas sobre las mamparas; Trading identificado en el suelo. Desaparecen los grandes carteles suspendidos. La vista de planta conserva los nueve nombres legibles.
+- Exterior/luz: fachadas en todas las caras, alturas/retranqueos/coronaciones distintos y tres franjas de profundidad; cielo procedural, niebla neutra más lejana, menor iluminación ambiente plana, focos cálidos dirigidos hacia abajo y materiales/relieve/reflejos afinados.
+- Cámara futura: techo a **4,5 m**, luminarias por encima de **4,03 m**, dinteles libres a **3,99 m**; vistas fijas a **3,25–3,35 m**, mirando hacia abajo. Documentados los rangos del usuario: 2,8–3,8 m de altura y 3–4,5 m detrás. No hay avatar ni seguimiento. P1.C deberá resolver el spawn exacto y las colisiones/oclusiones de cámara en recorridos reales.
+- Coste adicional **0 EUR**. Ningún asset nuevo descargado, servicio contratado ni dependencia nueva. Geometría/texturas añadidas originales; los seis mapas CC0 y las licencias MIT anteriores se conservan. [Licencias actualizadas](assets/LICENSES.md).
+
+### Capturas reales finales · 1920 × 1080
+
+[Recepción](docs/evidencias/P1B/revision-visual/01-recepcion.png) · [Planta completa](docs/evidencias/P1B/revision-visual/02-planta.png) · [Trading Floor](docs/evidencias/P1B/revision-visual/03-trading.png) · [Comité](docs/evidencias/P1B/revision-visual/04-comite.png).
+
+Se inspeccionaron las cuatro imágenes del build final. Son capturas de la aplicación WebGL en Chrome, con ANGLE **Intel Graphics / D3D11** comprobado; ninguna es un render generativo ni una imagen que sustituya la oficina. Se conservan las capturas anteriores para comparar.
+
+### Pruebas, seguridad y rendimiento finales
+
+`python scripts/manage.py check`: **47/47 pytest + 13/13 Vitest aprobados**, TypeScript y build correctos (14-10-2026, 10:19 Madrid). Los tests de geometría comprueban la altura mínima real del techo y rayos a 3,8 m por los nueve umbrales centrales, además de planta/presupuesto. GET local `/health`: 200, `PAPER_ONLY`, `orders_enabled=false`, DB/migración OK. POST local `/api/orders` con `mode=LIVE`: **403 P0_EXECUTION_DISABLED**. Backend, contratos, SQLite, guardas y transporte de órdenes sin modificaciones. Sin datos financieros ni actividad de agentes inventados. `git diff --check` correcto.
+
+Equipo anterior conservado: Intel Core 5 120U, Intel Graphics y 16 GB; pantalla 1920×1080/60 Hz. Mediciones finales en una sesión aislada de **Chrome headless con la GPU Intel real**, Equilibrado (DPR 1/sombras 1024), 12 s de render continuo, hasta 600 intervalos registrados, cámara fija, foco/visibilidad verificados y sin compilación de tests concurrente. Cada JSON incluye renderer, pose, resolución y fecha. [Evidencias y lecturas completas](docs/evidencias/P1B/revision-visual/).
+
+| Vista | FPS anteriores de referencia | FPS final revisado | p95/frame final | Draw calls | Triángulos visibles |
+|---|---:|---:|---:|---:|---:|
+| Recepción | 59,1 | **56,2** | 27,9 ms | 150 | 203.718 |
+| Planta completa | 60,0 | **53,7** | 27,6 ms | 170 | 217.952 |
+| Trading Floor | 47,5 | **59,2** | 18,4 ms | 100 | 159.092 |
+| Comité | 60,0 | **59,3** | 21,7 ms | 70 | 113.366 |
+
+Respecto a las cifras históricas: Recepción aproximadamente −5 %, Planta −10,5 %, Comité −1,1 %; Trading sube. **No son pruebas idénticas:** cambian la altura de cámara, geometría, modo de navegador y condiciones energéticas. Como comparación adicional, el build anterior archivado desde HEAD midió **57,78 FPS en recepción** en la misma sesión headless con alimentación de red, frente a **56,21** revisados (−2,7 %; poses distintas). El objetivo de 45–60 FPS se alcanza en las cuatro vistas finales. La pérdida más visible respecto a la referencia histórica está en la planta completa.
+
+Durante ensayos previos, WMI informó batería al **12 % y descargando**; tanto la oficina anterior (29,72 FPS) como la revisada rondaron 30 FPS. Después informó `BatteryStatus=2` y 17 %: acceso a alimentación de red, coincidiendo con la recuperación de FPS. Se conservan las lecturas de referencia; se interpreta el estado con [documentación Microsoft de Win32_Battery](https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-battery). No se modificaron ajustes de energía. Esto es una condición observada y una posible explicación de la variación, no una prueba de causalidad exclusiva.
+
+**Carga y límites:** escena preparada en 1,83 s y primer frame sincronizado en 6,63 s en la navegación final; la referencia anterior, con otras condiciones de caché, dio 2,40 s hasta primer frame. No se certifica descarga fría ni un tiempo fijo. El chunk de Three/R3F sigue en 918,46 kB (244,63 kB gzip); el de Office pasa a 53,15 kB (18,83 kB gzip). Se mantiene el aviso de bundle y las deprecaciones existentes. Reflejos PMREM y sombras de contacto aproximadas; no SSR, ray tracing ni GI dinámica completa. El perfil Detalle no se ha recertificado en esta revisión: priorizar Equilibrado.
+
+**Incidencias resueltas:** las luces de área ensayadas se retiraron al observar unos 26 FPS bajo carga/batería; no se atribuye toda la caída al tipo de luz. Se corrigieron facetas de los respaldos con una superficie de normales continuas y un error de sintaxis en su primera implementación; la batería final de tests está verde. Una medición en el navegador de revisión sufrió cambio de cámara y se descartó; las cuatro medidas finales se obtuvieron aisladas y se validaron contra sus poses/resolución.
+
+**Comprobación manual:** recargar `http://127.0.0.1:5173`, elegir las cuatro vistas y pulsar «Medir FPS» con la cámara quieta, navegador visible, Equilibrado y condiciones energéticas comparables. El diagnóstico P0 sigue en `/?diagnostico=1`. **Siguiente paso: aprobación visual de esta revisión de P1.B; esperar antes de implementar P1.C.**
+
+---
+
+## Checkpoint P1.A–B previo a la revisión de acabado (histórico)
+
 ## 2026-10-14 · P1.A y P1.B terminadas para revisión visual
 
 **Alcance alcanzado:** la ruta inicial abre una oficina 3D real en React Three Fiber/Three.js. Una sola planta de 34 × 28 m contiene los nueve departamentos según el plano: Research, Comité y Quant al norte; Riesgos, Trading y Ejecución en el centro; Performance, Recepción y Sistemas al sur. Hay pasillos y umbrales abiertos, mamparas de vidrio, mobiliario propio de cada sala, luminarias, piedra, madera oscura, bronce y skyline geométrico. Las cámaras Recepción/Trading/Comité/Planta sirven para inspeccionar el diseño. El diagnóstico P0 sigue en `/?diagnostico=1`.

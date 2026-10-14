@@ -1,0 +1,122 @@
+[
+  {
+    "scenario": "recepcion",
+    "moving_fps": 41.55,
+    "moving_frame_p95_ms": 41.3,
+    "moving_samples": 274,
+    "total_fps": 37.77,
+    "total_frame_p95_ms": 35.2,
+    "draw_calls": 204,
+    "triangles": 346188,
+    "textures": 48,
+    "geometries": 197,
+    "resolution": [
+      1920,
+      1080
+    ],
+    "dpr": 1,
+    "gpu": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "quality": "balanced",
+    "sample_count": 454
+  },
+  {
+    "scenario": "trading",
+    "moving_fps": 54.13,
+    "moving_frame_p95_ms": 26.4,
+    "moving_samples": 357,
+    "total_fps": 52.12,
+    "total_frame_p95_ms": 27.3,
+    "draw_calls": 167,
+    "triangles": 340600,
+    "textures": 48,
+    "geometries": 197,
+    "resolution": [
+      1920,
+      1080
+    ],
+    "dpr": 1,
+    "gpu": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "quality": "balanced",
+    "sample_count": 625
+  },
+  {
+    "scenario": "giro",
+    "moving_fps": 59.86,
+    "moving_frame_p95_ms": 18.4,
+    "moving_samples": 393,
+    "total_fps": 52.85,
+    "total_frame_p95_ms": 32.4,
+    "draw_calls": 162,
+    "triangles": 367192,
+    "textures": 49,
+    "geometries": 199,
+    "resolution": [
+      1920,
+      1080
+    ],
+    "dpr": 1,
+    "gpu": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "quality": "balanced",
+    "sample_count": 639
+  },
+  {
+    "scenario": "comite",
+    "moving_fps": 37.57,
+    "moving_frame_p95_ms": 58.5,
+    "moving_samples": 279,
+    "total_fps": 32.71,
+    "total_frame_p95_ms": 65.6,
+    "draw_calls": 72,
+    "triangles": 167126,
+    "textures": 49,
+    "geometries": 199,
+    "resolution": [
+      1920,
+      1080
+    ],
+    "dpr": 1,
+    "gpu": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "quality": "balanced",
+    "sample_count": 397
+  },
+  {
+    "scenario": "pasillo",
+    "moving_fps": 34.71,
+    "moving_frame_p95_ms": 62.9,
+    "moving_samples": 258,
+    "total_fps": 32.83,
+    "total_frame_p95_ms": 64.4,
+    "draw_calls": 143,
+    "triangles": 330794,
+    "textures": 49,
+    "geometries": 199,
+    "resolution": [
+      1920,
+      1080
+    ],
+    "dpr": 1,
+    "gpu": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "quality": "balanced",
+    "sample_count": 397
+  },
+  {
+    "scenario": "monitor",
+    "moving_fps": 32.79,
+    "moving_frame_p95_ms": 53.2,
+    "moving_samples": 274,
+    "total_fps": 28.93,
+    "total_frame_p95_ms": 64.6,
+    "draw_calls": 141,
+    "triangles": 351162,
+    "textures": 52,
+    "geometries": 201,
+    "resolution": [
+      1920,
+      1080
+    ],
+    "dpr": 1,
+    "gpu": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "quality": "balanced",
+    "sample_count": 349
+  }
+]

@@ -1,8 +1,10 @@
-import { BoxGeometry, BufferGeometry, CylinderGeometry, Group, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, SphereGeometry, type Material } from 'three';
+import { BoxGeometry, BufferGeometry, CylinderGeometry, Group, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, SphereGeometry, TorusGeometry, Vector3, type Material, type Texture } from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { DEPARTMENTS, FLOOR, type Department, type Vec3 } from './layout';
 import { textTexture, type Materials } from './materials';
+import { chairBack, chairSeat, facadeGeometry, leafGeometry, planterGeometry } from './details';
+import type { Collider } from './collisions';
 
 // Modelado original en metros. Las piezas se fusionan por material y departamento.
 // Conserva cada departamento como nodo independiente para fases posteriores.
@@ -13,6 +15,8 @@ function geometry(key: string, build: () => BufferGeometry) {
 }
 class Builder {
   group = new Group();
+  seats: { position: Vec3; forward: Vec3 }[] = [];
+  colliders: Collider[] = [];
   constructor(name: string) { this.group.name = name; }
   part(geo: BufferGeometry, mat: Material, position: Vec3, scale: Vec3 = [1, 1, 1], rotation: Vec3 = [0, 0, 0]) {
     const mesh = new Mesh(geo, mat); mesh.position.set(...position); mesh.scale.set(...scale); mesh.rotation.set(...rotation);
@@ -20,17 +24,25 @@ class Builder {
     this.group.add(mesh); return mesh;
   }
   box(p: Vec3, size: Vec3, mat: Material, radius = 0, rotation: Vec3 = [0, 0, 0]) {
-    const geo = radius ? geometry(`round-${size.join('-')}-${radius}`, () => new RoundedBoxGeometry(...size, 2, radius)) : geometry('box', () => new BoxGeometry());
+    if(this.group.name!=='skyline' && p[1]+size[1]/2>.04) {
+      const panel=mat.transparent && size[1]>2 && Math.max(size[0],size[2])>1;
+      const furniture=!mat.transparent && ((size[1]>.35&&Math.min(size[0],size[2])>=.12)||(size[0]>.6&&size[2]>.45&&p[1]>.3));
+      if(panel||furniture) this.colliders.push({center:[...p],half:[Math.max(size[0]/2,.02),size[1]/2,Math.max(size[2]/2,.02)],yaw:rotation[1],kind:panel?'glass':'solid'});
+    }
+    const geo = radius ? geometry(`round-${size.join('-')}-${radius}`, () => new RoundedBoxGeometry(...size, radius <= .028 ? 1 : 2, radius)) : geometry('box', () => new BoxGeometry());
     return this.part(geo, mat, p, radius ? [1, 1, 1] : size, rotation);
   }
   cylinder(p: Vec3, radius: number, height: number, mat: Material, top = radius) {
+    if(this.group.name!=='skyline'&&radius>=.4&&p[1]>.3&&p[1]<1.2)this.colliders.push({center:[...p],half:[radius,height/2,radius],yaw:0,kind:'solid'});
     return this.part(geometry(`cyl-${top / radius}`, () => new CylinderGeometry(top / radius, 1, 1, 16)), mat, p, [radius, height, radius]);
   }
   label(p: Vec3, width: number, height: number, title: string, subtitle = '', kind: 'sign' | 'screen' | 'brand' = 'sign', rotation: Vec3 = [0, 0, 0]) {
-    const mat = new MeshBasicMaterial({ map: textTexture(title, subtitle, kind), toneMapped: false });
+    const mat = new MeshBasicMaterial({ map: textTexture(title, subtitle, kind), toneMapped: false, transparent: kind === 'sign', depthWrite: kind !== 'sign' });
     return this.part(geometry('plane', () => new PlaneGeometry()), mat, p, [width, height, 1], rotation);
   }
   finish() {
+    this.group.userData.seats = this.seats;
+    this.group.userData.colliders = this.colliders;
     const byMaterial = new Map<Material, BufferGeometry[]>();
     this.group.children.forEach(child => {
       const mesh = child as Mesh; mesh.updateMatrix();
@@ -54,35 +66,44 @@ class Builder {
 
 function chair(b: Builder, x: number, z: number, angle: number, m: Materials, meeting = false) {
   const c = new Builder('chair');
+  c.seats.push({position:[0,.79,0],forward:[0,0,1]});
+  c.colliders.push({center:[0,.65,0],half:[.37,.65,.39],yaw:0,kind:'solid'});
   c.part(geometry('plane', () => new PlaneGeometry()), m.contact, [0, .033, 0], [1.1, 1.1, 1], [-Math.PI / 2, 0, 0]);
-  c.box([0, .52, 0], [.54, .13, .55], meeting ? m.cognac : m.leather, .065);
-  c.box([0, .91, -.25], [.53, .7, .09], meeting ? m.cognac : m.leather, .044, [-.12, 0, 0]);
-  c.box([0, .88, -.305], [.06, .48, .04], m.dark);
+  c.part(geometry('ergonomic-seat', chairSeat), meeting ? m.cognac : m.leather, [0, .51, .01]);
+  c.part(geometry('ergonomic-back', chairBack), meeting ? m.cognac : m.leather, [0, .90, -.245], [1, 1, 1], [-.16, 0, 0]);
+  c.part(geometry('ergonomic-back', chairBack), m.dark, [0, .90, -.296], [.96, .97, .35], [-.16, 0, 0]);
+  c.box([0, .69, -.315], [.07, .29, .055], m.steel, .024, [-.15,0,0]);
   for (const side of [-1, 1]) {
-    c.box([side * .32, .69, -.02], [.045, .28, .045], m.dark);
-    c.box([side * .32, .82, .01], [.075, .05, .35], m.leather, .018);
+    stem(c,[side*.27,.49,-.14],[side*.31,.74,-.05],m.steel,.012);
+    c.box([side * .31, .76, .02], [.07, .045, .32], meeting ? m.cognac : m.leather, .022);
   }
-  c.cylinder([0, .31, 0], .045, .37, m.bronze);
+  c.cylinder([0, .29, 0], .025, .36, m.steel);
+  c.cylinder([0, .18, 0], .037, .16, m.dark);
   for (let i = 0; i < 5; i++) {
     const a = i * Math.PI * 2 / 5;
-    c.box([Math.sin(a) * .16, .115, Math.cos(a) * .16], [.035, .04, .34], m.dark, 0, [0, a, 0]);
-    c.part(geometry('wheel', () => new SphereGeometry(1, 8, 6)), m.dark, [Math.sin(a) * .31, .07, Math.cos(a) * .31], [.045, .055, .045]);
+    stem(c,[0,.14,0],[Math.sin(a)*.31,.09,Math.cos(a)*.31],m.steel,.02);
+    for (const side of [-1,1]) c.part(geometry('wheel', () => new SphereGeometry(1, 8, 6)), m.dark, [Math.sin(a) * .31 + side * .017, .055, Math.cos(a) * .31], [.014, .037, .036]);
   }
   transfer(b, c, [x, 0, z], angle);
 }
 function transfer(to: Builder, from: Builder, position: Vec3, rotation = 0) {
   const parent = new Object3D(); parent.position.set(...position); parent.rotation.y = rotation; parent.updateMatrix();
+  from.seats.forEach(seat=>to.seats.push({position:new Vector3(...seat.position).applyMatrix4(parent.matrix).toArray() as Vec3,forward:new Vector3(...seat.forward).transformDirection(parent.matrix).toArray() as Vec3}));
+  from.colliders.forEach(c=>to.colliders.push({...c,center:new Vector3(...c.center).applyMatrix4(parent.matrix).toArray() as Vec3,yaw:c.yaw+rotation}));
   [...from.group.children].forEach(child => { child.updateMatrix(); child.applyMatrix4(parent.matrix); to.group.add(child); });
 }
 function monitor(b: Builder, x: number, z: number, m: Materials, screen: Material, rotation = 0, y = .81) {
   const t = new Builder('monitor');
-  t.box([0, y + .38, 0], [.84, .49, .055], m.dark, .018);
-  t.part(geometry('plane', () => new PlaneGeometry()), screen, [0, y + .38, .029], [.79, .437, 1]);
-  t.box([0, y + .12, -.015], [.055, .23, .055], m.bronze);
-  t.box([0, y + .015, .015], [.3, .027, .19], m.dark, .01);
-  t.box([0, y + .025, .44], [.43, .025, .15], m.dark, .009);
-  for (let row = 0; row < 3; row++) t.box([0, y + .041, .4 + row * .04], [.37, .004, .013], m.book);
-  t.part(geometry('mouse', () => new SphereGeometry(1, 8, 6)), m.dark, [.32, y + .035, .43], [.042, .025, .065]);
+  t.box([0, y + .37, 0], [.75, .442, .027], m.dark, .011, [-.04,0,0]);
+  t.box([0, y + .34, -.032], [.31, .24, .025], m.dark, .025);
+  t.part(geometry('plane', () => new PlaneGeometry()), screen, [0, y + .37, .018], [.721, .405, 1], [-.04,0,0]);
+  t.cylinder([0, y + .15, -.038], .018, .27, m.steel);
+  t.box([0, y + .011, .015], [.24, .018, .18], m.steel, .009);
+  t.box([0, y + .025, .37], [.44, .022, .155], m.dark, .009);
+  t.part(geometry('plane', () => new PlaneGeometry()), m.keys, [0,y + .037,.37],[.425,.145,1],[-Math.PI/2,0,0]);
+  t.part(geometry('mouse', () => new SphereGeometry(1, 12, 8)), m.dark, [.30, y + .028, .37], [.034, .023, .057]);
+  t.box([.3,y + .045,.37],[.003,.003,.07],m.steel);
+  t.box([-.25,y + .03,-.12],[.10,.045,.07],m.dark,.015);
   transfer(b, t, [x, 0, z], rotation);
 }
 function desk(b: Builder, x: number, z: number, m: Materials, screen: Material, facing = 0, dual = false) {
@@ -90,28 +111,45 @@ function desk(b: Builder, x: number, z: number, m: Materials, screen: Material, 
   t.part(geometry('plane', () => new PlaneGeometry()), m.contact, [0, .032, 0], [3.2, 1.8, 1], [-Math.PI / 2, 0, 0]);
   t.box([0, .77, 0], [dual ? 2.4 : 1.9, .075, 1.02], m.wood, .045);
   for (const side of [-1, 1]) {
-    t.box([side * (dual ? 1.02 : .8), .39, 0], [.055, .7, .72], m.dark, .018);
-    t.box([side * (dual ? 1.02 : .8), .045, 0], [.1, .035, .78], m.bronze);
+    for (const dz of [-.36,.36]) t.box([side * (dual ? 1.02 : .8), .39, dz], [.045, .7, .045], m.dark, .012);
+    t.box([side * (dual ? 1.02 : .8), .045, 0], [.045, .035, .79], m.dark, .012);
   }
   t.box([0, .61, -.28], [dual ? 2.0 : 1.65, .18, .035], m.dark);
   if (dual) { monitor(t, -.46, -.26, m, screen); monitor(t, .46, -.26, m, screen); }
   else monitor(t, 0, -.23, m, screen);
   t.box([-.71, .826, .22], [.24, .035, .32], m.paper, .01);
-  t.cylinder([.75, .91, .2], .045, .18, m.cream);
-  chair(t, 0, .92, 0, m);
+  t.box([-.71,.848,.22],[.25,.012,.33],m.leather,.01);
+  t.cylinder([.75, .865, .2], .038, .115, m.cream);
+  t.cylinder([.75,.925,.2],.030,.001,m.dark);
+  t.part(geometry('cup-handle', () => new TorusGeometry(.032,.008,6,14,Math.PI*1.6)),m.cream,[.79,.87,.2],[1,1,1],[0,0,-.8]);
+  chair(t, 0, .92, Math.PI, m);
   transfer(b, t, [x, 0, z], facing);
 }
 function plant(b: Builder, x: number, z: number, m: Materials, height = 1.8) {
+  b.colliders.push({center:[x,.7,z],half:[.31,.7,.31],yaw:0,kind:'solid'});
   b.part(geometry('plane', () => new PlaneGeometry()), m.contact, [x, .036, z], [1.1, 1.1, 1], [-Math.PI / 2, 0, 0]);
-  b.cylinder([x, .29, z], .25, .58, m.stone, .32);
-  b.cylinder([x, .57, z], .28, .015, m.dark);
-  for (let i = 0; i < 9; i++) {
-    const a = i * 2.39996; const y = .65 + (i % 4) * height / 5;
-    const dx = Math.sin(a), dz = Math.cos(a);
-    b.box([x + dx * .13, y, z + dz * .13], [.015, y * .8, .015], m.green, 0, [dz * .28, 0, dx * .28]);
-    b.part(geometry('leaf', () => new SphereGeometry(1, 12, 8)), i % 2 ? m.green : m.greenLight,
-      [x + dx * .2, y + .37, z + dz * .2], [.105, .018, .34], [.65 + i % 3 * .18, a, .32]);
+  b.part(geometry('planter',planterGeometry),m.stone,[x,.03,z]);
+  b.cylinder([x,.54,z],.243,.01,m.dark);
+  for (let trunk=0; trunk<3; trunk++) {
+    const a=trunk*2.4; const tip:Vec3=[x+Math.sin(a)*.16,height*.84,z+Math.cos(a)*.16];
+    stem(b,[x,.55,z],tip,m.wood,.014);
+    for (let i=0;i<6;i++) {
+      const turn=a+i*2.4, y=.84+i*(height-.65)/6;
+      const end:Vec3=[x+Math.sin(turn)*(.19+i*.016),y,z+Math.cos(turn)*(.19+i*.016)];
+      stem(b,[x+Math.sin(a)*.08,y-.13,z+Math.cos(a)*.08],end,m.green,.006);
+      b.part(geometry('botanical-leaf',leafGeometry),i%3?m.green:m.greenLight,end,[.78+(i%3)*.12,1,.85+(i%2)*.13],[-.35+(i%3)*.22,turn,.10*(trunk-1)]);
+    }
   }
+}
+function stem(b:Builder,from:Vec3,to:Vec3,mat:Material,radius:number) {
+  const a=new Vector3(...from),delta=new Vector3(...to).sub(a);
+  const mesh=b.cylinder(a.addScaledVector(delta,.5).toArray() as Vec3,radius,delta.length(),mat,radius*.55);
+  mesh.quaternion.setFromUnitVectors(new Vector3(0,1,0),delta.normalize());
+}
+function sculpture(b:Builder,x:number,z:number,m:Materials,y=.99) {
+  b.box([x,y,z],[.42,.045,.30],m.stone,.02);
+  b.part(geometry('sculpture',()=>new TorusGeometry(.17,.018,8,32)),m.bronze,[x,y+.19,z],[1,1.2,1],[.2,.55,.3]);
+  b.part(geometry('sculpture',()=>new TorusGeometry(.17,.018,8,32)),m.bronze,[x,y+.20,z],[.65,1,1],[.2,-.7,-.3]);
 }
 function sofa(b: Builder, x: number, z: number, rotation: number, m: Materials) {
   const s = new Builder('sofa');
@@ -124,10 +162,10 @@ function sofa(b: Builder, x: number, z: number, rotation: number, m: Materials) 
 }
 function glassRun(b: Builder, length: number, p: Vec3, m: Materials, angle = 0) {
   const g = new Builder('glazing');
-  g.box([0, 1.65, 0], [length, 3.2, .018], m.glass);
-  for (const y of [.045, 3.25]) g.box([0, y, 0], [length, .065, .075], m.bronze);
-  for (let i = 0; i <= Math.ceil(length / 1.5); i++) g.box([-length / 2 + length * i / Math.ceil(length / 1.5), 1.65, 0], [.035, 3.25, .05], m.dark);
-  g.box([0, 1.2, .012], [length, .018, .01], m.cream);
+  g.box([0, 2.02, 0], [length, 3.98, .014], m.glass);
+  for (const y of [.045, 4.01]) g.box([0, y, 0], [length, .045, .065], m.bronze);
+  for (let i = 0; i <= Math.ceil(length / 1.5); i++) g.box([-length / 2 + length * i / Math.ceil(length / 1.5), 2.02, 0], [.026, 4.0, .04], m.dark);
+  g.box([0, 1.2, .012], [length, .009, .01], m.cream);
   transfer(b, g, p, angle);
 }
 function roomShell(b: Builder, d: Department, m: Materials) {
@@ -138,10 +176,12 @@ function roomShell(b: Builder, d: Department, m: Materials) {
     glassRun(b, 6.4, [side * 4.2, 0, 0], m, Math.PI / 2);
   }
   // Portail abierto de 2.6 m y puerta de vidrio estacionada a 90°, fuera del paso.
-  b.box([0, 3.28, 3.2], [8.5, .24, .19], m.wood);
+  b.box([0, 4.08, 3.2], [8.5, .18, .16], m.wood);
   glassRun(b, 1.2, [-1.35, 0, 2.55], m, Math.PI / 2);
   b.box([-1.31, 1.13, 2.6], [.035, .38, .04], m.bronze);
-  b.label([0, 3.06, 3.305], 3.2, .8, `${d.number}  /  ${d.label}`, d.use);
+  b.box([2.65, 1.83, 3.223], [2.0,.30,.028],m.wood,.014);
+  b.box([2.65,1.68,3.24],[1.96,.008,.008],m.bronze);
+  b.label([2.65, 1.83, 3.242], 1.90, .2375, `${d.number}  /  ${d.label}`, d.use);
 }
 function shelves(b: Builder, x: number, z: number, m: Materials) {
   b.box([x, 1.32, z], [3.35, 2.6, .14], m.wood);
@@ -167,7 +207,7 @@ function department(d: Department, m: Materials) {
     b.box([-.6, .08, -.15], [4.58, .06, .95], m.light);
     for (let i = 0; i < 39; i++) b.box([-2.76 + i * .114, .64, .404], [.035, .92, .025], m.bronze);
     b.label([-.6, .73, .431], 2.7, .675, 'JAIME', 'I N V E S T O R   H Q', 'brand');
-    monitor(b, -.7, -.4, m, screen, Math.PI, 1.23);
+    monitor(b, -.7, -.4, m, screen, 0, 1.23);
     sofa(b, -3.1, 1.85, Math.PI / 2, m); sofa(b, 2.35, 1.9, -Math.PI / 2, m);
     b.cylinder([2.3, .39, .05], .56, .07, m.stone); b.cylinder([2.3, .2, .05], .24, .35, m.bronze);
     plant(b, -3.8, -2.1, m); plant(b, 3.7, -2.1, m);
@@ -175,17 +215,17 @@ function department(d: Department, m: Materials) {
     b.box([0, .8, -.3], [2.65, .12, 4.6], m.wood, .3);
     for (const z of [-1.6, 1.0]) b.box([0, .4, z], [.85, .73, .2], m.bronze, .04);
     for (const side of [-1, 1]) for (const z of [-1.7, -.3, 1.1]) {
-      chair(b, side * 1.83, z, side * Math.PI / 2, m, true);
+      chair(b, side * 1.83, z, -side * Math.PI / 2, m, true);
       b.box([side * .83, .87, z], [.36, .013, .48], m.paper);
       b.cylinder([side * .9, .92, z - .4], .03, .13, m.glass);
     }
-    chair(b, 0, 2.65, 0, m, true);
+    chair(b, 0, 2.65, Math.PI, m, true);
     wallScreen(b, 0, -3.04, d, m, 2.8);
     plant(b, -3.2, -2.4, m); plant(b, 3.2, -2.4, m);
   } else if (d.id === 'trading') {
-    for (const x of [-2.65, 0, 2.65]) for (const z of [-1.25, 1.25]) desk(b, x, z, m, screen, z < 0 ? 0 : Math.PI, true);
-    for (const x of [-3.8, 3.8]) plant(b, x, -2.5, m, 1.5);
-    b.label([0, 3.13, -3.2], 3.9, .975, '05 / TRADING FLOOR', 'INVESTIGACIÓN MULTIACTIVO  ·  PAPER ONLY');
+    for (const x of [-2.65, 0, 2.65]) for (const z of [-1.95, 1.95]) desk(b, x, z, m, screen, z < 0 ? 0 : Math.PI, true);
+    for (const x of [-3.8, 3.8]) plant(b, x, -3.1, m, 1.7);
+    b.label([0, .031, 3.05], 2.4, .30, '05 / TRADING FLOOR', 'INVESTIGACIÓN MULTIACTIVO', 'sign',[-Math.PI/2,0,0]);
   } else if (d.id === 'research') {
     shelves(b, 0, -2.9, m); desk(b, -2, .6, m, screen); desk(b, 1.5, .6, m, screen);
     b.cylinder([2.7, .7, -1.8], .75, .09, m.wood); b.cylinder([2.7, .35, -1.8], .08, .7, m.bronze);
@@ -196,7 +236,7 @@ function department(d: Department, m: Materials) {
       for (let i = 0; i < 11; i++) { b.box([x, .28 + i * .17, -1.935], [.86, .135, .026], m.book); b.box([x - .3, .28 + i * .17, -1.917], [.16, .012, .009], m.bronze); }
     }
     desk(b, .6, .75, m, screen, 0, true); plant(b, 3.3, -2.3, m);
-    b.label([-1.2, 2.65, -1.93], 3.3, .825, 'INFRAESTRUCTURA', 'SIN CONEXIONES EXTERNAS');
+    b.label([-1.2, 2.16, -1.928], .85, .106, 'DATA QUALITY', '', 'sign');
   } else if (d.id === 'performance') {
     wallScreen(b, 0, -2.95, d, m, 3.8);
     sofa(b, -2.8, .1, Math.PI / 2, m); sofa(b, 2.8, .1, -Math.PI / 2, m);
@@ -207,6 +247,7 @@ function department(d: Department, m: Materials) {
     desk(b, -2, .15, m, screen, 0, true); desk(b, 1.5, .15, m, screen, 0, true);
     b.box([0, .48, -2.65], [4.4, .9, .6], m.wood, .04);
     for (const x of [-1.5, -.5, .5, 1.5]) b.box([x, .48, -2.34], [.9, .74, .014], m.wood);
+    sculpture(b,1.4,-2.60,m);
     plant(b, 3.5, 2.0, m);
   }
   b.group.userData = { department: d.id, center: d.center, monitor: true, phase: d.phase };
@@ -221,32 +262,32 @@ function architecture(m: Materials) {
   for (const x of [-5.5, 5.5]) for (const edge of [-1.25, 1.25]) b.box([x + edge, .018, 0], [.014, .008, 27.5], m.bronze);
   for (const z of [-4.5, 4.5]) for (const edge of [-1.24, 1.24]) b.box([0, .018, z + edge], [33.6, .008, .014], m.bronze);
   for (const x of [-16.5, -4.45, 4.45, 16.5]) for (const z of [-12.7, -3.35, 3.35, 12.7]) {
-    b.box([x, 1.9, z], [.28, 3.8, .28], m.wood, .02);
-    b.box([x + .147, 1.9, z + .015], [.012, 3.6, .02], m.light);
+    b.box([x, 2.25, z], [.28, 4.5, .28], m.wood, .02);
+    b.box([x + .147, 2.25, z + .015], [.008, 4.2, .012], m.light);
     b.box([x, .08, z], [.34, .16, .34], m.bronze, .02);
   }
   glassRun(b, 34, [0, 0, -13.7], m);
   for (const x of [-16.8, 16.8]) glassRun(b, 27.4, [x, 0, 0], m, Math.PI / 2);
   for (const x of [-10.7, 10.7]) {
-    b.box([x, 1.9, 13.65], [12, 3.8, .18], m.wood);
-    for (let i = 0; i < 32; i++) b.box([x - 5.7 + i * .36, 1.9, 13.53], [.027, 3.65, .035], m.bronze);
+    b.box([x, 2.25, 13.65], [12, 4.5, .18], m.wood);
+    for (let i = 0; i < 32; i++) b.box([x - 5.7 + i * .36, 2.25, 13.53], [.020, 4.25, .028], m.bronze);
   }
-  for (const x of [-4.55, 4.55]) b.box([x, 1.9, 13.7], [.4, 3.8, .5], m.stone);
-  b.box([0, 3.55, 13.7], [9.2, .5, .5], m.wood);
+  for (const x of [-4.55, 4.55]) b.box([x, 2.25, 13.7], [.4, 4.5, .5], m.stone);
+  b.box([0, 4.27, 13.7], [9.2, .42, .5], m.wood);
   const a = b.finish();
   const roof = new Builder('ceiling');
   roof.box([0, FLOOR.ceiling + .07, 0], [34, .12, 28], m.ceiling);
   for (const d of DEPARTMENTS) {
     const [x, , z] = d.center;
-    roof.box([x, 3.63, z], [8.45, .2, 6.45], m.soffit, .06);
+    roof.box([x, 4.36, z], [8.45, .16, 6.45], m.soffit, .05);
     for (const side of [-1, 1]) {
-      roof.box([x + side * 3.85, 3.50, z], [.045, .025, 5.8], m.light);
-      roof.box([x, 3.50, z + side * 2.85], [7.72, .025, .045], m.light);
+      roof.box([x + side * 3.85, 4.26, z], [.03, .02, 5.8], m.light);
+      roof.box([x, 4.26, z + side * 2.85], [7.72, .02, .03], m.light);
     }
     for (const dx of [-2.8, 2.8]) {
-      roof.box([x + dx, 3.17, z], [.11, .075, 3.7], m.bronze, .025);
-      roof.box([x + dx, 3.12, z], [.07, .013, 3.55], m.light);
-      for (const dz of [-1.4, 1.4]) roof.box([x + dx, 3.43, z + dz], [.008, .45, .008], m.dark);
+      roof.box([x + dx, 4.075, z], [.08, .055, 3.7], m.bronze, .025);
+      roof.box([x + dx, 4.043, z], [.055, .009, 3.55], m.light);
+      for (const dz of [-1.4, 1.4]) roof.box([x + dx, 4.30, z + dz], [.006, .45, .006], m.dark);
     }
   }
   a.add(roof.finish()); return a;
@@ -254,31 +295,42 @@ function architecture(m: Materials) {
 
 function skyline(m: Materials) {
   const b = new Builder('skyline');
-  // Arquitectura de fondo original; no representa un skyline geográfico real.
-  for (let i = 0; i < 30; i++) {
-    const x = -100 + i * 7.1, h = 8 + ((i * 13) % 23), z = -42 - ((i * 7) % 20), w = 4 + i % 4;
-    b.box([x, h / 2 - 10, z], [w, h, 5], i % 2 ? m.city : m.cityDark);
-    b.box([x, h - 9.7, z], [w * .68, .6, 3.4], m.cityDark);
-    for (let floor = 0; floor < Math.floor(h / 1.3); floor++) b.box([x, -9 + floor * 1.3, z + 2.51], [w * .88, .54, .015], m.window);
-    for (let col = 0; col < 4; col++) b.box([x - w * .4 + col * w * .26, h / 2 - 10, z + 2.54], [.075, h, .04], m.cityDark);
+  // Contexto urbano original en tres planos de profundidad, sin réplica geográfica.
+  function tower(x:number,z:number,w:number,h:number,d:number,index:number) {
+    const mat=index%4===0?m.cityStone:index%3===0?m.cityDark:m.city;
+    b.part(geometry(`facade-${w}-${h}-${d}`,()=>facadeGeometry(w,h,d)),mat,[x,h/2-32,z]);
+    b.box([x,h-31.85,z],[w+.25,.3,d+.25],m.dark);
+    b.part(geometry(`facade-top-${w}-${h}-${d}`,()=>facadeGeometry(w*.68,3.6,d*.66)),mat,[x,h-30,z]);
+    b.box([x,h-28.08,z],[w*.70,.18,d*.68],m.cityStone);
+    // Dos retranqueos y coronación; la textura sustituye cientos de ventanas transparentes.
+    if(index%3===0) for(const level of [.34,.67]) b.box([x,h*level-32,z],[w+.16,.22,d+.16],m.cityStone);
+    for(const side of [-1,1]) b.box([x+side*w*.46,h/2-32,z+d*.505],[.11,h,.12],m.cityStone);
+    if(index%5===0) b.cylinder([x,h-25,z],.055,5.6,m.steel);
   }
-  for (const x of [-38, 38]) for (let i = 0; i < 7; i++) {
-    const h = 6 + i * 2.3, z = -30 + i * 10;
-    b.box([x, h / 2 - 13, z], [8, h, 7], m.city);
-    for (let f = 0; f < h; f += 1.4) b.box([x, f - 12, z + 3.51], [7.5, .6, .015], m.window);
+  for(let row=0;row<3;row++) for(let i=0;i<13;i++) {
+    const index=row*13+i,x=-132+i*22+(row%2)*9,z=-62-row*58-(i%3)*7;
+    tower(x,z,8+(i*7+row)%7,32+(i*17+row*11)%49,9+(i*3)%6,index);
   }
-  return b.finish();
+  for(const side of [-1,1]) for(let i=0;i<6;i++) tower(side*(54+(i%2)*12),-44+i*22,10+(i%3)*2,34+(i*13)%39,11+i%4,i+41);
+  b.box([0,-32.6,-30],[700,1,700],m.cityGround);
+  // Solamente contexto exterior: no participa en las sombras de la oficina.
+  const city=b.finish(); city.traverse(o=>{if(o instanceof Mesh){o.castShadow=false;o.receiveShadow=false;}}); return city;
 }
 
 export function createOffice(m: Materials) {
   const office = new Group(); office.name = 'JAIME_INVESTOR_HQ';
   office.add(architecture(m), skyline(m), ...DEPARTMENTS.map(d => department(d, m)));
   office.updateMatrixWorld(true);
+  const colliders:Collider[]=[];
+  office.traverse(node=>{for(const c of node.userData.colliders??[])colliders.push({...c,center:new Vector3(...c.center).applyMatrix4(node.matrixWorld).toArray() as Vec3});});
+  office.userData.colliders=colliders;
   return office;
 }
 
-export function disposeOffice(office: Group) {
+export function disposeOffice(office: Group, retainedTextures = new Set<Texture>()) {
   const owned = new Set<Material>();
   office.traverse(object => { if (object instanceof Mesh) { object.geometry.dispose(); owned.add(object.material as Material); } });
-  owned.forEach(mat => { if (mat instanceof MeshBasicMaterial && mat.map) { mat.map.dispose(); mat.dispose(); } });
+  const textures=new Set<Texture>();
+  owned.forEach(mat=>{ Object.values(mat).forEach(value=>{if(value?.isTexture&&!retainedTextures.has(value)) textures.add(value);}); mat.dispose(); });
+  textures.forEach(t=>t.dispose());
 }

@@ -16,3 +16,7 @@ Siempre: AGENTS.md, STATUS.md y tasks/Px_*.md correspondiente. **No cargar todos
 Evidencias P0: [ARQUITECTURA_P0](ARQUITECTURA_P0.md), [LICENCIAS_P0](LICENCIAS_P0.md) y [STATUS](../STATUS.md). Arranque reproducible: [README](../README.md).
 
 P1.A–B: [ARQUITECTURA_P1_AB](ARQUITECTURA_P1_AB.md), [LICENCIAS_P1](LICENCIAS_P1.md), [recursos y atribuciones](../assets/LICENSES.md), [capturas y mediciones](evidencias/P1B/).
+
+Revisión de acabado de P1.B: [capturas reales y FPS actualizados](evidencias/P1B/revision-visual/README.md).
+
+Cierre integral P1.B–F: [aceptación, arquitectura y comprobación](ACEPTACION_P1.md), [capturas/FPS/pruebas finales](evidencias/P1F/README.md). STOP antes de P2.

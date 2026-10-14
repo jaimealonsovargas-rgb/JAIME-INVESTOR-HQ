@@ -1,0 +1,63 @@
+{
+  "file": "professional.glb",
+  "sha256": "5475f5e0368bbe846ada559a9987b629486c30995b446689feaf09851aa156c5",
+  "bytes": 1624404,
+  "triangles": 41114,
+  "bones": 163,
+  "height": 1.78,
+  "animations": [
+    "idle",
+    "walk",
+    "observe",
+    "focus"
+  ],
+  "license": "CC0-1.0",
+  "source_manifest": "assets/source-humans/SOURCE_MANIFEST.json",
+  "textures": [
+    {
+      "file": "textures/eyes.png",
+      "bytes": 889677,
+      "sha256": "fa8637df60e877638a7cd5a914c685f39739721ad53bbf6271073e7de7a58361",
+      "license": "CC0-1.0",
+      "derived": "Canvas resample max 1024 px; fuentes en SOURCE_MANIFEST.json"
+    },
+    {
+      "file": "textures/hair.png",
+      "bytes": 1114802,
+      "sha256": "57b0fe085154ad04cda30d95b8d6eb9d97c250ce7605098d6737aa7f2cba206d",
+      "license": "CC0-1.0",
+      "derived": "Canvas resample max 1024 px; fuentes en SOURCE_MANIFEST.json"
+    },
+    {
+      "file": "textures/shoes.jpg",
+      "bytes": 239366,
+      "sha256": "bd1824d215e6c469695999a5e4c51e2318c1f532005659dd5342b56cdc084b1d",
+      "license": "CC0-1.0",
+      "derived": "Canvas resample max 1024 px; fuentes en SOURCE_MANIFEST.json"
+    },
+    {
+      "file": "textures/skin.jpg",
+      "bytes": 148274,
+      "sha256": "a39e5b167dc26bc88611fdd773c47b3aa81a00a5037ff7ff83c017b791158a75",
+      "license": "CC0-1.0",
+      "derived": "Canvas resample max 1024 px; fuentes en SOURCE_MANIFEST.json"
+    },
+    {
+      "file": "textures/suit.jpg",
+      "bytes": 85055,
+      "sha256": "e0c88f8e21ba144f1f8e7b3409e3468b74a264ae2d5868e57e99b9ec855fb005",
+      "license": "CC0-1.0",
+      "derived": "Canvas resample max 1024 px; fuentes en SOURCE_MANIFEST.json"
+    }
+  ],
+  "lods": {
+    "file": "professional-lods.json",
+    "bytes": 249734,
+    "sha256": "5343325105255cef1fc0ec8b023288528bc1b34ed416ebaf376a81ce44621df1",
+    "nearTriangles": 41114,
+    "mediumTriangles": 13240,
+    "farTriangles": 4040,
+    "license": "CC0-1.0",
+    "tool": "meshoptimizer 1.1.1 · MIT · offline"
+  }
+}

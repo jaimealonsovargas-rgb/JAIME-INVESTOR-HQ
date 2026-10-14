@@ -1,6 +1,18 @@
 # Licencias de arte y recursos
 
+## Humanos P1.C/E · 2026-10-14
+
+| Recurso | Autor / fuente | Licencia y redistribución | Archivos / versión |
+|---|---|---|---|
+| Anatomía, rig, pesos, piel joven, ojos marrones, pelo Short02 y Shoes01 | MakeHuman Community; Data Collection AB, Joel Palmius, Jonas Hauquier y colaboradores | **CC0-1.0 para assets gráficos**, permite modificar y redistribuir. No se incorpora código AGPL de MakeHuman. [Licencia oficial](https://static.makehumancommunity.org/about/license.html), [separación código/assets](https://github.com/makehumancommunity/makehuman/blob/master/LICENSE.md), [reutilización en otro generador](https://static.makehumancommunity.org/mpfb/faq/build_other_chargen.html) | Núcleo fijado a `a8bc2d54ff0ac92e78ff71431b1023eda42bf482`; fuentes y hashes por fichero en `assets/source-humans/SOURCE_MANIFEST.json`. Avisos originales conservados. |
+| Traje formal `toigo_male_suit_tie_and_jacket` (chaqueta, corbata, pantalón) | Margaret Toigo / MRT · [pack oficial Suits01 CC0](https://static.makehumancommunity.org/assets/assetpacks/suits01.html) | **CC0-1.0**, corroborada en ficha y cabecera `.mhclo`; redistribución/adaptación permitidas sin pago | Fuentes OBJ, proxy, mapas y declaración en `assets/source-humans/clothes/toigo_male_suit_tie_and_jacket/`; hashes en el manifiesto de fuentes. |
+| `professional.glb`, animaciones idle/walk/observe/focus y conversión | Derivado local de las fuentes anteriores; animaciones y conversor originales del proyecto | Se conserva CC0 para el modelo derivado. Skinning real; no imagen ni humano de primitivas | `frontend/public/models/professional.glb`, base nominal 1,78 m / mesh vestido medido 1,803 m, 41.114 triángulos, 163 huesos; hash y texturas 1K en `assets/P1_HUMAN_MANIFEST.json`. Reproducible con `python scripts/build_p1_human.py`. |
+
+Todos los modelos y mapas se sirven localmente. Se descargaron entradas concretas mediante HTTP Range desde los paquetes gratuitos oficiales, sin instalar Blender/MakeHuman, cuentas, créditos o APIs facturables. `scripts/fetch_p1_humans.py` es una herramienta de mantenimiento opcional, nunca se ejecuta en runtime. Los originales se conservan para verificar procedencia; los cinco mapas runtime se redujeron a 1K mediante Canvas, conservando alpha en pelo/ojos. **Coste adicional 0 EUR**. CC0 permite redistribución; no se depende de licencias de Mixamo ni de assets sin autor identificable.
+
 Los diagramas SVG son originales de este proyecto. P1.A–B incorpora materiales gratuitos de Poly Haven y modelado original en Three.js. No se han usado fotografías como sustituto de la escena ni modelos de pago. Las referencias de Runway siguen sin estar disponibles como imágenes locales.
+
+Los índices LOD derivados también son CC0 y se registran con hash en `assets/P1_HUMAN_MANIFEST.json`. `scripts/optimize_p1_human.mjs` usa **meshoptimizer 1.1.1**, Arseny Kapoulkine, **MIT**, ya incluido en el lockfile; [fuente oficial](https://github.com/zeux/meshoptimizer) y aviso en `frontend/node_modules/meshoptimizer/LICENSE.md`. El optimizador se ejecuta offline, conserva UV, normales, pesos y animaciones; no se carga WASM del simplificador en la aplicación. Animaciones adicionales observe/focus originales del proyecto. No hay Mixamo, compras ni herramientas pesadas instaladas.
 
 ## Recursos de P1.A–B
 
@@ -15,3 +27,7 @@ Los diagramas SVG son originales de este proyecto. P1.A–B incorpora materiales
 Condiciones CC0 verificadas: https://polyhaven.com/license y https://creativecommons.org/publicdomain/zero/1.0/. Se permite uso y adaptación sin pago ni atribución obligatoria. No se incluyen logos ni otros contenidos del sitio ajenos a los assets CC0. Los seis ficheros suman 2.180.614 bytes y se sirven localmente desde frontend/public/materials. No requieren cuentas, claves ni APIs de pago.
 
 Reproducción de descarga: `python scripts/fetch_p1_assets.py` (opcional, requiere internet; no se ejecuta al arrancar). Comprueba MD5 publicado y registra SHA-256, autores, URL y versión en `assets/P1_ASSET_MANIFEST.json`. Conservar este registro y revisar cualquier cambio de fuente/licencia al añadir nuevos assets.
+
+## Revisión visual de P1.B · 2026-10-14
+
+Respaldos ergonómicos, hojas curvas, jardineras torneadas, teclados, tejido, fachadas de edificios, cielo degradado, esculturas abstractas y placas discretas son creaciones procedurales originales en `world/details.ts`, `model.ts`, `materials.ts` y `Office.tsx`. No se han descargado nuevos assets ni imágenes generadas. La iluminación usa luces compartidas y PMREM procedural de Three.js, MIT, incluido en la dependencia ya inventariada; no usa un servicio externo. Los seis mapas CC0 anteriores permanecen sin modificación.

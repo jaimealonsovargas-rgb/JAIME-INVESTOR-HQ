@@ -1,0 +1,44 @@
+{
+  "/health": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "phase": "P0",
+      "trading_mode": "PAPER_ONLY",
+      "orders_enabled": false,
+      "database": "ok",
+      "schema_version": "0001_instruments",
+      "checked_at": "2026-10-14T16:03:25.166098Z"
+    }
+  },
+  "/api/providers/status": {
+    "status": 200,
+    "body": [
+      {
+        "provider": "ALPACA_PAPER",
+        "status": "NO DISPONIBLE",
+        "reason": "Adaptador no implementado en P0; acceso no comprobado.",
+        "checked_at": null
+      },
+      {
+        "provider": "T212_DEMO",
+        "status": "NO DISPONIBLE",
+        "reason": "Adaptador no implementado en P0; acceso no comprobado.",
+        "checked_at": null
+      },
+      {
+        "provider": "TWELVE_DATA",
+        "status": "NO DISPONIBLE",
+        "reason": "Adaptador no implementado en P0; acceso no comprobado.",
+        "checked_at": null
+      }
+    ]
+  },
+  "POST /api/orders": {
+    "status": 403,
+    "body": {
+      "code": "P0_EXECUTION_DISABLED",
+      "message": "NO DISPONIBLE: todas las órdenes están bloqueadas en P0."
+    }
+  }
+}

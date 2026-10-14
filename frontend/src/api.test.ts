@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { fetchHealth } from './api';
+import { fetchHealth,fetchProviders } from './api';
 
 const valid = { status: 'ok', phase: 'P0', database: 'ok', trading_mode: 'PAPER_ONLY', orders_enabled: false, schema_version: '0001_instruments', checked_at: '2026-10-13T12:00:00Z' };
 afterEach(() => vi.unstubAllGlobals());
@@ -26,4 +26,8 @@ describe('comprobación de salud sin falsos positivos', () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')));
     await expect(fetchHealth()).rejects.toThrow();
   });
+});
+describe('proveedores honestos P0',()=>{
+  it('acepta exclusivamente el contrato local de disponibilidad no verificada',async()=>{const data=[{provider:'ALPACA_PAPER',status:'NO DISPONIBLE',reason:'Adaptador no implementado',checked_at:null}];const fetch=vi.fn().mockResolvedValue(Response.json(data));vi.stubGlobal('fetch',fetch);expect(await fetchProviders()).toEqual(data);expect(fetch).toHaveBeenCalledWith('/api/providers/status',expect.objectContaining({credentials:'omit',cache:'no-store'}));});
+  it.each([[],null,[{provider:'x',status:'DISPONIBLE',reason:'demo',checked_at:null}],[{provider:'x',status:'NO DISPONIBLE',reason:'',checked_at:null}],[{provider:'x',status:'NO DISPONIBLE',reason:'pendiente',checked_at:'inventado'}]])('rechaza falsos positivos y fechas inválidas: %j',async data=>{vi.stubGlobal('fetch',vi.fn().mockResolvedValue(Response.json(data)));await expect(fetchProviders()).rejects.toThrow();});
 });

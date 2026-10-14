@@ -1,6 +1,6 @@
 # P1.A–B · Arquitectura gráfica
 
-P0 autorizada por el usuario y revisión estática de AUDITORIA_P0.md. Alcance: hardware, base gráfica y arquitectura de los nueve departamentos. No incluye P1.C–F: avatar, WASD, colisiones, teletransporte, monitores con paneles y diez NPC se implementarán después de aprobar el diseño.
+Documento del alcance inicial P1.A–B: hardware, base gráfica y arquitectura de los nueve departamentos. El cierre posterior autorizado de P1.C–F está implementado y documentado en [ACEPTACION_P1](ACEPTACION_P1.md); las restricciones históricas de este documento no son el estado actual.
 
 ## Equipo y presupuesto inicial
 
@@ -28,10 +28,22 @@ Las vistas Recepción/Trading/Comité/Planta son cámaras de revisión, no telet
 
 Renderizado bajo demanda al observar una escena quieta, para no mantener la iGPU ocupada innecesariamente. «Medir FPS» activa 12 segundos de render continuo; el resultado se identifica después como última medición. No se presenta el reposo como 60 FPS.
 
-Métricas locales expuestas en `window.__HQ_METRICS__` y muestra de hasta 600 intervalos visibles en `window.__HQ_FRAMES__`: FPS medio, p95 de frame, draw calls, triángulos, texturas, geometrías, resolución/DPR, renderer y nueve nodos de departamento. Se reinicia la muestra al cambiar cámara/calidad y al iniciar medición. No se registran frames con pestaña oculta ni pausas superiores a 1 s; una suspensión del sistema requiere reiniciar el benchmark. `loadMs` es el tiempo desde navegación hasta el primer callback de escena preparada; `firstFrameMs` mide hasta completar el primer frame WebGL mediante sincronización GPU. Son tiempos de esa navegación y equipo, no una certificación de descarga fría. Los contadores de draw calls y triángulos son los del último frame medido; para compararlos se debe activar «Medir FPS», pues en reposo se renderiza bajo demanda.
+Métricas locales expuestas en `window.__HQ_METRICS__`: FPS medio, p95 de frame, draw calls, triángulos, texturas, geometrías, resolución/DPR, renderer y nueve nodos de departamento. El cierre F conserva hasta 1.200 intervalos en `window.__HQ_FRAMES__`, suficientes para la ventana de 12 s; `window.__HQ_MOVING_FRAMES__` separa los intervalos con desplazamiento real. Se reinicia al cambiar cámara/calidad y al iniciar medición. Se excluyen pestañas ocultas y se cuentan las pausas largas: ya no se filtran intervalos superiores a 1 s. `loadMs` mide hasta el primer callback preparado y `firstFrameMs` hasta completar el primer frame WebGL sincronizado con GPU; no certifican la carga fría completa de todos los humanos. Los contadores son del último frame; activar «Medir FPS» para render continuo. Reposo jugable limitado a 20 Hz para animaciones ambientales.
 
 Pruebas nuevas: correspondencia con el plano, paso entre celdas, una sola cota, presets dentro de la envolvente, geometría finita y presupuesto de mallas/triángulos. Pruebas P0 se conservan. Capturas reales de navegador y mediciones reproducidas por CLI; evidencias finales sanitizadas en docs/evidencias/P1B para revisión desde Git, además de output local ignorado.
 
 ## Seguridad y coste
 
 Backend y guards de P0 intactos. Ninguna orden habilitada, ningún transporte hacia bróker. Monitores muestran NO DISPONIBLE con fase futura, sin NAV ni P&L ficticios. Recursos estáticos locales, sin CDN, HDRI remoto, telemetría remota, suscripciones o compras. Licencias y hashes en assets/LICENSES.md y P1_ASSET_MANIFEST.json.
+
+## Revisión visual de P1.B · 2026-10-14
+
+El usuario aprobó la distribución y la paleta general y pidió refinar el realismo. Se conservan centros, huella, pasillos, entrada 3D, controles de inspección y servicios P0. `details.ts` añade respaldos curvos con contorno ergonómico, asiento moldeado, hojas con nervadura y curvatura, macetas torneadas y UV de fachada. Las piezas se siguen fusionando por material/departamento; teclados y fachadas usan CanvasTexture original en lugar de una malla por tecla o ventana. Los monitores tienen biseles estrechos, soporte metálico, carcasa posterior y periféricos. Se añaden carpetas, tazas y esculturas abstractas propias.
+
+Los carteles suspendidos desaparecen: placas de nogal/bronce a la altura de la vista sobre las mamparas y rótulo de suelo en Trading; la vista de planta conserva los nueve identificadores DOM. Exterior en tres franjas de profundidad, alturas, retranqueos y coronaciones diferentes, fachadas en todas las caras, cielo degradado original y niebla neutra desde 100 m, sin lavado azul próximo.
+
+Luz ambiente reducida, luz diurna cálida, dos focos interiores compartidos orientados al suelo y materiales con rugosidad/relieve afinados. Se ensayaron luces de área y se retiraron al medir unos 26 FPS. La referencia antigua, medida después bajo la carga actual, también bajó hasta 29,72 FPS: no se atribuye toda la caída histórica al tipo de luz. Bevels pequeños con menor subdivisión y radios de silla modelados con tubos limitan el coste geométrico. No se usan SSR, ray tracing ni reflejos dinámicos de toda la escena: los reflejos siguen basados en el entorno procedural PMREM.
+
+Techo a 4,5 m; luminarias por encima de 4,03 m y dinteles libres a 3,99 m. Presets de interiores a 3,25–3,35 m, dirigidos hacia abajo. El test del techo comprueba el mínimo de su geometría y lanza rayos horizontales por los umbrales centrales a 3,8 m. Esto revisa la envolvente arquitectónica para la cámara futura; no implementa avatar, seguimiento ni colisiones.
+
+Capturas y JSON de medidas revisadas en `docs/evidencias/P1B/revision-visual/`. Benchmarks de 12 s con comprobación periódica de foco/visibilidad. Comparar con las cifras previas teniendo en cuenta las cámaras elevadas, geometría y carga del equipo; no son ensayos idénticos. La visual final debe ser aprobada antes de P1.C.
