@@ -24,7 +24,7 @@ def test_health_and_empty_registry(client):
     assert data["trading_mode"] == "PAPER_ONLY"
     assert data["orders_enabled"] is False
     assert data["database"] == "ok"
-    assert data["schema_version"] == "0001_instruments"
+    assert data["schema_version"] == "0002_data"
     assert datetime.fromisoformat(data["checked_at"]).tzinfo is not None
     assert client.get("/api/instruments").json() == []
 
@@ -117,5 +117,5 @@ def test_decimal_and_quote_provenance():
 
 def test_api_schema_has_typed_contracts(client):
     schema = client.get("/openapi.json").json()
-    assert set(schema["paths"]) == {"/health", "/api/providers/status", "/api/instruments", "/api/orders"}
+    assert set(schema["paths"]) == {"/health", "/api/providers/status", "/api/instruments", "/api/orders", "/api/data/quality", "/api/data/sources/{access_id}"}
     assert schema["paths"]["/api/orders"]["post"]["responses"]["403"]

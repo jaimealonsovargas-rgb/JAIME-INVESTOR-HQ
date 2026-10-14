@@ -35,6 +35,9 @@ class AssetClass(StrEnum):
     REAL_ESTATE = "REAL_ESTATE"
     INFRASTRUCTURE = "INFRASTRUCTURE"
     STRUCTURED = "STRUCTURED"
+    CRYPTO = "CRYPTO"
+    INDEX = "INDEX"
+    MACRO_SERIES = "MACRO_SERIES"
 
 
 class ProviderCapability(Contract):
@@ -46,13 +49,23 @@ class ProviderCapability(Contract):
     checked_at: AwareDatetime | None = None
     license: str | None = None
     reason: str = Field(min_length=1)
+    source: str | None = None
+    feed: str | None = None
+    expires_at: AwareDatetime | None = None
 
     @model_validator(mode="after")
     def evidence_required(self):
         if any((self.research, self.valuation, self.internal_paper, self.broker_paper)):
             if self.checked_at is None or not self.license:
                 raise ValueError("Una capacidad habilitada requiere fecha y licencia verificadas.")
+            if self.feed and (not self.source or not self.source.startswith('https://')):
+                raise ValueError('Capacidad de feed sin fuente documental.')
+        if self.expires_at and (not self.checked_at or self.expires_at <= self.checked_at):
+            raise ValueError('Caducidad inválida.')
         return self
+
+    def active(self, now):
+        return self.checked_at is not None and self.checked_at <= now and (self.expires_at is None or now < self.expires_at)
 
 
 class BondTerms(Contract):
@@ -68,7 +81,7 @@ class Instrument(Contract):
     id: UUID
     symbol: str = Field(min_length=1)
     venue: str = Field(min_length=1)
-    currency: str = Field(pattern=r"^[A-Z]{3}$")
+    currency: str | None = Field(default=None, pattern=r"^[A-Z0-9]{3,12}$")
     country: str | None = Field(default=None, pattern=r"^[A-Z]{2}$")
     asset_class: AssetClass
     isin: str | None = None
@@ -76,6 +89,16 @@ class Instrument(Contract):
     figi: str | None = None
     bond_terms: BondTerms | None = None
     provider_capabilities: tuple[ProviderCapability, ...] = ()
+    source: str | None = None
+    verified_at: AwareDatetime | None = None
+
+    @model_validator(mode='after')
+    def currency_semantics(self):
+        if self.currency is None and self.asset_class not in (AssetClass.MACRO_SERIES, AssetClass.INDEX):
+            raise ValueError('Divisa necesaria para instrumento monetario.')
+        if self.currency and self.asset_class != AssetClass.CRYPTO and len(self.currency) != 3:
+            raise ValueError('Divisa monetaria de tres letras.')
+        return self
 
 
 class Quote(Contract):
