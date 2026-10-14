@@ -20,6 +20,8 @@ Distinguir siempre: (a) cotización bursátil market_quote, (b) fundamental_fact
 
 **Excepción técnica limitada:** OpenFIGI `POST /v3/mapping` y BLS v2 `POST /publicAPI/v2/timeseries/data/` son **consultas read-only** documentadas; permitirlas **solo** con allowlist exacta de host/ruta/verbo, payload acotado y tests. Ningún POST/PUT/PATCH/DELETE hacia brókeres/exchanges, cuentas, transferencias ni órdenes. `POST /api/orders` local sigue 403. Si la separación no es segura, dejar estas excepciones pendientes.
 
+**Integraciones externas P2 añadidas por el usuario:** seguir [plan maestro Sims y tres herramientas](PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md) y [matriz de verificación](INTEGRACIONES_TERCEROS_VERIFICACION.md). Agent Reach canales públicos y legalmente permitidos, sin cookies personales; Vibe-Trading inventario y adaptador read-only en entorno aislado si pasa auditoría; Liquid únicamente investigar API pública read-only, **NO conectar OAuth estándar porque concede read+trade**. Mantener P2 sin cartera/operaciones y STOP antes de P3.
+
 ## 1. Secuencia de checkpoints y gates
 
 | Hito | Implementación mínima | Gate para continuar |

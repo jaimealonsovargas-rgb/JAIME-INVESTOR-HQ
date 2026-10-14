@@ -14,6 +14,8 @@
 8. **Fases:** P1 diseño/navegación/NPC/videowall con estados honestos; P2 datos y noticias públicas; P3 ledger MASTER 10.000 EUR ficticios; P4 agentes reales y estrategias; P5 riesgo/comité/backtesting; P6 operaciones PAPER exclusivamente; P7 QA. **NO anticipar cifras de fases futuras**.
 9. **0 EUR adicional**, secretos solo backend, licencias verificadas, NO live, NO wallets, NO órdenes a Liquid, ninguna operación en P2. La única «operación» visible antes de P6 será estado NO DISPONIBLE o eventos paper **realmente** existentes en el ledger autorizado.
 
+**Material de referencia para Codex:** [plano funcional editable de las 9 salas, 16 NPC y videowall](../assets/PLANO_SIMS_VIDEOWALL.svg). Es un **esquema funcional**, no copia literal de la imagen conceptual ni geometría definitiva; la referencia estética aprobada está en la conversación del usuario. [Matriz de auditoría de Liquid, Agent Reach y Vibe-Trading](INTEGRACIONES_TERCEROS_VERIFICACION.md). Codex debe conservar la versión local y utilizar el SVG solo como guía de distribución.
+
 ## 1. Referencia visual y layout
 
 ### 1.1 Distribución

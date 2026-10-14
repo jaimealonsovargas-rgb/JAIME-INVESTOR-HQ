@@ -25,6 +25,8 @@
 
 **Integraciones externas:** P2 Agent Reach solo lectura pública auditada; Vibe-Trading viabilidad/read-only aislado; Liquid solo investigación de endpoints públicos sin OAuth read+trade. 30 roles y presets operativos son P4; ledger P3. Ver plan maestro.
 
+**Guías de implementación nuevas:** [plano Sims](../assets/PLANO_SIMS_VIDEOWALL.svg) y [matriz de integraciones](INTEGRACIONES_TERCEROS_VERIFICACION.md). No confundir los números de la imagen conceptual con datos reales.
+
 ## 3. P2: checkpoints obligatorios
 
 Seguir [PLAN_P2_CHECKPOINTS.md](PLAN_P2_CHECKPOINTS.md) sin rediseñar P0: **P2.0** preflight/permisos → **P2.1** registry/capabilities → **P2.2** observaciones/cache/calidad/cuotas → **P2.3** fuentes públicas A en tres sublotes (19 candidatas) → **P2.4** fuentes con clave B en tres sublotes (15 candidatas, algunas condicionadas) → **P2.5** selección/API/Sistemas → **P2.6** QA. Sin claves, implementar con mocks HTTP y estado NO DISPONIBLE; no inventar conectividad ni derechos de visualización. Cero órdenes.
