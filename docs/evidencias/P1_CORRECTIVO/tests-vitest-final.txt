@@ -1,0 +1,13 @@
+
+> jaime-investor-hq-frontend@0.0.1 test
+> vitest run
+
+
+ RUN  v5.0.4 C:/Users/javie/Documents/GitHub/JAIME-INVESTOR-HQ/frontend
+
+
+ Test Files  4 passed (4)
+      Tests  32 passed (32)
+   Start at  22:01:53
+   Duration  2.25s (tests 75%, transform 12%, import 11%, worker 1%)
+

@@ -18,6 +18,13 @@ import {frameStats} from './frameStats';
 vi.mock('./materials', async (original) => ({ ...await original<typeof import('./materials')>(), textTexture: () => new Texture() }));
 
 describe('planta P1.B conforme al plano', () => {
+  it('evita paños y montantes entre la cámara posterior y la cabeza junto a los nueve agentes',()=>{
+    vi.stubGlobal('document', { createElement: () => ({ getContext: () => ({ createRadialGradient: () => ({ addColorStop() {} }), fillRect() {}, fillText() {} }) }) });
+    const office=createOffice(makeMaterials(Array.from({length:6},()=>new Texture())));const glass=office.userData.colliders.filter((c:{kind:string})=>c.kind==='glass');
+    for(const agent of PRIMARY_AGENT_INTERACTIONS){const body=new Vector3(...agent.approach),away=body.clone().sub(agent.anchor);away.y=0;away.normalize();const camera=body.clone().addScaledVector(away,3.8);camera.y=3.2;body.y=1.78;expect(firstHit(camera,body,glass,.001),agent.id).toBe(1);}
+    disposeOffice(office);
+    vi.unstubAllGlobals();
+  });
   it('mantiene nueve zonas únicas en las posiciones del documento', () => {
     expect(DEPARTMENTS.map(d => d.id)).toEqual(['research', 'committee', 'quant', 'risk', 'trading', 'execution', 'performance', 'reception', 'systems']);
     expect(new Set(DEPARTMENTS.map(d => d.center.join(','))).size).toBe(9);

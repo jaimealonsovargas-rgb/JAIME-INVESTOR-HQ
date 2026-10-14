@@ -23,6 +23,9 @@ export default function Player({runtime,contact}:{runtime:PlayerRuntime;contact:
     return()=>{clearInterval(timer);window.removeEventListener('keydown',down);window.removeEventListener('keyup',up);window.removeEventListener('blur',blur);canvas.removeEventListener('pointerdown',pointer);};
   },[gl,runtime,invalidate]);
   useFrame((_,delta)=>{
+    // No fijar la cámara antes de montar los colliders: el primer brazo podría
+    // quedar al otro lado de la fachada y el barrido impediría volver al interior.
+    if(!runtime.colliders.length)return;
     if(runtime.mode!=='play'||runtime.paused||(runtime.holdCamera&&!keys.current.size)){keys.current.clear();runtime.speed=0;runtime.velocity=0;runtime.angularVelocity=0;window.__HQ_PLAYER__={position:runtime.position.toArray(),yaw:runtime.yaw,cameraYaw:runtime.cameraYaw,pitch:runtime.pitch,distance:runtime.distance,speed:0,mode:runtime.mode,paused:runtime.paused,camera:camera.position.toArray()};return;}
     const dt=Math.min(delta,.05);const k=keys.current;
     const v=tankStep(runtime,Number(k.has('ArrowUp'))-Number(k.has('ArrowDown')),Number(k.has('ArrowLeft'))-Number(k.has('ArrowRight')),dt);

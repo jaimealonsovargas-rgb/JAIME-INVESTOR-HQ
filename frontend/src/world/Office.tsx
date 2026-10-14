@@ -14,6 +14,7 @@ import Monitors from './Monitors';
 import Personnel from './Personnel';
 import {PERSONNEL_COLLIDERS} from './staffLayout';
 import {frameStats} from './frameStats';
+import {batchStaticOffice} from './staticBatches';
 
 export interface SceneMetrics {
   ready: boolean; renderer: string; view: View; quality: Quality; fps: number;
@@ -32,16 +33,18 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
     '/materials/marble_01_diffuse.jpg', '/materials/marble_01_nor_gl.jpg', '/materials/marble_01_rough.jpg',
   ]);
   const materials = useMemo(() => makeMaterials(maps), [maps[0], maps[1], maps[2], maps[3], maps[4], maps[5]]);
-  const model = useMemo(() => {const office=createOffice(materials);office.updateMatrixWorld(true);office.traverse(object=>{object.matrixAutoUpdate=false;});return office;}, [materials]);
   const lightTargets=useMemo(()=>[8.5,-8.5].map(z=>{const target=new Object3D();target.position.set(0,0,z);return target;}),[]);
   const { gl, scene, camera, invalidate, size } = useThree();
+  const model = useMemo(() => {const office=createOffice(materials);office.getObjectByName('ceiling')?.traverse(o=>{if(o instanceof Mesh)o.castShadow=false;});
+    const batches=gl.extensions.has('WEBGL_multi_draw')?batchStaticOffice(office):[];
+    office.userData.batches=batches;office.updateMatrixWorld(true);office.traverse(object=>{object.matrixAutoUpdate=false;});return office;}, [materials,gl]);
   const controls = useRef<OrbitControlsImpl>(null);
   const frames = useRef<number[]>([]);
   const last = useRef(0), report = useRef(0), loaded = useRef(0);
   const firstFrame = useRef(0);
   const moving=useRef<number[]>([]);
   useEffect(()=>{player.colliders=[...model.userData.colliders,...PERSONNEL_COLLIDERS];window.__HQ_COLLIDERS__=player.colliders;model.getObjectByName('ceiling')?.traverse(o=>{if(o instanceof Mesh)o.castShadow=false;});return()=>{delete window.__HQ_COLLIDERS__;};},[model,player]);
-  useEffect(() => () => disposeOffice(model, new Set(maps)), [model]);
+  useEffect(() => () => {for(const batch of model.userData.batches)batch.dispose();disposeOffice(model, new Set(maps));}, [model]);
 
   useEffect(() => {
     const roof = model.getObjectByName('ceiling'); if (roof) roof.visible = mode==='play'||view !== 'plan';
@@ -63,6 +66,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
   }, [gl, scene]);
 
   useEffect(() => {
+    if(mode==='play'){player.holdCamera=false;player.revision+=1;invalidate();return;}
     const setting = VIEWS[view];
     camera.position.set(...setting.position);
     if ('fov' in camera) { camera.fov = setting.fov; camera.updateProjectionMatrix(); }

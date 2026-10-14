@@ -1,0 +1,9 @@
+{
+  "source": "Win32_PerfFormattedData_PerfOS_Memory y Win32_PerfFormattedData_Counters_ProcessorInformation; lectura real WMI durante el recorrido del 2026-10-14",
+  "AvailableMBytes": 750,
+  "PagesPersec": 60,
+  "PercentCommittedBytesInUse": 91,
+  "PercentProcessorUtility": 12,
+  "ProcessorFrequencyMHz": 1066,
+  "note": "Muestra puntual, no certifica causalidad exclusiva de los FPS bajos. La consulta WMI tardó varios minutos; no se repite como polling. No se cambió el plan de energía ni se cerraron aplicaciones del usuario."
+}

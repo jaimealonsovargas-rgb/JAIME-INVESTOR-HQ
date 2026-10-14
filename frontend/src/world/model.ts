@@ -159,7 +159,7 @@ function glassRun(b: Builder, length: number, p: Vec3, m: Materials, angle = 0,h
   g.box([0, height/2+.03, 0], [length, height, .014], m.glass);
   for (const y of [.045, height+.03]) g.box([0, y, 0], [length, .045, .065], m.bronze);
   for (let i = 0; i <= Math.ceil(length / 1.5); i++) g.box([-length / 2 + length * i / Math.ceil(length / 1.5), height/2+.03, 0], [.026, height, .04], m.dark);
-  g.box([0, 1.2, .012], [length, .009, .01], m.cream);
+  if(height>3)g.box([0, 1.2, .012], [length, .009, .01], m.cream);
   transfer(b, g, p, angle);
 }
 function roomShell(b: Builder, d: Department, m: Materials) {
@@ -167,7 +167,9 @@ function roomShell(b: Builder, d: Department, m: Materials) {
   if (d.id === 'trading' || d.id === 'reception') return;
   for (const side of [-1, 1]) {
     glassRun(b, 2.0, [side * 3.2, 0, 3.2], m,0,2.45);
-    glassRun(b, 6.4, [side * 4.2, 0, 0], m, Math.PI / 2,2.45);
+    // Paños de privacidad en el fondo; laterales abiertos junto al puesto y
+    // al acceso para que el brazo elevado no mire al avatar entre montantes.
+    glassRun(b, 2.4, [side * 4.2, 0, -2], m, Math.PI / 2,2.45);
   }
   // Portal libre de 4,4 m: sin hoja estacionada dentro del recorrido.
   b.box([0, 4.08, 3.2], [8.5, .18, .16], m.wood);
