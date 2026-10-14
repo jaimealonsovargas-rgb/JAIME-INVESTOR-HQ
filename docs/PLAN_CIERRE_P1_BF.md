@@ -8,7 +8,7 @@
 
 1. **P1.B:** retirar sofás de Recepción; quitar/reubicar cristales obstructivos; redistribuir interiores Performance (análisis real) y Sistemas (racks agrupados, operador accesible); elevar PBR, iluminación, skyline y muebles conservando 9 salas.
 2. **P1.C:** **solo flechas** ↑/↓ avanzar-retroceder, ←/→ girar personaje; cámara automática detrás y elevada ~3,2 m / 3,8 m, sin ratón/OrbitControls en juego. Resolver oclusión acortando brazo, mejorar rig, idle/walk/turn, velocidad y foot sliding.
-3. **P1.D:** nueve monitores físicos y paneles React, pero apertura **automática al acercarse al agente principal sentado de cada sala**, no por E/clic; radio orientativo entrada 1,6 m, rearme 2,3 m; comprobar departamento/acceso, histéresis, modal y Escape.
+3. **P1.D:** nueve monitores físicos y paneles React, pero apertura **automática al acercarse al agente principal sentado de cada sala**, no por E/clic; radio orientativo entrada 2,0 m, rearme 2,8 m; comprobar departamento/acceso, histéresis, modal y Escape.
 4. **P1.E:** **10 NPC humanos sentados**: uno por departamento y un segundo en Trading, con microanimaciones de trabajo **solo ambientales**, sin fingir agentes P4.
 5. **P1.F:** baseline de FPS de la versión LOCAL antes de tocarla, repetir pruebas visuales, navegación, paneles, NPC, licencias, P0, tests y FPS después. Avanzar después a P2.0→P2.6 según [PLAN_P2_CHECKPOINTS.md](PLAN_P2_CHECKPOINTS.md). STOP antes de P3.
 
@@ -42,7 +42,7 @@
 
 - `model.ts` fusiona meshes por material; **no intentar convertir una etiqueta/pantalla ya fusionada en interactable identificable**. Mantener `MONITOR_DEFINITIONS` con **exactamente nueve IDs únicos** y asociar `PRIMARY_AGENT_INTERACTIONS` con un NPC sentado por departamento: `reception`, `trading`, `execution`, `performance`, `risk`, `research`, `committee`, `quant`, `systems`.
 - Cada definición: `id`, `departmentId`, etiqueta, posición/rotación 3D, ancla de interacción, fase propietaria, tipo de panel. Verificar coordenadas con la **versión local**. Usar anclas/hitboxes de proximidad del agente principal sin deshacer el merge arquitectónico; los monitores son elementos físicos no obligatoriamente clicables. Comprobar sala correcta, acceso y colisión antes de activar.
-- Abrir **automáticamente al aproximarse al NPC principal sentado del departamento**, sin E/clic obligatorio. Distancias orientativas enter=1,6 m / rearm=2,3 m, con departamento correcto y acceso libre; no a través de paredes, ni reapertura inmediata al cerrar. El monitor sigue existiendo físicamente.
+- Abrir **automáticamente al aproximarse al NPC principal sentado del departamento**, sin E/clic obligatorio. Distancias orientativas enter=2,0 m / rearm=2,8 m, con departamento correcto y acceso libre; no a través de paredes, ni reapertura inmediata al cerrar. El monitor sigue existiendo físicamente.
 - El dashboard es **React/DOM**, no una textura ni un dashboard completo dentro de Canvas. Modal con `role=dialog`, `aria-modal`, foco inicial, trampa Tab/Shift+Tab, Escape, cierre visible y devolución del foco. Bloquear movimiento/cámara mientras esté abierto y restaurar exactamente posición, yaw, pitch y zoom al cerrar. El mundo debe continuar siendo explorable sin backend.
 - Componentes compartidos, no nueve CSS duplicados: `MonitorOverlay`, `PanelHeader`, `StatusBadge`, `UnavailableState`, `DataTableShell`, `SectionCard`, marcas de fuente/hora. Estética institucional azul noche/piedra/bronce, legible a 1920×1080.
 
