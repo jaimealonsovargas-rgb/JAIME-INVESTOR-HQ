@@ -1,5 +1,8 @@
 # JAIME INVESTOR HQ
 
+> **DISEÑO DEFINITIVO APROBADO (2026-10-15):** [especificación integral](docs/ESPECIFICACION_DEFINITIVA_2026_10_15.md) · [prompt Codex completo](docs/PROMPT_CODEX_EJECUCION_COMPLETA_P1_P2.md) · [referencia visual original y hashes](assets/REFERENCIA_APROBADA_MANIFIESTO.md). Oficina **estilo Los Sims isométrico** con **videowall enorme superior**, **16 NPC ambientales** y **30 roles IA lógicos futuros**. El ZIP de handoff contiene los dos PNG originales; **aún deben copiarse/versionarse en el repo**. Trabajo autorizado ahora P1 correctivo + P2, **STOP antes de P3**. Lo descrito es diseño, no código implementado.
+
+
 **Oficina 3D jugable de un fondo de inversión virtual multiactivo.**
 
 **Estado:** P0 conservada y P1.A–B implementadas para revisión: oficina 3D real de nueve departamentos en una sola planta. Avatar, desplazamiento y paneles de monitores pendientes de P1.C–F.
@@ -61,7 +64,7 @@ Resultados, incidencias y evidencia visual: [STATUS.md](STATUS.md). Arquitectura
 
 ## El producto
 
-La aplicación abre **directamente dentro de la oficina 3D**; nunca en un dashboard plano. Una sola planta, cámara elevada en tercera persona, avatar humano, nueve departamentos, diez NPC profesionales, pantallas físicas clicables que abren interfaces financieras React nítidas y navegación WASD/teletransporte. Calidad arquitectónica premium desde la primera fase visual aceptada.
+La visión final abre **directamente en la oficina 3D estilo Los Sims**; nunca en un dashboard plano. Una planta luminosa, **cámara isométrica elevada de orientación fija**, avatar humano que se desplaza **solo con flechas relativas a pantalla**, **9 departamentos/9 paneles**, **16 NPC profesionales sentados** (9 principales abren paneles automáticamente por proximidad), **30 roles IA lógicos P4** y **videowall panorámico enorme en pared superior** con datos reales por fase. No copiar cifras de la imagen conceptual. Calidad premium y FPS Intel medidos; ver especificación definitiva.
 
 Las funciones incluyen: universo multiactivo; análisis fundamental, técnico, macro, crédito y cuantitativo; comité; riesgos con veto; posiciones y órdenes; P&L EUR; historial de cada operación; tesis, evidencias y postmortems; integraciones paper con Alpaca/Trading 212 y datos de Twelve Data cuando sus condiciones lo permitan.
 
