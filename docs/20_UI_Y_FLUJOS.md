@@ -10,7 +10,7 @@ Cada trade con BUY/SELL, fecha, cantidad, coste, fee, tipo de cambio, cuenta pap
 Vista breve primero; paneles desplegables con tesis desarrollada, supporting arguments, contraargumentos, catalizadores, riesgos, invalidación, datos de fuente, opinión de agentes, comité, ejecución y revisión posterior. Sin muro de texto inicial.
 
 ## Navegación
-HUD discreto dentro de mundo 3D: mini mapa, departamentos, estado PAPER, NAV, hora de datos, errores críticos. Cada departamento tiene identidad visual y propósito. Panel financiero ampliado ocupa espacio suficiente para lectura y puede cerrarse para volver al juego.
+HUD discreto dentro de mundo 3D **visto en tercera persona desde detrás del avatar**: mini mapa, departamentos, estado PAPER, NAV (solo cuando exista en P3), hora de datos, errores críticos. Cada departamento tiene identidad visual y propósito. El jugador se aproxima físicamente al monitor con su personaje; E/clic abre un panel React/DOM ampliado y legible, que puede cerrarse para volver **a la misma posición y orientación de la cámara de seguimiento**. La vista aérea/planta es opcional como mapa o inspección, nunca la perspectiva principal.
 
 ## Estados
 Sin datos, stale, offline, bloqueado, pendiente, error y completo con motivos claros. Nunca usar datos financieros ficticios sin etiqueta DEMO. Modo sin conexión permite explorar HQ, pero no ejecutar órdenes.
