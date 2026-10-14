@@ -1,5 +1,7 @@
 # PLAN MAESTRO — JAIME INVESTOR HQ · Oficina estilo Los Sims, videowall, 16 NPC, 30 agentes e integraciones
 
+**DOCUMENTO RECTOR POSTERIOR (2026-10-15):** [especificación definitiva consolidada](ESPECIFICACION_DEFINITIVA_2026_10_15.md), [prompt Codex completo](PROMPT_CODEX_EJECUCION_COMPLETA_P1_P2.md), [manifiesto de los PNG originales aprobados](../assets/REFERENCIA_APROBADA_MANIFIESTO.md). El SVG es solo esquema; Codex debe importar los PNG del ZIP de handoff y verificar hash. Prevalece la especificación definitiva ante cualquier conflicto.
+
 > **Aprobación de diseño por el usuario: 2026-10-14.** Le gusta la referencia **minimalista, tipo Los Sims, vista isométrica elevada** y solicita una **pantalla panorámica ENORME en la parte superior** con cartera, operaciones, mercados y noticias. También pidió decidir número de bots/agentes y estudiar la integración de **Liquid Co-Invest, Agent Reach y HKUDS/Vibe-Trading** en el momento apropiado, con **0 EUR y PAPER ONLY**. **Este archivo es una especificación para Codex, NO una implementación ni prueba de conectividad.** Sustituye los requisitos anteriores de cámara «detrás del avatar» y giro con flechas cuando sean incompatibles. **La autorización de ejecución actualmente vigente sigue siendo corregir P1 + completar P2; STOP antes de P3** hasta una autorización posterior. Este plan define P3–P7 para no rehacer arquitectura.
 
 ## 0. Decisiones ejecutivas (no abrir debate de diseño de nuevo)
