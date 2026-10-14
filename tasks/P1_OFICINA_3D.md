@@ -2,6 +2,14 @@
 
 **Modelo recomendado en Codex: GPT-6.1 Sol · razonamiento Alto** (selección manual, si está disponible). Para componentes React simples o documentación: Sol Medio. Escalar a Astra Alto únicamente un problema difícil y acotado. **No usar modelos de pago por API, créditos, subagentes masivos ni modo acelerado facturable.**
 
+## Autorización expresa de cierre integral P1 · 2026-10-14
+
+El usuario ha autorizado **una única ejecución secuencial de los checkpoints restantes P1.B → P1.C → P1.D → P1.E → P1.F**. P1.A ya está completada. Codex **no debe pedir aprobación intermedia** si las pruebas y verificaciones de cada checkpoint son satisfactorias; sí debe corregir fallos antes de avanzar y **detenerse ante un bloqueo real** de licencia/asset humano, conflicto Git con riesgo de pérdida de cambios, seguridad/PAPER ONLY o plataforma. Registrar avances y resultados verificables en `STATUS.md`.
+
+Esta autorización **sustituye las instrucciones históricas** de trabajar una subetapa por conversación, pedir aprobación visual tras B/E y detenerse tras B o C; no sustituye las pruebas, el requisito de calidad visual ni los invariantes de `AGENTS.md`. **STOP al terminar P1.F; no empezar P2 ni P3–P7.** La versión local y sus cambios sin publicar deben preservarse; sincronizar Git sin sobrescribir ni forzar.
+
+La especificación detallada B/C está en [issue #1](https://github.com/jaimealonsovargas-rgb/JAIME-INVESTOR-HQ/issues/1); D/E/F y aceptación final en [docs/PLAN_CIERRE_P1_BF.md](../docs/PLAN_CIERRE_P1_BF.md). Leer por etapa, sin duplicar investigación ni documentación.
+
 ## Lectura obligatoria (mínimo contexto)
 1. `AGENTS.md` y `STATUS.md`.
 2. Este ticket.
@@ -10,8 +18,8 @@
 5. `docs/AUDITORIA_P0.md` y `docs/16_TESTS_ACEPTACION.md`.
 Leer otros archivos solo cuando sean necesarios; **no copiar todos los documentos al contexto**.
 
-## Investigación técnica disponible (no cambia el alcance autorizado)
-La guía de arquitectura y aceptación para un posible cierre P1.B–P1.F está preparada en [PLAN_CIERRE_P1_BF.md](../docs/PLAN_CIERRE_P1_BF.md). **Es una propuesta técnica, no autorización para saltar checkpoints ni iniciar P1.D–F**: prevalecen las instrucciones de alcance vigentes hasta que el usuario confirme expresamente una ampliación. Consultarla solo para las etapas efectivamente autorizadas.
+## Investigación técnica y especificación ejecutable
+La guía [PLAN_CIERRE_P1_BF.md](../docs/PLAN_CIERRE_P1_BF.md) contiene decisiones y criterios para B–F, **ahora autorizados**. El [issue #1](https://github.com/jaimealonsovargas-rgb/JAIME-INVESTOR-HQ/issues/1) conserva el mapa de archivos y la especificación pormenorizada de B/C. Seguir los checkpoints en orden y documentar resultados reales.
 
 ## Resultado obligatorio
 Al abrir `http://127.0.0.1:5173` aparece **directamente la oficina 3D jugable**, no el diagnóstico P0 ni un dashboard 2D. Una sola planta de aprox. 34×28 m, sin niveles apilados, pasillos abiertos y paredes acristaladas. Nueve departamentos físicamente presentes y distinguibles:
@@ -51,7 +59,7 @@ Estética institucional de alto nivel, Manhattan/Londres: mármol/piedra negra, 
 
 **P1.F — QA visual y aceptación (Sol Alto, Astra solo para bloqueo):** capturas **de la perspectiva real detrás del avatar**, E2E caminando por las nueve zonas y abriendo nueve pantallas, pruebas de cámara/colisiones/oclusión, tests existentes P0 verdes, revisión de licencias y documentación de hardware/FPS en movimiento. La vista aérea solo es evidencia auxiliar. Pulir hasta el estándar visual requerido; no dar por terminada P1 con placeholders.
 
-Trabajar **una subetapa por conversación/checkpoint** y actualizar `STATUS.md`. En P1.B y P1.E mostrar capturas reales para aprobación visual antes de continuar. No lanzar simultáneamente toda P1 en un prompt gigante.
+**Excepción autorizada de cierre:** ejecutar B → C → D → E → F en una sola sesión/encargo con **checkpoints internos obligatorios**. Registrar capturas reales en B y E y autoevaluar contra los criterios; **no pedir aprobación intermedia** si pasan. Si el contexto se agota, dejar checkpoint/estado verificable en `STATUS.md` para reanudar sin reanalizar. Nunca saltar una prueba fallida. Detenerse al finalizar F, antes de P2.
 
 ## Pruebas y criterios de aceptación
 1. `python scripts/manage.py check` sigue pasando (registrar resultado REAL, no asumir 56 tests).
@@ -65,5 +73,6 @@ Trabajar **una subetapa por conversación/checkpoint** y actualizar `STATUS.md`.
 9. Screenshots de **la app real desde la cámara detrás del avatar durante el recorrido** (no solo vistas de inspección ni renders Runway), estado offline verificado, accesibilidad básica.
 10. Prohibición live y guard de órdenes intactos. **No empezar P2** sin aprobación.
 
-## Instrucción de arranque para Codex
-«Lee los archivos indicados en este ticket. P0 está revisada estáticamente y autorizada para pasar a P1. Empieza por P1.A y P1.B; construye una escena arquitectónica premium de nueve departamentos en la aplicación real, con calidad visual verificable y coste 0 €. Mantén P0 verde, registra licencias, hardware, FPS y capturas, actualiza STATUS.md y **detente tras P1.B para que revise el aspecto**. No hagas P1.C–F todavía.»
+## Instrucción de arranque para Codex (actualizada)
+
+«Termina P1.B → P1.C → P1.D → P1.E → P1.F secuencialmente, en un único encargo, con gates reales entre etapas. Revisa el estado local y los cambios sin publicar; sigue el issue #1 y docs/PLAN_CIERRE_P1_BF.md. No rehagas P1.A ni módulos funcionales. Sin datos financieros inventados, con PAPER ONLY y 0 EUR. Prueba y corrige cada checkpoint, genera capturas reales y benchmarks de movimiento, actualiza STATUS.md y detente ANTES de P2. Si un bloqueo real impide cumplir calidad o licencia, repórtalo sin simular la entrega.»

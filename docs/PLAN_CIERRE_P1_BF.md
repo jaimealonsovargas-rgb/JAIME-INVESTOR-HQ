@@ -1,6 +1,6 @@
 # P1.B–P1.F — guía técnica de cierre para Codex (investigación consolidada)
 
-> **Preparación, NO implementación ni autorización nueva.** Elaborada el 2026-10-14 a partir de la investigación de cierre de P1 y del código publicado. La autorización vigente del issue #1 permite P1.B + P1.C y exige STOP después de C. **Solo ejecutar P1.D–F sin pausa si el usuario aprueba expresamente ampliar el alcance.** No altera `AGENTS.md`, P0, PAPER ONLY ni el STOP antes de P2.
+> **Autorización confirmada por el usuario el 2026-10-14:** Codex puede implementar **P1.B → P1.C → P1.D → P1.E → P1.F en una única ejecución secuencial**, con checkpoints y pruebas obligatorias; continuar sin aprobación intermedia cuando cada gate esté verde. **STOP antes de P2.** Este documento es especificación de implementación, no prueba de que P1 esté ejecutada. No altera `AGENTS.md`, P0, PAPER ONLY ni la exigencia de coste 0 EUR.
 >
 > **Fuente B/C detallada:** [issue #1](https://github.com/jaimealonsovargas-rgb/JAIME-INVESTOR-HQ/issues/1). Este documento concentra sobre todo las decisiones de D/E/F para evitar una nueva investigación.
 
@@ -8,7 +8,7 @@
 
 1. `git status --short`, `git log -1 --oneline`, revisar diffs y cambios sin publicar. **El working tree local es la autoridad**; las capturas recientes pueden ser posteriores al código de GitHub. No sobrescribir trabajo existente.
 2. Leer `AGENTS.md`, `STATUS.md`, `tasks/P1_OFICINA_3D.md`, este documento y las secciones necesarias de `docs/02_MUNDO_3D.md`, `docs/03_DEPARTAMENTOS.md`, `docs/20_UI_Y_FLUJOS.md`. Consultar el issue #1 para B/C. No cargar P2–P7 ni el backend entero.
-3. Plan breve y checkpoints secuenciales B → C → D → E → F, **solo si el alcance B–F se autoriza**. Cada checkpoint: implementación, tests, prueba visual real, registro de incidencias y corrección. Si falla, no fingir verde ni contaminar la siguiente etapa.
+3. Plan breve y checkpoints secuenciales B → C → D → E → F, **autorizados expresamente**. Cada checkpoint: implementación, tests, prueba visual real, registro de incidencias y corrección. Si falla, no fingir verde ni contaminar la siguiente etapa. Continuar automáticamente si pasa; si hay bloqueo real, detenerse y explicar.
 4. Hardware: Windows 11, Intel Core 5 120U, 16 GB, Intel Graphics integrada, 1920×1080. Equilibrado/DPR 1 como referencia. Objetivo 45–60 FPS en movimiento cuando sea viable; menos de 30 FPS sostenidos requiere optimización. FPS de P1.B en `STATUS.md` son históricos, **no resultados del cierre**.
 5. Coste adicional 0 EUR, sin CDN ni recursos de pago, sin secretos, **PAPER ONLY**. No inventar cotizaciones, NAV, P&L, operaciones, votos, jobs ni proveedores disponibles. Los 10.000 EUR ficticios son de P3, no NAV de P1.
 
