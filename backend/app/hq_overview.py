@@ -1,5 +1,4 @@
 """Resumen local de solo lectura. No consulta proveedores ni crea cartera/jobs."""
-from datetime import datetime, timezone
 from typing import Literal
 
 from pydantic import AwareDatetime

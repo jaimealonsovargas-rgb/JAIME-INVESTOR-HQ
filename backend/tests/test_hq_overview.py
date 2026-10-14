@@ -1,6 +1,7 @@
 """TEST_ONLY: no red, cartera ni datos reales en fixtures."""
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
+from dataclasses import replace
 
 from sqlalchemy.orm import Session
 
@@ -40,5 +41,6 @@ def test_overview_requires_verified_display_rights_and_labels_stale(client, monk
     assert markets['status'] == 'STALE'
     assert markets['items'][0]['value'] == '1.234567890123456789'
     assert markets['items'][0]['execution_eligible'] is False
-    monkeypatch.setattr(CATALOG['A01'].rights, 'display_allowed', False)
+    source = CATALOG['A01']
+    monkeypatch.setitem(CATALOG, 'A01', replace(source, rights=source.rights.model_copy(update={'display_allowed': False})))
     assert all(not s['items'] for s in client.get('/api/hq/overview').json()['sections'])
