@@ -11,6 +11,11 @@
 8. Fuentes y modelos 3D gratuitos con licencia comprobada y atribución registrada.
 9. Español para interfaz y comunicación; identificadores de código pueden ser ingleses.
 
+## Fuente de verdad consolidada (2026-10-15)
+- Leer **`docs/ESPECIFICACION_DEFINITIVA_2026_10_15.md`** como documento rector y **`docs/PROMPT_CODEX_EJECUCION_COMPLETA_P1_P2.md`** como instrucción ejecutable. Referencia visual **PNG original** (NO SVG) en `assets/REFERENCIA_APROBADA_MANIFIESTO.md`; copiar desde ZIP de handoff y verificar hash antes de afirmar que está en GitHub.
+- El usuario quiere **dinero virtual pero precios/datos reales**; los fills de P6 son simulación documentada, no operaciones reales. Tras 15 días paper no se habilita live automáticamente.
+- Las 30 funciones IA son **roles lógicos bajo demanda**; 16 NPC son ambientación. P2 fuentes máximas útiles, Agent Reach público, Vibe auditado y Liquid bloqueado si scope trade. Mantener P1+P2 autorizados y STOP antes de P3.
+
 ## Requisito definitivo de perspectiva (aprobado 2026-10-14)
 - **Cámara isométrica elevada estilo Los Sims**, orientación fija y seguimiento suave; avatar completo visible, paredes cutaway, sin cámara detrás.
 - **Flechas screen-relative:** ↑ arriba, ↓ abajo, ← izquierda, → derecha de pantalla; avatar gira automáticamente hacia la dirección de movimiento, **las flechas NO giran cámara ni avatar manualmente**. No WASD, mouse-look ni OrbitControls.

@@ -1,5 +1,7 @@
 # Índice — lectura selectiva por fase
 
+**DOCUMENTO RECTOR DEFINITIVO (2026-10-15):** [especificación de todas las decisiones del usuario](ESPECIFICACION_DEFINITIVA_2026_10_15.md) · [prompt Codex completo](PROMPT_CODEX_EJECUCION_COMPLETA_P1_P2.md) · [manifiesto de la imagen ORIGINAL aprobada](../assets/REFERENCIA_APROBADA_MANIFIESTO.md). **El SVG no sustituye a los PNG originales del ZIP de handoff.**
+
 | Fase | Leer primero |
 |---|---|
 | P0 | 01_VISION, 08_ARQUITECTURA, 13_SEGURIDAD, 14_COSTE_CERO, 17_AUDITORIA_PREVIA, 18_MODELOS_Y_TOKENS |
