@@ -154,28 +154,13 @@ function sculpture(b:Builder,x:number,z:number,m:Materials,y=.99) {
   b.part(geometry('sculpture',()=>new TorusGeometry(.17,.018,8,32)),m.bronze,[x,y+.19,z],[1,1.2,1],[.2,.55,.3]);
   b.part(geometry('sculpture',()=>new TorusGeometry(.17,.018,8,32)),m.bronze,[x,y+.20,z],[.65,1,1],[.2,-.7,-.3]);
 }
-function glassRun(b: Builder, length: number, p: Vec3, m: Materials, angle = 0,height=3.98) {
-  const g = new Builder('glazing');
-  g.box([0, height/2+.03, 0], [length, height, .014], m.glass);
-  for (const y of [.045, height+.03]) g.box([0, y, 0], [length, .045, .065], m.bronze);
-  for (let i = 0; i <= Math.ceil(length / 1.5); i++) g.box([-length / 2 + length * i / Math.ceil(length / 1.5), height/2+.03, 0], [.026, height, .04], m.dark);
-  if(height>3)g.box([0, 1.2, .012], [length, .009, .01], m.cream);
-  transfer(b, g, p, angle);
-}
 function roomShell(b: Builder, d: Department, m: Materials) {
   b.box([0, .009, 0], [8.35, .018, 6.35], m.carpet);
   if (d.id === 'trading' || d.id === 'reception') return;
-  for (const side of [-1, 1]) {
-    glassRun(b, 2.0, [side * 3.2, 0, 3.2], m,0,2.45);
-    // Paños de privacidad en el fondo; laterales abiertos junto al puesto y
-    // al acceso para que el brazo elevado no mire al avatar entre montantes.
-    glassRun(b, 2.4, [side * 4.2, 0, -2], m, Math.PI / 2,2.45);
-  }
-  // Portal libre de 4,4 m: sin hoja estacionada dentro del recorrido.
-  b.box([0, 4.08, 3.2], [8.5, .18, .16], m.wood);
-  b.box([3.2, 2.04, 3.223], [1.85,.30,.028],m.wood,.014);
-  b.box([3.2,1.89,3.24],[1.81,.008,.008],m.bronze);
-  b.label([3.2, 2.04, 3.242], 1.76, .2375, `${d.number}  /  ${d.label}`, d.use);
+  // Cutaway permanente: separaci?n f?sica baja, acceso frontal y visi?n isom?trica.
+  b.box([0,.24,-3.18],[8.35,.48,.12],m.cream);
+  for(const side of [-1,1])b.box([side*4.18,.24,-2],[.12,.48,2.4],m.cream);
+  b.label([2.3,.035,2.75],3.4,.45,`${d.number} / ${d.label}`,'','sign',[-Math.PI/2,0,0]);
 }
 function shelves(b: Builder, x: number, z: number, m: Materials) {
   b.box([x, 1.32, z], [3.35, 2.6, .14], m.wood);
@@ -256,19 +241,10 @@ function architecture(m: Materials) {
   for (const z of [-13.85, 13.85]) b.box([0, .008, z], [33.7, .015, .025], m.bronze);
   for (const x of [-5.5, 5.5]) for (const edge of [-1.25, 1.25]) b.box([x + edge, .018, 0], [.014, .008, 27.5], m.bronze);
   for (const z of [-4.5, 4.5]) for (const edge of [-1.24, 1.24]) b.box([0, .018, z + edge], [33.6, .008, .014], m.bronze);
-  for (const x of [-16.5, -4.45, 4.45, 16.5]) for (const z of [-12.7, -3.35, 3.35, 12.7]) {
-    b.box([x, 2.25, z], [.28, 4.5, .28], m.wood, .02);
-    b.box([x + .147, 2.25, z + .015], [.008, 4.2, .012], m.light);
-    b.box([x, .08, z], [.34, .16, .34], m.bronze, .02);
-  }
-  glassRun(b, 34, [0, 0, -13.7], m);
-  for (const x of [-16.8, 16.8]) glassRun(b, 27.4, [x, 0, 0], m, Math.PI / 2);
-  for (const x of [-10.7, 10.7]) {
-    b.box([x, 2.25, 13.65], [12, 4.5, .18], m.wood);
-    for (let i = 0; i < 32; i++) b.box([x - 5.7 + i * .36, 2.25, 13.53], [.020, 4.25, .028], m.bronze);
-  }
-  for (const x of [-4.55, 4.55]) b.box([x, 2.25, 13.7], [.4, 4.5, .5], m.stone);
-  b.box([0, 4.27, 13.7], [9.2, .42, .5], m.wood);
+  // Bordure marfil, abierta al jugador y sin fachadas altas delante de la c?mara.
+  b.box([0,.3,-13.7],[34,.6,.18],m.cream);
+  for(const x of [-16.8,16.8])b.box([x,.25,0],[.16,.5,27.4],m.cream);
+  b.box([0,-.3,0],[34.4,.2,28.4],m.dark);
   const a = b.finish();
   const roof = new Builder('ceiling');
   roof.box([0, FLOOR.ceiling + .07, 0], [34, .12, 28], m.ceiling);
@@ -314,7 +290,13 @@ function skyline(m: Materials) {
 
 export function createOffice(m: Materials) {
   const office = new Group(); office.name = 'JAIME_INVESTOR_HQ';
-  office.add(architecture(m), skyline(m), ...DEPARTMENTS.map(d => department(d, m)));
+  const exterior=skyline(m);exterior.visible=false;
+  office.add(architecture(m),exterior,...DEPARTMENTS.map(d => department(d, m)));
+  const wall=new Builder('videowall');wall.box([0,3,-13.35],[32,4.8,.28],m.dark,.12);
+  wall.label([-11.8,4.5,-13.19],7.4,.75,'JAIME INVESTOR HQ','SIMULACION / PAPER ONLY','screen');
+  ['CARTERA / P3','POSICIONES / P3','OPERACIONES / P6','MERCADOS / P2','NOTICIAS / P2','RIESGOS / P5','AGENTES / P4'].forEach((title,i)=>wall.label([-13.2+i*4.4,2.65,-13.19],4.1,2.35,title,'NO DISPONIBLE','screen'));
+  office.add(wall.finish());
+  office.getObjectByName('ceiling')!.visible=false;
   office.updateMatrixWorld(true);
   const colliders:Collider[]=[];
   office.traverse(node=>{for(const c of node.userData.colliders??[])colliders.push({...c,center:new Vector3(...c.center).applyMatrix4(node.matrixWorld).toArray() as Vec3});});

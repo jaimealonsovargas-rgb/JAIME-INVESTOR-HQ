@@ -1,5 +1,19 @@
 # Estado del proyecto
 
+## 2026-10-15 · Encargo vigente Sims / videowall · en ejecución
+
+El issue #3 y `PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md` sustituyen las perspectivas, giros y recuentos anteriores. Autorizado P1.S0–S4 y P2.0–P2.6; **STOP antes de P3**. Los apartados siguientes son historial, no instrucciones vigentes.
+
+**S0 comprobado:** working tree limpio en 71948e8; cinco commits locales anteriores conservados. Merge documental dc00029 desde origin/main ac3f68d; conflicto único de cámara resuelto conservando el texto anterior en `docs/HISTORICO_CAMARA_PRE_SIMS.md`. Baseline real, tras reducir carga adicional: Trading **31,29 FPS móviles**, p95 92,7 ms, Intel/D3D11, 1920×1080/DPR 1; evidencia `docs/evidencias/P1_SIMS/baseline-pre-sims.*`. Commit S0 **9f789f7**. Sin reset/clean/force/push ni pérdida de archivos.
+
+**Adaptación S1–S3 implementada, QA en curso:** mismos builders, humanos y nueve IDs; Trading noreste, Quant este, Ejecución centro. Cámara isométrica fija con seguimiento, flechas screen-relative normalizadas, paredes bajas cutaway y techo oculto; paleta marfil/roble/azul noche. Dieciséis NPC sentados con nueve principales y siete secundarios. Videowall norte 32×4,8 m y centro de control DOM, endpoint local GET de solo lectura sin consultas externas automáticas ni tablas P3. Cartera/posiciones/operaciones/riesgos/jobs NO DISPONIBLES. 32 Vitest y build pasan tras corregir spawn Comité y actualizar las expectativas de navegación. Nuevas pruebas de resumen backend en ejecución. Primera medición Sims Recepción **32,58 FPS móviles / p95 64 ms**, DPR 1; no certifica todas las salas. Recorrido real por flechas y QA pendientes de cerrar. No se declara S4 verde.
+
+P2 backend y Data Quality preparados de la ejecución anterior se conservan: 34 modalidades/31 proveedores candidatos, 32 adaptadores/29 proveedores implementados, 17 conexiones reales previas; frescura se recalcula y no equivale a conexión. Data Quality aún sin montar hasta cerrar S4. Auditoría de Agent Reach/Vibe/Liquid en curso, sin instalar dependencias de terceros en el entorno principal, sin OAuth trade. Coste servicios 0 EUR y órdenes locales bloqueadas 403.
+
+Siguiente paso: finalizar recorrido/cámara/16 NPC/nueve paneles y medir Sims en Intel; cerrar S4 antes de montar Data Quality. Después fuentes/news legales, auditorías aisladas, QA integral y documentación P2. No repetir conectores ni investigaciones ya verificadas.
+
+---
+
 ## 2026-10-14 · Correcciones P1 y P2 · gate F pendiente de rendimiento
 
 Encargo vigente: `PLAN_EJECUCION_P1_P2`, issue #1 actualizado e issue #2. Sustituye WASD/ratón, E/clic, NPC de pie y STOP antes de P2; **STOP antes de P3**. P1 correctiva pendiente de F; P2 backend implementado parcialmente y sometido a verificación, sin integración visual todavía.

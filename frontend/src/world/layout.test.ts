@@ -11,7 +11,7 @@ import {createPlayer} from './navigation';
 import {PANEL_CONTENT} from './panels';
 import {PERSONNEL,PERSONNEL_COLLIDERS} from './staffLayout';
 import {PRIMARY_AGENT_INTERACTIONS,ProximityLatch,canApproach} from './agentInteractions';
-import {tankStep} from './navigation';
+import {screenStep} from './navigation';
 import {humanLodLevel} from './humanLods';
 import {frameStats} from './frameStats';
 
@@ -26,7 +26,7 @@ describe('planta P1.B conforme al plano', () => {
     vi.unstubAllGlobals();
   });
   it('mantiene nueve zonas únicas en las posiciones del documento', () => {
-    expect(DEPARTMENTS.map(d => d.id)).toEqual(['research', 'committee', 'quant', 'risk', 'trading', 'execution', 'performance', 'reception', 'systems']);
+    expect(DEPARTMENTS.map(d => d.id)).toEqual(['research', 'committee', 'trading', 'risk', 'execution', 'quant', 'performance', 'reception', 'systems']);
     expect(new Set(DEPARTMENTS.map(d => d.center.join(','))).size).toBe(9);
     expect(DEPARTMENTS.map(d => d.center)).toEqual([[-11,0,-9],[0,0,-9],[11,0,-9],[-11,0,0],[0,0,0],[11,0,0],[-11,0,9],[0,0,9],[11,0,9]]);
     expect(FLOOR.width).toBe(34); expect(FLOOR.depth).toBe(28);
@@ -40,17 +40,10 @@ describe('planta P1.B conforme al plano', () => {
       expect(department.center[1]).toBe(0);
     }
   });
-  it('mantiene los presets de interior dentro de la envolvente', () => {
-    for (const name of ['interior', 'trading', 'committee'] as const) {
-      const [x, y, z] = VIEWS[name].position;
-      expect(Math.abs(x)).toBeLessThan(FLOOR.width / 2);
-      expect(Math.abs(z)).toBeLessThan(FLOOR.depth / 2);
-      expect(y).toBeGreaterThanOrEqual(PLAYER_CAMERA_ENVELOPE.minHeight); expect(y).toBeLessThanOrEqual(PLAYER_CAMERA_ENVELOPE.maxHeight);
-      expect(VIEWS[name].target[1]).toBeLessThan(y);
-    }
+  it('mantiene vistas isometricas elevadas y una orientacion de juego fija',()=>{
+    expect(VIEWS.interior.position[1]).toBeGreaterThan(15);
+    expect(VIEWS.plan.position[1]).toBeGreaterThan(30);
     expect(QUALITY.balanced.dpr).toBeLessThanOrEqual(1);
-    expect(PLAYER_CAMERA_ENVELOPE.lowestFixture).toBeGreaterThan(PLAYER_CAMERA_ENVELOPE.maxHeight);
-    expect(PLAYER_CAMERA_ENVELOPE.portalClearance).toBeGreaterThan(PLAYER_CAMERA_ENVELOPE.maxHeight);
   });
   it('crea geometría real finita y mobiliario para las nueve zonas, con presupuesto de mallas', () => {
     vi.stubGlobal('document', { createElement: () => ({ getContext: () => ({ createRadialGradient: () => ({ addColorStop() {} }), fillRect() {}, fillText() {} }) }) });
@@ -89,7 +82,7 @@ describe('planta P1.B conforme al plano', () => {
         seats++;
       }
     }
-    expect(seats).toBe(24);
+    expect(seats).toBe(26);
     for(const id of Object.keys(SAFE_SPAWNS))expect(validTeleport(id,office.userData.colliders),`spawn ocupado: ${id}`).toBeDefined();
     for(const [id,p] of Object.entries(SAFE_SPAWNS))expect(findWalkingPath([0,11],[p[0],p[2]],office.userData.colliders),`no existe recorrido peatonal: ${id}`).toBeDefined();
     expect(MONITOR_DEFINITIONS).toHaveLength(9);
@@ -105,7 +98,7 @@ describe('planta P1.B conforme al plano', () => {
       player.position.z+=10;expect(canInteract(player,monitor)).toBe(false);
       expect(PANEL_CONTENT[monitor.id]).toBeDefined();
     }
-    expect(PERSONNEL).toHaveLength(10);expect(new Set(PERSONNEL.map(p=>p.id)).size).toBe(10);
+    expect(PERSONNEL).toHaveLength(16);expect(new Set(PERSONNEL.map(p=>p.id)).size).toBe(16);
     const occupied=[...office.userData.colliders,...PERSONNEL_COLLIDERS];
     for(const person of PERSONNEL){expect(person.seated).toBe(true);const node=office.getObjectByName(`department:${person.department}`)!;expect(node.userData.seats.some((s:{position:[number,number,number]})=>{const seat=new Vector3(...s.position).applyMatrix4(node.matrixWorld);return Math.hypot(seat.x-person.position[0],seat.z-person.position[2])<1e-6;}),`NPC fuera de su silla: ${person.id}`).toBe(true);expect(person.state).toBe('OFFLINE');expect(person.work).toBe('NO DISPONIBLE — P4');}
     for(const [id,p] of Object.entries(SAFE_SPAWNS)){expect(validTeleport(id,occupied),`NPC ocupa spawn: ${id}`).toBeDefined();expect(findWalkingPath([0,11],[p[0],p[2]],occupied),`NPC bloquea departamento: ${id}`).toBeDefined();}
@@ -130,11 +123,16 @@ describe('navegación determinista',()=>{
     p.colliders=[];p.position.z=5.5;p.yaw=Math.PI;expect(canInteract(p,m)).toBe(false);
   });
   it('no reabre hasta salir del radio de rearme y volver',()=>{
-    expect(PRIMARY_AGENT_INTERACTIONS).toHaveLength(9);expect(new Set(PERSONNEL.filter(p=>p.primary).map(p=>p.department)).size).toBe(9);expect(PERSONNEL.filter(p=>p.department==='trading')).toHaveLength(2);
+    expect(PRIMARY_AGENT_INTERACTIONS).toHaveLength(9);expect(new Set(PERSONNEL.filter(p=>p.primary).map(p=>p.department)).size).toBe(9);expect(PERSONNEL.filter(p=>p.department==='trading')).toHaveLength(3);
     const p=createPlayer(),agent=PRIMARY_AGENT_INTERACTIONS.find(a=>a.id==='trading')!;p.position.set(...agent.approach);const latch=new ProximityLatch();expect(latch.next(p)).toBe('trading');p.paused=true;expect(latch.next(p)).toBeUndefined();p.paused=false;expect(latch.next(p)).toBeUndefined();p.position.set(0,0,3.05);expect(latch.next(p)).toBeUndefined();p.position.set(...agent.approach);expect(latch.next(p)).toBe('trading');p.position.set(-4.3,0,-1.16);expect(canApproach(p,agent)).toBe(false);
   });
-  it('flechas con aceleración, giro suave y retroceso sin girar 180 grados',()=>{
-    const p=createPlayer();let distance=0;for(let i=0;i<60;i++)distance+=tankStep(p,1,0,1/60).length();expect(distance).toBeGreaterThan(1.2);expect(distance).toBeLessThan(1.45);expect(p.yaw).toBe(0);for(let i=0;i<60;i++)tankStep(p,0,1,1/60);expect(p.yaw).toBeGreaterThan(1);expect(p.yaw).toBeLessThan(1.25);const heading=p.yaw;for(let i=0;i<60;i++)tankStep(p,-1,0,1/60);expect(p.direction).toBe(-1);expect(Math.abs(p.yaw-heading)).toBeLessThan(.2);
+  it('traslada en cuatro direcciones de pantalla, diagonal normalizada y yaw automatico',()=>{
+    const p=createPlayer();const forward=screenStep(p,1,0,1/60);const right=screenStep(createPlayer(),0,1,1/60);
+    expect(forward.dot(right)).toBeCloseTo(0);expect(forward.x).toBeLessThan(0);expect(forward.z).toBeLessThan(0);
+    expect(right.x).toBeGreaterThan(0);expect(right.z).toBeLessThan(0);
+    const diagonal=screenStep(createPlayer(),1,1,1/60);expect(diagonal.length()).toBeCloseTo(forward.length());
+    const heading=p.yaw;screenStep(p,0,0,1/60);expect(p.yaw).toBe(heading);
+    for(let i=0;i<60;i++)screenStep(p,0,1,1/60);expect(p.yaw).toBeCloseTo(-Math.atan2(right.x,-right.z),3);
   });
   it('normaliza diagonales y hace el movimiento relativo al yaw',()=>{expect(movementVector(1,1,0).length()).toBeCloseTo(1);expect(movementVector(1,0,Math.PI/2).x).toBeCloseTo(-1);});
   it('impide atravesar cristal incluso en un salto grande y permite deslizar',()=>{

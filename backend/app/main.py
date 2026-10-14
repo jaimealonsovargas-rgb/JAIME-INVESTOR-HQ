@@ -17,6 +17,7 @@ from app.data_config import DataSettings
 from app.data_service import DataService
 from app.data_catalog import CATALOG
 from app.data_contracts import DataResult, QualityReport
+from app.hq_overview import HQOverview, overview
 
 
 def create_app(settings: Settings | None = None, data_settings: DataSettings | None = None) -> FastAPI:
@@ -87,6 +88,10 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
         if access_id not in CATALOG:
             return JSONResponse(status_code=404,content=ApiError(code='UNKNOWN_SOURCE',message='Fuente no registrada.').model_dump())
         return app.state.data.query(access_id)
+
+    @app.get('/api/hq/overview', response_model=HQOverview)
+    def hq_overview():
+        return overview(app.state.data)
 
     @app.post("/api/orders", response_model=ApiError, responses={403: {"model": ApiError}})
     def blocked_order():

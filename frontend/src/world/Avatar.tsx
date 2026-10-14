@@ -25,7 +25,7 @@ export default memo(function Avatar({player,variant=0,id='avatar',npc=false,cont
   useFrame(({camera},delta)=>{
     const clips=actions.current;if(!clips)return;const speed=player?.speed??0;const move=speed>.1;
     let distance=0,visible=true;
-    if(npc&&wrapper.current){wrapper.current.getWorldPosition(shapes.position);shapes.sphere.center.copy(shapes.position).y+=.9;distance=camera.position.distanceTo(shapes.position);shapes.matrix.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse);shapes.frustum.setFromProjectionMatrix(shapes.matrix);visible=distance<26&&shapes.frustum.intersectsSphere(shapes.sphere);wrapper.current.visible=visible;
+    if(npc&&wrapper.current){wrapper.current.getWorldPosition(shapes.position);shapes.sphere.center.copy(shapes.position).y+=.9;distance=Math.max(0,camera.position.distanceTo(shapes.position)-17);shapes.matrix.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse);shapes.frustum.setFromProjectionMatrix(shapes.matrix);visible=distance<70&&shapes.frustum.intersectsSphere(shapes.sphere);wrapper.current.visible=visible;
      const next=humanLodLevel(distance,level.current);if(next!==level.current){for(const mesh of meshes)mesh.geometry=lods.get((mesh.material as MeshStandardMaterial).name)![next+1];level.current=next;}
     }
     const motion=move?'walk':!npc&&Math.abs(player?.angularVelocity??0)>.08?'turn':ambient;

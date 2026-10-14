@@ -59,10 +59,10 @@ export function makeMaterials(maps: Texture[]) {
   const [woodMap, woodNormal, woodRough, stoneMap, stoneNormal, stoneRough] = maps;
   const floorMap = stoneMap.clone(); floorMap.repeat.set(11, 9); floorMap.needsUpdate = true;
   const floorNormal = stoneNormal.clone(); floorNormal.repeat.set(11, 9); floorNormal.needsUpdate = true;
-  const wood = new MeshStandardMaterial({ map: woodMap, normalMap: woodNormal, roughnessMap: woodRough, color: '#8d7964', roughness: .64, normalScale: new Vector2(.08, .08) });
+  const wood = new MeshStandardMaterial({ map: woodMap, normalMap: woodNormal, roughnessMap: woodRough, color: '#d9bd91', roughness: .64, normalScale: new Vector2(.08, .08) });
   // Acabado de nogal: desaturación del albedo CC0, sin modificar el fichero fuente.
-  wood.onBeforeCompile = shader => { shader.fragmentShader = shader.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n diffuseColor.rgb = mix(diffuseColor.rgb, vec3(dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114))), 0.65);'); };
-  wood.customProgramCacheKey = () => 'walnut-stain-v1';
+  wood.onBeforeCompile = shader => { shader.fragmentShader = shader.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.64, 0.47, 0.28), 0.72);'); };
+  wood.customProgramCacheKey = () => 'sims-oak-v1';
   const shadowCanvas = document.createElement('canvas'); shadowCanvas.width = shadowCanvas.height = 128;
   const ctx = shadowCanvas.getContext('2d')!;
   const gradient = ctx.createRadialGradient(64, 64, 8, 64, 64, 62);
@@ -72,16 +72,16 @@ export function makeMaterials(maps: Texture[]) {
   return {
     wood,
     contact: new MeshBasicMaterial({ map: new CanvasTexture(shadowCanvas), transparent: true, depthWrite: false, opacity: .7, polygonOffset: true, polygonOffsetFactor: -1 }),
-    stone: new MeshStandardMaterial({ map: stoneMap, normalMap: stoneNormal, color: '#303435', roughnessMap: stoneRough, roughness: .3, metalness: .08, normalScale: new Vector2(.07, .07) }),
-    floor: new MeshStandardMaterial({ map: floorMap, normalMap: floorNormal, color: '#282b2c', roughness: .29, metalness: .08, normalScale: new Vector2(.06, .06) }),
+    stone: new MeshStandardMaterial({ map: stoneMap, normalMap: stoneNormal, color: '#e1dccb', roughnessMap: stoneRough, roughness: .3, metalness: .08, normalScale: new Vector2(.07, .07) }),
+    floor: new MeshStandardMaterial({ map: floorMap, normalMap: floorNormal, color: '#ddd9c9', roughness: .68, metalness: .02, normalScale: new Vector2(.06, .06) }),
     bronze: new MeshStandardMaterial({ color: '#b9915e', metalness: .78, roughness: .28 }),
     dark: new MeshStandardMaterial({ color: '#151d22', roughness: .43, metalness: .35 }),
     steel: new MeshStandardMaterial({ color: '#a4a9a7', metalness: .88, roughness: .26 }),
     keys: new MeshStandardMaterial({ map: surfaceTexture('keys'), roughness: .72 }),
     leather: new MeshStandardMaterial({ color: '#252b2d', roughness: .58, bumpMap: fabric, bumpScale: .003 }),
     cognac: new MeshStandardMaterial({ color: '#76513c', roughness: .64, bumpMap: fabric, bumpScale: .003 }),
-    carpet: new MeshStandardMaterial({ color: '#202a2e', roughness: 1, bumpMap: fabric, bumpScale: .006 }),
-    cream: new MeshStandardMaterial({ color: '#d0c5ac', roughness: .78 }),
+    carpet: new MeshStandardMaterial({ color: '#bbc8c8', roughness: 1, bumpMap: fabric, bumpScale: .006 }),
+    cream: new MeshStandardMaterial({ color: '#eee6d6', roughness: .78 }),
     ceiling: new MeshStandardMaterial({ color: '#50504c', roughness: .92 }),
     soffit: new MeshStandardMaterial({ color: '#20282d', roughness: 1, metalness: 0 }),
     glass: new MeshPhysicalMaterial({ color: '#e1e8e3', transparent: true, opacity: .085, roughness: .07, metalness: .15, depthWrite: false, side: 2,forceSinglePass:true }),

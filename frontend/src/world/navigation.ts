@@ -1,23 +1,27 @@
 import { Vector3 } from 'three';
 import type { Collider } from './collisions';
 import { isFree } from './collisions';
-import type { Vec3 } from './layout';
+import { DEPARTMENTS,type Vec3 } from './layout';
 
+export const ISOMETRIC={offset:[12,19,16] as const, azimuth:Math.atan2(12,16), fov:40};
 export const CAMERA={height:3.2,minHeight:2.8,maxHeight:3.8,distance:3.8,minDistance:3,maxDistance:4.5,fov:65,minFov:60,maxFov:75} as const;
-export const SAFE_SPAWNS:Record<string,Vec3>={reception:[0,0,11],trading:[0,0,3.05],committee:[.85,0,-6.15],research:[-11,0,-6.65],quant:[11,0,-6.65],risk:[-11,0,2.35],execution:[11,0,2.35],performance:[-11,0,11.7],systems:[11,0,11.5]};
+export const SAFE_SPAWNS:Record<string,Vec3>=Object.fromEntries(DEPARTMENTS.map(d=>[d.id,[d.center[0],0,d.center[2]+2.7] as Vec3]));
+SAFE_SPAWNS.reception=[0,0,11];
+SAFE_SPAWNS.committee=[.85,0,-6.15];
 export function movementVector(forward:number,strafe:number,yaw:number) {
   const vector=new Vector3(strafe,0,-forward);if(vector.lengthSq()>1)vector.normalize();return vector.applyAxisAngle(new Vector3(0,1,0),yaw);
 }
 export function validTeleport(id:string,colliders:Collider[]) {const p=SAFE_SPAWNS[id];return p&&isFree(p[0],p[2],colliders)?new Vector3(...p):undefined;}
 export interface PlayerRuntime { position:Vector3; yaw:number; cameraYaw:number; pitch:number; distance:number; speed:number; velocity:number;angularVelocity:number;direction:number;holdCamera:boolean;paused:boolean; revision:number; mode:'play'|'inspection'; colliders:Collider[];invalidate?:()=>void }
 export function createPlayer():PlayerRuntime {return {position:new Vector3(...SAFE_SPAWNS.reception),yaw:0,cameraYaw:0,pitch:0,distance:CAMERA.distance,speed:0,velocity:0,angularVelocity:0,direction:1,holdCamera:false,paused:false,revision:0,mode:'play',colliders:[]};}
-export function tankStep(player:PlayerRuntime,forward:number,turn:number,dt:number) {
- const blend=1-Math.exp(-dt*10);
- player.velocity+=(forward*(forward<0?.95:1.45)-player.velocity)*blend;
- player.angularVelocity+=(turn*1.25-player.angularVelocity)*blend;
- if(Math.abs(player.velocity)<.002)player.velocity=0;
- if(Math.abs(player.angularVelocity)<.002)player.angularVelocity=0;
- player.yaw+=player.angularVelocity*dt;player.direction=player.velocity<0?-1:1;
- return movementVector(1,0,player.yaw).multiplyScalar(player.velocity*dt);
+/** Las flechas usan la base fija proyectada de la c?mara; nunca giran en vac?o. */
+export function screenStep(player:PlayerRuntime,forward:number,right:number,dt:number) {
+ const axis=movementVector(forward,right,ISOMETRIC.azimuth);
+ const active=axis.lengthSq()>0,blend=1-Math.exp(-dt*12);
+ player.velocity+=((active?1.65:0)-player.velocity)*blend;
+ if(player.velocity<.002)player.velocity=0;
+ player.direction=1;player.angularVelocity=0;
+ if(active){const desired=Math.atan2(-axis.x,-axis.z);const error=Math.atan2(Math.sin(desired-player.yaw),Math.cos(desired-player.yaw));player.angularVelocity=error*10;player.yaw+=error*(1-Math.exp(-dt*10));}
+ return active?axis.multiplyScalar(player.velocity*dt):new Vector3();
 }
 declare global { interface Window { __HQ_PLAYER__?:{position:number[];yaw:number;cameraYaw:number;pitch:number;distance:number;speed:number;mode:string;paused:boolean;camera:number[]}; } }

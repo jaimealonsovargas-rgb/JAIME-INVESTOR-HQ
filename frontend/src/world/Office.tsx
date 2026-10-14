@@ -47,9 +47,8 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
   useEffect(() => () => {for(const batch of model.userData.batches)batch.dispose();disposeOffice(model, new Set(maps));}, [model]);
 
   useEffect(() => {
-    const roof = model.getObjectByName('ceiling'); if (roof) roof.visible = mode==='play'||view !== 'plan';
-    if(mode==='play'){player.revision++;invalidate();return;}
-    gl.toneMapping = ACESFilmicToneMapping; gl.toneMappingExposure = 1.06;
+    const roof = model.getObjectByName('ceiling'); if (roof) roof.visible = false;
+        gl.toneMapping = ACESFilmicToneMapping; gl.toneMappingExposure = 1.06;
     gl.shadowMap.type = PCFShadowMap;
     const pmrem = new PMREMGenerator(gl);
     const room = new RoomEnvironment();
@@ -60,7 +59,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
     gradient.addColorStop(0,'#66879f'); gradient.addColorStop(.45,'#d3d8d4'); gradient.addColorStop(.58,'#d3cbb9'); gradient.addColorStop(1,'#a5a394');
     ctx.fillStyle=gradient;ctx.fillRect(0,0,16,256);
     const background=new CanvasTexture(sky); background.colorSpace=SRGBColorSpace; background.mapping=EquirectangularReflectionMapping;
-    scene.background = background; scene.fog = new Fog('#c7cbc5', 100, 360);
+    scene.background = null; gl.setClearColor('#dce3de'); scene.fog = new Fog('#dce3de', 100, 360);
     room.dispose(); pmrem.dispose();
     return () => { scene.environment = null; scene.background=null; env.dispose(); background.dispose(); };
   }, [gl, scene]);
@@ -120,7 +119,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
     <Player runtime={player} contact={materials.contact}/>
     <Personnel contact={materials.contact}/>
     <Monitors player={player} onOpen={onOpen} onNear={onNear}/>
-    {mode==='inspection'&&view === 'plan' ? DEPARTMENTS.map(d => <Html key={d.id} position={[d.center[0], 2.2, d.center[2]]} center style={{pointerEvents: 'none'}}><div className="plan-label"><span>{d.number}</span>{d.label}</div></Html>) : null}
+    {mode==='inspection'&&view === 'plan' ? DEPARTMENTS.map(d => <Html key={d.id} position={[d.center[0], .15, d.center[2]+3]} center style={{pointerEvents: 'none'}}><div className="plan-label"><span>{d.number}</span>{d.label}</div></Html>) : null}
     {mode==='inspection'?<OrbitControls ref={controls} makeDefault enableDamping={false} enablePan={view === 'plan'}
       minDistance={view === 'plan' ? 26 : 2} maxDistance={view === 'plan' ? 65 : 20}
       minPolarAngle={.1} maxPolarAngle={Math.PI / 2 - .035} rotateSpeed={.5} zoomSpeed={.7} />:null}

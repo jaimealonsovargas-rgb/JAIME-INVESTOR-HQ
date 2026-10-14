@@ -5,6 +5,7 @@ export function batchStaticOffice(office:Group){
  const groups=new Map<string,Mesh[]>();
  office.updateMatrixWorld(true);
  office.traverse(object=>{if(!(object instanceof Mesh)||Array.isArray(object.material))return;
+  for(let parent:typeof object.parent=object;parent;parent=parent.parent)if(!parent.visible)return;
   const key=[object.material.uuid,object.castShadow,object.receiveShadow,object.renderOrder,Object.keys(object.geometry.attributes).sort().join(',')].join(':');
   const meshes=groups.get(key)??[];meshes.push(object);groups.set(key,meshes);
  });
