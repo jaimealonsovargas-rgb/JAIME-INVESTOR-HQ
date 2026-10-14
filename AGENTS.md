@@ -13,7 +13,7 @@
 
 ## Regla permanente de perspectiva jugable (P1.C–P7)
 - Diseñar, implementar y probar cada departamento **desde la cámara de seguimiento detrás del avatar**, no optimizar únicamente capturas panorámicas de P1.B.
-- Avatar humano visible en pantalla; cámara a unos metros detrás y algo por encima del personaje, orientada hacia donde avanza, con seguimiento suave, giro por ratón y zoom limitado. Evitar cámara cenital, isométrica fija o primera persona como modo principal.
+- Avatar humano visible en pantalla; **cámara claramente por encima de la cabeza del personaje** (tercera persona elevada, estilo videojuego), situada a unos metros detrás y orientada hacia donde avanza. Como punto de partida ajustable: altura de cámara aprox. 2,8–3,8 m sobre el suelo para un avatar de ~1,75 m y separación horizontal de 3–4,5 m. Debe verse bien el avatar entero y parte del suelo por delante, con seguimiento suave, giro por ratón y zoom limitado. No usar cámara cenital, isométrica fija ni primera persona como modo principal.
 - Resolver colisiones y oclusión entre cámara, techo, paredes acristaladas, mobiliario y avatar. Las puertas, pasillos y monitores deben ser usables a escala humana y desde la posición real del jugador.
 - Las capturas de aceptación y pruebas de FPS de P1.C en adelante deben mostrar **avatar + vista de juego en tercera persona** y desplazamiento real; la vista de planta es solo evidencia complementaria.
 - Ver especificación completa en `docs/02_MUNDO_3D.md` y `tasks/P1_OFICINA_3D.md`.
