@@ -30,6 +30,8 @@ QA final: offline/diagnóstico, WASD y ratón ignorados, retorno de inspección 
 
 Siguiente paso exacto: liberar carga adicional con el usuario y repetir el benchmark real guardado en `scripts/qa_p1_corrective/`; si sigue fallando, perfilar y optimizar conservando calidad. Solo cuando F pase: montar Data Quality en MonitorOverlay/Sistemas, sustituir textos P2 pendientes, comprobar filtros/pausa/valores/offline/capturas reales y cerrar P2.6. Concluir verificación gratuita de Finnhub/Nasdaq y descargas ESMA selectivas sin inventar cobertura. **P1 correctiva y P2 no se declaran completas. STOP antes de P3.**
 
+Último checkpoint de código: **e6cc900**, contratos Data Quality tipados, cliente/panel React preparado pero sin montar, endurecimiento de derechos/cuotas/Retry-After y evidencias normalizadas. Diff completo desde `ab830a5` sin errores de whitespace. Commits locales; no se ha hecho push. Navegadores de QA cerrados. Backend y frontend locales conservados para revisión; instrucciones y cifras en `docs/evidencias/P1_CORRECTIVO/README.md` y `docs/evidencias/P2/README.md`.
+
 ---
 
 ## 2026-10-14 · P1.B–F completadas · STOP antes de P2
