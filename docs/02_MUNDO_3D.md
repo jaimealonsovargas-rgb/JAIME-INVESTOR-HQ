@@ -1,36 +1,23 @@
-# Mundo 3D: arquitectura, interacción y calidad
+# Mundo 3D — diseño estilo Los Sims aprobado (2026-10-14)
 
-## Planta única
-Dimensiones objetivo aproximadas: 34 m (X) × 28 m (Z); eje Y vertical. Retícula abierta 3×3, pasillos de 2–3 m, tabiques de vidrio para conservar visibilidad.
+**Fuente vinculante:** [plan maestro](PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md). Sustituye la antigua cámara detrás del avatar y la planta 3×3 rígida. Especificación, no implementación.
 
-| | Oeste X -11 | Centro X 0 | Este X +11 |
-|---|---|---|---|
-| Norte Z -9 | Research | Comité de Inversión | Quant Lab |
-| Medio Z 0 | Riesgos | Trading Floor | Ejecución |
-| Sur Z +9 | Performance | Recepción | Sistemas |
+## Planta y distribución
 
-Spawn del jugador cerca de Recepción (X 0, Z +11). La cámara principal del producto **no es ninguna de las cámaras panorámicas de P1.B**: será una cámara de seguimiento en tercera persona detrás del avatar humano. Colisiones y navegación con flechas ↑↓←→, cámara automática, aproximación al agente principal para abrir panel, Escape, minimapa/HUD y teletransporte opcional.
+Una planta minimalista premium, vista elevada 3/4, madera clara, marfil, plantas, pantallas azul noche y luz cálida. Mantener **9 departamentos canónicos y 9 paneles**: Recepción, Trading, Research, Quant, Riesgos, Ejecución, Comité, Performance y Sistemas. Reorganizar la geometría para asemejar la imagen aprobada, sin romper IDs/anchors ni reconstruir todo desde cero. Macro, Fundamental, ESG y Legal pueden ser pods visuales, no departamentos backend adicionales. Quitar sofás Recepción y cristales obstructivos. Pasillos amplios, paredes cutaway y Performance/Sistemas accesibles.
 
-## Perspectiva definitiva del jugador (obligatoria desde P1.C hasta P7)
-- **Tercera persona real**: el usuario ve a su personaje humano de cuerpo entero desde detrás, **claramente por encima de la cabeza** (cámara de videojuego en tercera persona elevada, no a la altura del hombro); puede ver el suelo, los pasillos y el destino de su desplazamiento. La cámara acompaña al personaje al caminar y girar; no es una cámara de vigilancia, vista aérea, isométrica ni primera persona.
-- **Parámetros de partida ajustables**, no medidas inmutables: separación horizontal de cámara-avatar aprox. 3–4,5 m, **altura de cámara inicial aprox. 2,8–3,8 m sobre el suelo para un avatar de ~1,75 m**, FOV aprox. 60–75°, encuadre elevado con el personaje visible de cuerpo entero y con inclinación suave hacia el personaje y el frente. Afinar mediante pruebas reales y evitar mareo, recortes del avatar o distorsión.
-- **Controles vigentes**: únicamente ↑ avanzar, ↓ retroceder, ←/→ girar suavemente el avatar; la cámara sigue automáticamente desde detrás y arriba, sin ratón ni WASD en modo normal. Los nueve paneles se abren por proximidad al agente principal sentado de cada sala (no E/clic en monitor); tras cerrar se requiere alejarse y volver a entrar en el radio. Escape cierra modal; minimapa/teletransporte opcional no sustituyen caminar.
-- **Colisiones y cámara**: no atravesar paredes, vidrio, mesas o NPC; la cámara evita obstáculos y no queda detrás de techos, columnas o cristales que tapen la escena. Implementar raycast/spring arm, acercamiento automático o tratamiento visual del techo cuando sea necesario, sin teletransportes bruscos.
-- **Diseño a escala humana**: comprobar ancho de pasillos, accesos, alturas de monitores, muebles, rótulos y distancias de interacción desde el punto de vista del avatar. Los nueve departamentos deben ser reconocibles y alcanzables caminando.
-- **Cámaras de inspección de P1.B** (Recepción, Trading, Comité, planta completa): se conservan solo como herramientas auxiliares de revisión/mapa si aportan valor; no pueden ser la cámara inicial ni el modo normal de juego a partir de P1.C.
-- **Aceptación visual**: capturas y vídeo opcional desde la cámara real detrás del avatar, tanto en recepción como al entrar, recorrer y visitar agentes principales y abrir paneles de distintos departamentos. Medir FPS mientras el personaje se mueve, no solo con escena estática. Añadir pruebas de oclusión en puertas, paredes de vidrio, muebles y techos; el modo panorámico no basta para aprobar P1.C–P1.F.
+## Cámara y movimiento
 
-### Cámara definitiva del jugador · instrucción del usuario, revisión P1.B
+**Cámara isométrica elevada estilo Sims** como vista inicial, azimut fijo, seguimiento suave, avatar visible y paredes recortables. Flechas ↑↓←→ trasladan en las **direcciones de pantalla** (arriba/abajo/izquierda/derecha); avatar gira automáticamente hacia el movimiento. Diagonales normalizadas, delta time, animaciones idle/walk/turn sin foot sliding, colisiones reales. No WASD, mouse-look ni OrbitControls en juego. Vista global opcional.
 
-Tercera persona desde detrás del avatar humano, claramente por encima de su cabeza, mirando ligeramente hacia abajo. Referencia inicial ajustable para P1.C: **2,8–3,8 m sobre el suelo** y **3–4,5 m detrás del personaje**. Evitar vista aérea y cámara pegada a los hombros. En P1.B solo se comprueba la arquitectura desde cámaras fijas elevadas; todavía no se implementan avatar ni seguimiento.
+## NPC e interacción
 
-La revisión P1.B conserva la huella 34×28 m y los nueve centros, eleva el techo a 4,5 m, deja las luminarias por encima de 4,03 m y el dintel de las entradas a 3,99 m. Así reserva espacio para la altura prevista. La futura cámara deberá resolver la proximidad a fachada/puertas y la posición exacta del spawn en P1.C; esta reserva geométrica no certifica todavía el seguimiento ni las colisiones en todos los recorridos.
+**16 NPC sentados:** Recepción 1, Trading 3, Research 3, Quant 2, Riesgos 2, Ejecución 1, Comité 1, Performance 1, Sistemas 2. Nueve principales abren sus paneles automáticamente a ~2,0m, rearme ~2,8m, sin activar a través de paredes ni reabrir tras cierre hasta alejarse. Siete secundarios son ambientación; 30 roles IA P4 independientes.
 
-## Calidad visual P1
-Estilo Manhattan/Londres hedge fund: piedra negra, nogal oscuro, cristal claro, metal bronce champán, luz LED cálida, skyline y pantallas azul noche. PBR, sombras horneadas donde convenga, HDRI con licencia, texturas comprimidas, GLB con LOD, instancing y reutilización de materiales. Humanos realistas y mobiliario creíble, no cubos ni avatares low-poly caricaturescos. Ver assets/REFERENCIAS.md y SVG.
+## Videowall enorme superior
 
-## Rendimiento
-Objetivo 45–60 FPS en equipo desktop de referencia, degradación a 30 FPS; medir hardware y FPS reales. Evitar una luz dinámica por monitor y pantallas financieras texturizadas ilegibles. Los monitores son objetos físicos; los nueve React DOM overlays se abren al acercarse al agente principal de cada sala, con comprobación de acceso y sin activación a través de paredes. El contenido financiero es accesible con teclado.
+Pantalla panorámica en pared norte/superior visible desde vista global, con PAPER ONLY, cartera/NAV/posiciones **solo P3**, operaciones **solo P6**, mercados/noticias **P2 si verificados**, riesgo **P5**, agentes **P4**. Antes de cada fase mostrar «No disponible», no números ficticios de la imagen conceptual. Fullscreen DOM por botón «Ver centro de control», sin NPC obligatorio.
 
-## Criterios
-Todas las zonas físicamente accesibles, monitores identificables, escena navegable, calidad visual coherente, cargas razonables y capturas reales en STATUS. Una imagen generada no cuenta como escena funcional.
+## Rendimiento y QA
+
+Referencia Windows 11 Intel Core 5 120U, 16GB RAM, Intel Graphics 1920×1080. Objetivo 45–60 FPS, mínimo sostenido 30 medido en movimiento. LOD para 16 NPC, sombras limitadas, DPR adaptativo, DOM sin polling por frame. Capturas **reales** de cámara Sims, videowall, 9 salas/paneles, offline y P0 PAPER_ONLY; la imagen generada no es evidencia funcional.

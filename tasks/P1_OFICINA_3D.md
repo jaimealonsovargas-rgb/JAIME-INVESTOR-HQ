@@ -10,9 +10,11 @@ Esta autorización **sustituye las instrucciones históricas** de trabajar una s
 
 La especificación detallada B/C está en [issue #1](https://github.com/jaimealonsovargas-rgb/JAIME-INVESTOR-HQ/issues/1); D/E/F y aceptación final en [docs/PLAN_CIERRE_P1_BF.md](../docs/PLAN_CIERRE_P1_BF.md). Leer por etapa, sin duplicar investigación ni documentación.
 
+**ÚLTIMA APROBACIÓN VISUAL (PREVALECE):** [plan maestro Sims + videowall + 16 NPC + 30 roles IA](../docs/PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md). Cámara principal **isométrica elevada**, flechas screen-relative (no girar con flechas), 16 NPC sentados y pantalla enorme superior. Instrucciones históricas de cámara detrás, **10 NPC** y mármol oscuro NO prevalecen. Ejecución P1+P2; STOP antes de P3.
+
 ## Revisión final + ampliación a P2 (autorización posterior, prevalente)
 
-**No reconstruir P1**: partir del trabajo LOCAL reciente. Retirar sofás Recepción; cristales que bloqueen; redistribuir Performance y Sistemas; mejorar calidad y caminar. **Solo flechas** ↑↓←→ y cámara automática sin ratón; **9 paneles por proximidad al agente principal** y no al monitor; **10 NPC sentados trabajando visualmente** (ambientación, no agentes P4). Validar P1 con capturas/FPS y comenzar P2.0→P2.6 con gates; **STOP antes de P3**. Especificación única: [PLAN_EJECUCION_P1_P2.md](../docs/PLAN_EJECUCION_P1_P2.md) y [PLAN_P2_CHECKPOINTS.md](../docs/PLAN_P2_CHECKPOINTS.md). Instrucciones anteriores incompatibles quedan supersedidas.
+**No reconstruir P1**: partir del trabajo LOCAL reciente. Retirar sofás Recepción; cristales que bloqueen; redistribuir Performance y Sistemas; mejorar calidad y caminar. **Solo flechas** ↑↓←→ y cámara automática sin ratón; **9 paneles por proximidad al agente principal** y no al monitor; **16 NPC sentados trabajando visualmente** (ambientación, no agentes P4). Validar P1 con capturas/FPS y comenzar P2.0→P2.6 con gates; **STOP antes de P3**. Especificación única: [PLAN_EJECUCION_P1_P2.md](../docs/PLAN_EJECUCION_P1_P2.md) y [PLAN_P2_CHECKPOINTS.md](../docs/PLAN_P2_CHECKPOINTS.md). Instrucciones anteriores incompatibles quedan supersedidas.
 
 ## Lectura obligatoria (mínimo contexto)
 1. `AGENTS.md` y `STATUS.md`.
@@ -33,14 +35,14 @@ Al abrir `http://127.0.0.1:5173` aparece **directamente la oficina 3D jugable**,
 | Centro | Riesgos | Trading Floor | Ejecución |
 | Sur | Performance | Recepción / spawn | Sistemas y Data Quality |
 
-Estética institucional de alto nivel, Manhattan/Londres: mármol/piedra negra, nogal, bronce cálido, cristal, luz indirecta, skyline, monitores financieros azul noche. **Perspectiva jugable obligatoria de tercera persona**: avatar humano de proporciones realistas visible en pantalla, cámara detrás del personaje y **claramente por encima de su cabeza**, a distancia media y escala humana, acompañando su movimiento. **NO** vista aérea/isométrica ni cámara fija panorámica como vista principal. Diez NPC humanos profesionales distribuidos de manera lógica. No Roblox, personajes geométricos, salas vacías ni una imagen estática fingiendo ser 3D.
+Estética premium minimalista estilo Los Sims, madera clara/marfil/plantas y pantallas azul noche. **Perspectiva jugable isométrica elevada** con avatar visible, cámara de orientación fija y seguimiento suave, videowall gigante superior, 16 NPC sentados. Los materiales oscuros y la cámara detrás anteriores quedan sustituidos.
 
 ### Interacción
-- Solo flechas ↑↓←→ para desplazamiento/giro; cámara automática sin ratón en juego; colisiones, Escape y accesibilidad. **Los paneles se abren por proximidad al agente principal sentado**, no por E/clic en monitor.
+- Solo flechas ↑↓←→ para desplazamiento relativo a pantalla (avatar gira automáticamente); cámara automática sin ratón en juego; colisiones, Escape y accesibilidad. **Los paneles se abren por proximidad al agente principal sentado**, no por E/clic en monitor.
 - Teletransporte desde mapa/menú a los nueve departamentos; controles en español.
 - Cada zona tiene al menos un monitor físico y un agente principal sentado cuya proximidad abre un **panel React/DOM legible y distinto**: Recepción (estado), Trading Floor (posiciones), Ejecución (órdenes), Performance (NAV), Riesgos (límites), Research (tesis), Comité (decisiones), Quant (estrategias), Sistemas (APIs/health).
 - En P1 las funciones financieras posteriores deben indicar `NO DISPONIBLE — P2/P3/P4/P5/P6` según fase; **no mostrar precios, NAV, P&L, órdenes, rendimiento, trabajos de agentes ni saldos inventados**. Los 10.000 EUR son capital inicial **previsto para P3**, no NAV operativo.
-- Exactamente 10 NPC profesionales **sentados en sus puestos** con microanimaciones ambientales de trabajo; los agentes IA reales siguen `NO DISPONIBLE (P4)` y no se simulan jobs.
+- Exactamente 16 NPC profesionales **sentados en sus puestos** con microanimaciones ambientales de trabajo; los agentes IA reales siguen `NO DISPONIBLE (P4)` y no se simulan jobs.
 - La pérdida de backend no debe impedir explorar el mundo; solo marca servicios NO DISPONIBLES. Mantener `/health` y contratos P0 intactos salvo cambio necesario y probado.
 
 ### Dirección artística y assets gratuitos
@@ -53,15 +55,15 @@ Estética institucional de alto nivel, Manhattan/Londres: mármol/piedra negra, 
 ## Implementación por subetapas para ahorrar tokens
 **P1.A — Preparación (Sol Medio/Alto):** inspeccionar hardware Windows (GPU, memoria, resolución), probar compatibilidad R3F con React/Vite existentes, seleccionar licencias y presupuesto de rendimiento. Presentar plan y comenzar sin alterar backend.
 
-**P1.B — Arquitectura premium (Sol Alto):** piso completo con 9 zonas, pasillos, vidrio, puertas, mobiliario, iluminación, skyline y materiales coherentes. Sin zonas ausentes. Captura real de navegador y FPS medidos. Ajustar antes de seguir. **Las vistas de inspección de P1.B no son la cámara de juego**; el pulido de esta arquitectura debe preparar una perspectiva a altura humana desde detrás del futuro avatar.
+**P1.B — Arquitectura premium (Sol Alto):** piso completo con 9 zonas, pasillos, vidrio, puertas, mobiliario, iluminación, skyline y materiales coherentes. Sin zonas ausentes. Captura real de navegador y FPS medidos. Ajustar antes de seguir. **Las vistas de inspección de P1.B no son la cámara de juego**; el pulido debe preparar una perspectiva isométrica Sims y videowall superior.
 
-**P1.C — Movimiento (Sol Alto):** implementar **la perspectiva definitiva de juego**: avatar humano realista de cuerpo entero, visible desde detrás en todo momento; cámara de seguimiento **elevada por encima de la cabeza del avatar**, automática sin ratón, aprox. 3–4,5 m detrás y 2,8–3,8 m sobre el suelo para un avatar de ~1,75 m, como valores iniciales ajustables, FOV 60–75° y seguimiento suave sin zoom manual. Solo flechas, colisiones reales de avatar y cámara, control de oclusión por techos/cristales/muebles, teletransporte, accesibilidad y minimapa. **La ruta inicial debe abrir en esta cámara detrás del personaje**, no en las cuatro vistas panorámicas de P1.B. Validar caminando hasta los nueve departamentos y generar capturas reales con el avatar visible.
+**P1.C — Movimiento (Sol Alto):** cámara isométrica elevada estilo Sims, orientación fija, seguimiento suave y avatar visible; flechas ↑↓←→ desplazan **en direcciones de pantalla**, avatar gira automáticamente. No WASD, mouse-look ni OrbitControls. Colisiones, paredes cutaway, animación sin foot sliding, accesibilidad, minimapa y teletransporte opcional. La ruta inicial abre en esta vista Sims.
 
-**P1.D — Monitores/UI (Sol Medio):** 9 monitores físicos con **paneles activados por proximidad al agente principal** desde tercera persona, con overlays React reales, estados NO DISPONIBLE veraces, botón volver al mundo, teclado/ratón y sin click-through. Comprobar proximidad, departamento e histéresis y regreso a la misma posición del personaje. No integrar brókeres todavía.
+**P1.D — Monitores/UI (Sol Medio):** 9 monitores físicos con **paneles activados por proximidad al agente principal** desde vista isométrica Sims, con overlays React reales, estados NO DISPONIBLE veraces, botón volver al mundo, teclado/ratón y sin click-through. Comprobar proximidad, departamento e histéresis y regreso a la misma posición del personaje. No integrar brókeres todavía.
 
-**P1.E — NPC y optimización (Sol Alto):** diez humanos profesionales visualmente coherentes **a la escala del avatar y vistos desde la cámara de juego**, animaciones de ambientación honestas, LOD/instancing/shadows y mejoras de rendimiento **durante el movimiento real del jugador**.
+**P1.E — NPC y optimización (Sol Alto):** dieciséis humanos profesionales visualmente coherentes **a la escala del avatar y vistos desde la cámara de juego**, animaciones de ambientación honestas, LOD/instancing/shadows y mejoras de rendimiento **durante el movimiento real del jugador**.
 
-**P1.F — QA visual y aceptación (Sol Alto, Astra solo para bloqueo):** capturas **de la perspectiva real detrás del avatar**, E2E caminando por las nueve zonas y abriendo nueve pantallas, pruebas de cámara/colisiones/oclusión, tests existentes P0 verdes, revisión de licencias y documentación de hardware/FPS en movimiento. La vista aérea solo es evidencia auxiliar. Pulir hasta el estándar visual requerido; no dar por terminada P1 con placeholders.
+**P1.F — QA visual y aceptación (Sol Alto, Astra solo para bloqueo):** capturas **de la perspectiva isométrica Sims real con videowall superior**, E2E caminando por las nueve zonas y abriendo nueve pantallas, pruebas de cámara/colisiones/oclusión, tests existentes P0 verdes, revisión de licencias y documentación de hardware/FPS en movimiento. La vista global de planta es parte del diseño aprobado. Pulir hasta el estándar visual requerido; no dar por terminada P1 con placeholders.
 
 **Excepción autorizada de cierre:** ejecutar B → C → D → E → F en una sola sesión/encargo con **checkpoints internos obligatorios**. Registrar capturas reales en B y E y autoevaluar contra los criterios; **no pedir aprobación intermedia** si pasan. Si el contexto se agota, dejar checkpoint/estado verificable en `STATUS.md` para reanudar sin reanalizar. Nunca saltar una prueba fallida. Tras validar F, iniciar P2 por checkpoints y detenerse antes de P3.
 
@@ -69,12 +71,12 @@ Estética institucional de alto nivel, Manhattan/Londres: mármol/piedra negra, 
 1. `python scripts/manage.py check` sigue pasando (registrar resultado REAL, no asumir 56 tests).
 2. La app abre directamente en 3D, sin pantalla de diagnóstico previa.
 3. Los 9 departamentos están presentes, accesibles y reconocibles; mapa concuerda con plano.
-4. La **vista inicial es la cámara jugable detrás del avatar humano visible**, ligeramente elevada y con seguimiento suave; solo flechas funcionan y la cámara se orienta automáticamente, la cámara evita obstáculos y no se atraviesan paredes, techos o muebles ni se pierde el personaje. Capturas de inspección panorámica NO cumplen este criterio.
+4. La **vista inicial es cámara isométrica elevada estilo Los Sims**, avatar visible, seguimiento suave y orientación fija; solo flechas screen-relative funcionan y el avatar se orienta automáticamente, la cámara evita obstáculos y no se atraviesan paredes, techos o muebles ni se pierde el personaje. Capturas de inspección estáticas sin recorrido jugable NO cumplen este criterio.
 5. Los 9 paneles React se abren al acercarse al NPC principal de cada sala; monitores físicos presentes, sin E/clic obligatorio y sin reapertura inmediata tras cerrar.
-6. Los 10 NPC tienen aspecto humano profesional y estados honestos, sin trabajos falsos.
+6. Los 16 NPC tienen aspecto humano profesional y estados honestos, sin trabajos falsos.
 7. Licencias/atribuciones registradas; **coste adicional 0 EUR**; no se descargan assets de pago.
 8. FPS, tiempos de carga y GPU/CPU/RAM del equipo se miden y registran; degradación gráfica razonable cuando proceda.
-9. Screenshots de **la app real desde la cámara detrás del avatar durante el recorrido** (no solo vistas de inspección ni renders Runway), estado offline verificado, accesibilidad básica.
+9. Screenshots de **la app real desde la cámara Sims isométrica y videowall superior durante el recorrido** (no solo vistas de inspección ni renders Runway), estado offline verificado, accesibilidad básica.
 10. Prohibición live y guard de órdenes intactos. **P2 autorizado expresamente**; STOP antes de P3.
 
 ## Instrucción de arranque para Codex (actualizada)

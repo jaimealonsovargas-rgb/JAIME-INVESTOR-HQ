@@ -2,6 +2,8 @@
 
 > **Decisión del usuario, 2026-10-14:** una misma ejecución de Codex debe **terminar las correcciones finales de P1 y empezar P2** siguiendo checkpoints verificables. Este documento **sustituye solo las instrucciones incompatibles anteriores** (STOP antes de P2, WASD/ratón, abrir panel exclusivamente en monitor, NPC de pie). Mantener PAPER ONLY, 0 EUR, seguridad y pruebas. **Encargo, no implementación ni resultados comprobados.**
 
+**ÚLTIMA DECISIÓN VISUAL (2026-10-14):** [plan maestro Sims + videowall + 16 NPC + 30 roles IA](PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md) **PREVALECE** sobre cámara detrás, flechas para girar, planta rígida y 10 NPC. Mantener P1 correctivo + P2 y STOP antes de P3.
+
 ## 1. Preflight y autoridad
 
 - **El working tree LOCAL manda.** El main publicado todavía puede contener solo P1.B. Antes de editar: `git status --short`, `git log -5 --oneline`, `git branch --show-current`, `git diff --stat`; preservar cambios y commits no publicados. No reset, clean, force-push ni checkout destructivo. Incorporar la documentación nueva de main sin pisar código local.
@@ -13,13 +15,17 @@
 
 | Gate | Criterio concreto |
 |---|---|
-| **P1.B** | **Quitar todos los sofás de Recepción**. Eliminar/reubicar mamparas/cristales que obstaculicen el paso o cámara, conservar estética de cristal útil. **Redistribuir interiores Performance y Sistemas** con puestos creíbles, accesos despejados y operador sentado; racks concentrados en Sistemas. Mantener 9 departamentos y planta 3×3. Elevar calidad de mobiliario, PBR, iluminación y skyline con rendimiento Intel. |
-| **P1.C** | Movimiento normal **solo flechas**: ↑ avanzar, ↓ retroceder, ←/→ girar suavemente personaje. **No WASD ni ratón para girar cámara**. Cámara automática detrás y elevada (inicio ~3,2 m altura, ~3,8 m detrás, FOV ~65°); resolver oclusión acortando brazo, nunca volver cenital. Corregir animación idle/walk/giro, rig/retarget, foot sliding, velocidad y crossfade. Colisiones y puertas funcionales. Escape/Tab siguen siendo UI. |
+| **P1.B** | **Quitar todos los sofás de Recepción**. Eliminar/reubicar mamparas/cristales que obstaculicen el paso o cámara, conservar estética de cristal útil. **Redistribuir interiores Performance y Sistemas** con puestos creíbles, accesos despejados y operador sentado; racks concentrados en Sistemas. Mantener 9 departamentos/paneles; layout reorganizable estilo Sims con videowall superior y pods visuales opcionales. Elevar calidad de mobiliario, PBR, iluminación y skyline con rendimiento Intel. |
+| **P1.C** | Movimiento normal **solo flechas screen-relative**: ↑ arriba, ↓ abajo, ← izquierda, → derecha de pantalla; avatar gira automáticamente. Cámara **isométrica elevada estilo Sims** de orientación fija, seguimiento suave, paredes cutaway, no WASD ni mouse-look. Corregir animación idle/walk/giro, rig/retarget, foot sliding, velocidad y crossfade. Colisiones y puertas funcionales. Escape/Tab siguen siendo UI. |
 | **P1.D** | Mantener **9 monitores físicos + 9 paneles DOM**, pero activar panel **automáticamente al acercarse al AGENTE PRINCIPAL de la sala**, no a la pantalla. No exigir E/clic. Radio inicial ~2,0 m entrada / ~2,8 m rearme; afinar en prueba. Comprobar sala, recorrido libre y no atravesar paredes; no activar sala vecina. Al cerrar, no reabrir hasta alejarse/reentrar. Modal accesible, pausa movimiento, Escape/cierre, conserva transform. |
-| **P1.E** | **10 NPC humanos profesionales SENTADOS en puestos, trabajando VISUALMENTE**: 1 por departamento + 1 extra Trading. Seat anchors, poses correctas, typing/lectura/notas desincronizadas, sin clipping. **Ambientación, NO agentes IA P4 reales**: no inventar análisis, jobs, votos o trades. Optimizar rigs, sombras y LOD. |
-| **P1.F** | Prueba navegador real de 9 salas, 9 paneles, 10 NPC, avatar, cristales/puertas, teclado, offline y P0. Capturas reales de cámara de juego; baseline LOCAL antes/después en 1920×1080 Equilibrado/DPR1, FPS/p95/draw calls/tris; objetivo 45–60 FPS, <30 sostenidos exige optimización. Tests, audit, licencias, STATUS y commits. |
+| **P1.E** | **16 NPC humanos profesionales SENTADOS en puestos, trabajando VISUALMENTE**: 9 principales + 7 secundarios según plan maestro. Seat anchors, poses correctas, typing/lectura/notas desincronizadas, sin clipping. **Ambientación, NO agentes IA P4 reales**: no inventar análisis, jobs, votos o trades. Optimizar rigs, sombras y LOD. |
+| **P1.F** | Prueba navegador real de 9 salas, 9 paneles, 16 NPC y videowall superior, avatar, cristales/puertas, teclado, offline y P0. Capturas reales de cámara de juego; baseline LOCAL antes/después en 1920×1080 Equilibrado/DPR1, FPS/p95/draw calls/tris; objetivo 45–60 FPS, <30 sostenidos exige optimización. Tests, audit, licencias, STATUS y commits. |
 
-**Interacción:** 1 NPC primario por sala; trigger únicamente dentro del departamento correcto y con aproximación físicamente válida; histéresis evita reapertura instantánea. El HUD puede decir «Acércate al agente» a distancia cómoda, pero **no «E · Abrir panel» junto al monitor**. Al cerrar, las flechas funcionan inmediatamente. No modificar centros de las nueve salas. No instalar assets con licencia dudosa ni herramientas grandes solo para arte.
+**Interacción:** 1 NPC primario por sala; trigger únicamente dentro del departamento correcto y con aproximación físicamente válida; histéresis evita reapertura instantánea. El HUD puede decir «Acércate al agente» a distancia cómoda, pero **no «E · Abrir panel» junto al monitor**. Al cerrar, las flechas funcionan inmediatamente. Se permite rediseñar el layout preservando los 9 IDs, anchors accesibles y paneles. No instalar assets con licencia dudosa ni herramientas grandes solo para arte.
+
+**Integraciones externas:** P2 Agent Reach solo lectura pública auditada; Vibe-Trading viabilidad/read-only aislado; Liquid solo investigación de endpoints públicos sin OAuth read+trade. 30 roles y presets operativos son P4; ledger P3. Ver plan maestro.
+
+**Guías de implementación nuevas:** [plano Sims](../assets/PLANO_SIMS_VIDEOWALL.svg) y [matriz de integraciones](INTEGRACIONES_TERCEROS_VERIFICACION.md). No confundir los números de la imagen conceptual con datos reales.
 
 ## 3. P2: checkpoints obligatorios
 
