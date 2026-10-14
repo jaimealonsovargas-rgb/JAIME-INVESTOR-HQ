@@ -10,6 +10,9 @@
 5. `docs/AUDITORIA_P0.md` y `docs/16_TESTS_ACEPTACION.md`.
 Leer otros archivos solo cuando sean necesarios; **no copiar todos los documentos al contexto**.
 
+## Investigación técnica disponible (no cambia el alcance autorizado)
+La guía de arquitectura y aceptación para un posible cierre P1.B–P1.F está preparada en [PLAN_CIERRE_P1_BF.md](../docs/PLAN_CIERRE_P1_BF.md). **Es una propuesta técnica, no autorización para saltar checkpoints ni iniciar P1.D–F**: prevalecen las instrucciones de alcance vigentes hasta que el usuario confirme expresamente una ampliación. Consultarla solo para las etapas efectivamente autorizadas.
+
 ## Resultado obligatorio
 Al abrir `http://127.0.0.1:5173` aparece **directamente la oficina 3D jugable**, no el diagnóstico P0 ni un dashboard 2D. Una sola planta de aprox. 34×28 m, sin niveles apilados, pasillos abiertos y paredes acristaladas. Nueve departamentos físicamente presentes y distinguibles:
 
