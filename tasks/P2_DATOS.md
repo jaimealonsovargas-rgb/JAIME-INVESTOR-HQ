@@ -2,7 +2,7 @@
 
 **Autorizado por el usuario (2026-10-14):** comenzar P2 en la misma ejecución que la corrección final P1, con checkpoints verificables y preservación del código LOCAL. **No habilitar órdenes; PAPER ONLY; coste adicional 0 EUR; STOP antes de P3.**
 
-**Catálogo ampliado obligatorio:** [34 candidatas y estrategia de conexión](../docs/P2_CATALOGO_MAXIMO_FUENTES.md). **Guía técnica detallada:** [docs/PLAN_P2_CHECKPOINTS.md](../docs/PLAN_P2_CHECKPOINTS.md). **Coordinación con P1:** [docs/PLAN_EJECUCION_P1_P2.md](../docs/PLAN_EJECUCION_P1_P2.md). Leer solo el checkpoint activo, no todas las fases futuras.
+**Catálogo ampliado obligatorio:** [34 modalidades de ~31 fuentes y estrategia de conexión](../docs/P2_CATALOGO_MAXIMO_FUENTES.md). **Guía técnica detallada:** [docs/PLAN_P2_CHECKPOINTS.md](../docs/PLAN_P2_CHECKPOINTS.md). **Coordinación con P1:** [docs/PLAN_EJECUCION_P1_P2.md](../docs/PLAN_EJECUCION_P1_P2.md). Leer solo el checkpoint activo, no todas las fases futuras.
 
 | Checkpoint | Objetivo | Gate |
 |---|---|---|

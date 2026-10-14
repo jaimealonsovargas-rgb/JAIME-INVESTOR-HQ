@@ -26,7 +26,7 @@
 
 ## P2 — conectividad máxima viable (petición posterior del usuario)
 
-- **No limitar P2 a siete fuentes.** Seguir el catálogo [docs/P2_CATALOGO_MAXIMO_FUENTES.md](docs/P2_CATALOGO_MAXIMO_FUENTES.md): **34 candidatas** (19 públicas, 15 con registro o gratuitas condicionadas), más fuentes oficiales especializadas.
+- **No limitar P2 a siete fuentes.** Seguir el catálogo [docs/P2_CATALOGO_MAXIMO_FUENTES.md](docs/P2_CATALOGO_MAXIMO_FUENTES.md): **34 modalidades de acceso de ~31 proveedores distintos** (19 públicas, 15 con registro o gratuitas condicionadas; BLS, CoinGecko y OpenFIGI tienen dos modalidades), más fuentes oficiales especializadas.
 - Priorizar integraciones públicas sin clave, **activación bajo demanda** con cache/cuotas y derechos verificados. Preparar conectores opcionales con clave, sin registrarse ni comprar por el usuario. Diferenciar **candidata / implementada / conectada real / utilizable**. No declarar conexión solo por mock.
 - Si un proveedor falla, registrar motivo y continuar con otros. No crear decenas de stubs. Reutilizar parser/HTTP/SDMX compartidos.
 - Excepción muy limitada de **POST estadístico de solo lectura** para OpenFIGI mapping y BLS v2, únicamente host+ruta+verbo allowlisted y testeados; **nunca POST a bróker, exchange, cuentas, órdenes ni trading**. Mantener POST /api/orders = 403.

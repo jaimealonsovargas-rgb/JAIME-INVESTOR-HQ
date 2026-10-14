@@ -12,7 +12,7 @@ Distinguir siempre: (a) cotización bursátil market_quote, (b) fundamental_fact
 
 ## Ampliación prioritaria: **34 fuentes candidatas, máxima conectividad real**
 
-**Petición posterior del usuario:** conectar el **máximo posible** de fuentes gratuitas y legales, no solo los siete proveedores originales. **Catálogo y plan operativo vinculantes:** [P2_CATALOGO_MAXIMO_FUENTES.md](P2_CATALOGO_MAXIMO_FUENTES.md). Incluye **19 candidatas públicas sin clave o consulta pública** y **15 con registro/key gratis o gratuidad condicionada**, más investigación CNMV, BoE, Fed, IR y mercados restringidos. **No afirmar 34 conexiones**: distinguir candidata, implementada, conectada realmente y utilizable con derechos.
+**Petición posterior del usuario:** conectar el **máximo posible** de fuentes gratuitas y legales, no solo los siete proveedores originales. **Catálogo y plan operativo vinculantes:** [P2_CATALOGO_MAXIMO_FUENTES.md](P2_CATALOGO_MAXIMO_FUENTES.md). Incluye **19 modalidades públicas sin clave o consulta pública** y **15 con registro/key gratis o gratuidad condicionada** (34 modalidades de ~31 proveedores distintos; BLS, CoinGecko y OpenFIGI se repiten por modalidad), más investigación CNMV, BoE, Fed, IR y mercados restringidos. **No afirmar 34 conexiones**: distinguir candidata, implementada, conectada realmente y utilizable con derechos.
 
 **Regla de prioridad:** construir núcleo compartido, después **P2.3a España/Europa** (ECB, BdE, INE, Eurostat, OECD), **P2.3b mundo/US** (World Bank, BIS, Treasury, SEC, BLS v1, IMF), **P2.3c cripto/identidad/noticias** (Kraken, Binance data-only, Coinbase public, CoinPaprika, CoinGecko Public, OpenFIGI, GDELT, ESMA selectivo); después **P2.4a claves macro** (FRED, BEA, BLS v2, EIA, Alpha Vantage, CoinGecko Demo, OpenFIGI key), **P2.4b broker/data** (Alpaca, T212 Demo, Twelve), **P2.4c free tier a verificar** (Finnhub, FMP, Massive, Tiingo, Nasdaq Data Link). **No crear stubs vacíos para inflar cobertura.**
 
@@ -106,7 +106,7 @@ Fuentes: https://docs.alpaca.markets/us/docs/about-market-data-api ; https://doc
 
 **Ampliación obligatoria P2.4:** P2.4a FRED, BEA, BLS v2, EIA, Alpha Vantage, CoinGecko Demo, OpenFIGI key; P2.4b Alpaca, Trading 212 Demo, Twelve Data; P2.4c Finnhub, FMP, Massive/Polygon, Tiingo, Nasdaq Data Link **solo con endpoint gratuito y términos verificados**. No gastar tokens creando adaptadores vacíos para planes de pago. Sin claves, tests y estado NO_CREDENTIALS. Las excepciones POST de datos no se aplican a ningún bróker.
 
-**No se ha verificado** cuenta, residencia, credenciales, permiso de API, derechos de display ni límites efectivos del usuario. Crear adaptadores con HTTP mock, sin conectarlos realmente si falta autorización/clave. P0 paper-host allowlist sigue estricta; data-host allowlist separada y GET-only.
+**No se ha verificado** cuenta, residencia, credenciales, permiso de API, derechos de display ni límites efectivos del usuario. Crear adaptadores con HTTP mock, sin conectarlos realmente si falta autorización/clave. P0 paper-host allowlist sigue estricta; data-host allowlist separada, GET por defecto y excepciones read-only POST únicamente OpenFIGI/BLS v2 según catálogo.
 
 **Gate:** auth en backend, no claves en frontend/logs, IEX vs SIP, paginación T212 sin host live, 429 y headers, cuotas, derechos, sin métodos de órdenes.
 

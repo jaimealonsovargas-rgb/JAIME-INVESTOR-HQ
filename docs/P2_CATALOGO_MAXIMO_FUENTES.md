@@ -1,6 +1,6 @@
 # P2 — Catálogo máximo de fuentes financieras: cobertura real y 0 EUR
 
-> **Ampliación solicitada 2026-10-14.** Investigación y plan para Codex, **NO implementación ni conectividad verificada**. Meta: integrar **el máximo de fuentes independientes gratuitas y permitidas** que aporten datos útiles. El catálogo es de **34 candidatos diferenciados** (A01–A19, B01–B15), además de fuentes C para investigación. Nunca confundir número de candidatos con conectores operativos. Mantener PAPER ONLY, no órdenes, 0 EUR y STOP antes de P3.
+> **Ampliación solicitada 2026-10-14.** Investigación y plan para Codex, **NO implementación ni conectividad verificada**. Meta: integrar **el máximo de fuentes independientes gratuitas y permitidas** que aporten datos útiles. El catálogo contiene **34 modalidades/candidaturas de acceso** (A01–A19, B01–B15), de aproximadamente **31 proveedores/organismos distintos** porque BLS, CoinGecko y OpenFIGI aparecen tanto sin clave como con clave; además hay fuentes C para investigar. **No son 34 sitios independientes ni 34 conexiones verificadas.** Nunca confundir número de candidatos con conectores operativos. Mantener PAPER ONLY, no órdenes, 0 EUR y STOP antes de P3.
 
 ## 1. Arquitectura: conectar muchas fuentes, no acumular nombres
 
@@ -15,7 +15,7 @@ Estados separados por fuente:
 
 **Política de activación:** para APIs públicas sin clave, comprobadas y legalmente utilizables, conexión **bajo demanda** habilitada por defecto cuando el usuario pide esos datos, con opción de desactivarla, cache y límites conservadores. No hacer 34 requests al arrancar, ni sondear cada NPC. SEC exige User-Agent con contacto real configurado, no inventarlo. Para APIs con key, preparar código y tests pero esperar a que el usuario añada su propia clave en el .env local; nunca registrar cuentas, pagar ni usar claves ficticias. Derecho de visualización distinto de acceso gratuito.
 
-## 2. PRIORIDAD A — 19 fuentes públicas sin clave o con consulta pública
+## 2. PRIORIDAD A — 19 modalidades públicas sin clave o con consulta pública
 
 | ID | Fuente | Datos y uso | Referencia oficial / endpoint | Condiciones |
 |---|---|---|---|---|
@@ -41,7 +41,7 @@ Estados separados por fuente:
 
 **A no significa automáticamente USABLE**: antes de mostrar números comprobar licencia, retraso y derechos; A11/A18 necesitan concretar endpoint y A12 gestionar tamaño. Para SEC, sin contacto real, estado CONFIG_REQUIRED.
 
-## 3. PRIORIDAD B — 15 APIs con registro gratuito o plan gratuito condicionado
+## 3. PRIORIDAD B — 15 modalidades con registro gratuito o plan gratuito condicionado
 
 | ID | Proveedor | Utilidad | Referencia y cautela |
 |---|---|---|---|
