@@ -2,7 +2,7 @@
 
 34 modalidades de acceso / 31 proveedores distintos. La documentación acredita un endpoint o derecho; **solo un HTTP 200 con respuesta válida acredita conexión**. Mocks, 401/403, cuerpos inválidos y existencia de documentación no cuentan. Uso exclusivo local; no redistribuir feeds personales/internos. No se han creado cuentas ni contratado planes.
 
-Esta matriz describe un preset acotado por adaptador, no cobertura universal. Catálogo ejecutable: `backend/app/data_catalog.py`. Último smoke: 2026-10-14T19:31:00.453628+00:00. Latencia incluye DNS/TLS/descarga real; no se inventa retraso del feed.
+Esta matriz describe un preset acotado por adaptador, no cobertura universal. Catálogo ejecutable: `backend/app/data_catalog.py`. Último smoke: 2026-10-14T20:17:22.173322+00:00. Latencia incluye DNS/TLS/descarga real; no se inventa retraso del feed.
 
 | ID / proveedor | Endpoint de consulta | Dato / mercado | Auth / cuota | Adaptador / HTTP / usable | Última comprobación / latencia |
 |---|---|---|---|---|---|
@@ -22,7 +22,7 @@ Esta matriz describe un preset acotado por adaptador, no cobertura universal. Ca
 | A14 · Binance data-only | GET `https://data-api.binance.vision/api/v3/aggTrades` · [documentación](https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints) | market_quote / BINANCE / global | público · Presupuesto local conservador; límite oficial no publicado. | sí / 200 / no · RIGHTS_RESTRICTED | 2026-10-14T19:23:56.365226Z / 15097 ms |
 | A15 · CoinPaprika Free | GET `https://api.coinpaprika.com/v1/tickers/btc-bitcoin` · [documentación](https://docs.coinpaprika.com/) | market_quote / AGGREGATED / global | público · 20.000/mes; presupuesto local 5/min. | sí / 200 / sí · AVAILABLE_VERIFIED | 2026-10-14T19:24:15.130114Z / 18621 ms |
 | A16 · CoinGecko Public | GET `https://api.coingecko.com/api/v3/simple/price` · [documentación](https://docs.coingecko.com/docs/keyless-public-api) | market_quote / AGGREGATED / global | público · Presupuesto local conservador; límite oficial no publicado. | sí / 200 / no · RIGHTS_RESTRICTED | 2026-10-14T19:24:26.335714Z / 11106 ms |
-| A17 · GDELT DOC | GET `https://api.gdeltproject.org/api/v2/doc/doc` · [documentación](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/) | news_metadata / NEWS / global | público · Presupuesto local conservador; límite oficial no publicado. | sí / — / no · TIMEOUT | 2026-10-14T19:24:33.700420Z / 7142 ms |
+| A17 · GDELT DOC | GET `https://api.gdeltproject.org/api/v2/doc/doc` · [documentación](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/) | news_metadata / NEWS / global | público · Presupuesto local conservador; límite oficial no publicado. | sí / — / no · TIMEOUT | 2026-10-14T20:17:22.151494Z / 8326 ms |
 | A18 · Coinbase Exchange Public | GET `https://api.exchange.coinbase.com/products/BTC-USD/ticker` · [documentación](https://docs.cdp.coinbase.com/api-reference/exchange-api/rest-api/products/get-product-ticker) | market_quote / COINBASE / global | público · Presupuesto local conservador; límite oficial no publicado. | sí / 200 / sí · AVAILABLE_VERIFIED | 2026-10-14T19:25:14.360144Z / 40482 ms |
 | A19 · OpenFIGI público | POST `https://api.openfigi.com/v3/mapping` · [documentación](https://www.openfigi.com/api/documentation) | instrument_metadata / MAPPING / global | público · 25/min, 10 jobs/petición sin clave; local 10/min. | sí / 200 / sí · AVAILABLE_VERIFIED | 2026-10-14T19:25:30.871156Z / 15517 ms |
 | B01 · FRED | GET `https://api.stlouisfed.org/fred/series/observations` · [documentación](https://fred.stlouisfed.org/docs/api/fred/series_observations.html) | macro_series / STATISTICS / US | fred_api_key · Presupuesto local conservador; límite oficial no publicado. | sí / — / no · NO_CREDENTIALS | sin petición / — |
@@ -66,7 +66,7 @@ D = visualización local; C = cache local; R = redistribución. “Sí” depend
 | A17 | GDELT · solo metadatos y enlaces / open | sí / sí / sí | [2026-10-14](https://www.gdeltproject.org/about.html) |
 | A18 | Coinbase Market Data · interno; sin redistribución / internal | sí / sí / no | [2026-10-14](https://www.coinbase.com/legal/market_data) |
 | A19 | OpenFIGI · MIT Open Symbology / open | sí / sí / sí | [2026-10-14](https://www.openfigi.com/about/faq) |
-| B01 | FRED/DGS10 · Treasury, atribución / open | sí / sí / sí | [2026-10-14](https://fred.stlouisfed.org/series/DGS10) |
+| B01 | FRED/DGS10 · Federal Reserve H.15, atribución / open | sí / sí / sí | [2026-10-14](https://fred.stlouisfed.org/series/DGS10) |
 | B02 | BEA · estadísticas públicas / open | sí / sí / sí | [2026-10-14](https://www.bea.gov/about/using-bea-statistics) |
 | B03 | BLS · dominio público / open | sí / sí / sí | [2026-10-14](https://www.bls.gov/opub/copyright-information.htm) |
 | B04 | Alpaca Basic IEX · display pendiente / internal | no / no / no | [2026-10-14](https://docs.alpaca.markets/us/docs/about-market-data-api) |

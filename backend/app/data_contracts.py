@@ -85,3 +85,44 @@ class DataResult(Contract):
     normalized_count: int = Field(default=0,ge=0)
     observations: tuple[Observation, ...] = ()
 
+class SourceQuality(Contract):
+    access_id: str
+    provider: str
+    name: str
+    implemented: bool
+    data_kind: DataKind
+    asset_class: str
+    country: str | None
+    market: str
+    feed: str
+    docs: str
+    rights: Rights
+    quota_note: str
+    quota_used: int = Field(ge=0)
+    next_allowed_at: AwareDatetime | None
+    state: DataState
+    reason: str
+    checked_at: AwareDatetime | None
+    latency_ms: int | None = Field(default=None,ge=0)
+    http_status: int | None = None
+    real_connection: bool
+    usable: bool
+    cache_hit: bool
+    normalized_count: int = Field(ge=0)
+
+class QualityReport(Contract):
+    checked_at: AwareDatetime
+    counts: dict[str,int]
+    sources: tuple[SourceQuality,...]
+
+    @model_validator(mode='after')
+    def no_inflated_counts(self):
+        expected={'candidate_providers':len({s.provider for s in self.sources}),
+          'candidate_access_modes':len(self.sources),'implemented_adapters':sum(s.implemented for s in self.sources),
+          'implemented_providers':len({s.provider for s in self.sources if s.implemented}),
+          'verified_connections':sum(s.real_connection for s in self.sources),'verified_providers':len({s.provider for s in self.sources if s.real_connection}),
+          'usable_sources':sum(s.usable for s in self.sources),'usable_providers':len({s.provider for s in self.sources if s.usable}),
+          'no_credentials':sum(s.state=='NO_CREDENTIALS' for s in self.sources),'rights_restricted':sum(s.state=='RIGHTS_RESTRICTED' for s in self.sources)}
+        if self.counts!=expected or len({s.access_id for s in self.sources})!=len(self.sources) or any(s.usable and (not s.real_connection or not s.rights.display_allowed) for s in self.sources):
+            raise ValueError('Contadores, derechos o prueba real inconsistentes.')
+        return self

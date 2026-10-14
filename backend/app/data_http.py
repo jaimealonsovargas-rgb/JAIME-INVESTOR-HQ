@@ -2,7 +2,11 @@
 import ipaddress
 import json
 import socket
+import time
 from dataclasses import dataclass
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
+from math import ceil
 from urllib.parse import urlsplit
 import httpx
 from app.data_catalog import CATALOG, Source
@@ -10,6 +14,14 @@ from app.data_config import DataSettings
 
 MAX_BYTES = 8 * 1024 * 1024
 READ_POSTS = {('api.openfigi.com','/v3/mapping'),('api.bls.gov','/publicAPI/v2/timeseries/data/')}
+
+def retry_seconds(value: str, now=None):
+    if value.isdigit():return min(86400,int(value))
+    try:
+        date=parsedate_to_datetime(value)
+        if date.tzinfo is None:return 60
+        return min(86400,max(0,ceil((date-(now or datetime.now(timezone.utc))).total_seconds())))
+    except (ValueError,TypeError,OverflowError):return 60
 
 @dataclass
 class FetchError(Exception):
@@ -32,8 +44,10 @@ def validate_request(source: Source, method: str, url: str, payload=None):
         if target.hostname=='api.openfigi.com':
             if not isinstance(payload,list) or not 1 <= len(payload) <= 10 or any(not isinstance(job,dict) or set(job)-{'idType','idValue','exchCode','currency'} or job.get('idType') not in {'ID_ISIN','ID_CUSIP','ID_BB_GLOBAL','TICKER'} or not isinstance(job.get('idValue'),str) or not 1<=len(job['idValue'])<=120 for job in payload):
                 raise FetchError('CONFIG_REQUIRED')
-        elif not isinstance(payload,dict) or set(payload)-{'seriesid','startyear','endyear','registrationkey'} or not isinstance(payload.get('seriesid'),list) or not 1<=len(payload['seriesid'])<=10 or any(not isinstance(v,str) or not v.isalnum() or len(v)>40 for v in payload['seriesid']):
-            raise FetchError('CONFIG_REQUIRED')
+        else:
+            if not isinstance(payload,dict) or set(payload)-{'seriesid','startyear','endyear','registrationkey'} or not isinstance(payload.get('seriesid'),list) or not 1<=len(payload['seriesid'])<=10 or any(not isinstance(v,str) or not v.isalnum() or len(v)>40 for v in payload['seriesid']):raise FetchError('CONFIG_REQUIRED')
+            start,end=payload.get('startyear',''),payload.get('endyear','')
+            if any(not isinstance(v,str) or len(v)!=4 or not v.isdigit() for v in (start,end)) or not 1900<=int(start)<=int(end)<=2100 or int(end)-int(start)>1:raise FetchError('CONFIG_REQUIRED')
         if len(json.dumps(payload))>8192:
             raise FetchError('CONFIG_REQUIRED')
 
@@ -73,17 +87,19 @@ class SafeDataHttp:
         elif source.auth=='tiingo':
             headers['Authorization']='Token '+secrets[0]
         validate_request(source,source.method,source.url,payload)
+        started=time.monotonic()
         try:
             self.resolver(urlsplit(source.url).hostname)
-            with httpx.Client(transport=self.transport, timeout=httpx.Timeout(12,connect=5), follow_redirects=False, trust_env=False) as client:
+            with httpx.Client(transport=self.transport, timeout=httpx.Timeout(source.read_timeout,connect=5), follow_redirects=False, trust_env=False) as client:
                 with client.stream(source.method,source.url,params=params,headers=headers,json=payload) as response:
                     status=response.status_code
                     if status != 200:
                         retry=response.headers.get('Retry-After','0')
-                        raise FetchError({401:'AUTH_FAILED',403:'RIGHTS_RESTRICTED',429:'RATE_LIMITED'}.get(status,'ERROR'),status,min(86400,int(retry)) if retry.isdigit() else 60)
+                        raise FetchError({401:'AUTH_FAILED',403:'RIGHTS_RESTRICTED',429:'RATE_LIMITED'}.get(status,'ERROR'),status,retry_seconds(retry))
                     chunks=[];size=0
                     for chunk in response.iter_bytes():
                         size+=len(chunk)
+                        if time.monotonic()-started>30:raise FetchError('TIMEOUT',status)
                         if size>MAX_BYTES:
                             raise FetchError('INVALID_PAYLOAD',status)
                         chunks.append(chunk)

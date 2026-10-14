@@ -27,4 +27,3 @@ class DataSettings(BaseSettings):
     def secret(self, field: str) -> str | None:
         value = getattr(self, field, None)
         return value.get_secret_value().strip() or None if value else None
-

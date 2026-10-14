@@ -55,7 +55,7 @@ export default function World() {
     {info ? <aside className="architecture-info" id="architecture-info">
       <button className="close-info" onClick={() => setInfo(false)} aria-label="Cerrar información">×</button>
       <p className="info-kicker">SEDE VIRTUAL · PAPER ONLY</p><h2>Una planta. Nueve perspectivas.</h2>
-      <p>Escena 3D real. Recorre la sede con tu avatar; las cámaras de inspección permiten revisar la arquitectura. Diez humanos de ambientación offline. Trabajo de agentes: NO DISPONIBLE — P4. No hay datos financieros conectados.</p>
+      <p>Escena 3D real. Recorre la sede con tu avatar; las cámaras de inspección permiten revisar la arquitectura. Diez humanos de ambientación offline. Trabajo de agentes: NO DISPONIBLE — P4. Las funciones de inversión permanecen deshabilitadas; la integración visual de datos P2 está pendiente de validar el rendimiento de la oficina.</p>
       <ol>{DEPARTMENTS.map(d => <li key={d.id}><span>{d.number}</span>{d.label}</li>)}</ol>
       <p>Órdenes bloqueadas. Servicios locales: {health.isSuccess ? 'disponibles' : 'NO DISPONIBLE'}.</p>
       <a href="?diagnostico=1">Abrir comprobación de P0 ↗</a>

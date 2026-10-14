@@ -25,6 +25,7 @@ REASONS = {
  'AUTH_FAILED':'Credenciales rechazadas.', 'OFFLINE':'Conexión no disponible.',
  'TIMEOUT':'El proveedor superó el tiempo límite.', 'ERROR':'El proveedor rechazó la consulta.',
  'INVALID_PAYLOAD':'La respuesta no cumple su contrato.', 'NO_DATA':'Respuesta válida sin observaciones.',
+ 'DELAYED':'Serie histórica o EOD; no representa una cotización en tiempo real.',
  'DISABLED':'Fuente desactivada por configuración local.', 'STALE':'Cache caducada; datos históricos, nunca ejecutables.',
 }
 
@@ -49,11 +50,13 @@ class DataService:
                 # Configuración actual manda; una clave retirada no conserva AVAILABLE.
                 if initial.state in ('DISABLED','NO_CREDENTIALS','CONFIG_REQUIRED','PLAN_REQUIRED','NOT_IMPLEMENTED'):
                     result=initial.model_copy(update={'checked_at':result.checked_at,'latency_ms':result.latency_ms,'http_status':result.http_status,'real_connection':result.real_connection})
+                elif not source.rights.display_allowed or not source.rights.access_allowed:
+                    result=result.model_copy(update={'state':'RIGHTS_RESTRICTED','reason':REASONS['RIGHTS_RESTRICTED'],'usable':False})
                 elif result.usable and record and now>datetime.fromisoformat(record.expires_at):
                     result=result.model_copy(update={'state':'STALE','reason':REASONS['STALE'],'usable':False})
                 quota=session.get(DataQuota,source.provider)
                 rows.append({'access_id':source.id,'provider':source.provider,'name':source.name,'implemented':source.implemented,'data_kind':source.kind,'asset_class':source.asset_class,'country':source.country,'market':source.venue,'feed':source.feed,'docs':source.docs,'rights':source.rights.model_dump(mode='json'),'quota_note':source.quota_note,'quota_used':quota.used if quota else 0,'next_allowed_at':quota.blocked_until if quota else None,**result.model_dump(mode='json',exclude={'observations'})})
-        return {'checked_at':now.isoformat(),'counts':{'candidate_providers':len({s.provider for s in CATALOG.values()}),'candidate_access_modes':len(rows),'implemented_adapters':sum(r['implemented'] for r in rows),'verified_connections':sum(r['real_connection'] for r in rows),'usable_sources':sum(r['usable'] for r in rows),'no_credentials':sum(r['state']=='NO_CREDENTIALS' for r in rows),'rights_restricted':sum(r['state']=='RIGHTS_RESTRICTED' for r in rows)},'sources':rows}
+        return {'checked_at':now.isoformat(),'counts':{'candidate_providers':len({s.provider for s in CATALOG.values()}),'candidate_access_modes':len(rows),'implemented_adapters':sum(r['implemented'] for r in rows),'implemented_providers':len({r['provider'] for r in rows if r['implemented']}),'verified_connections':sum(r['real_connection'] for r in rows),'verified_providers':len({r['provider'] for r in rows if r['real_connection']}),'usable_sources':sum(r['usable'] for r in rows),'usable_providers':len({r['provider'] for r in rows if r['usable']}),'no_credentials':sum(r['state']=='NO_CREDENTIALS' for r in rows),'rights_restricted':sum(r['state']=='RIGHTS_RESTRICTED' for r in rows)},'sources':rows}
 
     def query(self, access_id: str):
         source=CATALOG[access_id];initial=self.initial(source)
@@ -86,7 +89,10 @@ class DataService:
             try:
                 raw,status=self.http.fetch(source);received=self.clock();observations=parse(source,raw,received)
                 state='AVAILABLE_VERIFIED' if observations and source.rights.display_allowed else 'RIGHTS_RESTRICTED' if observations else 'NO_DATA'
-                result=DataResult(access_id=source.id,state=state,reason=REASONS[state],checked_at=received,latency_ms=round((time.perf_counter()-start)*1000),http_status=status,real_connection=self.http.real and bool(observations),usable=bool(observations) and source.rights.display_allowed and self.http.real,normalized_count=len(observations),observations=observations if source.rights.display_allowed else ())
+                if state=='AVAILABLE_VERIFIED' and source.kind=='market_quote':
+                    if any('HISTORICAL_EOD' in o.quality_flags for o in observations):state='DELAYED'
+                    elif all((received-o.observed_at).total_seconds()>max(60,source.ttl) for o in observations):state='STALE'
+                result=DataResult(access_id=source.id,state=state,reason=REASONS[state],checked_at=received,latency_ms=round((time.perf_counter()-start)*1000),http_status=status,real_connection=self.http.real and bool(observations),usable=bool(observations) and source.rights.display_allowed and self.http.real and state!='STALE',normalized_count=len(observations),observations=observations if source.rights.display_allowed else ())
                 failure=None
             except FetchError as error:
                 failure=error;result=DataResult(access_id=source.id,state=error.state,reason=REASONS[error.state],checked_at=self.clock(),latency_ms=round((time.perf_counter()-start)*1000),http_status=error.status)
@@ -94,7 +100,7 @@ class DataService:
                 failure=None;result=DataResult(access_id=source.id,state='INVALID_PAYLOAD',reason=REASONS['INVALID_PAYLOAD'],checked_at=self.clock(),latency_ms=round((time.perf_counter()-start)*1000),http_status=status)
             with Session(self.engine) as session, session.begin():
                 quota=session.get(DataQuota,source.provider)
-                if result.state in ('AVAILABLE_VERIFIED','NO_DATA','RIGHTS_RESTRICTED'):quota.failures=0
+                if result.state in ('AVAILABLE_VERIFIED','DELAYED','STALE','NO_DATA','RIGHTS_RESTRICTED'):quota.failures=0
                 else:
                     quota.failures+=1
                     if failure and failure.state=='RATE_LIMITED' or quota.failures>=3:
@@ -116,7 +122,7 @@ class DataService:
         if row is None:row=DataRecord(key=key,payload=payload,expires_at=expiry.isoformat(),updated_at=self.clock().isoformat());session.add(row)
         else:row.payload=payload;row.expires_at=expiry.isoformat();row.updated_at=self.clock().isoformat()
 
-def select_equivalent(observations, *, kind, series_id, venue, currency, unit, now):
+def select_equivalent(observations, *, kind, series_id, feed, period_precision, venue, currency, unit, now):
     """Fallback solo entre observaciones de idéntica semántica, nunca IEX/SIP."""
-    valid=[o for o in observations if (o.data_kind,o.series_id,o.venue,o.currency,o.unit)==(kind,series_id,venue,currency,unit) and o.rights.display_allowed and not o.stale(now)]
+    valid=[o for o in observations if (o.data_kind,o.series_id,o.feed,o.period_precision,o.venue,o.currency,o.unit)==(kind,series_id,feed,period_precision,venue,currency,unit) and o.rights.display_allowed and not o.stale(now)]
     return max(valid,key=lambda o:(o.observed_at,o.received_at)) if valid else None

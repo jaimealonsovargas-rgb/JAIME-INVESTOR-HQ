@@ -16,9 +16,11 @@ from app.data_catalog import CATALOG
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--sources',default=','.join(CATALOG))
-    parser.add_argument('--output',default='docs/evidencias/P2/smoke-real.json')
+    parser.add_argument('--output',default=None)
     parser.add_argument('--database',default='output/p2-smoke.db')
     args=parser.parse_args()
+    args.output=args.output or 'docs/evidencias/P2/smoke-real-'+datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S')+'.json'
+    if not (ROOT/args.output).resolve().is_relative_to(ROOT):raise SystemExit('Evidencia debe quedar dentro del repositorio.')
     ids=args.sources.split(',')
     if any(id not in CATALOG for id in ids):raise SystemExit('ID de fuente no permitido.')
     path=(ROOT/args.database).resolve()

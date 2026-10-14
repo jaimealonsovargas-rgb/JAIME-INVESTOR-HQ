@@ -13,7 +13,7 @@ from app.database import InstrumentRegistry, create_db_engine, DataRecord, Instr
 from app.data_registry import ingest
 from app.data_catalog import CATALOG
 from app.data_config import DataSettings
-from app.data_http import SafeDataHttp, FetchError, validate_request, public_dns
+from app.data_http import SafeDataHttp, FetchError, validate_request, public_dns, retry_seconds
 from app.data_parsers import parse, safe_xml, period_time
 from app.data_service import DataService, select_equivalent
 
@@ -130,7 +130,7 @@ def test_statistical_semantics_future_bidask_xml():
     with pytest.raises(ValueError):safe_xml(b'<!DOCTYPE x [<!ENTITY a SYSTEM "file:///private">]><x/>')
     with pytest.raises(ValueError):period_time('2026-01-01T00:00:00')
     assert parse(CATALOG['A14'],body('binance'),NOW)[0].currency=='USDT'
-    assert select_equivalent([fx],kind='market_quote',series_id=fx.series_id,venue=fx.venue,currency=fx.currency,unit=fx.unit,now=NOW) is None
+    assert select_equivalent([fx],kind='market_quote',series_id=fx.series_id,feed=fx.feed,period_precision=fx.period_precision,venue=fx.venue,currency=fx.currency,unit=fx.unit,now=NOW) is None
 
 def test_registry_identity_asset_class_and_null_macro(migrated):
     engine=create_db_engine(migrated.database_url)
@@ -141,6 +141,7 @@ def test_registry_identity_asset_class_and_null_macro(migrated):
         registry.add(Instrument(id=uuid4(),symbol='TEST_MACRO',venue='TEST',asset_class='MACRO_SERIES'))
         assert len(registry.list('TEST_ONLY'))==2
         assert len(registry.list(limit=1))==1
+    with pytest.raises(ValidationError):Instrument(id=uuid4(),symbol='TEST_ONLY',venue='TEST',currency='US1',asset_class='EQUITY')
 
 def test_quality_does_not_query_or_expose_secrets(client):
     result=client.get('/api/data/quality');assert result.status_code==200
@@ -187,3 +188,24 @@ def test_sdmx_xml_and_multiplier_not_false_connection():
     assert parse(CATALOG['A07'],xml,NOW)[0].value==Decimal('12.34')
     with pytest.raises(ValueError):parse(CATALOG['A07'],b'<html>not data</html>',NOW)
     assert parse(CATALOG['A05'],b'TIME_PERIOD,OBS_VALUE,UNIT_MEASURE,UNIT_MULT\n2026-09,1.234,index,3\n',NOW)[0].value==Decimal('1234.000')
+
+def test_quota_inside_http_200_not_available():
+    with pytest.raises(FetchError) as error:parse(CATALOG['B07'],b'{"Note":"TEST_ONLY quota"}',NOW)
+    assert error.value.state=='RATE_LIMITED'
+
+def test_quality_contract_and_rights_revocation(migrated,monkeypatch):
+    from app.data_contracts import QualityReport
+    data=service(migrated);data.query('A01');report=data.quality()
+    QualityReport.model_validate(report)
+    with pytest.raises(ValidationError):QualityReport.model_validate({**report,'counts':{**report['counts'],'verified_connections':99}})
+    source=CATALOG['A01'];monkeypatch.setitem(CATALOG,'A01',replace(source,rights=source.rights.model_copy(update={'display_allowed':False,'access_allowed':False})))
+    assert data.query('A01').state=='RIGHTS_RESTRICTED'
+    row=next(r for r in data.quality()['sources'] if r['access_id']=='A01')
+    assert not row['usable'] and row['state']=='RIGHTS_RESTRICTED'
+
+def test_bls_read_post_year_range_bounded():
+    source=CATALOG['B03']
+    for start,end in (('1900','2100'),('2026','2025'),('TEST','2026')):
+        with pytest.raises(FetchError):validate_request(source,'POST',source.url,{'seriesid':['CUUR0000SA0'],'startyear':start,'endyear':end})
+    assert retry_seconds('Wed, 14 Oct 2026 00:05:00 GMT',NOW)==300
+    assert retry_seconds('TEST_ONLY invalid date',NOW)==60

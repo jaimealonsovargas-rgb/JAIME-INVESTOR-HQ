@@ -16,7 +16,7 @@ from app.security import ExecutionUnavailable, deny_order_execution
 from app.data_config import DataSettings
 from app.data_service import DataService
 from app.data_catalog import CATALOG
-from app.data_contracts import DataResult
+from app.data_contracts import DataResult, QualityReport
 
 
 def create_app(settings: Settings | None = None, data_settings: DataSettings | None = None) -> FastAPI:
@@ -78,7 +78,7 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
         with Session(engine) as session:
             return InstrumentRegistry(session).list(q,offset,limit)
 
-    @app.get('/api/data/quality')
+    @app.get('/api/data/quality',response_model=QualityReport)
     def data_quality():
         return app.state.data.quality()
 

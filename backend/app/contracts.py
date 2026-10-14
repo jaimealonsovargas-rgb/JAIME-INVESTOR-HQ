@@ -1,6 +1,7 @@
 from datetime import date
 from decimal import Decimal
 from enum import StrEnum
+import re
 from typing import Literal
 from uuid import UUID
 
@@ -96,7 +97,7 @@ class Instrument(Contract):
     def currency_semantics(self):
         if self.currency is None and self.asset_class not in (AssetClass.MACRO_SERIES, AssetClass.INDEX):
             raise ValueError('Divisa necesaria para instrumento monetario.')
-        if self.currency and self.asset_class != AssetClass.CRYPTO and len(self.currency) != 3:
+        if self.currency and self.asset_class != AssetClass.CRYPTO and not re.fullmatch('[A-Z]{3}',self.currency):
             raise ValueError('Divisa monetaria de tres letras.')
         return self
 

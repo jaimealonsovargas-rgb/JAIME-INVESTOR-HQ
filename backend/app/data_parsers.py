@@ -9,6 +9,7 @@ from decimal import Decimal, InvalidOperation
 from xml.etree import ElementTree as ET
 from app.data_catalog import Source
 from app.data_contracts import Observation
+from app.data_http import FetchError
 
 UTC=timezone.utc
 
@@ -52,6 +53,8 @@ def parse(source: Source, raw: bytes, received: datetime):
         flags=('REFERENCE_NOT_EXECUTABLE',) if source.kind in ('fx_reference','yield_curve','macro_series') else ('NON_EXECUTABLE_P2',)
         if source.parser=='imf':flags+=('ESTIMATE_OR_FORECAST',)
         if source.parser in ('alpaca','alpha'):flags+=('HISTORICAL_EOD',)
+        flags+=('UNKNOWN_FEED_DELAY',)
+        if precision!='instant':flags+=('PERIOD_START_NOT_PUBLICATION',)
         fields=dict(provider=source.provider,access_id=source.id,feed=source.feed,series_id=series,data_kind=source.kind,venue=source.venue,country=country or source.country,asset_class=source.asset_class,source_ref=source.url or source.docs,payload_hash=digest,observed_at=when,received_at=received,period=str(period),period_precision=precision,currency=currency,unit=unit,value=val,bid=number(bid),ask=number(ask),metadata={str(k):str(v) for k,v in (metadata or {}).items() if v is not None},delay_seconds=None,stale_after_seconds=source.ttl,rights=source.rights,quality_flags=flags)
         ident=hashlib.sha256((source.id+series+str(period)+digest).encode()).hexdigest()
         result.append(Observation(id=ident,**fields))
@@ -108,6 +111,11 @@ def parse(source: Source, raw: bytes, received: datetime):
                     emit(received.isoformat(),None,'metadata',fields['Id'],metadata=fields)
     else:
         data=json.loads(raw,parse_float=Decimal,parse_constant=lambda _v:(_ for _ in ()).throw(ValueError('No finito')))
+        if isinstance(data,dict):
+            if data.get('code') in (401,403,429):raise FetchError({401:'AUTH_FAILED',403:'RIGHTS_RESTRICTED',429:'RATE_LIMITED'}[data['code']],200,60)
+            if parser=='alpha' and 'Note' in data:raise FetchError('RATE_LIMITED',200,86400)
+            if parser=='alpha' and 'Information' in data:raise FetchError('PLAN_REQUIRED',200)
+            if parser=='alpha' and 'Error Message' in data:raise FetchError('NO_DATA',200)
         if parser=='bde':
             for row in data:
                 precision=str(row.get('codFrecuencia','')).upper()
@@ -177,7 +185,7 @@ def parse(source: Source, raw: bytes, received: datetime):
                     emit(received.isoformat(),None,'identifier metadata',row['figi'],metadata={k:row.get(k) for k in ('figi','name','ticker','exchCode','securityType','marketSector','shareClassFIGI','compositeFIGI')})
         elif parser=='fred':
             for row in data['observations']:
-                emit(row['date'],row['value'],'percent per annum','DGS10',metadata={'realtime_start':row.get('realtime_start'),'realtime_end':row.get('realtime_end'),'original_provider':'US Treasury'})
+                emit(row['date'],row['value'],'percent per annum','DGS10',metadata={'realtime_start':row.get('realtime_start'),'realtime_end':row.get('realtime_end'),'original_provider':'Board of Governors of the Federal Reserve System · H.15'})
         elif parser=='bea':
             for row in data['BEAAPI']['Results']['Data']:
                 emit(row['TimePeriod'],str(row['DataValue']).replace(',',''),row.get('UNIT','BEA table T10101'),row['SeriesCode'],metadata={k:row.get(k) for k in ('LineDescription','METRIC_NAME','UNIT_MULT','CL_UNIT')})
