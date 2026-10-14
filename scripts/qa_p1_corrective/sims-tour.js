@@ -1,5 +1,5 @@
 async(page)=>{
- const results=[],opened=[],az=Math.atan2(12,16),co=Math.cos(az),si=Math.sin(az);
+ const results=[],opened=[],az=Math.atan2(2.5,20),co=Math.cos(az),si=Math.sin(az);
  await page.waitForFunction(()=>Object.keys(window.__HQ_HUMANS__||{}).length===17,{},{timeout:30000});
  async function panel(){const d=page.getByRole('dialog');if(!await d.isVisible())return false;for(const key of ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'])await page.keyboard.up(key);opened.push(await d.getByRole('heading',{level:2}).innerText());await page.keyboard.press('Escape');await page.locator('canvas').focus();return true;}
  async function walk(goal,stop=false){
@@ -22,7 +22,7 @@ async(page)=>{
   await panel();return{goal,path,end:await page.evaluate(()=>window.__HQ_PLAYER__)};
  }
  if(await page.getByRole('dialog').isVisible())await page.keyboard.press('Escape');await page.getByRole('button',{name:'Recorrer',exact:true}).click();
- const cases=[['reception',[1.65,10.3]],['performance',[-10.75,9.5]],['risk',[-11.45,1.3]],['research',[-11.45,-7.4]],['committee',[-3.35,-9.3]],['trading',[10,-10.16]],['quant',[10.55,1.4]],['execution',[-.45,1.3]],['systems',[11,9.3]]];
+ const cases=[['reception',[-.6,9.8]],['performance',[-10.75,9.5]],['risk',[-11.45,1.3]],['research',[-11.45,-7.4]],['committee',[-3.35,-9.3]],['trading',[10,-10.16]],['quant',[10.55,1.4]],['execution',[-.45,1.3]],['systems',[11,9.3]]];
  for(const [id,goal] of cases){const before=opened.length;const journey=await walk(goal,true);if(opened.length===before)throw Error('No abre '+id);await page.waitForTimeout(250);const pose=await page.evaluate(()=>window.__HQ_PLAYER__);await page.waitForTimeout(400);if(await page.getByRole('dialog').isVisible())throw Error('Reapertura inmediata '+id);await page.screenshot({path:'docs/evidencias/P1_SIMS/recorrido-'+id+'.png'});results.push({id,journey,panel:opened.at(-1),afterClose:pose});}
  await page.getByRole('button',{name:'Ver centro de control',exact:true}).click();await page.waitForTimeout(500);await page.screenshot({path:'docs/evidencias/P1_SIMS/centro-control.png'});const overview=await page.getByRole('dialog').innerText();await page.keyboard.press('Escape');
  return {at:new Date().toISOString(),input:'Flechas nativas; sin teletransportes ni escrituras de pose',results,opened,overview,humans:await page.evaluate(()=>window.__HQ_HUMANS__),metrics:await page.evaluate(()=>window.__HQ_METRICS__)};

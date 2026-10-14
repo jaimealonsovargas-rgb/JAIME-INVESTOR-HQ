@@ -3,7 +3,7 @@ import type { Collider } from './collisions';
 import { isFree } from './collisions';
 import { DEPARTMENTS,type Vec3 } from './layout';
 
-export const ISOMETRIC={offset:[12,19,16] as const, azimuth:Math.atan2(12,16), fov:40};
+export const ISOMETRIC={offset:[2.5,19,20] as const, azimuth:Math.atan2(2.5,20), fov:40};
 export const CAMERA={height:3.2,minHeight:2.8,maxHeight:3.8,distance:3.8,minDistance:3,maxDistance:4.5,fov:65,minFov:60,maxFov:75} as const;
 export const SAFE_SPAWNS:Record<string,Vec3>=Object.fromEntries(DEPARTMENTS.map(d=>[d.id,[d.center[0],0,d.center[2]+2.7] as Vec3]));
 SAFE_SPAWNS.reception=[0,0,11];

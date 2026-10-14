@@ -1,0 +1,8 @@
+{
+  "check": {
+    "returncode": 1
+  },
+  "audit": {
+    "returncode": 0
+  }
+}

@@ -1,11 +1,12 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { Html, OrbitControls, useTexture } from '@react-three/drei';
+import { Html, useTexture } from '@react-three/drei';
 import { ACESFilmicToneMapping, CanvasTexture, EquirectangularReflectionMapping, Fog, Mesh, Object3D, PCFShadowMap, PMREMGenerator, SRGBColorSpace, Vector3 } from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { createOffice, disposeOffice } from './model';
-import { makeMaterials } from './materials';
+import { makeMaterials,hqTexture } from './materials';
+import {HQ_TITLES,type HQOverviewData} from './HQVideowall';
+import {MeshBasicMaterial} from 'three';
 import { DEPARTMENTS, QUALITY, VIEWS, type Quality, type View } from './layout';
 import Player from './Player';
 import type { PlayerRuntime } from './navigation';
@@ -27,7 +28,7 @@ export interface SceneMetrics {
 }
 declare global { interface Window { __HQ_METRICS__?: SceneMetrics; __HQ_FRAMES__?: number[];__HQ_MOVING_FRAMES__?:number[]; __HQ_COLLIDERS__?:ReadonlyArray<Collider> } }
 
-export default memo(function Office({ view, quality, measuring, onMetrics, player, mode,onOpen,onNear }: { view: View; quality: Quality; measuring: boolean; onMetrics: (m: SceneMetrics) => void; player:PlayerRuntime; mode:'play'|'inspection';onOpen:(id:string)=>void;onNear:(id:string|undefined)=>void }) {
+export default memo(function Office({ view, quality, measuring, onMetrics, player, mode,onOpen,onNear,overview }: { view: View; quality: Quality; measuring: boolean; onMetrics: (m: SceneMetrics) => void; player:PlayerRuntime; mode:'play'|'inspection';onOpen:(id:string)=>void;onNear:(id:string|undefined)=>void;overview?:HQOverviewData }) {
   const maps = useTexture([
     '/materials/dark_wood_diffuse.jpg', '/materials/dark_wood_nor_gl.jpg', '/materials/dark_wood_rough.jpg',
     '/materials/marble_01_diffuse.jpg', '/materials/marble_01_nor_gl.jpg', '/materials/marble_01_rough.jpg',
@@ -38,7 +39,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
   const model = useMemo(() => {const office=createOffice(materials);office.getObjectByName('ceiling')?.traverse(o=>{if(o instanceof Mesh)o.castShadow=false;});
     const batches=gl.extensions.has('WEBGL_multi_draw')?batchStaticOffice(office):[];
     office.userData.batches=batches;office.updateMatrixWorld(true);office.traverse(object=>{object.matrixAutoUpdate=false;});return office;}, [materials,gl]);
-  const controls = useRef<OrbitControlsImpl>(null);
+  const cutaways=useMemo(()=>DEPARTMENTS.map(d=>({object:model.getObjectByName('cutaway:'+d.id),x:d.center[0],z:d.center[2]-3.18})),[model]);
   const frames = useRef<number[]>([]);
   const last = useRef(0), report = useRef(0), loaded = useRef(0);
   const firstFrame = useRef(0);
@@ -53,7 +54,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
     const pmrem = new PMREMGenerator(gl);
     const room = new RoomEnvironment();
     const env = pmrem.fromScene(room, .04, .1, 100);
-    scene.environment = env.texture; scene.environmentIntensity = 1.1;
+    scene.environment = env.texture; scene.environmentIntensity = .7;
     const sky=document.createElement('canvas'); sky.width=16; sky.height=256;
     const ctx=sky.getContext('2d')!; const gradient=ctx.createLinearGradient(0,0,0,256);
     gradient.addColorStop(0,'#66879f'); gradient.addColorStop(.45,'#d3d8d4'); gradient.addColorStop(.58,'#d3cbb9'); gradient.addColorStop(1,'#a5a394');
@@ -70,14 +71,29 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
     camera.position.set(...setting.position);
     if ('fov' in camera) { camera.fov = setting.fov; camera.updateProjectionMatrix(); }
     camera.lookAt(new Vector3(...setting.target));
-    controls.current?.target.set(...setting.target); controls.current?.update();
     gl.shadowMap.needsUpdate = true; frames.current = []; last.current = 0; invalidate();
   }, [view, mode, camera, model, gl, invalidate,player]);
+
+  useEffect(()=>{
+    model.traverse(object=>{if(!(object instanceof Mesh)||!(object.material instanceof MeshBasicMaterial)||!object.material.name.startsWith('hq:'))return;
+      const id=object.material.name.slice(3),section=overview?.sections.find(s=>s.section_id===id),item=section?.items[0];
+      let detail=section?.reason??'NO DISPONIBLE / servicio local sin verificar';
+      if(id==='systems'&&section)detail=`${section.quality.candidate_access_modes} modalidades / ${section.quality.verified_connections} conexiones verificadas`;
+      if(item)detail=(section?.status==='STALE'?'DESACTUALIZADO / ':'REFERENCIA / ')+(item.metadata.title?.slice(0,52)??`${item.series_id}: ${item.value} ${item.unit}`)+' / '+item.period;
+      const state=section?.status==='AVAILABLE'?(id==='systems'?'ESTADO LOCAL':'REFERENCIA'):section?.status==='STALE'?'DESACTUALIZADO':'NO DISPONIBLE';
+      const old=object.material.map;object.material.map=hqTexture(HQ_TITLES[id]??id,state,detail,item?item.provider+' / '+item.period:section?.phase_required??'Sin conexión');old?.dispose();
+    });invalidate();
+  },[overview,model,invalidate]);
 
   useEffect(() => { gl.shadowMap.autoUpdate = true; gl.shadowMap.needsUpdate = true; frames.current = []; }, [quality, gl]);
   useEffect(() => { if (measuring) { frames.current = [];moving.current=[]; last.current = 0; }report.current=0; }, [measuring]);
 
   useFrame(() => {
+    for(const wall of cutaways){if(!wall.object)continue;
+      const t=(wall.z-player.position.z)/(camera.position.z-player.position.z);
+      const x=player.position.x+t*(camera.position.x-player.position.x),y=.1+t*(camera.position.y-.1);
+      wall.object.visible=mode!=='play'||!(t>0&&t<1&&y<2.75&&Math.abs(x-wall.x)<4.5);
+    }
     const now = performance.now();
     if (!loaded.current) { loaded.current = now; invalidate(); return; }
     // Se ejecuta tras el primer render completo, una sola vez por montaje.
@@ -98,7 +114,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
       geometries: gl.info.memory.geometries, loadMs: loaded.current, firstFrameMs: firstFrame.current,
       width: size.width, height: size.height, dpr: gl.getPixelRatio(),
       departments: model.children.filter(c => c.name.startsWith('department:')).map(c => c.name.slice(11)), hidden: document.hidden,
-      camera: camera.position.toArray(), target: controls.current?.target.toArray() ?? [],
+      camera: camera.position.toArray(), target: mode==='play'?[player.position.x,.7,player.position.z]:[...VIEWS[view].target],
       mode,movingSamples:motion.samples,movingFps:motion.fps,movingFrameMsP95:motion.p95,
     };
     window.__HQ_METRICS__ = metrics; window.__HQ_FRAMES__ = [...frames.current];window.__HQ_MOVING_FRAMES__=[...moving.current]; onMetrics(metrics);
@@ -107,7 +123,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
   });
 
   return <>
-    <hemisphereLight args={['#e6e8e3', '#807565', 2.05]} />
+    <hemisphereLight args={['#e6e8e3', '#807565', 1.25]} />
     <directionalLight position={[-20, 25, 16]} color="#ffe9c9" intensity={2.65} castShadow
       shadow-mapSize={[QUALITY[quality].shadows, QUALITY[quality].shadows]} shadow-camera-left={-25} shadow-camera-right={25}
       shadow-camera-top={24} shadow-camera-bottom={-24} shadow-camera-near={1} shadow-camera-far={85}
@@ -120,8 +136,6 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
     <Personnel contact={materials.contact}/>
     <Monitors player={player} onOpen={onOpen} onNear={onNear}/>
     {mode==='inspection'&&view === 'plan' ? DEPARTMENTS.map(d => <Html key={d.id} position={[d.center[0], .15, d.center[2]+3]} center style={{pointerEvents: 'none'}}><div className="plan-label"><span>{d.number}</span>{d.label}</div></Html>) : null}
-    {mode==='inspection'?<OrbitControls ref={controls} makeDefault enableDamping={false} enablePan={view === 'plan'}
-      minDistance={view === 'plan' ? 26 : 2} maxDistance={view === 'plan' ? 65 : 20}
-      minPolarAngle={.1} maxPolarAngle={Math.PI / 2 - .035} rotateSpeed={.5} zoomSpeed={.7} />:null}
+
   </>;
 });

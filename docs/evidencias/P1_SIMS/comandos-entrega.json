@@ -1,0 +1,9 @@
+{
+  "check": {
+    "returncode": 0
+  },
+  "audit": {
+    "returncode": 0,
+    "evidence": "audit-entrega.txt; no dependencies changed since this execution"
+  }
+}

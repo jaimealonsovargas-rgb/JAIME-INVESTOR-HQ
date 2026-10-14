@@ -1,0 +1,53 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.4, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\javie\Documents\GitHub\JAIME-INVESTOR-HQ
+configfile: pyproject.toml
+testpaths: backend/tests
+plugins: anyio-4.15.1, platformdirs-4.13.0
+collected 115 items
+
+backend\tests\test_base.py ..........                                    [  8%]
+backend\tests\test_data.py ............................................. [ 47%]
+.................                                                        [ 62%]
+backend\tests\test_hq_overview.py ..                                     [ 64%]
+backend\tests\test_public_integrations.py ....                           [ 67%]
+backend\tests\test_security.py .....................................     [100%]
+
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\javie\Documents\GitHub\JAIME-INVESTOR-HQ\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 115 passed, 1 warning in 32.91s =======================
+
+> jaime-investor-hq-frontend@0.0.1 test
+> vitest run
+
+
+ RUN  v5.0.4 C:/Users/javie/Documents/GitHub/JAIME-INVESTOR-HQ/frontend
+
+ ❯ src/world/layout.test.ts (13 tests | 1 failed) 15195ms
+   ❯ planta P1.B conforme al plano (5)
+     × evita paños y montantes entre la cámara posterior y la cabeza junto a los nueve agentes 5350ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/world/layout.test.ts > planta P1.B conforme al plano > evita paños y montantes entre la cámara posterior y la cabeza junto a los nueve agentes
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/world/layout.test.ts:21:3
+     19|
+     20| describe('planta P1.B conforme al plano', () => {
+     21|   it('evita paños y montantes entre la cámara posterior y la cabeza ju…
+       |   ^
+     22|     vi.stubGlobal('document', { createElement: () => ({ getContext: ()…
+     23|     const office=createOffice(makeMaterials(Array.from({length:6},()=>…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 5 passed (6)
+      Tests  1 failed | 34 passed (35)
+   Start at  01:34:40
+   Duration  18.66s (tests 73%, transform 15%, import 11%, worker 1%)

@@ -8,11 +8,11 @@ import './world.css';
 import { createPlayer } from './navigation';
 import PlayerHud from './PlayerHud';
 import MonitorOverlay from './MonitorOverlay';
-import HQVideowall from './HQVideowall';
+import HQVideowall,{type HQOverviewData} from './HQVideowall';
 import { MONITOR_DEFINITIONS,canInteract } from './terminals';
 
 const Office = lazy(() => import('./Office'));
-const INITIAL_CAMERA = { position: VIEWS.interior.position, fov: 62, near: .08, far: 220 };
+const INITIAL_CAMERA = { position: VIEWS.interior.position, fov: VIEWS.interior.fov, near: .08, far: 220 };
 const GL_SETTINGS = { antialias: true, powerPreference: 'high-performance' as const, alpha: false };
 class SceneErrorBoundary extends Component<{children: ReactNode}, {failed: boolean}> {
   state = { failed: false };
@@ -26,6 +26,7 @@ export default function World() {
   const player=useRef(createPlayer()).current;
   const [mode,setMode]=useState<'play'|'inspection'>('play');
   const [panel,setPanel]=useState<string>();
+  const [overview,setOverview]=useState<HQOverviewData>();
   const [near,setNear]=useState<string>();
   const openPanel=useCallback((id:string)=>{const monitor=MONITOR_DEFINITIONS.find(m=>m.id===id);if(monitor&&canInteract(player,monitor)){player.paused=true;player.speed=0;player.invalidate?.();setPanel(id);}},[player]);
   const closePanel=useCallback(()=>{player.paused=false;player.holdCamera=true;player.invalidate?.();setPanel(undefined);document.querySelector('canvas')?.focus();},[player]);
@@ -45,7 +46,7 @@ export default function World() {
       <Canvas frameloop={measuring ? 'always' : 'demand'} shadows="percentage" dpr={QUALITY[quality].dpr} camera={INITIAL_CAMERA}
         gl={GL_SETTINGS}
         fallback={<div className="world-fallback">WebGL no disponible. <a href="?diagnostico=1">Abrir diagnóstico</a></div>}>
-        <Suspense fallback={null}><Office view={view} quality={quality} measuring={measuring} onMetrics={onMetrics} player={player} mode={mode} onOpen={openPanel} onNear={setNear} /></Suspense>
+        <Suspense fallback={null}><Office view={view} quality={quality} measuring={measuring} onMetrics={onMetrics} player={player} mode={mode} onOpen={openPanel} onNear={setNear} overview={overview} /></Suspense>
       </Canvas>
     </SceneErrorBoundary>
     <header className="world-header">
@@ -63,7 +64,7 @@ export default function World() {
       <a href="?diagnostico=1">Abrir comprobación de P0 ↗</a>
     </aside> : null}
     {mode==='play'?<PlayerHud player={player}/>:null}
-    <HQVideowall onPause={paused=>{player.paused=paused;player.speed=0;player.invalidate?.();if(!paused)document.querySelector('canvas')?.focus();}}/>
+    <HQVideowall onOverview={setOverview} onPause={paused=>{player.paused=paused;player.speed=0;player.invalidate?.();if(!paused)document.querySelector('canvas')?.focus();}}/>
     {mode==='play'&&near&&!panel?<p className="terminal-prompt">Acércate al agente principal para abrir su panel</p>:null}
     {panel?<MonitorOverlay id={panel} onClose={closePanel}/>:null}
     <footer className="world-toolbar">

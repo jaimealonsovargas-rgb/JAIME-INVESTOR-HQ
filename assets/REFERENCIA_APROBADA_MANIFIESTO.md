@@ -7,7 +7,7 @@ La referencia principal es el render de oficina **Los Sims minimalista isométri
 | **Principal** | `assets/reference_images/JAIME_HQ_SIMS_VIDEOWALL_APROBADA.png` | 1672×941 PNG | `4e07c5f1ea91b598ce8e3fcbcc1e73da6332b64006f8c03a21df7fa7a515ef92` |
 | Secundaria (concepto Sims previo) | `assets/reference_images/JAIME_HQ_SIMS_BASE.png` | 1672×941 PNG | `69101f7a18a0d48908b3e3a060e64ffeb1c89a2a975ccb085ac9bdf6dfd83347` |
 
-**Estado al redactar:** las dos imágenes originales **NO están todavía subidas a GitHub**; están en el **ZIP de handoff de esta conversación**. **Codex debe extraerlas al workspace, comprobar SHA-256 y hacer commit**. No afirmar que están versionadas hasta comprobar su blob real. El SVG `assets/PLANO_SIMS_VIDEOWALL.svg` es un plano lógico secundario, no la imagen original.
+**Estado verificado 2026-10-15:** ambos PNG originales están versionados localmente en **a3547bc**, con los hashes indicados. Se localizaron ya extraídos en `C:\Users\javie\Downloads\assets\reference_images`, según la ruta facilitada por el usuario, y se importaron mediante el verificador del repositorio. No se ha hecho push ni se afirma que exista el ZIP original en la raíz. El SVG `assets/PLANO_SIMS_VIDEOWALL.svg` es un plano lógico secundario, no la imagen original.
 
 **Verificación Windows:** `Get-FileHash assets/reference_images/JAIME_HQ_SIMS_VIDEOWALL_APROBADA.png -Algorithm SHA256`.
 

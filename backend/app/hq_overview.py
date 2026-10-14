@@ -9,6 +9,7 @@ from app.contracts import Contract
 from app.data_catalog import CATALOG
 from app.data_contracts import DataResult, Observation
 from app.database import DataRecord
+from app.data_service import cache_key
 
 
 class HQSection(Contract):
@@ -20,6 +21,8 @@ class HQSection(Contract):
     currency: str | None = None
     value: None = None
     items: tuple[Observation, ...] = ()
+    quality: dict[str, int | str] = {}
+    rights: str | None = None
     reason: str
 
 
@@ -40,26 +43,34 @@ def overview(data) -> HQOverview:
             source = CATALOG.get(result.access_id)
             if not source or data.initial(source).state != 'NOT_VERIFIED':
                 continue
-            if not result.real_connection or not source.rights.display_allowed:
+            if row.key!=cache_key(source):
+                continue
+            if not result.real_connection or not all((source.rights.access_allowed, source.rights.display_allowed, source.rights.storage_allowed, source.rights.redistribution_allowed)):
                 continue
             for item in result.observations:
-                if not item.rights.display_allowed or not item.rights.storage_allowed:
+                if not item.rights.display_allowed or not item.rights.storage_allowed or not item.rights.redistribution_allowed:
                     continue
                 group = 'news' if item.data_kind == 'news_metadata' else 'markets'
                 if item.data_kind in ('news_metadata', 'market_quote', 'fx_reference', 'yield_curve'):
                     groups[group].append(item)
     sections = []
-    for name, phase in [('portfolio', 'P3'), ('positions', 'P3'), ('operations', 'P6'), ('markets', 'P2'), ('news', 'P2'), ('risk', 'P5'), ('agents', 'P4')]:
+    for name, phase in [('portfolio', 'P3'), ('positions', 'P3'), ('operations', 'P6'), ('markets', 'P2'), ('news', 'P2'), ('risk', 'P5'), ('committee', 'P5'), ('agents', 'P4'), ('systems', 'P2')]:
         # Una observación por serie, conservando fuente/feed; ningún cálculo financiero.
         unique = {}
         for item in sorted(groups.get(name, []), key=lambda o: o.observed_at, reverse=True):
             unique.setdefault((item.access_id, item.series_id), item)
         items = tuple(list(unique.values())[:5])
         status = 'AVAILABLE' if items else 'NOT_IMPLEMENTED'
-        if items and all(item.stale(now) for item in items):
+        if items and any(item.stale(now) for item in items):
             status = 'STALE'
+        if name=='systems':
+            sections.append(HQSection(section_id=name,phase_required=phase,status='AVAILABLE',as_of_utc=now,
+                source='GET /api/data/quality · SQLite local',quality=data.quality()['counts'],
+                rights='Metadatos propios de conexión; no valores financieros.',reason='Estado local de conectores; una conexión histórica no garantiza frescura actual.'))
+            continue
         sections.append(HQSection(section_id=name, phase_required=phase, status=status,
             as_of_utc=max((o.received_at for o in items), default=None),
             source='Cache local P2 verificada' if items else None, items=items,
-            reason='Datos de referencia/históricos; no ejecutables.' if items else f'NO DISPONIBLE — {phase}: sin registros autorizados.'))
+            rights='Solo feeds con visualización y redistribución autorizadas.' if items else None,
+            reason=('Contiene datos caducados; consultar fechas por registro. No ejecutables.' if status=='STALE' else 'Datos de referencia/históricos; no ejecutables.') if items else f'NO DISPONIBLE — {phase}: sin registros autorizados.'))
     return HQOverview(checked_at=now, sections=tuple(sections))

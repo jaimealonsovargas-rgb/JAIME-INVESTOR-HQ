@@ -28,6 +28,21 @@ export function textTexture(title: string, subtitle = '', kind: 'sign' | 'screen
   return texture;
 }
 
+/** Videowall vivo: estados y datos locales; sin gráficas ni actividad decorativa. */
+export function hqTexture(title:string,state:string,detail:string,source:string){
+  const canvas=document.createElement('canvas');canvas.width=canvas.height=512;
+  const ctx=canvas.getContext('2d')!;ctx.fillStyle='#0a2035';ctx.fillRect(0,0,512,512);
+  ctx.fillStyle='#e6ece9';ctx.font='42px Arial';ctx.fillText(title.toUpperCase(),24,66,464);
+  ctx.fillStyle='#d7c29d';ctx.font='30px Arial';ctx.fillText(state,24,128,464);
+  ctx.fillStyle='#c9dce6';ctx.font='27px Arial';
+  const words=detail.split(/\s+/);let line='',y=190;
+  for(const word of words){const next=line?line+' '+word:word;if(ctx.measureText(next).width>455&&line){ctx.fillText(line,24,y);y+=39;line=word;if(y>368)break;}else line=next;}
+  if(y<=368)ctx.fillText(line,24,y,464);
+  ctx.fillStyle='#a2bdcc';ctx.font='20px Arial';ctx.fillText(source,24,440,464);
+  ctx.font='18px Arial';ctx.fillText('SIMULACIÓN · PAPER ONLY',24,487,464);
+  const texture=new CanvasTexture(canvas);texture.colorSpace=SRGBColorSpace;texture.anisotropy=4;return texture;
+}
+
 function surfaceTexture(kind: 'fabric' | 'facade' | 'keys') {
   const c = document.createElement('canvas'); c.width = kind === 'fabric' ? 128 : 512; c.height = kind === 'facade' ? 1024 : 128;
   const ctx = c.getContext('2d')!;
@@ -57,12 +72,15 @@ function surfaceTexture(kind: 'fabric' | 'facade' | 'keys') {
 export function makeMaterials(maps: Texture[]) {
   maps.forEach((map, index) => { map.wrapS = map.wrapT = RepeatWrapping; map.anisotropy = 4; if (index % 3 === 0) map.colorSpace = SRGBColorSpace; });
   const [woodMap, woodNormal, woodRough, stoneMap, stoneNormal, stoneRough] = maps;
-  const floorMap = stoneMap.clone(); floorMap.repeat.set(11, 9); floorMap.needsUpdate = true;
-  const floorNormal = stoneNormal.clone(); floorNormal.repeat.set(11, 9); floorNormal.needsUpdate = true;
+  const floorMap = woodMap.clone(); floorMap.repeat.set(10, 12); floorMap.needsUpdate = true;
+  const floorNormal = woodNormal.clone(); floorNormal.repeat.set(10, 12); floorNormal.needsUpdate = true;
   const wood = new MeshStandardMaterial({ map: woodMap, normalMap: woodNormal, roughnessMap: woodRough, color: '#d9bd91', roughness: .64, normalScale: new Vector2(.08, .08) });
   // Acabado de nogal: desaturación del albedo CC0, sin modificar el fichero fuente.
   wood.onBeforeCompile = shader => { shader.fragmentShader = shader.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.64, 0.47, 0.28), 0.72);'); };
   wood.customProgramCacheKey = () => 'sims-oak-v1';
+  const floor=new MeshStandardMaterial({map:floorMap,normalMap:floorNormal,color:'#e7cda5',roughness:.72,normalScale:new Vector2(.04,.04)});
+  floor.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n diffuseColor.rgb=mix(diffuseColor.rgb,vec3(0.56,0.40,0.24),0.64);');};
+  floor.customProgramCacheKey=()=> 'sims-oak-floor-v1';
   const shadowCanvas = document.createElement('canvas'); shadowCanvas.width = shadowCanvas.height = 128;
   const ctx = shadowCanvas.getContext('2d')!;
   const gradient = ctx.createRadialGradient(64, 64, 8, 64, 64, 62);
@@ -73,7 +91,7 @@ export function makeMaterials(maps: Texture[]) {
     wood,
     contact: new MeshBasicMaterial({ map: new CanvasTexture(shadowCanvas), transparent: true, depthWrite: false, opacity: .7, polygonOffset: true, polygonOffsetFactor: -1 }),
     stone: new MeshStandardMaterial({ map: stoneMap, normalMap: stoneNormal, color: '#e1dccb', roughnessMap: stoneRough, roughness: .3, metalness: .08, normalScale: new Vector2(.07, .07) }),
-    floor: new MeshStandardMaterial({ map: floorMap, normalMap: floorNormal, color: '#ddd9c9', roughness: .68, metalness: .02, normalScale: new Vector2(.06, .06) }),
+    floor,
     bronze: new MeshStandardMaterial({ color: '#b9915e', metalness: .78, roughness: .28 }),
     dark: new MeshStandardMaterial({ color: '#151d22', roughness: .43, metalness: .35 }),
     steel: new MeshStandardMaterial({ color: '#a4a9a7', metalness: .88, roughness: .26 }),

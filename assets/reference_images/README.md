@@ -1,6 +1,6 @@
 # Referencias originales aprobadas — importación segura
 
-**Estado:** los PNG originales se encuentran en el ZIP de handoff proporcionado en la conversación. **No confundir el SVG del plano con los PNG aprobados.** Si los PNG aún no están aquí, el repositorio no contiene todavía la referencia original a resolución completa.
+**Estado verificado 2026-10-15:** los dos PNG originales están aquí y versionados en el commit local **a3547bc**, con resolución y hashes comprobados. Origen: carpeta local `Downloads/assets/reference_images` indicada por el usuario. El importador validó ambos archivos; no se ha hecho push. **No confundir el SVG del plano ni estos conceptos con capturas reales de la aplicación.**
 
 **Imagen principal**: JAIME_HQ_SIMS_VIDEOWALL_APROBADA.png (1672×941), oficina isométrica minimalista tipo Los Sims, videowall gigante arriba, SHA-256 `4e07c5f1ea91b598ce8e3fcbcc1e73da6332b64006f8c03a21df7fa7a515ef92`.
 

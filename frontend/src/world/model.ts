@@ -174,19 +174,18 @@ function shelves(b: Builder, x: number, z: number, m: Materials) {
 }
 function wallScreen(b: Builder, x: number, z: number, d: Department, m: Materials, width = 2.8) {
   b.box([x, 1.94, z], [width + .1, 1.67, .11], m.dark, .035);
-  b.label([x, 1.94, z + .058], width, 1.575, d.label, `Función prevista para ${d.phase}`, 'screen');
+  b.label([x, 1.94, z + .058], width, 1.575, d.label, (d.id==='systems'?'Fuentes reales / Data Quality':d.id==='reception'?'Estado local / PAPER ONLY':`NO DISPONIBLE / ${d.phase}`), 'screen');
 }
 
 function department(d: Department, m: Materials) {
   const b = new Builder(`department:${d.id}`); roomShell(b, d, m);
-  const screen = new MeshBasicMaterial({ map: textTexture(d.label, `Función prevista para ${d.phase}`, 'screen'), toneMapped: false });
+  const screen = new MeshBasicMaterial({ map: textTexture(d.label, (d.id==='systems'?'Fuentes reales / Data Quality':d.id==='reception'?'Estado local / PAPER ONLY':`NO DISPONIBLE / ${d.phase}`), 'screen'), toneMapped: false });
   if (d.id === 'reception') {
-    b.box([-.6, .58, -.15], [4.8, 1.16, 1.1], m.stone, .18);
-    b.box([-.6, 1.18, -.15], [4.92, .09, 1.18], m.wood, .08);
+    b.box([-.6, .37, -.15], [4.8, .74, 1.0], m.stone, .12);
+    b.box([-.6, .79, -.15], [4.92, .09, 1.02], m.wood, .045);
     b.box([-.6, .08, -.15], [4.58, .06, .95], m.light);
-    for (let i = 0; i < 39; i++) b.box([-2.76 + i * .114, .64, .404], [.035, .92, .025], m.bronze);
-    b.label([-.6, .73, .431], 2.7, .675, 'JAIME', 'I N V E S T O R   H Q', 'brand');
-    monitor(b, -.7, -.4, m, screen, 0, 1.23);
+    for (let i = 0; i < 39; i++) b.box([-2.76 + i * .114, .42, .354], [.035, .61, .025], m.bronze);
+    b.label([-.6, .45, .381], 2.7, .45, 'JAIME', 'I N V E S T O R   H Q', 'brand');
     // Recepción despejada y puesto lateral real; sin sofás ni mesas auxiliares.
     plant(b, -3.8, -2.1, m); plant(b, 3.7, -2.1, m);
   } else if (d.id === 'committee') {
@@ -203,7 +202,7 @@ function department(d: Department, m: Materials) {
   } else if (d.id === 'trading') {
     // Dos bancadas laterales conservan seis puestos y liberan el eje central.
     for (const x of [-3.8, 3.8]) plant(b, x, -3.1, m, 1.7);
-    b.label([0, .031, 3.05], 2.4, .30, '05 / TRADING FLOOR', 'INVESTIGACIÓN MULTIACTIVO', 'sign',[-Math.PI/2,0,0]);
+    b.label([0, .031, 3.05], 2.4, .30, `${d.number} / TRADING FLOOR`, 'INVESTIGACIÓN MULTIACTIVO', 'sign',[-Math.PI/2,0,0]);
   } else if (d.id === 'research') {
     shelves(b, 0, -2.9, m);
     b.cylinder([2.7, .7, -1.8], .75, .09, m.wood); b.cylinder([2.7, .35, -1.8], .08, .7, m.bronze);
@@ -231,7 +230,19 @@ function department(d: Department, m: Materials) {
   }
   for(const w of WORKSPACES.filter(w=>w.department===d.id))desk(b,w.x,w.z,m,screen,w.yaw,w.dual);
   b.group.userData = { department: d.id, center: d.center, monitor: true, phase: d.phase,sofas:0,portalWidth:4.4 };
-  const group = b.finish(); group.position.set(...d.center); return group;
+  const group = b.finish(); group.position.set(...d.center);
+  if(d.id!=='reception'){
+    const backdrop=new Builder(`cutaway:${d.id}`);
+    backdrop.box([0,1.53,-3.18],[d.center[2]===-9?3.8:8.35,2.1,.12],m.cream);
+    if(d.center[2]===-9)for(const side of [-1,1]){
+      backdrop.box([side*3.08,1.53,-3.18],[2.1,2.1,.014],m.glass);
+      for(const edge of [-1,1])backdrop.box([side*3.08+edge*1.05,1.53,-3.18],[.025,2.1,.035],m.dark);
+      backdrop.box([side*3.08,2.59,-3.18],[2.13,.035,.045],m.dark);
+    }
+    for(const side of [-1,1])backdrop.box([side*3.96,1.48,-3.105],[.026,2.05,.018],m.light);
+    backdrop.group.userData.cutaway=true;group.add(backdrop.finish());
+  }
+  return group;
 }
 
 function architecture(m: Materials) {
@@ -290,11 +301,15 @@ function skyline(m: Materials) {
 
 export function createOffice(m: Materials) {
   const office = new Group(); office.name = 'JAIME_INVESTOR_HQ';
-  const exterior=skyline(m);exterior.visible=false;
+  const exterior=skyline(m);
   office.add(architecture(m),exterior,...DEPARTMENTS.map(d => department(d, m)));
-  const wall=new Builder('videowall');wall.box([0,3,-13.35],[32,4.8,.28],m.dark,.12);
-  wall.label([-11.8,4.5,-13.19],7.4,.75,'JAIME INVESTOR HQ','SIMULACION / PAPER ONLY','screen');
-  ['CARTERA / P3','POSICIONES / P3','OPERACIONES / P6','MERCADOS / P2','NOTICIAS / P2','RIESGOS / P5','AGENTES / P4'].forEach((title,i)=>wall.label([-13.2+i*4.4,2.65,-13.19],4.1,2.35,title,'NO DISPONIBLE','screen'));
+  const wall=new Builder('videowall');wall.box([0,4.8,-13.35],[32,4.8,.28],m.dark,.12);
+  for(const side of [-1,1])wall.box([side*16,3.6,-13.35],[.18,7.2,.3],m.dark);
+  wall.label([-11.8,6.6,-13.19],7.4,.9,'JAIME INVESTOR HQ','SIMULACIÓN / PAPER ONLY','brand');
+  ['CARTERA / P3','POSICIONES / P3','OPERACIONES / P6','MERCADOS / P2','NOTICIAS / P2','RIESGOS / P5','COMITE / P5','AGENTES / P4','SISTEMAS / P2'].forEach((title,i)=>{
+    const screen=wall.label([-14.1+i*3.52,4.6,-13.19],3.3,3.1,title,'NO DISPONIBLE','screen');
+    (screen.material as Material).name='hq:'+['portfolio','positions','operations','markets','news','risk','committee','agents','systems'][i];
+  });
   office.add(wall.finish());
   office.getObjectByName('ceiling')!.visible=false;
   office.updateMatrixWorld(true);

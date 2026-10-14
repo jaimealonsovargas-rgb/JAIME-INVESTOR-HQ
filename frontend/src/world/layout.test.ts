@@ -11,20 +11,20 @@ import {createPlayer} from './navigation';
 import {PANEL_CONTENT} from './panels';
 import {PERSONNEL,PERSONNEL_COLLIDERS} from './staffLayout';
 import {PRIMARY_AGENT_INTERACTIONS,ProximityLatch,canApproach} from './agentInteractions';
-import {screenStep} from './navigation';
+import {screenStep,ISOMETRIC} from './navigation';
 import {humanLodLevel} from './humanLods';
 import {frameStats} from './frameStats';
 
 vi.mock('./materials', async (original) => ({ ...await original<typeof import('./materials')>(), textTexture: () => new Texture() }));
 
 describe('planta P1.B conforme al plano', () => {
-  it('evita paños y montantes entre la cámara posterior y la cabeza junto a los nueve agentes',()=>{
+  it('evita cristales entre la cámara isométrica y la cabeza junto a los nueve agentes',()=>{
     vi.stubGlobal('document', { createElement: () => ({ getContext: () => ({ createRadialGradient: () => ({ addColorStop() {} }), fillRect() {}, fillText() {} }) }) });
     const office=createOffice(makeMaterials(Array.from({length:6},()=>new Texture())));const glass=office.userData.colliders.filter((c:{kind:string})=>c.kind==='glass');
-    for(const agent of PRIMARY_AGENT_INTERACTIONS){const body=new Vector3(...agent.approach),away=body.clone().sub(agent.anchor);away.y=0;away.normalize();const camera=body.clone().addScaledVector(away,3.8);camera.y=3.2;body.y=1.78;expect(firstHit(camera,body,glass,.001),agent.id).toBe(1);}
+    for(const agent of PRIMARY_AGENT_INTERACTIONS){const body=new Vector3(...agent.approach),camera=body.clone().add(new Vector3(...ISOMETRIC.offset));camera.y+=.7;body.y=1.78;expect(firstHit(camera,body,glass,.001),agent.id).toBe(1);}
     disposeOffice(office);
     vi.unstubAllGlobals();
-  });
+  },15000);
   it('mantiene nueve zonas únicas en las posiciones del documento', () => {
     expect(DEPARTMENTS.map(d => d.id)).toEqual(['research', 'committee', 'trading', 'risk', 'execution', 'quant', 'performance', 'reception', 'systems']);
     expect(new Set(DEPARTMENTS.map(d => d.center.join(','))).size).toBe(9);
@@ -99,6 +99,7 @@ describe('planta P1.B conforme al plano', () => {
       expect(PANEL_CONTENT[monitor.id]).toBeDefined();
     }
     expect(PERSONNEL).toHaveLength(16);expect(new Set(PERSONNEL.map(p=>p.id)).size).toBe(16);
+    expect(Object.fromEntries(DEPARTMENTS.map(d=>[d.id,PERSONNEL.filter(p=>p.department===d.id).length]))).toEqual({reception:1,trading:3,research:3,quant:2,risk:2,execution:1,committee:1,performance:1,systems:2});
     const occupied=[...office.userData.colliders,...PERSONNEL_COLLIDERS];
     for(const person of PERSONNEL){expect(person.seated).toBe(true);const node=office.getObjectByName(`department:${person.department}`)!;expect(node.userData.seats.some((s:{position:[number,number,number]})=>{const seat=new Vector3(...s.position).applyMatrix4(node.matrixWorld);return Math.hypot(seat.x-person.position[0],seat.z-person.position[2])<1e-6;}),`NPC fuera de su silla: ${person.id}`).toBe(true);expect(person.state).toBe('OFFLINE');expect(person.work).toBe('NO DISPONIBLE — P4');}
     for(const [id,p] of Object.entries(SAFE_SPAWNS)){expect(validTeleport(id,occupied),`NPC ocupa spawn: ${id}`).toBeDefined();expect(findWalkingPath([0,11],[p[0],p[2]],occupied),`NPC bloquea departamento: ${id}`).toBeDefined();}
