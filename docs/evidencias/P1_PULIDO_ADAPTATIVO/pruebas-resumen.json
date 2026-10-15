@@ -1,0 +1,44 @@
+{
+  "manage_check": {
+    "exit_code": 0,
+    "pytest_passed": 115,
+    "vitest_passed": 40,
+    "typescript": "PASS",
+    "production_build": "PASS"
+  },
+  "audit": {
+    "python": "No known vulnerabilities found",
+    "npm_vulnerabilities": 0
+  },
+  "regression": [
+    "9 native walking departments",
+    "9 proximity panels",
+    "16 seated NPCs / 17 rigs",
+    "4 arrow directions",
+    "WASD/mouse ignored",
+    "modal pause/focus/hysteresis/resume",
+    "browser backend abort / offline / diagnostic",
+    "98 instruments and 9 HQ sections",
+    "POST /api/orders = 403"
+  ],
+  "warnings": [
+    "TestClient/httpx deprecation",
+    "3D bundle >500 kB",
+    "THREE.Clock created by R3F",
+    "Intel ANGLE shader compiler X4122 rounding warning"
+  ],
+  "render_cleanup": {
+    "three_version": "0.186.1",
+    "selected_shadow_type": "PCFShadowMap",
+    "measured_shadow_type": "PCFShadowMap (library fallback from removed PCFSoftShadowMap)",
+    "source": "node_modules/three/src/renderers/webgl/WebGLShadowMap.js:99-102",
+    "final_smoke": "smoke-pcf-final.json"
+  },
+  "browser_console": {
+    "errors": 0,
+    "warnings": [
+      "THREE.Clock deprecation from R3F",
+      "Intel ANGLE shader compiler X4122 rounding warning; shader compiled"
+    ]
+  }
+}

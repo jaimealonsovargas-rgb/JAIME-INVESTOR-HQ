@@ -1,0 +1,296 @@
+{
+  "at": "2026-10-15T15:12:22.466Z",
+  "method": "Playwright Chrome con ventana / Intel D3D11; flechas nativas; fijo-adaptativo-fijo en el mismo build; sin otras cargas de QA simultáneas",
+  "renderer": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "viewport": [
+    1920,
+    1080
+  ],
+  "rows": [
+    {
+      "profile": "fixed-before",
+      "room": "recepcion",
+      "moving_fps": 60.099137893887715,
+      "moving_p95_ms": 17.700000047683716,
+      "worst_moving_5s_fps": 59.956831082764,
+      "moving_samples": 702,
+      "moving_seconds": 11.680700000047684,
+      "dpr": 0.8,
+      "calls": 182
+    },
+    {
+      "profile": "fixed-before",
+      "room": "trading",
+      "moving_fps": 56.66424511773001,
+      "moving_p95_ms": 20.200000047683716,
+      "worst_moving_5s_fps": 54.91104410958981,
+      "moving_samples": 663,
+      "moving_seconds": 11.7005,
+      "dpr": 0.8,
+      "calls": 173
+    },
+    {
+      "profile": "fixed-before",
+      "room": "comite",
+      "moving_fps": 58.88939221774752,
+      "moving_p95_ms": 20.09999990463257,
+      "worst_moving_5s_fps": 57.235162732966565,
+      "moving_samples": 689,
+      "moving_seconds": 11.69989999985695,
+      "dpr": 0.8,
+      "calls": 182
+    },
+    {
+      "profile": "fixed-before",
+      "room": "sistemas",
+      "moving_fps": 57.133126144152584,
+      "moving_p95_ms": 18.09999990463257,
+      "worst_moving_5s_fps": 54.36086017911576,
+      "moving_samples": 671,
+      "moving_seconds": 11.7445,
+      "dpr": 0.8,
+      "calls": 180
+    },
+    {
+      "profile": "adaptive",
+      "room": "recepcion",
+      "moving_fps": 59.91800693763097,
+      "moving_p95_ms": 17.40000009536743,
+      "worst_moving_5s_fps": 59.78804239152169,
+      "moving_samples": 703,
+      "moving_seconds": 11.732700000047684,
+      "dpr": 1,
+      "calls": 182
+    },
+    {
+      "profile": "adaptive",
+      "room": "trading",
+      "moving_fps": 57.06805386836883,
+      "moving_p95_ms": 17.5,
+      "worst_moving_5s_fps": 53.150038962868024,
+      "moving_samples": 667,
+      "moving_seconds": 11.687799999952317,
+      "dpr": 1,
+      "calls": 173
+    },
+    {
+      "profile": "adaptive",
+      "room": "comite",
+      "moving_fps": 60.00017045649273,
+      "moving_p95_ms": 17.200000047683716,
+      "worst_moving_5s_fps": 59.97960693592982,
+      "moving_samples": 704,
+      "moving_seconds": 11.733299999713898,
+      "dpr": 1,
+      "calls": 182
+    },
+    {
+      "profile": "adaptive",
+      "room": "sistemas",
+      "moving_fps": 56.34209766032087,
+      "moving_p95_ms": 17.600000143051147,
+      "worst_moving_5s_fps": 51.286144759611865,
+      "moving_samples": 663,
+      "moving_seconds": 11.767399999856949,
+      "dpr": 1,
+      "calls": 178
+    },
+    {
+      "profile": "fixed-after",
+      "room": "recepcion",
+      "moving_fps": 60.00702939511726,
+      "moving_p95_ms": 17.600000143051147,
+      "worst_moving_5s_fps": 59.97600959616153,
+      "moving_samples": 700,
+      "moving_seconds": 11.665299999952316,
+      "dpr": 0.8,
+      "calls": 182
+    },
+    {
+      "profile": "fixed-after",
+      "room": "trading",
+      "moving_fps": 59.56819486966483,
+      "moving_p95_ms": 17.600000143051147,
+      "worst_moving_5s_fps": 58.84934567563161,
+      "moving_samples": 695,
+      "moving_seconds": 11.667299999952316,
+      "dpr": 0.8,
+      "calls": 173
+    },
+    {
+      "profile": "fixed-after",
+      "room": "comite",
+      "moving_fps": 58.71359202659171,
+      "moving_p95_ms": 20.59999990463257,
+      "worst_moving_5s_fps": 56.8363114247229,
+      "moving_samples": 688,
+      "moving_seconds": 11.717899999856948,
+      "dpr": 0.8,
+      "calls": 182
+    },
+    {
+      "profile": "fixed-after",
+      "room": "sistemas",
+      "moving_fps": 58.401797506609405,
+      "moving_p95_ms": 22,
+      "worst_moving_5s_fps": 56.21337160466424,
+      "moving_samples": 681,
+      "moving_seconds": 11.660599999904633,
+      "dpr": 0.8,
+      "calls": 180
+    }
+  ],
+  "changes": [
+    {
+      "from": 0.8,
+      "to": 0.81,
+      "fps": 60.01686424568407,
+      "reason": "headroom",
+      "at": 77844.19999980927
+    },
+    {
+      "from": 0.81,
+      "to": 0.82,
+      "fps": 60.07049594824131,
+      "reason": "headroom",
+      "at": 86594.5
+    },
+    {
+      "from": 0.82,
+      "to": 0.83,
+      "fps": 60,
+      "reason": "headroom",
+      "at": 99761.09999990463
+    },
+    {
+      "from": 0.83,
+      "to": 0.84,
+      "fps": 60,
+      "reason": "headroom",
+      "at": 108578.19999980927
+    },
+    {
+      "from": 0.84,
+      "to": 0.85,
+      "fps": 60.001983539483405,
+      "reason": "headroom",
+      "at": 117311.39999985695
+    },
+    {
+      "from": 0.85,
+      "to": 0.86,
+      "fps": 57.199701566774436,
+      "reason": "headroom",
+      "at": 130327.89999985695
+    },
+    {
+      "from": 0.86,
+      "to": 0.87,
+      "fps": 59.994000591358656,
+      "reason": "headroom",
+      "at": 139095
+    },
+    {
+      "from": 0.87,
+      "to": 0.88,
+      "fps": 55.237621298830554,
+      "reason": "headroom",
+      "at": 147878.09999990463
+    },
+    {
+      "from": 0.88,
+      "to": 0.89,
+      "fps": 60,
+      "reason": "headroom",
+      "at": 160861.39999985695
+    },
+    {
+      "from": 0.89,
+      "to": 0.9,
+      "fps": 59.93362721991396,
+      "reason": "headroom",
+      "at": 169680.29999995232
+    },
+    {
+      "from": 0.9,
+      "to": 0.91,
+      "fps": 60.007934937802126,
+      "reason": "headroom",
+      "at": 178528.19999980927
+    },
+    {
+      "from": 0.91,
+      "to": 0.92,
+      "fps": 60.07347830972997,
+      "reason": "headroom",
+      "at": 191611.69999980927
+    },
+    {
+      "from": 0.92,
+      "to": 0.93,
+      "fps": 60.19002139127,
+      "reason": "headroom",
+      "at": 200444.89999985695
+    },
+    {
+      "from": 0.93,
+      "to": 0.94,
+      "fps": 59.99400060566091,
+      "reason": "headroom",
+      "at": 209311.39999985695
+    },
+    {
+      "from": 0.94,
+      "to": 0.95,
+      "fps": 60.00198353238949,
+      "reason": "headroom",
+      "at": 220179
+    },
+    {
+      "from": 0.95,
+      "to": 0.96,
+      "fps": 60.01984126984127,
+      "reason": "headroom",
+      "at": 228995.59999990463
+    },
+    {
+      "from": 0.96,
+      "to": 0.97,
+      "fps": 60.001983539483405,
+      "reason": "headroom",
+      "at": 237895.19999980927
+    },
+    {
+      "from": 0.97,
+      "to": 0.98,
+      "fps": 60.01388751683699,
+      "reason": "headroom",
+      "at": 250962.19999980927
+    },
+    {
+      "from": 0.98,
+      "to": 0.99,
+      "fps": 59.985003749062734,
+      "reason": "headroom",
+      "at": 259845.59999990463
+    },
+    {
+      "from": 0.99,
+      "to": 1,
+      "fps": 59.99100135122761,
+      "reason": "headroom",
+      "at": 268728.89999985695
+    }
+  ],
+  "dom_before": {
+    "font": "38px",
+    "width": 320,
+    "height": 46
+  },
+  "dom_after": {
+    "font": "38px",
+    "width": 320,
+    "height": 46
+  },
+  "paused_dpr": 1
+}

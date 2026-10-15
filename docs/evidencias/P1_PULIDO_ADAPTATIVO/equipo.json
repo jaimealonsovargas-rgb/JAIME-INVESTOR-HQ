@@ -1,0 +1,26 @@
+﻿{
+    "previous_snapshot":  {
+                              "checked_at_utc":  "2026-10-15T15:14:40.7917357Z",
+                              "gpu":  {
+                                          "Name":  "Intel(R) Graphics",
+                                          "DriverVersion":  "31.0.101.4953"
+                                      },
+                              "battery":  {
+                                              "BatteryStatus":  1,
+                                              "EstimatedChargeRemaining":  50
+                                          },
+                              "cpu":  {
+                                          "Name":  "Intel(R) Core(TM) 5 120U",
+                                          "NumberOfCores":  10,
+                                          "NumberOfLogicalProcessors":  12
+                                      },
+                              "power_plan":  "GUID de plan de energía: ab6534a3-bc02-4c44-94d1-a8535b2eb070  (Samsung Mode)",
+                              "note":  "Read after benchmark; battery was 58 percent / discharging before the run. Other user applications were not closed by automation."
+                          },
+    "checked_after_final_smoke_utc":  "2026-10-15T15:37:20.3139803Z",
+    "battery_after_final_smoke":  {
+                                      "BatteryStatus":  1,
+                                      "EstimatedChargeRemaining":  33
+                                  },
+    "note":  "Hardware snapshot at 15:14 UTC precedes the final A/B. No user applications were closed; all benchmark windows identify the Intel D3D11 renderer."
+}

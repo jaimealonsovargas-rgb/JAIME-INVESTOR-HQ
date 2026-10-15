@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-15T08:52:31.894725+00:00",
+  "health": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "phase": "P0",
+      "trading_mode": "PAPER_ONLY",
+      "orders_enabled": false,
+      "database": "ok",
+      "schema_version": "0002_data",
+      "checked_at": "2026-10-15T08:52:31.951872Z"
+    }
+  },
+  "orders": {
+    "status": 403,
+    "body": "{\"code\":\"P0_EXECUTION_DISABLED\",\"message\":\"NO DISPONIBLE: todas las \u00f3rdenes est\u00e1n bloqueadas en P0.\"}"
+  }
+}
