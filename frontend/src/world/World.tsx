@@ -10,9 +10,10 @@ import PlayerHud from './PlayerHud';
 import MonitorOverlay from './MonitorOverlay';
 import HQVideowall,{type HQOverviewData} from './HQVideowall';
 import { MONITOR_DEFINITIONS,canInteract } from './terminals';
+import AdaptiveResolution from './AdaptiveResolution';
 
 const Office = lazy(() => import('./Office'));
-const INITIAL_CAMERA = { position: VIEWS.interior.position, fov: VIEWS.interior.fov, near: .08, far: 220 };
+const INITIAL_CAMERA = { position: VIEWS.interior.position, fov: VIEWS.interior.fov, near: .08, far: 400 };
 const GL_SETTINGS = { antialias: true, powerPreference: 'high-performance' as const, alpha: false };
 class SceneErrorBoundary extends Component<{children: ReactNode}, {failed: boolean}> {
   state = { failed: false };
@@ -34,18 +35,20 @@ export default function World() {
   useEffect(()=>{const back=(e:KeyboardEvent)=>{if(e.key==='Escape'&&player.mode==='inspection'){setMode('play');document.querySelector('canvas')?.focus();}};window.addEventListener('keydown',back);return()=>window.removeEventListener('keydown',back);},[player]);
   const [view, setView] = useState<View>('interior');
   const [quality, setQuality] = useState<Quality>('balanced');
+  const [renderDpr,setRenderDpr]=useState<number>(QUALITY.balanced.dpr);
   const [metrics, setMetrics] = useState<SceneMetrics>();
   const [info, setInfo] = useState(false);
   const [measuring, setMeasuring] = useState(false);
   useEffect(() => { if (!measuring) return; const timer = window.setTimeout(() => setMeasuring(false), 12000); return () => clearTimeout(timer); }, [measuring]);
   const onMetrics = useCallback((m: SceneMetrics) => setMetrics(m), []);
   const health = useQuery({ queryKey: ['health'], queryFn: ({signal}) => fetchHealth(signal), retry: false, refetchInterval: 30000 });
-  const room=DEPARTMENTS.find(d=>Math.abs(player.position.x-d.center[0])<4.2&&Math.abs(player.position.z-d.center[2])<3.2);
+  const room=DEPARTMENTS.find(d=>Math.abs(player.position.x-d.center[0])<d.size[0]/2&&Math.abs(player.position.z-d.center[2])<d.size[1]/2);
   return <main className="world" aria-label="Oficina tridimensional JAIME INVESTOR HQ">
     <SceneErrorBoundary>
-      <Canvas frameloop={measuring ? 'always' : 'demand'} shadows="percentage" dpr={QUALITY[quality].dpr} camera={INITIAL_CAMERA}
+      <Canvas frameloop={measuring ? 'always' : 'demand'} shadows="percentage" dpr={renderDpr} camera={INITIAL_CAMERA}
         gl={GL_SETTINGS}
         fallback={<div className="world-fallback">WebGL no disponible. <a href="?diagnostico=1">Abrir diagnóstico</a></div>}>
+        <AdaptiveResolution quality={quality} player={player} onDprChange={setRenderDpr}/>
         <Suspense fallback={null}><Office view={view} quality={quality} measuring={measuring} onMetrics={onMetrics} player={player} mode={mode} onOpen={openPanel} onNear={setNear} overview={overview} /></Suspense>
       </Canvas>
     </SceneErrorBoundary>
@@ -69,7 +72,7 @@ export default function World() {
     {panel?<MonitorOverlay id={panel} onClose={closePanel}/>:null}
     <footer className="world-toolbar">
       <nav aria-label="Cámara"><button aria-pressed={mode==='play'} onClick={()=>{setMode('play');document.querySelector('canvas')?.focus();}}>Recorrer</button>{Object.entries(VIEWS).map(([key, value]) => <button key={key} aria-pressed={mode==='inspection'&&view === key} onClick={() => { setMode('inspection');setView(key as View); setMetrics(m => m ? {...m, samples: 0} : m); }}>{value.label}</button>)}</nav>
-      <div className="world-tools"><label>Gráficos <select value={quality} onChange={e => { setQuality(e.target.value as Quality); setMetrics(m => m ? {...m, samples: 0} : m); }}><option value="balanced">Equilibrado</option><option value="detail">Detalle</option></select></label><button disabled={measuring} onClick={() => setMeasuring(true)}>{measuring ? 'Midiendo…' : 'Medir FPS'}</button><output aria-label="Fotogramas por segundo">{metrics && metrics.samples > 10 ? `${measuring ? '' : 'Última: '}${metrics.fps.toFixed(0)} FPS` : 'En reposo'}</output></div>
+      <div className="world-tools"><label>Gráficos <select value={quality} onChange={e => { const next=e.target.value as Quality;setQuality(next);setRenderDpr(QUALITY[next].dpr);setMetrics(m => m ? {...m, samples: 0} : m); }}><option value="balanced">Equilibrado automático</option><option value="fixed">Equilibrado fijo (80 %)</option><option value="detail">Detalle</option></select></label><span className="resolution-status" aria-label="Resolución de la escena 3D">{Math.round(renderDpr*100)} % 3D</span><button disabled={measuring} onClick={() => setMeasuring(true)}>{measuring ? 'Midiendo…' : 'Medir FPS'}</button><output aria-label="Fotogramas por segundo">{metrics && metrics.samples > 10 ? `${measuring ? '' : 'Última: '}${metrics.fps.toFixed(0)} FPS` : 'En reposo'}</output></div>
       <p className="world-help">{mode==='play'?'↑↓←→ desplazarse en pantalla · Cámara isométrica · Acércate al agente':'Vista general · Esc para volver'} <span>PERSONAL OFFLINE · AGENTES NO DISPONIBLES — P4</span></p>
     </footer>
   </main>;

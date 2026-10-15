@@ -2,7 +2,7 @@ import type { Vec3 } from './layout';
 import type { PlayerRuntime } from './navigation';
 import { PRIMARY_AGENT_INTERACTIONS,canApproach } from './agentInteractions';
 import { WORKSPACES,AGENT_APPROACHES } from './workspaces';
-import { DEPARTMENTS } from './layout';
+import { DEPARTMENTS,OFFICE_FORWARD } from './layout';
 
 export interface MonitorDefinition {id:string;departmentId:string;label:string;position:Vec3;rotation:Vec3;anchor:Vec3;size:[number,number];phase:string;panel:string;approach:Vec3;yaw:number}
 export const MONITOR_DEFINITIONS:MonitorDefinition[]=[
@@ -21,6 +21,9 @@ for(const m of MONITOR_DEFINITIONS){
  const agent=PRIMARY_AGENT_INTERACTIONS.find(a=>a.id===m.id)!;
  m.yaw=Math.atan2(m.approach[0]-agent.anchor.x,m.approach[2]-agent.anchor.z);
  const w=WORKSPACES.find(w=>w.department===m.id&&w.occupant==='primary');
- if(w){const d=DEPARTMENTS.find(d=>d.id===m.id)!;m.position=[d.center[0]+w.x+(w.dual?.46:0),1.18,d.center[2]+w.z-(w.dual?.26:.23)+.018];m.anchor=[m.position[0],m.position[1],m.position[2]+.06];}
+ if(w){const d=DEPARTMENTS.find(d=>d.id===m.id)!,x=w.dual?.46:0,z=-(w.dual?.26:.23)+.018;
+   m.position=[d.center[0]+w.x+x*Math.cos(w.yaw)+z*Math.sin(w.yaw),1.18,d.center[2]+w.z-x*Math.sin(w.yaw)+z*Math.cos(w.yaw)];
+   m.rotation=[-.04,w.yaw,0];m.anchor=[m.position[0],m.position[1],m.position[2]+.06];
+ }else if(m.id==='committee'){m.position=[0,1.65,-5.882+OFFICE_FORWARD];m.anchor=[0,1.65,-5.82+OFFICE_FORWARD];m.size=[3.5,1.28];}
 }
 export function canInteract(player:PlayerRuntime,monitor:MonitorDefinition){return canApproach(player,PRIMARY_AGENT_INTERACTIONS.find(a=>a.id===monitor.id)!);}

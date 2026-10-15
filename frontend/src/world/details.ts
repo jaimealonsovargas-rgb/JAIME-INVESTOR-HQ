@@ -53,7 +53,7 @@ export function facadeGeometry(w: number, h: number, d: number) {
   const g = new BoxGeometry(w, h, d); const uv = g.getAttribute('uv');
   for (let i = 0; i < uv.count; i++) {
     const width = i < 8 ? d : w;
-    uv.setXY(i, uv.getX(i) * width / 5, uv.getY(i) * (i >= 8 && i < 16 ? d : h) / 9);
+    uv.setXY(i, uv.getX(i) * width / 8.4, uv.getY(i) * (i >= 8 && i < 16 ? d : h) / 48);
   }
   return g;
 }

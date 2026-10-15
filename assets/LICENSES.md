@@ -1,5 +1,9 @@
 # Licencias de arte y recursos
 
+## Distrito financiero retirado de runtime · 2026-10-15
+
+**Canary Wharf**, Andreas Mischok / [Poly Haven](https://polyhaven.com/a/canary_wharf), **CC0-1.0**. La [licencia oficial](https://polyhaven.com/license) permite modificar y redistribuir gratuitamente. Descarga pública real del JPG tonemapped 8K, reducido localmente a 4K. URL, tamaños y SHA-256 de fuente/derivado en [P1_CITY_MANIFEST.json](P1_CITY_MANIFEST.json). **Retirado por la nueva petición de fondo negro puro**: el derivado se conserva en `assets/retired/canary_wharf_4k.jpg` para trazabilidad y no se carga ni se incluye en el build público. La oficina sigue siendo geometría Three.js real. No se añade ningún recurso externo ni servicio para el fondo negro.
+
 ## Humanos P1.C/E · 2026-10-14
 
 | Recurso | Autor / fuente | Licencia y redistribución | Archivos / versión |

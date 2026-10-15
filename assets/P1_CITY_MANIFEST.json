@@ -1,0 +1,32 @@
+{
+  "verified_at": "2026-10-15",
+  "name": "Canary Wharf",
+  "author": "Andreas Mischok",
+  "publisher": "Poly Haven",
+  "asset_page": "https://polyhaven.com/a/canary_wharf",
+  "license": "CC0-1.0",
+  "license_page": "https://polyhaven.com/license",
+  "redistribution": "Allowed, including modified assets and commercial use; credit retained voluntarily.",
+  "source_url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/canary_wharf.jpg",
+  "source_dimensions": [
+    8192,
+    4096
+  ],
+  "source_bytes": 6175039,
+  "source_sha256": "62169f131300e52610930edb0d304e3e38a22f3a6b2762c0849ea8824610cf6a",
+  "runtime_path": null,
+  "runtime_dimensions": [
+    4096,
+    2048
+  ],
+  "runtime_bytes": 2372326,
+  "runtime_sha256": "4a086b853f1ceb88d7a4d8dc391281fb000d142be6ebf0f7dee04bcd3c598194",
+  "transformation": "Pillow thumbnail 4096x2048, JPEG quality 93 optimize; source colors unchanged. UV crop on distant cylinder in model.ts.",
+  "purpose": "Photographic distant financial-district backdrop; the office, furniture, people and videowall remain real Three.js geometry. This is not a modeled or geographically accurate city.",
+  "runtime_network": "None; local file only",
+  "cost_eur": 0,
+  "api_result": "Metadata API returned HTTP 403; used the public asset-page download link. No bypass or authenticated service.",
+  "archive_path": "assets/retired/canary_wharf_4k.jpg",
+  "active": false,
+  "retirement_reason": "User requested pure black background on 2026-10-15. Asset retained for provenance; not bundled or loaded by the app."
+}

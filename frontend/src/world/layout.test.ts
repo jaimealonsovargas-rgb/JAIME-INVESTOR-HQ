@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { Box3, Mesh, Raycaster, Texture, Vector3 } from 'three';
-import { DEPARTMENTS, FLOOR, PLAYER_CAMERA_ENVELOPE, QUALITY, VIEWS } from './layout';
+import { Box3, Mesh, PerspectiveCamera, Raycaster, Texture, Vector3 } from 'three';
+import { DEPARTMENTS, FLOOR, OFFICE_FORWARD, VIDEOWALL, PLAYER_CAMERA_ENVELOPE, QUALITY, VIEWS } from './layout';
 import { makeMaterials } from './materials';
 import { createOffice, disposeOffice } from './model';
 import { SAFE_SPAWNS,validTeleport,movementVector } from './navigation';
@@ -28,15 +28,15 @@ describe('planta P1.B conforme al plano', () => {
   it('mantiene nueve zonas únicas en las posiciones del documento', () => {
     expect(DEPARTMENTS.map(d => d.id)).toEqual(['research', 'committee', 'trading', 'risk', 'execution', 'quant', 'performance', 'reception', 'systems']);
     expect(new Set(DEPARTMENTS.map(d => d.center.join(','))).size).toBe(9);
-    expect(DEPARTMENTS.map(d => d.center)).toEqual([[-11,0,-9],[0,0,-9],[11,0,-9],[-11,0,0],[0,0,0],[11,0,0],[-11,0,9],[0,0,9],[11,0,9]]);
+    expect(DEPARTMENTS.map(d => d.center)).toEqual([[-12,0,-10],[0,0,-3],[12,0,-3.7],[9,0,-10],[-12,0,3.6],[0,0,-10],[12,0,3.1],[0,0,3.8],[-12,0,-3.2]].map(([x,y,z])=>[x,y,z+OFFICE_FORWARD]));
     expect(FLOOR.width).toBe(34); expect(FLOOR.depth).toBe(28);
   });
   it('reserva pasos continuos de 2.6 metros entre zonas', () => {
-    expect(11 - 8.4).toBeCloseTo(FLOOR.corridor);
-    expect(9 - 6.4).toBeCloseTo(FLOOR.corridor);
+    // Dos pasillos longitudinales flanquean Comité/Recepción (referencia verde).
+    expect(8.3-5).toBeGreaterThanOrEqual(FLOOR.corridor);
     for (const department of DEPARTMENTS) {
-      expect(Math.abs(department.center[0]) + 4.2).toBeLessThan(FLOOR.width / 2);
-      expect(Math.abs(department.center[2]) + 3.2).toBeLessThan(FLOOR.depth / 2);
+      expect(Math.abs(department.center[0]) + department.size[0]/2).toBeLessThan(FLOOR.width / 2);
+      expect(Math.abs(department.center[2]) + department.size[1]/2).toBeLessThan(FLOOR.depth / 2);
       expect(department.center[1]).toBe(0);
     }
   });
@@ -49,6 +49,13 @@ describe('planta P1.B conforme al plano', () => {
     vi.stubGlobal('document', { createElement: () => ({ getContext: () => ({ createRadialGradient: () => ({ addColorStop() {} }), fillRect() {}, fillText() {} }) }) });
     const materials = makeMaterials(Array.from({length: 6}, () => new Texture()));
     const office = createOffice(materials);
+    const glazing:typeof office[]=[];office.traverse(node=>{if(node.userData.visualOnlyGlazing)glazing.push(node as typeof office);});
+    expect(glazing).toHaveLength(12);
+    for(const partition of glazing)expect(partition.userData.colliders).toHaveLength(0);
+    for(const [id,side] of [['research',-1],['systems',-1],['execution',-1],['risk',1],['trading',1],['performance',1]] as const){
+      const d=DEPARTMENTS.find(d=>d.id===id)!,x=d.center[0]+side*d.size[0]/2;
+      expect(firstHit(new Vector3(x-side*.6,1.55,d.center[2]),new Vector3(x+side*.6,1.55,d.center[2]),office.userData.colliders),`lateral opaco atravesable: ${id}`).toBeLessThan(1);
+    }
     let meshes = 0, triangles = 0;
     office.traverse(object => {
       if (!(object instanceof Mesh)) return;
@@ -82,7 +89,21 @@ describe('planta P1.B conforme al plano', () => {
         seats++;
       }
     }
-    expect(seats).toBe(26);
+    expect(seats).toBe(22);
+    for(const d of DEPARTMENTS.filter(d=>d.id!=='committee'))expect(office.getObjectByName(`department:${d.id}`)!.userData.seats).toHaveLength(PERSONNEL.filter(p=>p.department===d.id).length);
+    const receptionCamera=new PerspectiveCamera(VIEWS.interior.fov,1920/1080,.08,400);
+    receptionCamera.position.set(...VIEWS.interior.position);receptionCamera.lookAt(new Vector3(...VIEWS.interior.target));receptionCamera.updateMatrixWorld(true);
+    const visible:Mesh[]=[];office.traverse(o=>{if(!(o instanceof Mesh)||(o.material as {transparent?:boolean}).transparent)return;for(let p=o.parent;p;p=p.parent)if(!p.visible)return;visible.push(o);});
+    for(const x of [-14,0,14])for(const y of [VIDEOWALL.bottom+.35,VIDEOWALL.bottom+VIDEOWALL.height-.3]){
+      const point=new Vector3(x,y,VIDEOWALL.z+.186),screen=point.clone().project(receptionCamera);
+      expect(Math.abs(screen.x)).toBeLessThan(.95);expect(Math.abs(screen.y)).toBeLessThan(.95);
+      const plan=new PerspectiveCamera(VIEWS.plan.fov,1920/1080,.08,400);plan.position.set(...VIEWS.plan.position);plan.lookAt(new Vector3(...VIEWS.plan.target));plan.updateMatrixWorld(true);
+      const onPlan=point.clone().project(plan);expect(Math.abs(onPlan.x)).toBeLessThan(.95);expect(Math.abs(onPlan.y)).toBeLessThan(.95);
+      const hits=new Raycaster(receptionCamera.position,point.clone().sub(receptionCamera.position).normalize(),.08,receptionCamera.position.distanceTo(point)+.5).intersectObjects(visible,false);
+      expect(hits.length).toBeGreaterThan(0);
+      let node=hits[0].object;while(node.parent&&node.name!=='videowall')node=node.parent;
+      expect(node.name,`videowall tapado en ${x},${y}`).toBe('videowall');
+    }
     for(const id of Object.keys(SAFE_SPAWNS))expect(validTeleport(id,office.userData.colliders),`spawn ocupado: ${id}`).toBeDefined();
     for(const [id,p] of Object.entries(SAFE_SPAWNS))expect(findWalkingPath([0,11],[p[0],p[2]],office.userData.colliders),`no existe recorrido peatonal: ${id}`).toBeDefined();
     expect(MONITOR_DEFINITIONS).toHaveLength(9);
@@ -120,17 +141,18 @@ describe('navegación determinista',()=>{
   it('evita oscilación del LOD en sus umbrales',()=>{expect(humanLodLevel(8.2,0)).toBe(0);expect(humanLodLevel(8.2,1)).toBe(1);expect(humanLodLevel(16.2,1)).toBe(1);expect(humanLodLevel(16.2,2)).toBe(2);expect(humanLodLevel(3,2)).toBe(0);});
   it('abre por agente y evita cristal, distancia y salas equivocadas',()=>{
     const m=MONITOR_DEFINITIONS.find(m=>m.id==='performance')!,p=createPlayer();p.position.set(...m.approach);
-    expect(canInteract(p,m)).toBe(true);p.colliders=[{center:[-11.5,1.5,9.5],half:[.03,1.5,2],yaw:0,kind:'glass'}];expect(canInteract(p,m)).toBe(false);
-    p.colliders=[];p.position.z=5.5;p.yaw=Math.PI;expect(canInteract(p,m)).toBe(false);
+    const a=PRIMARY_AGENT_INTERACTIONS.find(a=>a.id===m.id)!;
+    expect(canInteract(p,m)).toBe(true);p.colliders=[{center:[(p.position.x+a.anchor.x)/2,1.5,(p.position.z+a.anchor.z)/2],half:[.03,1.5,2],yaw:0,kind:'glass'}];expect(canInteract(p,m)).toBe(false);
+    p.colliders=[];p.position.z=m.approach[2]+10;p.yaw=Math.PI;expect(canInteract(p,m)).toBe(false);
   });
   it('no reabre hasta salir del radio de rearme y volver',()=>{
     expect(PRIMARY_AGENT_INTERACTIONS).toHaveLength(9);expect(new Set(PERSONNEL.filter(p=>p.primary).map(p=>p.department)).size).toBe(9);expect(PERSONNEL.filter(p=>p.department==='trading')).toHaveLength(3);
-    const p=createPlayer(),agent=PRIMARY_AGENT_INTERACTIONS.find(a=>a.id==='trading')!;p.position.set(...agent.approach);const latch=new ProximityLatch();expect(latch.next(p)).toBe('trading');p.paused=true;expect(latch.next(p)).toBeUndefined();p.paused=false;expect(latch.next(p)).toBeUndefined();p.position.set(0,0,3.05);expect(latch.next(p)).toBeUndefined();p.position.set(...agent.approach);expect(latch.next(p)).toBe('trading');p.position.set(-4.3,0,-1.16);expect(canApproach(p,agent)).toBe(false);
+    const p=createPlayer(),agent=PRIMARY_AGENT_INTERACTIONS.find(a=>a.id==='trading')!;p.position.set(...agent.approach);const latch=new ProximityLatch();expect(latch.next(p)).toBe('trading');p.paused=true;expect(latch.next(p)).toBeUndefined();p.paused=false;expect(latch.next(p)).toBeUndefined();p.position.set(7,0,0);expect(latch.next(p)).toBeUndefined();p.position.set(...agent.approach);expect(latch.next(p)).toBe('trading');p.position.set(-4.3,0,-1.16);expect(canApproach(p,agent)).toBe(false);
   });
   it('traslada en cuatro direcciones de pantalla, diagonal normalizada y yaw automatico',()=>{
     const p=createPlayer();const forward=screenStep(p,1,0,1/60);const right=screenStep(createPlayer(),0,1,1/60);
-    expect(forward.dot(right)).toBeCloseTo(0);expect(forward.x).toBeLessThan(0);expect(forward.z).toBeLessThan(0);
-    expect(right.x).toBeGreaterThan(0);expect(right.z).toBeLessThan(0);
+    expect(forward.dot(right)).toBeCloseTo(0);expect(forward.x).toBeCloseTo(0);expect(forward.z).toBeLessThan(0);
+    expect(right.x).toBeGreaterThan(0);expect(right.z).toBeCloseTo(0);
     const diagonal=screenStep(createPlayer(),1,1,1/60);expect(diagonal.length()).toBeCloseTo(forward.length());
     const heading=p.yaw;screenStep(p,0,0,1/60);expect(p.yaw).toBe(heading);
     for(let i=0;i<60;i++)screenStep(p,0,1,1/60);expect(p.yaw).toBeCloseTo(-Math.atan2(right.x,-right.z),3);

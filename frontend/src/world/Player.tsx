@@ -39,8 +39,8 @@ export default function Player({runtime,contact}:{runtime:PlayerRuntime;contact:
     else camera.position.lerp(desired.current,1-Math.exp(-dt*8));
     const perspective=camera as PerspectiveCamera;
     if(perspective.fov!==ISOMETRIC.fov){perspective.fov=ISOMETRIC.fov;perspective.updateProjectionMatrix();}
-    // Objetivo derivado del mismo desplazamiento: azimut/elevaci?n no cambian al seguir.
-    camera.lookAt(camera.position.clone().sub(new Vector3(...ISOMETRIC.offset)));
+    // Objetivo derivado del mismo desplazamiento: azimut/elevación no cambian al seguir.
+    camera.lookAt(camera.position.clone().sub(new Vector3(...ISOMETRIC.offset)).add(new Vector3(0,0,-ISOMETRIC.lookAhead)));
     if(k.size||runtime.velocity>.002)invalidate();
     window.__HQ_PLAYER__={position:runtime.position.toArray(),yaw:runtime.yaw,cameraYaw:runtime.cameraYaw,pitch:runtime.pitch,distance:runtime.distance,speed:runtime.speed,mode:runtime.mode,paused:runtime.paused,camera:camera.position.toArray()};
   },-1);
