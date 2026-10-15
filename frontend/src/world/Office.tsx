@@ -1,7 +1,7 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Html, useTexture } from '@react-three/drei';
-import { ACESFilmicToneMapping, Color, Mesh, Object3D, PCFSoftShadowMap, PMREMGenerator, Vector3 } from 'three';
+import { ACESFilmicToneMapping, Color, Mesh, Object3D, PCFShadowMap, PMREMGenerator, Vector3 } from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createOffice, disposeOffice } from './model';
 import { makeMaterials,hqTexture } from './materials';
@@ -51,7 +51,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
   useEffect(() => {
     const roof = model.getObjectByName('ceiling'); if (roof) roof.visible = false;
         gl.toneMapping = ACESFilmicToneMapping; gl.toneMappingExposure = 1.06;
-    gl.shadowMap.type = PCFSoftShadowMap;
+    gl.shadowMap.type = PCFShadowMap;
     const pmrem = new PMREMGenerator(gl);
     const room = new RoomEnvironment();
     const env = pmrem.fromScene(room, .04, .1, 100);

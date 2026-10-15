@@ -43,6 +43,8 @@ summary = {
     'viewport': [data['results'][0]['metrics']['width'], data['results'][0]['metrics']['height']],
     'rows': rows, 'changes': list(changes.values()),
     'dom_before': data['domBefore'], 'dom_after': data['domAfter'],
+    'dom_dpr_before': data.get('domDprBefore'), 'dom_dpr_after': data.get('domDprAfter'),
+    'excluded_samples': len(data.get('excludedSamples', [])),
     'paused_dpr': data['paused']['dpr'],
 }
 (EVIDENCE / 'rendimiento-resumen.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
