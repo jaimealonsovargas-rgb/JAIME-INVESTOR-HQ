@@ -18,6 +18,9 @@ from app.data_service import DataService
 from app.data_catalog import CATALOG
 from app.data_contracts import DataResult, QualityReport
 from app.hq_overview import HQOverview, overview
+from app.portfolio_store import initialize_master, JournalIntegrityError
+from app.portfolio_service import PortfolioService
+from app.portfolio_contracts import PortfolioSummary, LedgerPage, PortfolioPage, PositionsResponse, MarketWatchlist
 
 
 def create_app(settings: Settings | None = None, data_settings: DataSettings | None = None) -> FastAPI:
@@ -32,6 +35,8 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
             engine.dispose()
             raise RuntimeError("Base no preparada: ejecutar python scripts/manage.py migrate.") from None
         try:
+            initialize_master(engine)
+            app.state.portfolio.snapshot()
             yield
         finally:
             engine.dispose()
@@ -41,6 +46,7 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
                   docs_url=None, redoc_url=None)
     app.state.engine = engine
     app.state.data = DataService(engine, data_settings)
+    app.state.portfolio = PortfolioService(engine, app.state.data)
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "[::1]"])
     app.add_middleware(
         CORSMiddleware,
@@ -58,6 +64,12 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
     async def database_unavailable(_request: Request, _exc: SQLAlchemyError):
         return JSONResponse(status_code=503, content=ApiError(
             code="DATABASE_UNAVAILABLE", message="NO DISPONIBLE: base de datos local.",
+        ).model_dump())
+
+    @app.exception_handler(JournalIntegrityError)
+    async def journal_unavailable(_request: Request, _exc: JournalIntegrityError):
+        return JSONResponse(status_code=503, content=ApiError(
+            code='LEDGER_INTEGRITY', message='NO DISPONIBLE: la integridad del ledger requiere revisión.',
         ).model_dump())
 
     @app.get("/health", response_model=Health, responses={503: {"model": ApiError}})
@@ -91,7 +103,32 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
 
     @app.get('/api/hq/overview', response_model=HQOverview)
     def hq_overview():
-        return overview(app.state.data)
+        return overview(app.state.data, app.state.portfolio.summary())
+
+    @app.get('/api/portfolio/master/summary', response_model=PortfolioSummary)
+    def portfolio_summary():
+        return app.state.portfolio.summary()
+
+    @app.get('/api/portfolio/master/positions', response_model=PositionsResponse)
+    def portfolio_positions():
+        summary = app.state.portfolio.summary()
+        return dict(as_of=summary['as_of'], valuation_status=summary['valuation_status'], items=summary['positions'])
+
+    @app.get('/api/portfolio/master/ledger', response_model=LedgerPage)
+    def portfolio_ledger(offset: int = Query(default=0, ge=0), limit: int = Query(default=50, ge=1, le=200)):
+        return app.state.portfolio.ledger(offset, limit)
+
+    @app.get('/api/portfolio/master/nav/history', response_model=PortfolioPage)
+    def portfolio_history(offset: int = Query(default=0, ge=0), limit: int = Query(default=100, ge=1, le=1000)):
+        return app.state.portfolio.history(limit, offset)
+
+    @app.get('/api/portfolio/master/performance', response_model=dict)
+    def portfolio_performance():
+        return app.state.portfolio.summary()['performance']
+
+    @app.get('/api/markets/watchlist', response_model=MarketWatchlist)
+    def market_watchlist():
+        return app.state.portfolio.markets()
 
     @app.post("/api/orders", response_model=ApiError, responses={403: {"model": ApiError}})
     def blocked_order():

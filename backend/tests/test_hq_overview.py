@@ -12,14 +12,16 @@ from app.database import DataRecord
 from app.data_service import cache_key
 
 
-def test_overview_absence_is_not_zero_or_initial_funds(client):
+def test_overview_master_is_backed_by_ledger_and_future_phases_remain_absent(client):
     response = client.get('/api/hq/overview')
     assert response.status_code == 200
     result = response.json()
     assert result['trading_mode'] == 'PAPER_ONLY' and result['orders_enabled'] is False
     assert len(result['sections']) == 9
-    assert all(s['value'] is None and s['items'] == [] for s in result['sections'])
-    assert all(s['status'] == 'NOT_IMPLEMENTED' for s in result['sections'] if s['section_id']!='systems')
+    assert all(s['items'] == [] for s in result['sections'])
+    assert all(s['status'] == 'NOT_IMPLEMENTED' and s['value'] is None for s in result['sections'] if s['section_id'] not in ('systems', 'portfolio', 'positions'))
+    portfolio = next(s for s in result['sections'] if s['section_id']=='portfolio')
+    assert portfolio['value']['nav_eur']=='10000.00' and 'Ledger MASTER' in portfolio['source']
     assert client.post('/api/orders', json={'mode': 'LIVE'}).status_code == 403
 
 

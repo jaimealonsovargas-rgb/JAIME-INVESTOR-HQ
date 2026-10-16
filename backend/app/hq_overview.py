@@ -19,7 +19,7 @@ class HQSection(Contract):
     as_of_utc: AwareDatetime | None = None
     source: str | None = None
     currency: str | None = None
-    value: None = None
+    value: dict | None = None
     items: tuple[Observation, ...] = ()
     quality: dict[str, int | str] = {}
     rights: str | None = None
@@ -33,7 +33,7 @@ class HQOverview(Contract):
     sections: tuple[HQSection, ...]
 
 
-def overview(data) -> HQOverview:
+def overview(data, portfolio=None) -> HQOverview:
     now = data.clock()
     groups: dict[str, list[Observation]] = {'markets': [], 'news': []}
     # Solo caches verificadas; la mera existencia de registros/mock no prueba conexión.
@@ -55,6 +55,14 @@ def overview(data) -> HQOverview:
                     groups[group].append(item)
     sections = []
     for name, phase in [('portfolio', 'P3'), ('positions', 'P3'), ('operations', 'P6'), ('markets', 'P2'), ('news', 'P2'), ('risk', 'P5'), ('committee', 'P5'), ('agents', 'P4'), ('systems', 'P2')]:
+        if name in ('portfolio', 'positions') and portfolio:
+            value = ({key: portfolio[key] for key in ('nav_eur', 'cash_eur', 'cumulative_return_pct', 'valuation_status', 'performance')}
+                if name == 'portfolio' else {key: portfolio[key] for key in ('positions_count', 'market_value_eur', 'invested_pct', 'positions')})
+            sections.append(HQSection(section_id=name, phase_required='P3', status='AVAILABLE' if portfolio['valuation_status']=='FRESH' else 'STALE',
+                as_of_utc=portfolio['as_of'], source='Ledger MASTER local · '+portfolio['ledger_hash'], currency='EUR', value=value,
+                rights='Contabilidad propia de simulación; sin saldos de bróker.',
+                reason='Capital virtual; ledger verificado. Órdenes y fills bloqueados — P6.'))
+            continue
         # Una observación por serie, conservando fuente/feed; ningún cálculo financiero.
         unique = {}
         for item in sorted(groups.get(name, []), key=lambda o: o.observed_at, reverse=True):

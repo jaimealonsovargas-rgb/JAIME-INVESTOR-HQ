@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser(description="JAIME INVESTOR HQ · herramientas locales P0")
-    parser.add_argument("command", choices=["migrate", "backend", "frontend", "check", "audit"])
+    parser.add_argument("command", choices=["migrate", "backend", "frontend", "check", "audit", "portfolio-snapshot"])
     args = parser.parse_args()
     python = ROOT / ".venv" / ("Scripts/python.exe" if sys.platform == "win32" else "bin/python")
     if not python.exists():
@@ -40,6 +40,8 @@ def main():
     elif args.command == "audit":
         run(str(python), "-m", "pip_audit")
         frontend("audit")
+    elif args.command == 'portfolio-snapshot':
+        run(str(python), str(ROOT / 'scripts' / 'portfolio_snapshot.py'))
 
 
 if __name__ == "__main__":

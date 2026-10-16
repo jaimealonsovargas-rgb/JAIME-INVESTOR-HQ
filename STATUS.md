@@ -1,5 +1,16 @@
 # Estado del proyecto
 
+## 2026-10-16 ? P3 en desarrollo ? STOP antes de P4
+
+Encargo maestro P3 autorizado y modelo Astra confirmado por el usuario. Entorno real: Windows local, no Cloud. Preflight remoto: cierre 460c7e0 presente en origin/main; avance r?pido seguro de 11 commits documentales hasta **901f6f0**, sin cambios locales previos ni p?rdida de trabajo. Issue #4 y documentos P3 le?dos. Backup consistente en `output/p3-preflight/before-p3-20261016T094959Z.db`, integridad ok, esquema 0002_data, 98 instrumentos. Baseline: 115 pytest + 40 Vitest + TypeScript/build correctos; orden HTTP local 403. El primer sondeo de salud us? /api/health y devolvi? 404; ruta correcta /health.
+
+P3.1?P3.4 backend implementado y probado en bases temporales: migraci?n 0003_portfolio, ledger append-only con triggers/hash chain, Decimal TEXT, seed transaccional ?nico, FIFO/fees/FX/corporate actions, snapshots y APIs read-only. **138 pytest pasan** (23 nuevos casos financieros). No aplicada a?n la migraci?n a la DB de usuario; HUD/QA final pendientes. MASTER rechaza cualquier evento distinto del seed fijo durante P3. Capacidades P2 de valoraci?n se respetan: las actuales de consulta no se habilitan impl?citamente. No ?rdenes, agentes ni servicios de pago.
+
+Siguiente paso: HUD lateral/contratos P3/videowall y pruebas de frontend; despu?s backup verificado, migraci?n/reinicio, E2E offline y cierre. No declarar P3 terminada todav?a.
+
+---
+
+
 ## 2026-10-15 · Cierre visual y regresión P1/P2 · STOP antes de P3
 
 La última imagen marcada y las correcciones de esta conversación sustituyen los fondos y planos históricos incompatibles. **Nueve departamentos, 16 NPC sentados y nueve paneles** conservados. **Ejecución está debajo de Sistemas, a la izquierda**. Todos los despachos se adelantan **4,3 m**, dejando **2,7 m de vestíbulo**. Laterales exteriores sólidos, crema más oscuro `#a7987e`, negro y suelo azul negro; accesos interiores abiertos y vidrios decorativos interiores atravesables. Fondo **negro puro**, sin ciudad ni fachada inferior. El antiguo panorama queda archivado fuera del build/runtime.
