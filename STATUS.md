@@ -1,12 +1,14 @@
 # Estado del proyecto
 
-## 2026-10-16 ? P3 en desarrollo ? STOP antes de P4
+## 2026-10-16 · P3 en desarrollo · STOP antes de P4
 
-Encargo maestro P3 autorizado y modelo Astra confirmado por el usuario. Entorno real: Windows local, no Cloud. Preflight remoto: cierre 460c7e0 presente en origin/main; avance r?pido seguro de 11 commits documentales hasta **901f6f0**, sin cambios locales previos ni p?rdida de trabajo. Issue #4 y documentos P3 le?dos. Backup consistente en `output/p3-preflight/before-p3-20261016T094959Z.db`, integridad ok, esquema 0002_data, 98 instrumentos. Baseline: 115 pytest + 40 Vitest + TypeScript/build correctos; orden HTTP local 403. El primer sondeo de salud us? /api/health y devolvi? 404; ruta correcta /health.
+Encargo P3 autorizado y modelo Astra confirmado por el usuario. Entorno real: Windows local, no Cloud. Preflight remoto: cierre 460c7e0 presente en origin/main; avance rápido seguro de 11 commits documentales hasta **901f6f0**, sin pérdida de trabajo. Issue #4 y documentos P3 leídos. Backup consistente en `output/p3-preflight/before-p3-20261016T094959Z.db`, integridad ok, esquema 0002_data, 98 instrumentos. Baseline: 115 pytest + 40 Vitest + TypeScript/build correctos; orden HTTP local 403. Primer sondeo /api/health devolvió 404; la ruta correcta es /health.
 
-P3.1?P3.4 backend implementado y probado en bases temporales: migraci?n 0003_portfolio, ledger append-only con triggers/hash chain, Decimal TEXT, seed transaccional ?nico, FIFO/fees/FX/corporate actions, snapshots y APIs read-only. **138 pytest pasan** (23 nuevos casos financieros). No aplicada a?n la migraci?n a la DB de usuario; HUD/QA final pendientes. MASTER rechaza cualquier evento distinto del seed fijo durante P3. Capacidades P2 de valoraci?n se respetan: las actuales de consulta no se habilitan impl?citamente. No ?rdenes, agentes ni servicios de pago.
+Backend P3.1–P3.4 guardado en **c8b8ab2**. Ledger append-only, triggers/hash chain, Decimal TEXT, seed transaccional, FIFO, FX, snapshots y API read-only. Migración **0003_portfolio aplicada**; dos inicializaciones y arranque mantienen **NAV 10000.00 EUR, cash 10000.00, posiciones 0**, mismo hash. Las capacidades P2 de consulta no se convierten implícitamente en capacidades de valoración.
 
-Siguiente paso: HUD lateral/contratos P3/videowall y pruebas de frontend; despu?s backup verificado, migraci?n/reinicio, E2E offline y cierre. No declarar P3 terminada todav?a.
+HUD P3.5 implementado: Watchlist/Market Pulse; Cartera/Posiciones/Actividad/Mapa; módulos P3 de videowall y texto DOM sobre las nueve pantallas físicas. Tests actuales 138 pytest + 45 Vitest; 6 pruebas backend adicionales en preparación. E2E HUD, tabs, mapa, offline, diagnóstico y 390 px correcto. Primer intento offline descartado por navegador a ~1 FPS bajo oclusión; repetición con CDP focus emulation pasa. Recorrido 9/9 en curso. Sin cotizaciones redistribuibles disponibles; no se rellenan huecos ni variaciones diarias con ejemplos.
+
+Siguiente paso: terminar recorrido, pruebas finales/auditoría, backup/restore real, evidencias y push normal. **No declarar P3 terminada todavía.** PAPER ONLY, 0 EUR, STOP antes de P4.
 
 ---
 

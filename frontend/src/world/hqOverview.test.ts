@@ -14,3 +14,9 @@ it('rechaza importes inventados, jobs futuros y secciones duplicadas',()=>{
  expect(()=>validateOverview(jobs)).toThrow();
  const duplicate=fixture();duplicate.sections[1]=duplicate.sections[0];expect(()=>validateOverview(duplicate)).toThrow();
 });
+it('activa P3 solo con importes Decimal y referencia al ledger',()=>{
+ const data=fixture();const section=data.sections[0] as unknown as Record<string,unknown>;
+ Object.assign(section,{phase_required:'P3',status:'AVAILABLE',source:'Ledger MASTER local · TEST_ONLY',as_of_utc:data.checked_at,value:{nav_eur:'10000.00',cash_eur:'10000.00',cumulative_return_pct:'0'}});
+ expect(validateOverview(data).sections[0].value?.nav_eur).toBe('10000.00');
+ section.source='DEMO BROKER';expect(()=>validateOverview(data)).toThrow();
+});

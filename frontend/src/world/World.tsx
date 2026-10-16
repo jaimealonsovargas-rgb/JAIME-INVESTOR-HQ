@@ -6,7 +6,7 @@ import { DEPARTMENTS, QUALITY, VIEWS, type Quality, type View } from './layout';
 import type { SceneMetrics } from './Office';
 import './world.css';
 import { createPlayer } from './navigation';
-import PlayerHud from './PlayerHud';
+import FinancialHud from './FinancialHud';
 import MonitorOverlay from './MonitorOverlay';
 import HQVideowall,{type HQOverviewData} from './HQVideowall';
 import { MONITOR_DEFINITIONS,canInteract } from './terminals';
@@ -43,7 +43,7 @@ export default function World() {
   const onMetrics = useCallback((m: SceneMetrics) => setMetrics(m), []);
   const health = useQuery({ queryKey: ['health'], queryFn: ({signal}) => fetchHealth(signal), retry: false, refetchInterval: 30000 });
   const room=DEPARTMENTS.find(d=>Math.abs(player.position.x-d.center[0])<d.size[0]/2&&Math.abs(player.position.z-d.center[2])<d.size[1]/2);
-  return <main className="world" aria-label="Oficina tridimensional JAIME INVESTOR HQ">
+  return <main className={'world world-'+mode} aria-label="Oficina tridimensional JAIME INVESTOR HQ">
     <SceneErrorBoundary>
       <Canvas frameloop={measuring ? 'always' : 'demand'} shadows="percentage" dpr={renderDpr} camera={INITIAL_CAMERA}
         gl={GL_SETTINGS}
@@ -66,7 +66,7 @@ export default function World() {
       <p>Órdenes bloqueadas. Servicios locales: {health.isSuccess ? 'disponibles' : 'NO DISPONIBLE'}.</p>
       <a href="?diagnostico=1">Abrir comprobación de P0 ↗</a>
     </aside> : null}
-    {mode==='play'?<PlayerHud player={player}/>:null}
+    <FinancialHud player={player} mode={mode}/>
     <HQVideowall onOverview={setOverview} onPause={paused=>{player.paused=paused;player.speed=0;player.invalidate?.();if(!paused)document.querySelector('canvas')?.focus();}}/>
     {mode==='play'&&near&&!panel?<p className="terminal-prompt">Acércate al agente principal para abrir su panel</p>:null}
     {panel?<MonitorOverlay id={panel} onClose={closePanel}/>:null}

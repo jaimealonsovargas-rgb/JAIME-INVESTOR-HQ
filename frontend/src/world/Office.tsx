@@ -4,8 +4,9 @@ import { Html, useTexture } from '@react-three/drei';
 import { ACESFilmicToneMapping, Color, Mesh, Object3D, PCFShadowMap, PMREMGenerator, Vector3 } from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createOffice, disposeOffice } from './model';
-import { makeMaterials,hqTexture } from './materials';
-import {HQ_TITLES,type HQOverviewData} from './HQVideowall';
+import { makeMaterials } from './materials';
+import {type HQOverviewData} from './HQVideowall';
+import VideowallLabels from './VideowallLabels';
 import {MeshBasicMaterial} from 'three';
 import { DEPARTMENTS, OFFICE_FORWARD, QUALITY, VIEWS, type Quality, type View } from './layout';
 import Player from './Player';
@@ -72,14 +73,9 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
 
   useEffect(()=>{
     model.traverse(object=>{if(!(object instanceof Mesh)||!(object.material instanceof MeshBasicMaterial)||!object.material.name.startsWith('hq:'))return;
-      const id=object.material.name.slice(3),section=overview?.sections.find(s=>s.section_id===id),item=section?.items[0];
-      let detail=section?.reason??'NO DISPONIBLE / servicio local sin verificar';
-      if(id==='systems'&&section)detail=`${section.quality.candidate_access_modes} modalidades / ${section.quality.verified_connections} conexiones verificadas`;
-      if(item)detail=(section?.status==='STALE'?'DESACTUALIZADO / ':'REFERENCIA / ')+(item.metadata.title?.slice(0,52)??`${item.series_id}: ${item.value} ${item.unit}`)+' / '+item.period;
-      const state=section?.status==='AVAILABLE'?(id==='systems'?'ESTADO LOCAL':'REFERENCIA'):section?.status==='STALE'?'DESACTUALIZADO':'NO DISPONIBLE';
-      const old=object.material.map;object.material.map=hqTexture(HQ_TITLES[id]??id,state,detail,item?item.provider+' / '+item.period:section?.phase_required??'Sin conexión');old?.dispose();
+      object.material.map?.dispose();object.material.map=null;object.material.color.set('#081720');object.material.needsUpdate=true;
     });invalidate();
-  },[overview,model,invalidate]);
+  },[model,invalidate]);
 
   useEffect(() => { gl.shadowMap.autoUpdate = true; gl.shadowMap.needsUpdate = true; frames.current = []; }, [quality, gl]);
   useEffect(() => { if (measuring) { frames.current = [];moving.current=[]; last.current = 0; }report.current=0; }, [measuring]);
@@ -127,6 +123,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
     <spotLight position={[0, 4.08, 4+OFFICE_FORWARD]} target={lightTargets[0]} color="#ffe0b1" intensity={70} distance={18} decay={2} angle={1.1} penumbra={1} />
     <spotLight position={[0, 4.08, -3+OFFICE_FORWARD]} target={lightTargets[1]} color="#ffe7c6" intensity={70} distance={17} decay={2} angle={1.1} penumbra={1} />
     <primitive object={model} />
+    <VideowallLabels overview={overview}/>
     <Player runtime={player} contact={materials.contact}/>
     <Personnel contact={materials.contact}/>
     <Monitors player={player} onOpen={onOpen} onNear={onNear}/>
