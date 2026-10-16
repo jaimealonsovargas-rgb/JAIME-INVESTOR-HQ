@@ -1,0 +1,633 @@
+{
+  "at": "2026-10-16T15:08:50.115Z",
+  "input": "Flechas nativas; sin teletransportes ni escrituras de pose",
+  "results": [
+    {
+      "id": "reception",
+      "journey": {
+        "goal": [
+          -0.6,
+          8.899999999999999
+        ],
+        "path": [
+          [
+            0,
+            13
+          ],
+          [
+            0,
+            9
+          ],
+          [
+            -0.5,
+            9
+          ],
+          [
+            -0.6,
+            8.899999999999999
+          ]
+        ],
+        "end": {
+          "position": [
+            -0.5400633350605435,
+            0,
+            8.949256318409885
+          ],
+          "yaw": 0.9584884300680104,
+          "cameraYaw": 0,
+          "pitch": 0,
+          "distance": 3.8,
+          "speed": 0,
+          "mode": "play",
+          "paused": false,
+          "camera": [
+            -0.43155062001796024,
+            22.2,
+            27.03121120370774
+          ]
+        }
+      },
+      "panel": "Estado de la sede",
+      "afterClose": {
+        "position": [
+          -0.5400633350605435,
+          0,
+          8.949256318409885
+        ],
+        "yaw": 0.9584884300680104,
+        "cameraYaw": 0,
+        "pitch": 0,
+        "distance": 3.8,
+        "speed": 0,
+        "mode": "play",
+        "paused": false,
+        "camera": [
+          -0.43155062001796024,
+          22.2,
+          27.03121120370774
+        ]
+      }
+    },
+    {
+      "id": "trading",
+      "journey": {
+        "goal": [
+          11.5,
+          1.0999999999999996
+        ],
+        "path": [
+          [
+            -0.5,
+            9
+          ],
+          [
+            -0.5,
+            8.75
+          ],
+          [
+            2.25,
+            8.75
+          ],
+          [
+            2.25,
+            6.75
+          ],
+          [
+            4.5,
+            6.75
+          ],
+          [
+            4.5,
+            5.75
+          ],
+          [
+            5.5,
+            5.75
+          ],
+          [
+            5.5,
+            1.5
+          ],
+          [
+            11,
+            1.5
+          ],
+          [
+            11,
+            1
+          ],
+          [
+            11.5,
+            1
+          ],
+          [
+            11.5,
+            1.0999999999999996
+          ]
+        ],
+        "end": {
+          "position": [
+            8.46569222748142,
+            0,
+            1.5833571086837006
+          ],
+          "yaw": -1.5707962194712994,
+          "cameraYaw": 0,
+          "pitch": 0,
+          "distance": 3.8,
+          "speed": 0,
+          "mode": "play",
+          "paused": false,
+          "camera": [
+            8.253972741805388,
+            22.2,
+            19.583357143051824
+          ]
+        }
+      },
+      "panel": "Posiciones",
+      "afterClose": {
+        "position": [
+          8.46569222748142,
+          0,
+          1.5833571086837006
+        ],
+        "yaw": -1.5707962194712994,
+        "cameraYaw": 0,
+        "pitch": 0,
+        "distance": 3.8,
+        "speed": 0,
+        "mode": "play",
+        "paused": false,
+        "camera": [
+          8.253972741805388,
+          22.2,
+          19.583357143051824
+        ]
+      }
+    },
+    {
+      "id": "performance",
+      "journey": {
+        "goal": [
+          12.1,
+          8.3
+        ],
+        "path": [
+          [
+            8.5,
+            1.5
+          ],
+          [
+            8.5,
+            2.5
+          ],
+          [
+            8.25,
+            2.5
+          ],
+          [
+            8.25,
+            4
+          ],
+          [
+            8,
+            4
+          ],
+          [
+            8,
+            4.25
+          ],
+          [
+            7.75,
+            4.25
+          ],
+          [
+            7.75,
+            8.75
+          ],
+          [
+            11.5,
+            8.75
+          ],
+          [
+            11.5,
+            8.25
+          ],
+          [
+            12,
+            8.25
+          ],
+          [
+            12.1,
+            8.3
+          ]
+        ],
+        "end": {
+          "position": [
+            8.883956921261625,
+            0,
+            8.671023336627956
+          ],
+          "yaw": -1.576201399939825,
+          "cameraYaw": 0,
+          "pitch": 0,
+          "distance": 3.8,
+          "speed": 0,
+          "mode": "play",
+          "paused": false,
+          "camera": [
+            8.649986806444668,
+            22.2,
+            26.669946405614194
+          ]
+        }
+      },
+      "panel": "Rentabilidad y atribución",
+      "afterClose": {
+        "position": [
+          8.883956921261625,
+          0,
+          8.671023336627956
+        ],
+        "yaw": -1.576201399939825,
+        "cameraYaw": 0,
+        "pitch": 0,
+        "distance": 3.8,
+        "speed": 0,
+        "mode": "play",
+        "paused": false,
+        "camera": [
+          8.649986806444668,
+          22.2,
+          26.669946405614194
+        ]
+      }
+    }
+  ],
+  "opened": [
+    "Estado de la sede",
+    "Posiciones",
+    "Rentabilidad y atribución"
+  ],
+  "panelEvidence": [
+    {
+      "title": "Estado de la sede",
+      "text": "JAIME INVESTOR HQ / Recepción\nVolver a la oficina Esc\nEstado de la sede\n\nEstado comprobado de la sede local y acceso a los nueve departamentos.\n\nDisponible\nPAPER ONLY\n\nMASTER · CAPITAL VIRTUAL\nVIGENTE\n\nPatrimonio neto\n10.000,00 €\nCaja\n10.000,00 €\nInvertido\n0,00 %\nP&L acumulado\n0,00 €\nRentabilidad\n0,00 %\nPosiciones\n0\n\nAportación inicial ≠ beneficio. Las cuentas demo externas están separadas.\n\nLedger MASTER verificado · 16/10/26, 17:08\n\nServicio local\nActualizar estado\nServicio local\nOperativo Disponible\nBase de datos\nComprobación correcta\nModo de trading\nPAPER_ONLY\nÓrdenes\nDeshabilitadas Bloqueado\nEsquema\n0003_portfolio\nFuente / comprobación\nGET /health\n16/10/2026, 17:08:22\nNueve departamentos, una planta\n01\nRESEARCH\nBiblioteca · análisis fundamental\n02\nCOMITÉ DE INVERSIÓN\nConsejo · decisiones\n03\nTRADING\nMercados · investigación\n04\nRIESGOS\nControl · límites\n05\nEJECUCIÓN\nÓrdenes · reconciliación\n06\nQUANT LAB\nLaboratorio · estrategias\n07\nPERFORMANCE\nAnálisis · atribución\n08\nRECEPCIÓN\nBienvenida · sede\n09\nSISTEMAS\nInfraestructura · Data Quality\n\nEl minimapa permite volver a cualquier departamento desde el mundo. NAV y caja proceden exclusivamente del ledger MASTER.\n\nPatrimonio y caja\n\nLedger MASTER append-only, capital virtual y cuentas demo separadas.\n\nPersonal y agentes\n\nAmbientación 3D offline. Trabajo de agentes: NO DISPONIBLE — P4.\n\nSesión local · Ninguna operación real\nDatos locales comprobables",
+      "pose": {
+        "position": [
+          -0.5400633350605435,
+          0,
+          8.949256318409885
+        ],
+        "yaw": 0.9584884300680104,
+        "cameraYaw": 0,
+        "pitch": 0,
+        "distance": 3.8,
+        "speed": 0,
+        "mode": "play",
+        "paused": true,
+        "camera": [
+          -0.43155062001796024,
+          22.2,
+          27.03121120370774
+        ]
+      }
+    },
+    {
+      "title": "Posiciones",
+      "text": "JAIME INVESTOR HQ / Trading Floor\nVolver a la oficina Esc\nPosiciones\n\nPosiciones, exposición y trazabilidad de la cartera paper.\n\nDisponible\nPAPER ONLY\n\nMASTER · CAPITAL VIRTUAL\nVIGENTE\n\nPatrimonio neto\n10.000,00 €\nCaja\n10.000,00 €\nInvertido\n0,00 %\nP&L acumulado\n0,00 €\nRentabilidad\n0,00 %\nPosiciones\n0\n\nAportación inicial ≠ beneficio. Las cuentas demo externas están separadas.\n\nLedger MASTER verificado · 16/10/26, 17:08\n\nSin posiciones\n\n10.000,00 € en caja\n\nLas compras y ventas permanecen bloqueadas. No hay posiciones de ejemplo.\nServicio local\nActualizar estado\nServicio local\nOperativo Disponible\nBase de datos\nComprobación correcta\nModo de trading\nPAPER_ONLY\nÓrdenes\nDeshabilitadas Bloqueado\nEsquema\n0003_portfolio\nFuente / comprobación\nGET /health\n16/10/2026, 17:08:35\nFicha del instrumento\n\nIdentidad, divisa, mercado y fuente se vincularán a cada posición.\n\nTesis y ejecución\n\nResearch, condiciones de riesgo y fills paper quedarán asociados a su historial.\n\nSesión local · Ninguna operación real\nDatos locales comprobables",
+      "pose": {
+        "position": [
+          8.46569222748142,
+          0,
+          1.5833571086837006
+        ],
+        "yaw": -1.5707962194712994,
+        "cameraYaw": 0,
+        "pitch": 0,
+        "distance": 3.8,
+        "speed": 0,
+        "mode": "play",
+        "paused": true,
+        "camera": [
+          8.253972741805388,
+          22.2,
+          19.583357143051824
+        ]
+      }
+    },
+    {
+      "title": "Rentabilidad y atribución",
+      "text": "JAIME INVESTOR HQ / Performance\nVolver a la oficina Esc\nRentabilidad y atribución\n\nPatrimonio, rentabilidad y atribución con fuentes y fechas verificables.\n\nDisponible\nPAPER ONLY\n\nMASTER · CAPITAL VIRTUAL\nVIGENTE\n\nPatrimonio neto\n10.000,00 €\nCaja\n10.000,00 €\nInvertido\n0,00 %\nP&L acumulado\n0,00 €\nRentabilidad\n0,00 %\nPosiciones\n0\nValor de mercado\n0,00 €\nRealizado\n0,00 €\nNo realizado\n0,00 €\nEfecto FX\n0,00 €\nIngresos\n0,00 €\nComisiones separadas\n0,00 €\nDía\nNO DISPONIBLE\nTWR\nNO DISPONIBLE\nMWR / XIRR\nNO DISPONIBLE\nDrawdown máximo\nNO DISPONIBLE\n\nAportación inicial ≠ beneficio. Las cuentas demo externas están separadas.\n\nLedger MASTER verificado · 16/10/26, 17:08\n\nHistoria insuficiente: no se fabrican observaciones ni ratios.\n\nConsultar ledger auditable\nServicio local\nActualizar estado\nServicio local\nOperativo Disponible\nBase de datos\nComprobación correcta\nModo de trading\nPAPER_ONLY\nÓrdenes\nDeshabilitadas Bloqueado\nEsquema\n0003_portfolio\nFuente / comprobación\nGET /health\n16/10/2026, 17:08:42\nSeries y benchmark\n\nSin curvas ni retornos de ejemplo. Los ratios requieren historia suficiente de snapshots reales.\n\nResultados y divisas\n\nRealizado, no realizado, ingresos y FX se derivan del ledger y de precios autorizados.\n\nSesión local · Ninguna operación real\nDatos locales comprobables",
+      "pose": {
+        "position": [
+          8.883956921261625,
+          0,
+          8.671023336627956
+        ],
+        "yaw": -1.576201399939825,
+        "cameraYaw": 0,
+        "pitch": 0,
+        "distance": 3.8,
+        "speed": 0,
+        "mode": "play",
+        "paused": true,
+        "camera": [
+          8.649986806444668,
+          22.2,
+          26.669946405614194
+        ]
+      }
+    }
+  ],
+  "glassBefore": {
+    "position": [
+      4.514916714324157,
+      0,
+      9.59040805441083
+    ],
+    "yaw": -3.7356869808739055,
+    "cameraYaw": 0,
+    "pitch": 0,
+    "distance": 3.8,
+    "speed": 0,
+    "mode": "play",
+    "paused": false,
+    "camera": [
+      4.533440532962106,
+      22.2,
+      27.56350196625722
+    ]
+  },
+  "glassAfter": {
+    "position": [
+      5.47112803889103,
+      0,
+      9.59040805441083
+    ],
+    "yaw": -1.5782904949137628,
+    "cameraYaw": 0,
+    "pitch": 0,
+    "distance": 3.8,
+    "speed": 0,
+    "mode": "play",
+    "paused": false,
+    "camera": [
+      5.415018172160929,
+      22.2,
+      27.590363348404367
+    ]
+  },
+  "overview": "Centro de control\n\nSIMULACIÓN · PAPER ONLY · Órdenes bloqueadas\n\nVolver a la oficina · Esc\n\nComprobación local: 16/10/2026, 17:08:47. Solo lectura; sin consultas externas automáticas.\n\nCartera MASTER\nLEDGER MASTER · VIRTUAL\n\nCapital virtual; ledger verificado. Órdenes y fills bloqueados — P6.\n\nNAV · virtual\n10.000,00 €\nCaja\n10.000,00 €\nRentabilidad\n0,00 %\nPerformance\nHistoria insuficiente\nPosiciones\nLEDGER MASTER · VIRTUAL\n\nCapital virtual; ledger verificado. Órdenes y fills bloqueados — P6.\n\nPosiciones\n0\nValor de mercado\n0,00 €\nExposición\n0,00 %\nOperaciones\nNO DISPONIBLE\n\nNO DISPONIBLE — P6: sin registros autorizados.\n\nMercados\nREFERENCIA · NO EJECUTABLE\n\nDatos de referencia/históricos; no ejecutables.\n\nEXR.D.USD.EUR.SP00.A\n\n1.1208 USD/EUR\n\nECB · EXR/D.USD.EUR.SP00.A · STATISTICS\n2026-10-15 · day · Retraso desconocido\nRecibido: 16/10/2026, 12:21:46\nBCE · atribución\nFuente original\nNoticias\nDESACTUALIZADO\n\nContiene datos caducados; consultar fechas por registro. No ejecutables.\n\nFrank Elderson: Ensuring resilience in the face of uncertainty\nBCE · Autor: No informado · Idioma: en\nComunicado de fuente primaria; sin verificación independiente.\nECB · ECB/press/RSS · PUBLISHER\n2026-10-14T00:00:00+00:00 · instant · Retraso desconocido\nRecibido: 15/10/2026, 1:27:09\nBCE · atribución; metadatos RSS propios\nFuente original\nPhilip R. Lane: The AI opportunity for Europe\nBCE · Autor: No informado · Idioma: en\nComunicado de fuente primaria; sin verificación independiente.\nECB · ECB/press/RSS · PUBLISHER\n2026-10-13T18:30:00+00:00 · instant · Retraso desconocido\nRecibido: 15/10/2026, 1:27:09\nBCE · atribución; metadatos RSS propios\nFuente original\nMeeting of 9-10 September 2026\nBCE · Autor: No informado · Idioma: en\nComunicado de fuente primaria; sin verificación independiente.\nECB · ECB/press/RSS · PUBLISHER\n2026-10-08T11:30:00+00:00 · instant · Retraso desconocido\nRecibido: 15/10/2026, 1:27:09\nBCE · atribución; metadatos RSS propios\nFuente original\nPiero Cipollone: Interview with Corriere della Sera\nBCE · Autor: No informado · Idioma: en\nComunicado de fuente primaria; sin verificación independiente.\nECB · ECB/press/RSS · PUBLISHER\n2026-10-08T06:00:00+00:00 · instant · Retraso desconocido\nRecibido: 15/10/2026, 1:27:09\nBCE · atribución; metadatos RSS propios\nFuente original\nResults of the September 2026 survey on credit terms and conditions in euro-denominated securities financing and OTC derivatives markets (SESFOD)\nBCE · Autor: No informado · Idioma: en\nComunicado de fuente primaria; sin verificación independiente.\nECB · ECB/press/RSS · PUBLISHER\n2026-10-07T08:00:00+00:00 · instant · Retraso desconocido\nRecibido: 15/10/2026, 1:27:09\nBCE · atribución; metadatos RSS propios\nFuente original\nRiesgos\nNO DISPONIBLE\n\nNO DISPONIBLE — P5: sin registros autorizados.\n\nComité\nNO DISPONIBLE\n\nNO DISPONIBLE — P5: sin registros autorizados.\n\nAgentes\nNO DISPONIBLE\n\nNO DISPONIBLE — P4: sin registros autorizados.\n\nSistemas\nESTADO LOCAL\n\nEstado local de conectores; una conexión histórica no garantiza frescura actual.\n\nProveedores candidatos\n31\nModalidades candidatas\n35\nAdaptadores implementados\n33\nConexiones reales verificadas\n18\nFuentes utilizables ahora\n1\nSin credenciales\n13\nDerechos restringidos\n4",
+  "humans": {
+    "avatar": {
+      "kind": "player",
+      "rigId": "2f1ef6c0-1d24-4da3-8bc6-e20a8257ca55",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 41114,
+      "visible": true,
+      "level": 0,
+      "animation": "idle",
+      "seated": false,
+      "state": "JUGADOR LOCAL"
+    },
+    "personal-recepcion": {
+      "kind": "npc",
+      "rigId": "73af4d3a-5145-4fc0-aa0e-714cc4efce74",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 13240,
+      "visible": true,
+      "level": 1,
+      "animation": "typing",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-trading-0": {
+      "kind": "npc",
+      "rigId": "c3251e6b-2114-4fc4-bb91-be77142d79a4",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 4040,
+      "visible": true,
+      "level": 2,
+      "animation": "reading",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-trading-1": {
+      "kind": "npc",
+      "rigId": "62e3aec5-083e-40e3-bee4-1fb45c4afed4",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 4040,
+      "visible": true,
+      "level": 2,
+      "animation": "writing",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-trading-2": {
+      "kind": "npc",
+      "rigId": "0b9e9526-e7c0-4c69-a9c6-614973052594",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 4040,
+      "visible": true,
+      "level": 2,
+      "animation": "typing",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-research-1": {
+      "kind": "npc",
+      "rigId": "a58cc917-27c8-4a34-9191-c05126e37529",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 4040,
+      "visible": true,
+      "level": 2,
+      "animation": "reading",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-research-2": {
+      "kind": "npc",
+      "rigId": "83a7dd74-741b-463d-9057-39fb951c82f9",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 4040,
+      "visible": true,
+      "level": 2,
+      "animation": "writing",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-research-3": {
+      "kind": "npc",
+      "rigId": "50760ce6-cd24-44c6-abea-3c485463052a",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 4040,
+      "visible": true,
+      "level": 2,
+      "animation": "typing",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-quant-1": {
+      "kind": "npc",
+      "rigId": "cb1bc7fb-a57f-4401-8af3-241ff9bad74c",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 4040,
+      "visible": true,
+      "level": 2,
+      "animation": "reading",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-quant-2": {
+      "kind": "npc",
+      "rigId": "5b6357ab-7d43-44fb-8aaa-107a9f2438bf",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 4040,
+      "visible": true,
+      "level": 2,
+      "animation": "writing",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-risk-1": {
+      "kind": "npc",
+      "rigId": "4a59d838-9281-4d5a-b7ed-d2024d049ade",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 4040,
+      "visible": true,
+      "level": 2,
+      "animation": "typing",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-risk-2": {
+      "kind": "npc",
+      "rigId": "73e125f5-baec-4531-a968-6ede95c15412",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 4040,
+      "visible": true,
+      "level": 2,
+      "animation": "reading",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-execution-1": {
+      "kind": "npc",
+      "rigId": "df79e407-38ca-4b4a-8bf4-b93132fcb7c2",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 4040,
+      "visible": true,
+      "level": 2,
+      "animation": "writing",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-performance": {
+      "kind": "npc",
+      "rigId": "5bedad2e-57f3-45f7-bcaa-062bc854370f",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 13240,
+      "visible": true,
+      "level": 1,
+      "animation": "typing",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-systems-2": {
+      "kind": "npc",
+      "rigId": "0fd4e2cd-f2ab-4d9f-a825-c6095af7825f",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 4040,
+      "visible": true,
+      "level": 2,
+      "animation": "reading",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-systems": {
+      "kind": "npc",
+      "rigId": "9371e2c8-54ec-45d6-b70d-cdd6cb748778",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 4040,
+      "visible": true,
+      "level": 2,
+      "animation": "writing",
+      "seated": true,
+      "state": "OFFLINE"
+    },
+    "personal-comite": {
+      "kind": "npc",
+      "rigId": "b0a57ed8-f294-4be8-8245-0ee7774cd374",
+      "bones": 163,
+      "meshes": 5,
+      "triangles": 4040,
+      "visible": true,
+      "level": 2,
+      "animation": "typing",
+      "seated": true,
+      "state": "OFFLINE"
+    }
+  },
+  "metrics": {
+    "ready": true,
+    "renderer": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "view": "interior",
+    "quality": "balanced",
+    "fps": 0,
+    "frameMsP95": 0,
+    "samples": 0,
+    "calls": 182,
+    "triangles": 342142,
+    "textures": 90,
+    "geometries": 121,
+    "loadMs": 1186.4000000953674,
+    "firstFrameMs": 2855.7999999523163,
+    "width": 1536,
+    "height": 729.6000366210938,
+    "dpr": 0.8,
+    "departments": [
+      "research",
+      "committee",
+      "trading",
+      "risk",
+      "execution",
+      "quant",
+      "performance",
+      "reception",
+      "systems"
+    ],
+    "hidden": false,
+    "camera": [
+      5.465300984191512,
+      22.2,
+      27.590403411656176
+    ],
+    "target": [
+      5.47112803889103,
+      0.7,
+      0.09040805441082966
+    ],
+    "mode": "play",
+    "movingSamples": 0,
+    "movingFps": 0,
+    "movingFrameMsP95": 0
+  }
+}

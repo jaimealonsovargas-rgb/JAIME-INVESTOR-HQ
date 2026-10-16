@@ -1,0 +1,248 @@
+{
+  "at": "2026-10-16T15:06:05.779863+00:00",
+  "environment": "Windows local",
+  "http": {
+    "/health": {
+      "status": 200,
+      "body": {
+        "status": "ok",
+        "phase": "P0",
+        "trading_mode": "PAPER_ONLY",
+        "orders_enabled": false,
+        "database": "ok",
+        "schema_version": "0003_portfolio",
+        "checked_at": "2026-10-16T15:06:05.859988Z"
+      }
+    },
+    "/api/portfolio/master/summary": {
+      "status": 200,
+      "body": {
+        "portfolio_id": "MASTER",
+        "base_currency": "EUR",
+        "trading_mode": "PAPER_ONLY",
+        "orders_enabled": false,
+        "as_of": "2026-10-16T15:06:05.879901Z",
+        "ledger_status": "VERIFIED_APPEND_ONLY",
+        "ledger_hash": "fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836",
+        "events_count": 1,
+        "seeded_at": "2026-10-16T10:12:45.113258Z",
+        "valuation_status": "FRESH",
+        "nav_eur": "10000.00",
+        "cash_eur": "10000.00",
+        "market_value_eur": "0.00",
+        "accruals_eur": "0.00",
+        "liabilities_eur": "0.00",
+        "contributed_eur": "10000.00",
+        "positions_count": 0,
+        "invested_pct": "0E+2",
+        "realized_pnl_eur": "0.00",
+        "unrealized_pnl_eur": "0.00",
+        "income_eur": "0.00",
+        "fees_eur": "0.00",
+        "total_pnl_eur": "0.00",
+        "fx_effect_eur": "0.00",
+        "cumulative_return_pct": "0",
+        "cash_accounts": [
+          {
+            "currency": "EUR",
+            "amount": "10000.00",
+            "reserved": "0",
+            "value_eur": "10000.00",
+            "valuation_status": "FRESH"
+          }
+        ],
+        "positions": [],
+        "provenance": [],
+        "valuation_method": "FIFO; purchase fees capitalized; native-currency journal; EUR base; HALF_EVEN display to cents; no short or liabilities in V1",
+        "performance": {
+          "nav_eur": "10000.00",
+          "cash_eur": "10000.00",
+          "market_value_eur": "0.00",
+          "realized_pnl_eur": "0.00",
+          "unrealized_pnl_eur": "0.00",
+          "fx_effect_eur": "0.00",
+          "total_pnl_eur": "0.00",
+          "cumulative_return_pct": "0",
+          "valuation_status": "FRESH",
+          "as_of": "2026-10-16T15:06:05.879901+00:00",
+          "daily_return_pct": null,
+          "twr_pct": null,
+          "mwr_xirr_pct": null,
+          "max_drawdown_pct": null,
+          "reason": "Historia insuficiente: no se fabrican observaciones ni ratios.",
+          "observations": 1
+        }
+      }
+    },
+    "/api/portfolio/master/positions": {
+      "status": 200,
+      "body": {
+        "as_of": "2026-10-16T15:06:05.961701Z",
+        "valuation_status": "FRESH",
+        "items": []
+      }
+    },
+    "/api/portfolio/master/ledger": {
+      "status": 200,
+      "body": {
+        "total": 1,
+        "offset": 0,
+        "limit": 50,
+        "items": [
+          {
+            "kind": "DEPOSIT_VIRTUAL",
+            "source_ref": "MASTER:DEPOSIT_VIRTUAL:v1",
+            "actor": "P3_INITIALIZER",
+            "occurred_at": "2026-10-16T10:12:45.113258Z",
+            "currency": "EUR",
+            "instrument": null,
+            "amount": "10000.00",
+            "qty": "0",
+            "price": "0",
+            "fee": "0",
+            "fx": "1",
+            "target_currency": null,
+            "target_fx": "1",
+            "target_instrument": null,
+            "ratio": "1",
+            "reservation_ref": null,
+            "settles_accrual": false,
+            "evidence": null,
+            "entries": [
+              {
+                "account": "CASH",
+                "currency": "EUR",
+                "debit": "10000.00",
+                "credit": "0"
+              },
+              {
+                "account": "VIRTUAL_CAPITAL",
+                "currency": "EUR",
+                "debit": "0",
+                "credit": "10000.00"
+              }
+            ]
+          }
+        ],
+        "portfolio_id": "MASTER",
+        "ledger_hash": "fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836"
+      }
+    },
+    "/api/portfolio/master/nav/history": {
+      "status": 200,
+      "body": {
+        "total": 1,
+        "offset": 0,
+        "limit": 100,
+        "items": [
+          {
+            "accruals_eur": "0.00",
+            "as_of": "2026-10-16T10:12:45.122906+00:00",
+            "base_currency": "EUR",
+            "cash_accounts": [
+              {
+                "amount": "10000.00",
+                "currency": "EUR",
+                "reserved": "0",
+                "valuation_status": "FRESH",
+                "value_eur": "10000.00"
+              }
+            ],
+            "cash_eur": "10000.00",
+            "contributed_eur": "10000.00",
+            "cumulative_return_pct": "0",
+            "events_count": 1,
+            "fees_eur": "0.00",
+            "fx_effect_eur": "0.00",
+            "income_eur": "0.00",
+            "invested_pct": "0E+2",
+            "ledger_hash": "fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836",
+            "ledger_status": "VERIFIED_APPEND_ONLY",
+            "liabilities_eur": "0.00",
+            "market_value_eur": "0.00",
+            "nav_eur": "10000.00",
+            "orders_enabled": false,
+            "portfolio_id": "MASTER",
+            "positions": [],
+            "positions_count": 0,
+            "provenance": [],
+            "realized_pnl_eur": "0.00",
+            "seeded_at": "2026-10-16T10:12:45.113258+00:00",
+            "total_pnl_eur": "0.00",
+            "trading_mode": "PAPER_ONLY",
+            "unrealized_pnl_eur": "0.00",
+            "valuation_method": "FIFO; purchase fees capitalized; native-currency journal; EUR base; HALF_EVEN display to cents; no short or liabilities in V1",
+            "valuation_status": "FRESH"
+          }
+        ]
+      }
+    },
+    "/api/portfolio/master/performance": {
+      "status": 200,
+      "body": {
+        "nav_eur": "10000.00",
+        "cash_eur": "10000.00",
+        "market_value_eur": "0.00",
+        "realized_pnl_eur": "0.00",
+        "unrealized_pnl_eur": "0.00",
+        "fx_effect_eur": "0.00",
+        "total_pnl_eur": "0.00",
+        "cumulative_return_pct": "0",
+        "valuation_status": "FRESH",
+        "as_of": "2026-10-16T15:06:06.009829+00:00",
+        "daily_return_pct": null,
+        "twr_pct": null,
+        "mwr_xirr_pct": null,
+        "max_drawdown_pct": null,
+        "reason": "Historia insuficiente: no se fabrican observaciones ni ratios.",
+        "observations": 1
+      }
+    },
+    "/api/data/quality": {
+      "status": 200,
+      "body": {
+        "candidate_providers": 31,
+        "candidate_access_modes": 35,
+        "implemented_adapters": 33,
+        "implemented_providers": 29,
+        "verified_connections": 18,
+        "verified_providers": 17,
+        "usable_sources": 1,
+        "usable_providers": 1,
+        "no_credentials": 13,
+        "rights_restricted": 4
+      }
+    }
+  },
+  "orders": {
+    "status": 403,
+    "body": {
+      "code": "P0_EXECUTION_DISABLED",
+      "message": "NO DISPONIBLE: todas las órdenes están bloqueadas en P0."
+    }
+  },
+  "restore": {
+    "integrity": "ok",
+    "foreign_keys": [],
+    "schema": "0003_portfolio",
+    "instruments": 98,
+    "events": 1,
+    "backup_sha256": "26aa823dd87bc121c7e07eb67cab4a26fc792d90764f60451fa0d1e04cdeee8e"
+  },
+  "restarts_restored_db": [
+    {
+      "nav_eur": "10000.00",
+      "cash_eur": "10000.00",
+      "positions_count": 0,
+      "events_count": 1,
+      "ledger_hash": "fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836"
+    },
+    {
+      "nav_eur": "10000.00",
+      "cash_eur": "10000.00",
+      "positions_count": 0,
+      "events_count": 1,
+      "ledger_hash": "fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.4, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\javie\Documents\GitHub\JAIME-INVESTOR-HQ
+configfile: pyproject.toml
+testpaths: backend/tests
+plugins: anyio-4.15.1, platformdirs-4.13.0
+collected 144 items
+
+backend\tests\test_base.py ..........                                    [  6%]
+backend\tests\test_data.py ............................................. [ 38%]
+.................                                                        [ 50%]
+backend\tests\test_hq_overview.py ..                                     [ 51%]
+backend\tests\test_portfolio.py .............................            [ 71%]
+backend\tests\test_public_integrations.py ....                           [ 74%]
+backend\tests\test_security.py .....................................     [100%]
+
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\javie\Documents\GitHub\JAIME-INVESTOR-HQ\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 144 passed, 1 warning in 8.40s ========================
+
+> jaime-investor-hq-frontend@0.0.1 test
+> vitest run
+
+
+ RUN  v5.0.4 C:/Users/javie/Documents/GitHub/JAIME-INVESTOR-HQ/frontend
+
+
+ Test Files  8 passed (8)
+      Tests  45 passed (45)
+   Start at  17:04:55
+   Duration  1.45s (tests 58%, import 26%, transform 13%, worker 4%)
+
+
+> jaime-investor-hq-frontend@0.0.1 build
+> tsc --noEmit && vite build
+
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 654 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.75 kB │ gzip:   0.47 kB
+dist/assets/index-DONgIah5.css    2.00 kB │ gzip:   0.89 kB
+dist/assets/World-CuaLR5Oo.css   25.13 kB │ gzip:   6.44 kB
+dist/assets/Office-C2xRMTfi.js  126.27 kB │ gzip:  41.33 kB
+dist/assets/index-BqojT68N.js   258.81 kB │ gzip:  80.54 kB
+dist/assets/World-CmwWqPFE.js   979.36 kB │ gzip: 263.04 kB
+
+python : [plugin builtin:vite-reporter]
+En línea: 2 Carácter: 1
++ python scripts/manage.py check > output/p3-check-final.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([plugin builtin:vite-reporter] :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking:
+https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 880ms
