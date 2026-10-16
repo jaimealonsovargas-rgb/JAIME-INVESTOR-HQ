@@ -1,8 +1,8 @@
 # Agentes — 16 NPC visuales y 30 roles IA lógicos
 
-**Fuente vinculante:** [plan maestro](PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md). Los NPC P1 son ambientación, no modelos IA ni jobs reales.
+**Fuente vinculante P4:** `docs/PLAN_P4_AGENTES_RESEARCH_LOCAL_AI.md`. Los NPC P1 son representación visual; los estados IA deben proceder de jobs reales.
 
-## 16 NPC P1
+## 16 NPC visuales
 
 | Sala | NPC | Principales |
 |---|---:|---:|
@@ -17,8 +17,6 @@
 | Sistemas | 2 | 1 |
 | **Total** | **16** | **9** |
 
-Todos sentados y trabajando **visualmente**; nueve principales activan paneles por proximidad. Los nombres de los diez NPC históricos se pueden reutilizar sin forzar uno a uno con roles IA.
-
 ## 30 roles IA P4
 
 | Equipo | Especialidades | Total |
@@ -32,4 +30,17 @@ Todos sentados y trabajando **visualmente**; nueve principales activan paneles p
 | Committee | CIO/Chair, Bull Advocate, Bear/Skeptic | 3 |
 | **Total** | | **30** |
 
-Registry de roles, herramientas autorizadas, entradas, evidencias, jobs reales y estado. **No** 30 procesos/LLM activos: 1 inferencia local, 2 jobs cuantitativos CPU, 4 fetches ligeros por defecto, sujetos a benchmark. Sin LLM local gratuito, roles dependientes NO DISPONIBLES; cálculos deterministas sí. Hasta 30 presets Vibe si auditados, 6–10 activos inicialmente, sin brokers. Agent Reach noticias públicas con procedencia. Liquid OAuth read+trade prohibido.
+Los 30 roles existen como identidades, contratos y permisos, **no como 30 modelos**. Configuración por defecto: 1 inferencia LLM local, 2 jobs quant CPU y 4 fetches ligeros. El scheduler es persistente, on-demand y con deny-by-default.
+
+## Pipeline inicial
+Activar 6–10 roles por caso, no todos siempre. Base recomendada: Data Quality → Fundamental → Valuation → Macro → Momentum/Trend → Volatility/Regime → Bull → Bear/Skeptic → CIO/Chair. Crédito, ESG, liquidez, atribución, etc. entran por clase de activo/contexto.
+
+Los roles Risk de P4 son **advisory**; el motor determinista y veto formal pertenecen a P5. Los roles Execution de P4 solo analizan microestructura/plan PAPER conceptual; P6 será la única fase que podrá generar ejecución simulada.
+
+## Contrato común
+Cada job guarda role/version, inputs, tools autorizadas, model/runtime si aplica, timestamps, hashes, evidence IDs, status y output versionado. Estados mínimos: `IDLE`, `QUEUED`, `RUNNING`, `SUCCEEDED`, `FAILED`, `CANCELLED`, `BLOCKED`, `NO_LOCAL_MODEL`.
+
+Claims numéricos sin evidencia se rechazan o marcan `UNVERIFIED`. Contenido externo es `UNTRUSTED_CONTENT`. Ningún agente puede mutar MASTER, ledger, cash, positions, NAV, orders o fills.
+
+## Terceros
+Vibe-Trading solo tras auditoría del subset; sin broker tools ni código generado no confiable. Agent Reach solo público/read-only y sin cookies/cuentas personales. Liquid OAuth read+trade continúa prohibido.
