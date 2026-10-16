@@ -248,3 +248,76 @@ def test_no_negative_reconciliation_or_utc_backdating():
         rebuild([seed(), buy().model_copy(update={'occurred_at':NOW-timedelta(seconds=1)})])
     with pytest.raises(ValueError):
         rebuild([seed(), seed()])
+
+
+def test_price_units_are_not_percent_par_or_yield():
+    state = rebuild([seed(), buy()])
+    for unit in ('percent of par', 'yield percent', 'index'):
+        assert value_portfolio(state, {'TEST_INSTRUMENT':quote(unit=unit)}, {}, NOW)['nav_eur'] is None
+
+
+def test_p2_cache_alias_capability_rights_and_feed_selection(client, monkeypatch):
+    from dataclasses import replace
+    from uuid import uuid4
+    from sqlalchemy.orm import Session
+    from app.contracts import Instrument, ProviderCapability
+    from app.database import InstrumentRecord, InstrumentAlias, DataRecord
+    from app.data_contracts import DataResult
+    from app.data_catalog import CATALOG
+    from app.data_service import cache_key
+    service = client.app.state.portfolio
+    monkeypatch.setattr(client.app.state.data, 'clock', lambda: NOW)
+    # Strictly TEST_ONLY cache, no network; never counted as a real connection in delivery.
+    source = replace(CATALOG['A18'], rights=quote().rights)
+    monkeypatch.setitem(CATALOG, 'A18', source)
+    observation = quote('123', 'USD').model_copy(update={'access_id':'A18','provider':source.provider,'feed':source.feed,'venue':source.venue,'series_id':'TEST_ONLY_SYMBOL'})
+    instrument = Instrument(id=uuid4(),symbol='TEST_ONLY_SYMBOL',venue=source.venue,currency='USD',asset_class='EQUITY',provider_capabilities=(ProviderCapability(provider=source.provider, feed=source.feed, research=True, valuation=False, checked_at=NOW, license='TEST_ONLY',source='https://example.org/TEST_ONLY',reason='TEST_ONLY'),))
+    result = DataResult(access_id='A18',state='AVAILABLE_VERIFIED',reason='TEST_ONLY',real_connection=True,observations=(observation,))
+    with Session(service.engine) as s, s.begin():
+        s.add(InstrumentRecord(id=str(instrument.id),symbol=instrument.symbol,venue=instrument.venue,currency='USD',asset_class='EQUITY',payload=instrument.model_dump(mode='json')))
+        s.flush()
+        s.add(InstrumentAlias(id=str(uuid4()),instrument_id=str(instrument.id),provider=source.provider,symbol=instrument.symbol,venue=source.venue,currency='USD',source='https://example.org/TEST_ONLY',verified_at=NOW.isoformat()))
+        s.add(DataRecord(key=cache_key(source),payload=result.model_dump(mode='json'),expires_at=(NOW+timedelta(minutes=1)).isoformat(),updated_at=NOW.isoformat()))
+    assert service.inputs(NOW)[0] == {}  # research does NOT grant valuation
+    assert service.markets()['items'][0]['daily_change_pct'] is None
+    with Session(service.engine) as s, s.begin():
+        row=s.get(InstrumentRecord,str(instrument.id))
+        row.payload=instrument.model_copy(update={'provider_capabilities':(instrument.provider_capabilities[0].model_copy(update={'valuation':True}),)}).model_dump(mode='json')
+    assert service.inputs(NOW)[0][str(instrument.id)].value == D('123')
+    with Session(service.engine) as s, s.begin():
+        row=s.get(DataRecord,cache_key(source))
+        row.payload=result.model_copy(update={'observations':(observation.model_copy(update={'feed':'OTHER_FEED'}),)}).model_dump(mode='json')
+    assert service.inputs(NOW)[0] == {}  # never silently mix IEX/SIP or other feeds
+    monkeypatch.setitem(CATALOG,'A18',replace(source, rights=source.rights.model_copy(update={'redistribution_allowed':False})))
+    assert service.markets()['items'] == []
+
+
+def test_multiple_external_flows_do_not_fabricate_twr():
+    events=[seed(),event('DEPOSIT_VIRTUAL','second',amount='100')]
+    summary=value_portfolio(rebuild(events),{},{},NOW)
+    assert summary['total_pnl_eur']=='0.00' and summary['cumulative_return_pct'] is None
+    assert performance(summary,[summary]*4,events)['twr_pct'] is None
+
+
+def test_integrity_failure_api_is_unavailable_not_plausible_nav(client):
+    with client.app.state.engine.begin() as connection:
+        connection.execute(text("INSERT INTO ledger_entries(event_id,account,currency,debit,credit) VALUES(1,'TEST_TAMPER','EUR','1','0')"))
+    response=client.get('/api/portfolio/master/summary')
+    assert response.status_code==503 and response.json()['code']=='LEDGER_INTEGRITY'
+
+
+def test_foreign_accrual_fx_is_not_lost_when_coupon_settles():
+    events=[seed(),event('INTEREST_ACCRUAL','interest',amount='10',currency='USD',fx='.8')]
+    rate=quote('1.25','USD','fx_reference',unit='USD/EUR')
+    before=value_portfolio(rebuild(events),{}, {'USD':rate}, NOW)
+    assert before['nav_eur']=='10008.00' and before['fx_effect_eur']=='0.00'
+    events.append(event('COUPON','coupon',amount='10',currency='USD',fx='1',settles_accrual=True))
+    after=value_portfolio(rebuild(events),{}, {'USD':rate.model_copy(update={'value':D('1')})}, NOW)
+    assert after['nav_eur']=='10010.00' and after['fx_effect_eur']=='2.00' and after['income_eur']=='8.00'
+
+
+def test_external_demo_balance_never_enters_master(client):
+    engine=client.app.state.engine
+    append_event(engine,event('DEPOSIT_VIRTUAL','TEST_BROKER_DEMO',amount='100000'),portfolio='ALPACA_PAPER')
+    summary=client.get('/api/portfolio/master/summary').json()
+    assert summary['nav_eur']=='10000.00' and summary['events_count']==1

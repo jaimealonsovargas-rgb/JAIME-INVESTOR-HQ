@@ -44,6 +44,8 @@ class PortfolioService:
                 if not instrument:
                     continue
                 labels[alias.instrument_id] = instrument.symbol
+                if datetime.fromisoformat(alias.verified_at) > now:
+                    continue
                 if alias.expires_at and datetime.fromisoformat(alias.expires_at) <= now:
                     continue
                 for o in observations:

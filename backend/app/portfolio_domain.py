@@ -109,6 +109,7 @@ class PortfolioState:
     cash: dict[str, Decimal] = field(default_factory=lambda: defaultdict(Decimal))
     cash_basis_eur: dict[str, Decimal] = field(default_factory=lambda: defaultdict(Decimal))
     accruals: dict[str, Decimal] = field(default_factory=lambda: defaultdict(Decimal))
+    accrual_basis_eur: dict[str, Decimal] = field(default_factory=lambda: defaultdict(Decimal))
     reservations: dict[str, tuple[str, Decimal]] = field(default_factory=dict)
     lots: list[Lot] = field(default_factory=list)
     postings: dict[str, list[dict]] = field(default_factory=dict)
@@ -229,12 +230,16 @@ def _rebuild(events):
             post('CASH', 'FX_CLEARING', target, e.target_currency)
         elif e.kind == 'INTEREST_ACCRUAL':
             state.accruals[e.currency] += e.amount
+            state.accrual_basis_eur[e.currency] += e.amount * e.fx
             state.income_eur += e.amount * e.fx
             post('ACCRUED_INCOME', 'INCOME', e.amount)
         elif e.kind in ('DIVIDEND', 'COUPON'):
             if e.settles_accrual:
                 if state.accruals[e.currency] < e.amount:
                     raise ValueError('Coupon exceeds accrued income.')
+                basis = state.accrual_basis_eur[e.currency] if e.amount == state.accruals[e.currency] else state.accrual_basis_eur[e.currency] * e.amount / state.accruals[e.currency]
+                state.accrual_basis_eur[e.currency] -= basis
+                state.cash_realized_fx_eur += e.amount * e.fx - basis
                 state.accruals[e.currency] -= e.amount
                 post('CASH', 'ACCRUED_INCOME', e.amount)
             else:

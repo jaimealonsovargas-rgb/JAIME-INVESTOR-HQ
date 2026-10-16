@@ -11,7 +11,7 @@ def permitted(observation):
 
 
 def freshness(o, now):
-    if not permitted(o) or o.value is None or o.value <= ZERO or o.observed_at > now or o.received_at > now:
+    if not permitted(o) or o.value is None or (o.data_kind in ('market_quote', 'fx_reference') and o.value <= ZERO) or o.observed_at > now or o.received_at > now:
         return 'NO_DATA'
     if o.stale(now) or now-o.observed_at > timedelta(seconds=o.stale_after_seconds):
         return 'STALE'
@@ -58,7 +58,7 @@ def _value(state, quotes, fx_rates, now, labels):
         else:
             if cash_total is not None:
                 cash_total += amount*rate
-                cash_fx += amount*rate-state.cash_basis_eur[currency]
+                cash_fx += amount*rate-state.cash_basis_eur[currency]+accrued*rate-state.accrual_basis_eur[currency]
                 accrual_total += accrued*rate
     positions, market_total, unrealized, position_fx = [], ZERO, ZERO, ZERO
     for instrument in sorted({l.instrument for l in state.lots if l.qty_remaining > ZERO}):
@@ -68,7 +68,8 @@ def _value(state, quotes, fx_rates, now, labels):
         cost = sum((l.cost_eur for l in lots), ZERO)
         native_cost = sum((l.cost_native for l in lots), ZERO)
         quote = quotes.get(instrument)
-        status = freshness(quote, now) if quote and quote.data_kind == 'market_quote' and quote.currency == currency else 'NO_DATA'
+        compatible_units = (currency, currency+' per share', currency+' per unit', currency+' per BTC')
+        status = freshness(quote, now) if quote and quote.data_kind == 'market_quote' and quote.currency == currency and quote.unit in compatible_units else 'NO_DATA'
         rate, fx_status = fx(currency)
         status = combine([status, fx_status])
         statuses.append(status)
