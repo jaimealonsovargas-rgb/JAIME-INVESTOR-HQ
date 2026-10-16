@@ -21,6 +21,8 @@ from app.hq_overview import HQOverview, overview
 from app.portfolio_store import initialize_master, JournalIntegrityError
 from app.portfolio_service import PortfolioService
 from app.portfolio_contracts import PortfolioSummary, LedgerPage, PortfolioPage, PositionsResponse, MarketWatchlist
+from app.research_service import ResearchService
+from app.research_api import router as research_router
 
 
 def create_app(settings: Settings | None = None, data_settings: DataSettings | None = None) -> FastAPI:
@@ -37,8 +39,10 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
         try:
             initialize_master(engine)
             app.state.portfolio.snapshot()
+            await app.state.research.start()
             yield
         finally:
+            await app.state.research.stop()
             engine.dispose()
 
     # El contrato OpenAPI es local; no cargar Swagger/ReDoc desde un CDN externo.
@@ -47,12 +51,20 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
     app.state.engine = engine
     app.state.data = DataService(engine, data_settings)
     app.state.portfolio = PortfolioService(engine, app.state.data)
+    app.state.research = ResearchService(engine, app.state.data, app.state.portfolio)
+    app.include_router(research_router(app.state.research))
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "[::1]"])
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["http://127.0.0.1:5173", "http://localhost:5173", "http://127.0.0.1:5174", "http://localhost:5174"],
-        allow_methods=["GET"], allow_headers=["Accept"], allow_credentials=False,
+        allow_methods=["GET", "POST"], allow_headers=["Accept", "Content-Type", "X-HQ-Research", "Idempotency-Key"], allow_credentials=False,
     )
+
+    @app.middleware('http')
+    async def restrict_research_preflight(request: Request, call_next):
+        if request.method == 'OPTIONS' and request.headers.get('access-control-request-method') == 'POST' and not request.url.path.startswith(('/api/research/', '/api/agent-jobs/')):
+            return JSONResponse(status_code=400, content={'detail': 'WRITE_PREFLIGHT_DENIED'})
+        return await call_next(request)
 
     @app.exception_handler(ExecutionUnavailable)
     async def execution_blocked(_request: Request, _exc: ExecutionUnavailable):
@@ -103,7 +115,11 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
 
     @app.get('/api/hq/overview', response_model=HQOverview)
     def hq_overview():
-        return overview(app.state.data, app.state.portfolio.summary())
+        result = overview(app.state.data, app.state.portfolio.summary())
+        status = app.state.research.status()
+        section = next(s for s in result.sections if s.section_id == 'agents')
+        updated = section.model_copy(update={'status': 'AVAILABLE', 'as_of_utc': datetime.now(timezone.utc), 'source': 'Scheduler P4 · SQLite local', 'value': status, 'reason': 'Research bajo demanda; no órdenes. PC apagado: sin ejecución local.', 'rights': 'Metadatos locales de jobs P4.'})
+        return result.model_copy(update={'sections': tuple(updated if s.section_id == 'agents' else s for s in result.sections)})
 
     @app.get('/api/portfolio/master/summary', response_model=PortfolioSummary)
     def portfolio_summary():

@@ -19,7 +19,7 @@ def test_overview_master_is_backed_by_ledger_and_future_phases_remain_absent(cli
     assert result['trading_mode'] == 'PAPER_ONLY' and result['orders_enabled'] is False
     assert len(result['sections']) == 9
     assert all(s['items'] == [] for s in result['sections'])
-    assert all(s['status'] == 'NOT_IMPLEMENTED' and s['value'] is None for s in result['sections'] if s['section_id'] not in ('systems', 'portfolio', 'positions'))
+    assert all(s['status'] == 'NOT_IMPLEMENTED' and s['value'] is None for s in result['sections'] if s['section_id'] not in ('systems', 'portfolio', 'positions', 'agents'))
     portfolio = next(s for s in result['sections'] if s['section_id']=='portfolio')
     assert portfolio['value']['nav_eur']=='10000.00' and 'Ledger MASTER' in portfolio['source']
     assert client.post('/api/orders', json={'mode': 'LIVE'}).status_code == 403

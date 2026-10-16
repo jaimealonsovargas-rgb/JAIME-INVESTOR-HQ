@@ -6,7 +6,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
 
 from app.contracts import Instrument
 
-SCHEMA_VERSION = "0003_portfolio"
+SCHEMA_VERSION = "0004_research"
 
 
 class Base(DeclarativeBase):
@@ -15,6 +15,8 @@ class Base(DeclarativeBase):
 
 from app.portfolio_schema import register as register_portfolio_schema
 register_portfolio_schema(Base.metadata)
+from app.research_schema import register as register_research_schema
+register_research_schema(Base.metadata)
 
 
 class InstrumentRecord(Base):

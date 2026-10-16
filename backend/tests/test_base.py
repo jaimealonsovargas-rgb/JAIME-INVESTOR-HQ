@@ -24,7 +24,7 @@ def test_health_and_empty_registry(client):
     assert data["trading_mode"] == "PAPER_ONLY"
     assert data["orders_enabled"] is False
     assert data["database"] == "ok"
-    assert data["schema_version"] == "0003_portfolio"
+    assert data["schema_version"] == "0004_research"
     assert datetime.fromisoformat(data["checked_at"]).tzinfo is not None
     assert client.get("/api/instruments").json() == []
 
@@ -117,5 +117,5 @@ def test_decimal_and_quote_provenance():
 
 def test_api_schema_has_typed_contracts(client):
     schema = client.get("/openapi.json").json()
-    assert set(schema["paths"]) == {"/health", "/api/providers/status", "/api/instruments", "/api/orders", "/api/data/quality", "/api/data/sources/{access_id}", "/api/hq/overview", '/api/markets/watchlist', *('/api/portfolio/master/'+p for p in ('summary','positions','ledger','nav/history','performance'))}
+    assert set(schema["paths"]) == {"/api/agents", "/api/agents/status", "/api/research/cases", "/api/research/cases/{case_id}", "/api/research/cases/{case_id}/run", "/api/research/cases/{case_id}/evidence", "/api/research/cases/{case_id}/results", "/api/agent-jobs/{job_id}", "/api/agent-jobs/{job_id}/cancel", "/health", "/api/providers/status", "/api/instruments", "/api/orders", "/api/data/quality", "/api/data/sources/{access_id}", "/api/hq/overview", '/api/markets/watchlist', *('/api/portfolio/master/'+p for p in ('summary','positions','ledger','nav/history','performance'))}
     assert schema["paths"]["/api/orders"]["post"]["responses"]["403"]
