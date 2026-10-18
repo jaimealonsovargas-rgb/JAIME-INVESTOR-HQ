@@ -61,7 +61,7 @@ export default function World() {
     {info ? <aside className="architecture-info" id="architecture-info">
       <button className="close-info" onClick={() => setInfo(false)} aria-label="Cerrar información">×</button>
       <p className="info-kicker">SEDE VIRTUAL · PAPER ONLY</p><h2>Una planta. Nueve perspectivas.</h2>
-      <p>Oficina Sims 3D real con dieciséis profesionales sentados. Usa las flechas en direcciones de pantalla. Los NPC son ambientación; agentes IA NO DISPONIBLES — P4. Las funciones de inversión permanecen deshabilitadas.</p>
+      <p>Oficina Sims 3D real con dieciséis profesionales sentados. Usa las flechas en direcciones de pantalla. Los NPC son ambientación; la actividad research P4 se consulta en los paneles y procede del backend. Las funciones de inversión permanecen deshabilitadas.</p>
       <ol>{DEPARTMENTS.map(d => <li key={d.id}><span>{d.number}</span>{d.label}</li>)}</ol>
       <p>Órdenes bloqueadas. Servicios locales: {health.isSuccess ? 'disponibles' : 'NO DISPONIBLE'}.</p>
       <a href="?diagnostico=1">Abrir comprobación de P0 ↗</a>
@@ -73,7 +73,7 @@ export default function World() {
     <footer className="world-toolbar">
       <nav aria-label="Cámara"><button aria-pressed={mode==='play'} onClick={()=>{setMode('play');document.querySelector('canvas')?.focus();}}>Recorrer</button>{Object.entries(VIEWS).map(([key, value]) => <button key={key} aria-pressed={mode==='inspection'&&view === key} onClick={() => { setMode('inspection');setView(key as View); setMetrics(m => m ? {...m, samples: 0} : m); }}>{value.label}</button>)}</nav>
       <div className="world-tools"><label>Gráficos <select value={quality} onChange={e => { const next=e.target.value as Quality;setQuality(next);setRenderDpr(QUALITY[next].dpr);setMetrics(m => m ? {...m, samples: 0} : m); }}><option value="balanced">Equilibrado automático</option><option value="fixed">Equilibrado fijo (80 %)</option><option value="detail">Detalle</option></select></label><span className="resolution-status" aria-label="Resolución de la escena 3D">{Math.round(renderDpr*100)} % 3D</span><button disabled={measuring} onClick={() => setMeasuring(true)}>{measuring ? 'Midiendo…' : 'Medir FPS'}</button><output aria-label="Fotogramas por segundo">{metrics && metrics.samples > 10 ? `${measuring ? '' : 'Última: '}${metrics.fps.toFixed(0)} FPS` : 'En reposo'}</output></div>
-      <p className="world-help">{mode==='play'?'↑↓←→ desplazarse en pantalla · Cámara isométrica · Acércate al agente':'Vista general · Esc para volver'} <span>PERSONAL OFFLINE · AGENTES NO DISPONIBLES — P4</span></p>
+      <p className="world-help">{mode==='play'?'↑↓←→ desplazarse en pantalla · Cámara isométrica · Acércate al agente':'Vista general · Esc para volver'} <span>NPC AMBIENTALES · RESEARCH P4 BAJO DEMANDA</span></p>
     </footer>
   </main>;
 }

@@ -1,0 +1,49 @@
+import {useState} from 'react';
+import {useQuery,useQueryClient} from '@tanstack/react-query';
+import {researchRead,researchWrite,validateStatus,validateDossier,type Role,type ResearchCase,type Dossier,type Result} from '../researchApi';
+import './research.css';
+
+const TEAMS:Record<string,string[]>={research:['research'],quant:['quant'],committee:['committee'],systems:['systems_data'],trading:['trading_execution'],execution:['trading_execution'],risk:['risk'],performance:['performance'],reception:[]};
+const SECTION_NAMES:Record<string,string>={fundamental_equity:'Tesis y fundamentales',valuation:'Valoración',macro_global:'Contexto macro',momentum_trend:'Quant / tendencia',volatility_regime:'Volatilidad y régimen',bull_advocate:'Bull · argumentos a favor',bear_skeptic:'Bear · argumentos en contra',cio_chair:'Chair · síntesis y desacuerdos',data_quality:'Calidad de datos',market_structure:'Estructura de mercado',liquidity_slippage:'Liquidez y límites'};
+
+function OpinionCard({result}:{result:Result}){
+ return <details className="research-opinion" open={result.role_id==='cio_chair'}><summary>{SECTION_NAMES[result.role_id]??result.role_id} <span>{result.opinion.research_view}</span></summary>
+  <p>{result.opinion.overview}</p><p className="research-note">Interpretación de research; no recomendación ejecutable. Solo extractos comprobados se marcan verificados.</p>
+  {result.validation?.withheld_passages.length?<p role="status">Análisis limitado: {result.validation.withheld_passages.length} pasajes no verificados se han omitido. La conclusión queda en evidencia insuficiente.</p>:null}
+  <h4>Tesis</h4><p>{result.opinion.thesis||'Sin tesis adicional documentada.'}</p>
+  {(['catalysts','risks','key_disagreements'] as const).map((key,i)=><section key={key}><h4>{['Catalizadores','Riesgos','Desacuerdos clave'][i]}</h4>{result.opinion[key]?.length?<ul>{result.opinion[key]!.map((s,n)=><li key={n}>{s}</li>)}</ul>:<p>No documentado por este rol; no se rellena con supuestos.</p>}</section>)}
+  {result.claims.map(c=><article key={c.claim_id}><strong>{c.verified?'EXTRACTO VERIFICADO':'NO VERIFICADO'} · {c.claim_type}</strong><p>{c.text}</p><small>{c.evidence_ids.map(id=><a key={id} href={`#ev-${id}`}>Evidencia {id.slice(0,8)} </a>)}</small></article>)}
+  {result.features?<div><h4>Features deterministas · {result.features.state}</h4><p>{result.features.reason}</p><table><thead><tr><th>Feature</th><th>Valor Decimal</th><th>Fuentes</th></tr></thead><tbody>{result.features.items.map(f=><tr key={f.name}><td>{f.name}</td><td>{f.value}</td><td>{f.evidence_ids.length}</td></tr>)}</tbody></table></div>:null}
+  <h4>Unknowns / gaps</h4><ul>{result.opinion.unknowns.map((s,i)=><li key={i}>{s}</li>)}</ul><h4>Condiciones de invalidación</h4><ul>{result.opinion.invalidation_conditions.map((s,i)=><li key={i}>{s}</li>)}</ul>
+  {Object.entries(result.debate).map(([role,o])=><section key={role}><h4>{SECTION_NAMES[role]} · versión recibida por Chair</h4><p>{o.overview}</p><ul>{o.claims.map((c,i)=><li key={i}>{c.text}</li>)}</ul></section>)}
+  <details><summary>Lineage y runtime</summary><p>Job {result.job_id}</p><p>Input SHA-256 {result.input_hash}</p><pre>{JSON.stringify(result.metrics,null,2)}</pre></details>
+ </details>;
+}
+
+export default function ResearchPanel({department}:{department:string}){
+ const qc=useQueryClient(),[selected,setSelected]=useState(''),[run,setRun]=useState(''),[instrument,setInstrument]=useState(''),[question,setQuestion]=useState('Evaluar evidencia, contexto y límites del instrumento.'),[error,setError]=useState(''),[pending,setPending]=useState(false),[refresh,setRefresh]=useState(false);
+ const status=useQuery({queryKey:['research-status'],queryFn:async({signal})=>validateStatus(await researchRead('/api/agents/status',signal)),refetchInterval:10000,retry:false});
+ const roles=useQuery({queryKey:['research-roles'],queryFn:({signal})=>researchRead<Role[]>('/api/agents',signal),refetchInterval:10000,retry:false});
+ const cases=useQuery({queryKey:['research-cases'],queryFn:({signal})=>researchRead<ResearchCase[]>('/api/research/cases',signal),refetchInterval:10000,retry:false});
+ const instruments=useQuery({queryKey:['research-instruments'],queryFn:({signal})=>researchRead<{id:string;symbol:string;venue:string}[]>('/api/instruments',signal),staleTime:60000,retry:false,enabled:department==='research'});
+ const caseId=selected||cases.data?.[0]?.id||'';
+ const dossier=useQuery({queryKey:['research-dossier',caseId,run],queryFn:async({signal})=>validateDossier(await researchRead(`/api/research/cases/${caseId}${run?'?run_key='+encodeURIComponent(run):''}`,signal)),enabled:!!caseId,refetchInterval:10000,retry:false});
+ async function action(fn:()=>Promise<unknown>){setError('');setPending(true);try{await fn();await qc.invalidateQueries({predicate:q=>String(q.queryKey[0]).startsWith('research-')});}catch(e){setError(e instanceof Error?e.message:'Error local');}finally{setPending(false);}}
+ const visible=roles.data?.filter(r=>!TEAMS[department]?.length||TEAMS[department].includes(r.team))??[];
+ const data:Dossier|undefined=!dossier.isError?dossier.data:undefined;
+ return <section className="research-panel" aria-label="Research P4"><header><p className="research-eyebrow">P4 · RESEARCH LOCAL · SIN OPERACIONES</p><h3>{department==='systems'?'Runtime y orquestación':department==='committee'?'Bull / Bear / Comité':'Mesa de investigación'}</h3></header>
+ {status.isError?<p role="status">NO DISPONIBLE: backend research desconectado.</p>:status.data?<div className="research-stats"><span><b>{status.data.active_jobs}</b> jobs activos</span><span><b>{status.data.queue}</b> en cola</span><span><b>{status.data.failures}</b> bloqueos / fallos</span><span><b>{status.data.runtime.state}</b> {status.data.runtime.model??'Sin modelo local'}</span></div>:<p>Comprobando research…</p>}
+ <p className="research-note">Una inferencia local · dos tareas quant · cuatro consultas ligeras. PC apagado: sin ejecución; la cola se conserva.</p>
+ <details><summary>Roles del departamento ({visible.length})</summary><div className="research-roles">{visible.map(r=><article key={r.role_id}><strong>{r.name}</strong><span>{r.state} · {r.llm_required?'LLM local':'Python determinista'}</span><p>{r.mission}</p></article>)}</div></details>
+ {department==='research'?<form onSubmit={e=>{e.preventDefault();void action(async()=>{const c=await researchWrite<ResearchCase>('/api/research/cases',{instrument_id:instrument,question},crypto.randomUUID());setSelected(c.id);});}}><h4>Nuevo caso</h4><label>Instrumento verificado<select required value={instrument} onChange={e=>setInstrument(e.target.value)}><option value="">Seleccionar del registro P2</option>{instruments.data?.map(i=><option key={i.id} value={i.id}>{i.symbol} · {i.venue}</option>)}</select></label><label>Pregunta de investigación<textarea maxLength={800} value={question} onChange={e=>setQuestion(e.target.value)}/></label><button disabled={pending||!instrument}>Crear caso de research</button></form>:null}
+ {error?<p role="alert">{error}</p>:null}
+ <label>Caso<select value={caseId} onChange={e=>{setSelected(e.target.value);setRun('');}}><option value="">Sin casos</option>{cases.data?.map(c=><option key={c.id} value={c.id}>{c.instrument.symbol} · {new Date(c.created_at).toLocaleString('es-ES')}</option>)}</select></label>
+ {data?.runs?.length?<label>Versión del dossier<select value={run} onChange={e=>setRun(e.target.value)}><option value="">Última ejecución</option>{data.runs.map((r,i)=><option key={r} value={r}>Versión {data.runs!.length-i} · {r.slice(0,8)}</option>)}</select></label>:null}
+ {data?<><div className="research-case-heading"><div><h3>{data.instrument.symbol}</h3><p>{data.question}</p><strong>{data.status}</strong></div><div><label><input type="checkbox" checked={refresh} onChange={e=>setRefresh(e.target.checked)}/> Consultar fuentes públicas P2 autorizadas</label><button disabled={pending||data.status==='RUNNING'} onClick={()=>void action(()=>researchWrite(`/api/research/cases/${caseId}/run`,{priority:10,refresh_public:refresh},crypto.randomUUID()))}>Analizar · sin operar</button></div></div>
+ <details><summary>Jobs y auditoría ({data.jobs.length})</summary><table><thead><tr><th>Rol</th><th>Estado</th><th>Tiempo / error</th><th>Control</th></tr></thead><tbody>{data.jobs.map(j=><tr key={j.id}><td>{j.role_id}</td><td>{j.state}</td><td>{j.duration_ms??'—'} ms {j.error}</td><td>{['QUEUED','RUNNING'].includes(j.state)?<button disabled={pending} onClick={()=>void action(()=>researchWrite(`/api/agent-jobs/${j.id}/cancel`,{},crypto.randomUUID()))}>Cancelar ejecución de research</button>:null}</td></tr>)}</tbody></table></details>
+ <div className="research-dossier">{data.results.map(r=><OpinionCard key={r.job_id} result={r}/>)}</div>
+ <details><summary>Evidencias y fuentes ({data.evidence.length})</summary>{data.evidence.map(e=><article id={`ev-${e.id}`} key={e.id} className="research-evidence"><strong>{e.provider} · {e.scope} · {e.freshness}</strong><p>{e.content.excerpt}</p><p>{e.trust_class} · {e.available&&e.rights_ok?'Disponible':'NO DISPONIBLE / derechos'}</p><small>Observado {e.observed_at} · Recuperado {e.retrieved_at}<br/>SHA-256 {e.hash}</small>{e.url.startsWith('https://')?<a href={e.url} target="_blank" rel="noopener noreferrer">Fuente original</a>:<p>{e.url}</p>}<details><summary>Derechos</summary><pre>{JSON.stringify(e.rights,null,2)}</pre></details></article>)}</details>
+ </>:<p>{dossier.isError?'NO DISPONIBLE: no se pudo verificar el dossier.':'Todavía no hay un caso seleccionado. Crea uno desde Research.'}</p>}
+ <p className="research-note">Riesgo P4 es advisory. Veto formal P5 y órdenes/fills P6: NO DISPONIBLE.</p>
+ </section>;
+}

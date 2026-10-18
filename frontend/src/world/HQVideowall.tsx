@@ -3,10 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 import { validateSource, type DataObservation } from '../dataApi';
 import { eur,percent,nullableDecimal } from '../portfolioApi';
 import './videowall.css';
+import {validateStatus,type RuntimeStatus} from '../researchApi';
 
 export const HQ_TITLES:Record<string,string>={portfolio:'Cartera MASTER',positions:'Posiciones',operations:'Operaciones',markets:'Mercados',news:'Noticias',risk:'Riesgos',committee:'Comité',agents:'Agentes',systems:'Sistemas'};
 const COUNTS:Record<string,string>={candidate_providers:'Proveedores candidatos',candidate_access_modes:'Modalidades candidatas',implemented_adapters:'Adaptadores implementados',verified_connections:'Conexiones reales verificadas',usable_sources:'Fuentes utilizables ahora',no_credentials:'Sin credenciales',rights_restricted:'Derechos restringidos'};
-export type ExecutiveValue={nav_eur?:string|null;cash_eur?:string|null;cumulative_return_pct?:string|null;valuation_status?:string;performance?:Record<string,string|number|null>;positions_count?:number;market_value_eur?:string|null;invested_pct?:string|null;positions?:unknown[]};
+export type ExecutiveValue=Partial<RuntimeStatus>&{nav_eur?:string|null;cash_eur?:string|null;cumulative_return_pct?:string|null;valuation_status?:string;performance?:Record<string,string|number|null>;positions_count?:number;market_value_eur?:string|null;invested_pct?:string|null;positions?:unknown[]};
 type Section={section_id:string;phase_required:string;status:string;as_of_utc:string|null;source:string|null;reason:string;value:ExecutiveValue|null;quality:Record<string,number|string>;rights:string|null;items:DataObservation[]};
 export interface HQOverviewData {checked_at:string;sections:Section[]}
 export function validateOverview(value:unknown):HQOverviewData{
@@ -15,17 +16,19 @@ export function validateOverview(value:unknown):HQOverviewData{
  const ids=new Set<string>();
  for(const section of data.sections as Section[]){
   if(!HQ_TITLES[section.section_id]||ids.has(section.section_id)||!Array.isArray(section.items)||!['AVAILABLE','STALE','NOT_IMPLEMENTED','OFFLINE'].includes(section.status)||typeof section.reason!=='string'||typeof section.quality!=='object'||!section.quality)throw Error('Sección no válida');ids.add(section.section_id);
-  if(!['markets','news','systems','portfolio','positions'].includes(section.section_id)&&(section.items.length||section.status!=='NOT_IMPLEMENTED'||section.value!==null))throw Error('Fase futura no habilitada');
-  if(section.value!==null){
+  if(!['markets','news','systems','portfolio','positions','agents'].includes(section.section_id)&&(section.items.length||section.status!=='NOT_IMPLEMENTED'||section.value!==null))throw Error('Fase futura no habilitada');
+  if(section.section_id==='agents'&&section.value!==null){validateStatus(section.value);if(section.phase_required!=='P4')throw Error('Fase research inválida');}
+  else if(section.value!==null){
    if(!['portfolio','positions'].includes(section.section_id)||typeof section.value!=='object'||section.phase_required!=='P3'||!section.source?.startsWith('Ledger MASTER local')||!section.as_of_utc||!Number.isFinite(Date.parse(section.as_of_utc)))throw Error('Capital sin ledger.');
    if(section.section_id==='portfolio'&&(!nullableDecimal(section.value.nav_eur)||!nullableDecimal(section.value.cash_eur)||!nullableDecimal(section.value.cumulative_return_pct)))throw Error('Importe P3 inválido.');
    if(section.section_id==='positions'&&(!Number.isInteger(section.value.positions_count)||!nullableDecimal(section.value.market_value_eur)||!nullableDecimal(section.value.invested_pct)||!Array.isArray(section.value.positions)||section.value.positions.length!==section.value.positions_count))throw Error('Posiciones P3 inválidas.');
-  }else if(['portfolio','positions'].includes(section.section_id)&&section.status==='AVAILABLE')throw Error('Cartera sin datos.');
+  }else if(['portfolio','positions','agents'].includes(section.section_id)&&section.status==='AVAILABLE')throw Error('Sección activa sin datos verificables.');
   for(const item of section.items)validateSource({access_id:(item as DataObservation & {access_id:string}).access_id,state:'AVAILABLE_VERIFIED',reason:'Cache',checked_at:data.checked_at,real_connection:true,usable:true,cache_hit:true,normalized_count:1,observations:[item]});
  }
  return data as unknown as HQOverviewData;
 }
 export function ExecutiveSummary({id,value}:{id:string;value:ExecutiveValue}){
+ if(id==='agents')return <dl className="hq-counts"><div><dt>Jobs activos / cola</dt><dd>{value.active_jobs} / {value.queue}</dd></div><div><dt>Runtime local</dt><dd>{value.runtime?.state}</dd></div><div><dt>Fallos / bloqueos</dt><dd>{value.failures}</dd></div><div><dt>Roles lógicos</dt><dd>{value.roles}</dd></div></dl>;
  return id==='portfolio'?<dl className="hq-counts"><div><dt>NAV · virtual</dt><dd>{eur(value.nav_eur)}</dd></div><div><dt>Caja</dt><dd>{eur(value.cash_eur)}</dd></div><div><dt>Rentabilidad</dt><dd>{percent(value.cumulative_return_pct)}</dd></div><div><dt>Performance</dt><dd>{value.performance?.twr_pct==null?'Historia insuficiente':percent(value.performance.twr_pct as string)}</dd></div></dl>:<dl className="hq-counts"><div><dt>Posiciones</dt><dd>{value.positions_count}</dd></div><div><dt>Valor de mercado</dt><dd>{eur(value.market_value_eur)}</dd></div><div><dt>Exposición</dt><dd>{percent(value.invested_pct)}</dd></div></dl>;
 }
 async function fetchOverview(signal:AbortSignal):Promise<HQOverviewData>{

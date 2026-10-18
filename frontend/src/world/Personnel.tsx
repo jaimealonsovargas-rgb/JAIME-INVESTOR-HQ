@@ -2,6 +2,8 @@ import {Suspense,memo} from 'react';
 import type {Material} from 'three';
 import Avatar from './Avatar';
 import {PERSONNEL} from './staffLayout';
-export default memo(function Personnel({contact}:{contact:Material}) {
- return <group name="personal-offline"><Suspense fallback={null}>{PERSONNEL.map(p=><group key={p.id} name={p.id} position={p.position} rotation={[0,p.yaw,0]}><group scale={1+(p.variant%3-1)*.015}><Avatar id={p.id} variant={p.variant} npc contact={contact}/></group></group>)}</Suspense></group>;
+import {Html} from '@react-three/drei';
+const TEAM:Record<string,string>={research:'research',quant:'quant',trading:'trading_execution',execution:'trading_execution',risk:'risk',performance:'performance',systems:'systems_data',committee:'committee'};
+export default memo(function Personnel({contact,states}:{contact:Material;states?:Record<string,string>}) {
+ return <group name="personal-offline"><Suspense fallback={null}>{PERSONNEL.map(p=><group key={p.id} name={p.id} position={p.position} rotation={[0,p.yaw,0]}><group scale={1+(p.variant%3-1)*.015}><Avatar id={p.id} variant={p.variant} npc contact={contact}/></group>{p.primary&&states?.[TEAM[p.department]]?<Html position={[0,1.85,0]} center zIndexRange={[4,0]} style={{pointerEvents:'none'}}><span style={{fontSize:9,color:'#e0cca4',background:'#101e26dd',padding:'2px 5px',whiteSpace:'nowrap'}}>{states[TEAM[p.department]]}</span></Html>:null}</group>)}</Suspense></group>;
 });

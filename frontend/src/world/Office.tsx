@@ -125,7 +125,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
     <primitive object={model} />
     <VideowallLabels overview={overview}/>
     <Player runtime={player} contact={materials.contact}/>
-    <Personnel contact={materials.contact}/>
+    <Personnel contact={materials.contact} states={overview?.sections.find(s=>s.section_id==='agents')?.value?.department_states}/>
     <Monitors player={player} onOpen={onOpen} onNear={onNear}/>
     {DEPARTMENTS.map(d => <Html key={d.id} position={[d.center[0],2.76,d.center[2]-d.size[1]/2+.15]} transform distanceFactor={4} zIndexRange={[5,0]} style={{pointerEvents: 'none'}}><div className="department-label" data-department={d.id} style={{width:d.id==='committee'?480:320}}>{d.label}</div></Html>)}
 
