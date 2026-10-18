@@ -101,6 +101,7 @@ def withhold_unsupported_narrative(opinion: Opinion, evidence: list[dict]):
     supported = {n for row in rows if row['verified'] for n in re.findall(r'(?<![\w])[-+]?\d+(?:[.,]\d+)*', row['text'])}
     withheld = []
     def check(text, path):
+        text = sanitize(text)
         if any(n not in supported for n in re.findall(r'(?<![\w])[-+]?\d+(?:[.,]\d+)*', text)):
             withheld.append({'field': path, 'reason': 'NUMBERS_OUTSIDE_CLAIMS', 'text_hash': digest(text)})
             return 'NO VERIFICADO: pasaje omitido por contener cifras sin evidencia vinculada.'

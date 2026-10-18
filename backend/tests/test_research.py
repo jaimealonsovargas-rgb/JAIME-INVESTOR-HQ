@@ -205,8 +205,8 @@ def test_chair_preserves_both_views_and_lineage(migrated):
         status = {'state':'AVAILABLE','model':'TEST_ONLY','runtime':'fixture'}
         async def probe(self): return self.status
         async def chat(self, system, data, **kwargs):
-            view = 'Bull: cobertura de fuente.' if 'tesis favorable' in system else 'Bear: evidencia insuficiente.' if 'Refutar' in system else 'Síntesis condicionada.'
-            return Opinion(overview=view,claims=[],unknowns=['Sin datos adicionales.'],invalidation_conditions=[],research_view='INSUFFICIENT_EVIDENCE'), {'model':'TEST_ONLY','runtime':'fixture'}
+            view = 'Bull: cobertura de fuente.' if 'bull_advocate' in system else 'Bear: evidencia insuficiente.' if 'Refutar' in system else 'Síntesis condicionada.'
+            return Opinion(overview=view,thesis=view,risks=['Muestra insuficiente.'],key_disagreements=['Cobertura no equivale a capacidad predictiva.'],claims=[],unknowns=['Sin datos adicionales.'],invalidation_conditions=['Fuente retirada.'],research_view='INSUFFICIENT_EVIDENCE'), {'model':'TEST_ONLY','runtime':'fixture'}
     async def scenario():
         engine, store, case = setup_store(migrated)
         service = ResearchService(engine, DataService(engine), None, FakeLocal())
@@ -306,3 +306,19 @@ def test_source_withdrawal_degrades_cached_evidence(migrated):
         session.add(DataRecord(key='status:A01',payload={'http_status':404},expires_at=now,updated_at=now))
     assert current_evidence(DataService(engine),[evidence])[0]['available'] is False
     engine.dispose()
+
+
+def test_debate_context_is_independent_and_copied_thesis_rejected():
+    from app.research_debate import role_context, validate_debate
+    bull = opinion(thesis='La fuente permite comparar referencias.',risks=['Cobertura limitada.'],invalidation_conditions=['Fuente retirada.'])
+    prior = [{'role_id':'macro_global','opinion':opinion().model_dump()}, {'role_id':'bull_advocate','opinion':bull.model_dump()}]
+    assert role_context('bull_advocate', prior) == []
+    assert [r['role'] for r in role_context('bear_skeptic',prior)] == ['bull_advocate']
+    with pytest.raises(ValueError,match='DEBATE_DUPLICATE_THESIS'):
+        validate_debate('bear_skeptic',bull,prior)
+    bear=bull.model_copy(update={'thesis':'Comparabilidad no prueba capacidad predictiva.','key_disagreements':['La muestra no establece causalidad.']})
+    validate_debate('bear_skeptic',bear,prior)
+    prior.append({'role_id':'bear_skeptic','opinion':bear.model_dump()})
+    assert len(role_context('cio_chair',prior)) == 2
+    with pytest.raises(ValueError,match='DEBATE_ARGUMENT_MISSING'):
+        validate_debate('bull_advocate',opinion(),[])

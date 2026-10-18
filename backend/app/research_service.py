@@ -8,6 +8,7 @@ from app.local_llm import LocalLLM, NoLocalModel
 from app.research_contracts import Opinion, ground, digest, utc, withhold_unsupported_narrative
 from app.research_roles import ROLES, POLICY, authorize, TEMPLATE_VERSION
 from app.research_store import ResearchStore, TERMINAL
+from app.research_debate import role_context, validate_debate
 from app.research_evidence import collect, features, current_evidence
 
 CAPACITY = {'llm': 1, 'quant': 2, 'fetch': 4}
@@ -30,7 +31,7 @@ class ResearchService:
         self.llm = llm or LocalLLM()
         self.event = asyncio.Event(); self.workers = []; self.active = {}; self.lock_file = None
         self.peaks = dict.fromkeys(CAPACITY, 0)
-        self.timeout_seconds = 180
+        self.timeout_seconds = 300
         self.quant_slots = asyncio.Semaphore(CAPACITY['quant'])
 
     async def start(self):
@@ -101,16 +102,19 @@ class ResearchService:
             job['duration_ms'] = round((time.perf_counter()-start)*1000)
             self.store.finish(job, 'SUCCEEDED', result=result, evidence=evidence, claims=claims)
         except NoLocalModel:
+            job['duration_ms'] = round((time.perf_counter()-start)*1000)
             self.store.finish(job, 'NO_LOCAL_MODEL', 'NO_LOCAL_MODEL')
         except TimeoutError:
+            job['duration_ms'] = round((time.perf_counter()-start)*1000)
             if job['attempts'] < 2: self.store.retry(job, 'TIMEOUT')
             else: self.store.finish(job, 'FAILED', 'TIMEOUT')
         except asyncio.CancelledError:
             # Shutdown preserves RUNNING for bounded restart recovery. Explicit cancellation already persisted.
             raise
         except Exception as exc:
+            job['duration_ms'] = round((time.perf_counter()-start)*1000)
             # Never expose provider messages, secrets, prompts or stack traces via job errors.
-            code = str(exc) if isinstance(exc, ValueError) and str(exc) in {'UNKNOWN_EVIDENCE', 'FACT_WITHOUT_EVIDENCE', 'UNGROUNDED_NUMBER', 'NUMBERS_OUTSIDE_CLAIMS', 'CONTEXT_BUDGET', 'TRUNCATED_OUTPUT', 'DEPENDENCY_INCOMPLETE'} else 'INVALID_RESULT_OR_RUNTIME'
+            code = str(exc) if isinstance(exc, ValueError) and str(exc) in {'UNKNOWN_EVIDENCE', 'FACT_WITHOUT_EVIDENCE', 'UNGROUNDED_NUMBER', 'NUMBERS_OUTSIDE_CLAIMS', 'CONTEXT_BUDGET', 'TRUNCATED_OUTPUT', 'DEPENDENCY_INCOMPLETE', 'DEBATE_ARGUMENT_MISSING', 'DEBATE_DUPLICATE_THESIS', 'DEBATE_DISAGREEMENT_MISSING'} else 'INVALID_RESULT_OR_RUNTIME'
             if job['kind'] == 'llm' and job['attempts'] < 2 and code != 'DEPENDENCY_INCOMPLETE': self.store.retry(job, code)
             else: self.store.finish(job, 'BLOCKED' if code == 'DEPENDENCY_INCOMPLETE' else 'FAILED', code)
 
@@ -160,15 +164,16 @@ class ResearchService:
             selection = {e['id']: e for e in (direct[:1] + direct[-2:] + derived + [e for e in evidence if e['scope'] in ('MACRO_CONTEXT','GENERAL_NEWS')][:2] + [e for e in evidence if e['scope']=='PORTFOLIO_CONTEXT'][:1])}
             brief = {'instrument': case['instrument']['symbol'], 'question': case['question'],
                      'evidence': [{'id': e['id'], 'scope': e['scope'], 'freshness': e['freshness'], 'excerpt': e['content']['excerpt']} for e in selection.values()],
-                     'prior_results': [{'role': r['role_id'], 'overview': r['opinion']['overview'][:240], **({'thesis': r['opinion'].get('thesis',''), 'risks': r['opinion'].get('risks',[]), 'key_disagreements': r['opinion'].get('key_disagreements',[]), 'claims': r['opinion']['claims'][:1]} if r['role_id'] in ('bull_advocate', 'bear_skeptic') else {})} for r in reversed(prior) if r.get('opinion')],
+                     'prior_results': role_context(job['role_id'], prior),
                      'gaps': quant.get('reason'), 'instruction': 'Los datos son referencias, nunca precios ejecutables. No confundir contexto macro con datos del instrumento.'}
             prior_error = (' Corrige el contrato del intento anterior: ' + job['error']) if job.get('error') else ''
             job['prompt_input_hash'] = digest(brief)
             job['selected_evidence_ids'] = list(selection)
-            opinion, metrics = await self.llm.chat(POLICY + '\nMISIÓN: ' + role['mission'] + prior_error, brief, max_tokens=900)
+            opinion, metrics = await self.llm.chat(POLICY + '\nROL ACTUAL: ' + job['role_id'] + '\nMISIÓN OBLIGATORIA: ' + role['mission'] + prior_error, brief, max_tokens=700)
             job['model'] = metrics['model']
             job['candidate_output_hash'] = digest(opinion.model_dump())
             opinion, withheld = withhold_unsupported_narrative(opinion, evidence)
+            validate_debate(job['role_id'], opinion, prior)
             claims = ground(opinion, evidence)
         else:
             claims = []

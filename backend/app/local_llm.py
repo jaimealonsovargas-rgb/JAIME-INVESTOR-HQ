@@ -69,7 +69,13 @@ class LocalLLM:
         if (await self.probe())['state'] != 'AVAILABLE':
             raise NoLocalModel()
         # Conservative budget, no silently truncated evidence or huge external documents.
-        prompt = canonical(data)
+        def model_view(value):
+            if isinstance(value, dict):
+                return {k: model_view(v) for k, v in value.items() if k not in ('id', 'evidence_ids')}
+            if isinstance(value, list):
+                return [model_view(v) for v in value]
+            return value
+        prompt = canonical(model_view(data))
         if len(prompt) > 14000 or not 1 <= max_tokens <= 900:
             raise ValueError('CONTEXT_BUDGET')
         start = time.perf_counter()
@@ -78,8 +84,11 @@ class LocalLLM:
                    'max_tokens': max_tokens, 'stream': False,
                    'chat_template_kwargs': {'enable_thinking': False}, 'reasoning_effort': 'none',
                    'response_format': {'type': 'json_object', 'schema': grounded_schema(data)}}
-        async with httpx.AsyncClient(trust_env=False, follow_redirects=False, transport=self.transport, timeout=175) as client:
-            response = await client.post(self.endpoint + '/v1/chat/completions', json=payload)
+        async with httpx.AsyncClient(trust_env=False, follow_redirects=False, transport=self.transport, timeout=295) as client:
+            try:
+                response = await client.post(self.endpoint + '/v1/chat/completions', json=payload)
+            except httpx.TimeoutException:
+                raise TimeoutError('LOCAL_LLM_TIMEOUT') from None
             response.raise_for_status()
             if len(response.content) > 64000:
                 raise ValueError('OUTPUT_BUDGET')
@@ -89,4 +98,4 @@ class LocalLLM:
             raise ValueError('TRUNCATED_OUTPUT')
         parsed = Opinion.model_validate(json.loads(choice['message']['content']))
         parsed = attach_extracts(parsed, data)
-        return parsed, {'runtime': 'llama.cpp', 'model': self.status['model'], 'duration_ms': round((time.perf_counter()-start)*1000), 'usage': body.get('usage', {}), 'raw_model_output_hash': digest(choice['message']['content']), 'claims_origin': 'PYTHON_EXACT_EVIDENCE_EXTRACTION'}
+        return parsed, {'runtime': 'llama.cpp', 'model': self.status['model'], 'duration_ms': round((time.perf_counter()-start)*1000), 'usage': body.get('usage', {}), 'model_prompt_hash': digest(prompt), 'raw_model_output_hash': digest(choice['message']['content']), 'claims_origin': 'PYTHON_EXACT_EVIDENCE_EXTRACTION'}
