@@ -14,7 +14,7 @@ from app.local_llm import LocalLLM, NoLocalModel
 
 
 def opinion(**changes):
-    return Opinion.model_validate(dict(overview='Research limitado por evidencia.', claims=[], unknowns=['Faltan datos.'], invalidation_conditions=['Cambio de evidencia.'], research_view='INSUFFICIENT_EVIDENCE', **changes))
+    return Opinion.model_validate(dict(overview='Research limitado por evidencia.', claims=[], unknowns=['Faltan datos.'], invalidation_conditions=['Cambio de evidencia.'], research_view='INSUFFICIENT_EVIDENCE') | changes)
 
 
 def setup_store(settings):
@@ -158,3 +158,111 @@ def test_scheduler_capacity_and_restart(migrated):
         assert peak == CAPACITY
         await service.stop(); engine.dispose()
     asyncio.run(scenario())
+
+
+def test_timeout_is_retried_only_once_and_cancel_releases_worker(migrated):
+    async def scenario():
+        engine, store, case = setup_store(migrated)
+        service = ResearchService(engine, None, None, LocalLLM(transport=httpx.MockTransport(lambda r: httpx.Response(503))))
+        service.timeout_seconds = .02
+        async def slow(job):
+            await asyncio.sleep(1)
+        service.perform = slow
+        await service.start()
+        jobs = service.run(case['id'], 'timeout-run', 10)
+        for _ in range(100):
+            if store.get('agent_jobs', jobs[0]['id'])['state'] == 'FAILED': break
+            await asyncio.sleep(.01)
+        failed = store.get('agent_jobs', jobs[0]['id'])
+        assert failed['error'] == 'TIMEOUT' and failed['attempts'] == 2
+        service.cancel(jobs[1]['id'])
+        await asyncio.sleep(.03)
+        assert all(j['state'] in ('FAILED','CANCELLED') for j in store.list('agent_jobs'))
+        await service.stop(); engine.dispose()
+    asyncio.run(scenario())
+
+
+def test_no_model_pipeline_does_not_fabricate_results(migrated):
+    from app.data_service import DataService
+    async def scenario():
+        engine, store, case = setup_store(migrated)
+        service = ResearchService(engine, DataService(engine), None, LocalLLM(transport=httpx.MockTransport(lambda r: httpx.Response(503))))
+        await service.start(); jobs = service.run(case['id'], 'no-model-run')
+        for _ in range(100):
+            if all(j['state'] not in ('RUNNING','QUEUED') for j in store.list('agent_jobs')): break
+            await asyncio.sleep(.01)
+        states = {j['role_id']:j['state'] for j in store.list('agent_jobs')}
+        assert states['bull_advocate'] == states['bear_skeptic'] == states['cio_chair'] == 'NO_LOCAL_MODEL'
+        assert len(store.list('agent_results')) == 3
+        assert service.dossier(case['id'])['status'] == 'INCOMPLETE'
+        await service.stop(); engine.dispose()
+    asyncio.run(scenario())
+
+
+def test_chair_preserves_both_views_and_lineage(migrated):
+    from app.data_service import DataService
+    class FakeLocal:
+        status = {'state':'AVAILABLE','model':'TEST_ONLY','runtime':'fixture'}
+        async def probe(self): return self.status
+        async def chat(self, system, data, **kwargs):
+            view = 'Bull: cobertura de fuente.' if 'tesis favorable' in system else 'Bear: evidencia insuficiente.' if 'Refutar' in system else 'Síntesis condicionada.'
+            return Opinion(overview=view,claims=[],unknowns=['Sin datos adicionales.'],invalidation_conditions=[],research_view='INSUFFICIENT_EVIDENCE'), {'model':'TEST_ONLY','runtime':'fixture'}
+    async def scenario():
+        engine, store, case = setup_store(migrated)
+        service = ResearchService(engine, DataService(engine), None, FakeLocal())
+        await service.start(); service.run(case['id'],'debate-test')
+        for _ in range(200):
+            if all(j['state']=='SUCCEEDED' for j in store.list('agent_jobs')): break
+            await asyncio.sleep(.01)
+        results=store.list('agent_results');chair=next(r for r in results if r['role_id']=='cio_chair')
+        assert set(chair['debate'])=={'bull_advocate','bear_skeptic'}
+        assert chair['debate']['bull_advocate']['overview'] != chair['debate']['bear_skeptic']['overview']
+        assert len(chair['input_manifest']['prior_output_hashes']) == 8
+        await service.stop();engine.dispose()
+    asyncio.run(scenario())
+
+
+def test_derived_features_decimal_and_no_mixed_feeds():
+    from app.research_evidence import features
+    evidence=[{'id':str(i),'provider':'TEST_ONLY','scope':'INSTRUMENT','rights_ok':True,'observed_at':str(i),'freshness':'FRESH','hash':str(i),'content':{'value':v,'feed':'test','series_id':'A','unit':'USD','venue':'TEST'}} for i,v in enumerate(['10','11','12'])]
+    result=features(evidence)
+    assert result['sample_size']==3
+    assert next(m for m in result['items'] if m['name']=='period_return')['value']=='0.2'
+    evidence[-1]['content']['feed']='different'
+    assert features(evidence)['state']=='NO_DATA'
+
+
+def test_numeric_substring_is_not_evidence():
+    record = {'id':'E1','content':{'excerpt':'Value 114.2'},'freshness':'FRESH','rights_ok':True}
+    candidate = opinion(claims=[{'claim_type':'FACT','text':'Value 14.2','evidence_ids':['E1'],'confidence':'HIGH'}])
+    with pytest.raises(ValueError, match='UNGROUNDED_NUMBER'):
+        ground(candidate,[record])
+
+
+def test_case_versions_keep_failed_history(migrated):
+    from app.data_service import DataService
+    engine, store, case = setup_store(migrated)
+    old = store.enqueue(case['id'],'old-version',10,False)
+    store.cancel(old[0]['id'])
+    new = store.enqueue(case['id'],'new-version',10,False)
+    service = ResearchService(engine,DataService(engine),None)
+    assert service.dossier(case['id'])['active_run_key']=='new-version'
+    assert {j['id'] for j in service.dossier(case['id'])['jobs']}=={j['id'] for j in new}
+    previous = service.dossier(case['id'],'old-version')
+    assert previous['status']=='INCOMPLETE' and len(previous['jobs'])==9
+    assert all(j['state']=='CANCELLED' for j in previous['jobs'])
+    engine.dispose()
+
+
+def test_unsupported_narrative_withheld_without_repairing_claims():
+    from app.research_contracts import withhold_unsupported_narrative
+    record={'id':'E1','content':{'excerpt':'Value 114.2'},'freshness':'FRESH','rights_ok':True}
+    candidate=opinion(overview='Expected return 99%',thesis='Evidence remains limited.',claims=[{'claim_type':'FACT','text':'Value 114.2','evidence_ids':['E1'],'confidence':'HIGH'}])
+    safe, notices=withhold_unsupported_narrative(candidate,[record])
+    assert '99' not in safe.overview and 'NO VERIFICADO' in safe.overview
+    assert safe.thesis==candidate.thesis and safe.research_view=='INSUFFICIENT_EVIDENCE'
+    assert notices[0]['field']=='overview' and notices[0]['text_hash']
+    assert ground(safe,[record])[0]['verified']
+    bad=candidate.model_copy(update={'claims':[candidate.claims[0].model_copy(update={'evidence_ids':['INVENTED']})]})
+    with pytest.raises(ValueError,match='UNKNOWN_EVIDENCE'):
+        withhold_unsupported_narrative(bad,[record])

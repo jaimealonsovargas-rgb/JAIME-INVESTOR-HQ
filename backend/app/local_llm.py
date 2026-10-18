@@ -11,6 +11,27 @@ class NoLocalModel(Exception):
     pass
 
 
+def grounded_schema(data):
+    """Small llama.cpp-compatible schema. Facts are constrained to evidence excerpts;
+    free qualitative narrative remains explicitly unverified and validated separately.
+    """
+    schema = Opinion.model_json_schema()
+    schema.pop('$defs', None)
+    records = [e for e in data.get('evidence', [])[:16] if e.get('excerpt')]
+    schema['properties']['claims'] = {'type': 'array', 'maxItems': min(2, len(records)), 'items': {
+        'type': 'object', 'additionalProperties': False,
+        'required': ['claim_type', 'text', 'evidence_ids', 'confidence'],
+        'properties': {'claim_type': {'const': 'FACT'},
+            'text': {'enum': [e['excerpt'] for e in records] or ['NO_DATA']},
+            'evidence_ids': {'type': 'array', 'items': {'enum': [e['id'] for e in records] or ['NO_EVIDENCE']}, 'minItems': 1, 'maxItems': 1},
+            'confidence': {'enum': ['LOW','MEDIUM','HIGH']}}}}
+    for key in ('overview','thesis'):
+        schema['properties'][key] = {'type': 'string', 'maxLength': 400}
+    for key in ('unknowns','invalidation_conditions','catalysts','risks','key_disagreements'):
+        schema['properties'][key] = {'type': 'array', 'maxItems': 2, 'items': {'type': 'string','maxLength':250}}
+    return schema
+
+
 class LocalLLM:
     def __init__(self, endpoint=None, transport=None):
         endpoint = endpoint or os.environ.get('HQ_LOCAL_LLM_URL', 'http://127.0.0.1:8089')
@@ -45,7 +66,8 @@ class LocalLLM:
         payload = {'model': self.status['model'], 'messages': [{'role': 'system', 'content': system},
                    {'role': 'user', 'content': 'UNTRUSTED_CONTENT_JSON\n' + prompt}], 'temperature': 0,
                    'max_tokens': max_tokens, 'stream': False,
-                   'response_format': {'type': 'json_schema', 'json_schema': {'name': 'research', 'strict': True, 'schema': Opinion.model_json_schema()}}}
+                   'chat_template_kwargs': {'enable_thinking': False}, 'reasoning_effort': 'none',
+                   'response_format': {'type': 'json_object', 'schema': grounded_schema(data)}}
         async with httpx.AsyncClient(trust_env=False, follow_redirects=False, transport=self.transport, timeout=175) as client:
             response = await client.post(self.endpoint + '/v1/chat/completions', json=payload)
             response.raise_for_status()

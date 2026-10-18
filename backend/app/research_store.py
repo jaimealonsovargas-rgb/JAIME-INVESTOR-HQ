@@ -5,7 +5,7 @@ import uuid
 from contextlib import contextmanager
 from app.research_schema import TABLES
 from app.research_contracts import canonical, digest, utc
-from app.research_roles import ROLES, pipeline
+from app.research_roles import ROLES, pipeline, TEMPLATE_VERSION
 
 TERMINAL = {'SUCCEEDED', 'FAILED', 'CANCELLED', 'BLOCKED', 'NO_LOCAL_MODEL'}
 
@@ -97,7 +97,7 @@ class ResearchStore:
                 job = {'id': str(uuid.uuid4()), 'role_id': role, 'case_id': case_id, 'run_key': key, 'state': 'QUEUED',
                        'kind': kind, 'priority': priority, 'depends_on': previous, 'queued_at': utc(), 'started_at': None,
                        'finished_at': None, 'input_hash': None, 'output_hash': None, 'error': None, 'runtime': None,
-                       'model': None, 'template_version': 'p4.1', 'attempts': 0, 'refresh_public': refresh, 'duration_ms': None}
+                       'model': None, 'template_version': TEMPLATE_VERSION, 'attempts': 0, 'refresh_public': refresh, 'duration_ms': None}
                 c.execute('INSERT INTO agent_jobs VALUES (?,?,?,?,?,?,?,?,?)', (job['id'], case_id, role, key, kind, 'QUEUED', priority, previous, canonical(job)))
                 jobs.append(job); previous = job['id']
             self.audit(c, 'RUN_QUEUED', case_id=case_id, run_key=key, jobs=[j['id'] for j in jobs])
@@ -154,3 +154,10 @@ class ResearchStore:
                 job.update(state='QUEUED' if job['attempts'] < 2 else 'FAILED', error='RESTART_INTERRUPTED')
                 self.update(c, job)
             self.audit(c, 'SCHEDULER_RECOVERY')
+
+    def retry(self, job, error):
+        with self.connection(True) as c:
+            current = json.loads(c.execute('SELECT payload FROM agent_jobs WHERE id=?', (job['id'],)).fetchone()[0])
+            if current['state'] == 'CANCELLED': return
+            job.update(state='QUEUED', error=error)
+            self.update(c, job); self.audit(c, 'RETRY_QUEUED', job_id=job['id'], attempt=job['attempts'], error=error)

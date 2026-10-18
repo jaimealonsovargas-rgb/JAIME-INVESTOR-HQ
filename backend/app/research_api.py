@@ -1,4 +1,5 @@
 import re
+from datetime import datetime, timezone
 from fastapi import APIRouter, Request, HTTPException
 from sqlalchemy.orm import Session
 from app.database import InstrumentRegistry
@@ -31,7 +32,10 @@ def router(service):
         return [{**role, 'state': next((j['state'] for j in jobs if j['role_id'] == role['role_id']), 'IDLE')} for role in ROLES.values()]
 
     @api.get('/api/agents/status')
-    def status():
+    async def status():
+        last = service.llm.status.get('last_checked_at')
+        if not last or (datetime.now(timezone.utc)-datetime.fromisoformat(last)).total_seconds() > 15:
+            await service.llm.probe()
         return service.status()
 
     @api.get('/api/research/cases')
@@ -48,8 +52,8 @@ def router(service):
         return call(service.store.create_case, instrument.model_dump(mode='json'), sanitize(body.question), key)
 
     @api.get('/api/research/cases/{case_id}')
-    def detail(case_id: str):
-        return call(service.dossier, case_id)
+    def detail(case_id: str, run_key: str | None = None):
+        return call(service.dossier, case_id, run_key)
 
     @api.post('/api/research/cases/{case_id}/run')
     async def run(case_id: str, body: RunCase, request: Request):

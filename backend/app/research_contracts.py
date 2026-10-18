@@ -42,6 +42,10 @@ class Opinion(Strict):
     unknowns: list[str] = Field(max_length=12)
     invalidation_conditions: list[str] = Field(max_length=8)
     research_view: Literal['POSITIVE', 'NEUTRAL', 'NEGATIVE', 'INSUFFICIENT_EVIDENCE']
+    thesis: str = Field(default='', max_length=1200)
+    catalysts: list[str] = Field(default_factory=list, max_length=6)
+    risks: list[str] = Field(default_factory=list, max_length=6)
+    key_disagreements: list[str] = Field(default_factory=list, max_length=6)
 
 
 class CreateCase(Strict):
@@ -69,7 +73,7 @@ def ground(opinion: Opinion, evidence: list[dict]) -> list[dict]:
         if claim.claim_type == 'FACT' and not cited:
             raise ValueError('FACT_WITHOUT_EVIDENCE')
         numbers = re.findall(r'(?<![\w])[-+]?\d+(?:[.,]\d+)*', claim.text)
-        available = ' '.join(canonical(e['content']) for e in cited)
+        available = set(re.findall(r'(?<![\w])[-+]?\d+(?:[.,]\d+)*', ' '.join(canonical(e['content']) for e in cited)))
         if numbers and (not cited or any(n not in available for n in numbers)):
             raise ValueError('UNGROUNDED_NUMBER')
         valid = bool(cited) and all(e['freshness'] == 'FRESH' and e['rights_ok'] and e.get('available', True) for e in cited)
@@ -77,8 +81,31 @@ def ground(opinion: Opinion, evidence: list[dict]) -> list[dict]:
         rows.append({**claim.model_dump(), 'text': sanitize(claim.text), 'claim_id': digest(claim.model_dump()),
                      'verified': valid and exact and claim.claim_type == 'FACT',
                      'grounding': 'VERIFIED_EXTRACT' if valid and exact and claim.claim_type == 'FACT' else 'UNVERIFIED', 'timestamp': utc()})
-    # Narratives cannot smuggle unsupported financial figures around claims.
-    for text in [opinion.overview, *opinion.unknowns, *opinion.invalidation_conditions]:
-        if re.search(r'\d', text):
+    # Repeated figures in a summary inherit the exact verified claim references.
+    # A number appearing somewhere in a cited blob is not sufficient.
+    supported_numbers = set(n for row in rows if row['verified'] for n in re.findall(r'(?<![\w])[-+]?\d+(?:[.,]\d+)*', row['text']))
+    for text in [opinion.overview, opinion.thesis, *opinion.unknowns, *opinion.invalidation_conditions, *opinion.catalysts, *opinion.risks, *opinion.key_disagreements]:
+        if any(n not in supported_numbers for n in re.findall(r'(?<![\w])[-+]?\d+(?:[.,]\d+)*', text)):
             raise ValueError('NUMBERS_OUTSIDE_CLAIMS')
-    return rows
+    return list({row['claim_id']: row for row in rows}.values())
+
+
+def withhold_unsupported_narrative(opinion: Opinion, evidence: list[dict]):
+    """Keep strict claim validation. Withhold whole unsupported numeric passages,
+    never silently repair a number or pretend that a model's prose is evidence.
+    The original output hash and affected field hashes remain auditable.
+    """
+    fields = ('overview', 'thesis', 'unknowns', 'invalidation_conditions', 'catalysts', 'risks', 'key_disagreements')
+    empty = {key: '' if key in ('overview', 'thesis') else [] for key in fields}
+    rows = ground(opinion.model_copy(update=empty), evidence)
+    supported = {n for row in rows if row['verified'] for n in re.findall(r'(?<![\w])[-+]?\d+(?:[.,]\d+)*', row['text'])}
+    withheld = []
+    def check(text, path):
+        if any(n not in supported for n in re.findall(r'(?<![\w])[-+]?\d+(?:[.,]\d+)*', text)):
+            withheld.append({'field': path, 'reason': 'NUMBERS_OUTSIDE_CLAIMS', 'text_hash': digest(text)})
+            return 'NO VERIFICADO: pasaje omitido por contener cifras sin evidencia vinculada.'
+        return text
+    updates = {key: check(getattr(opinion, key), key) if key in ('overview', 'thesis') else [check(text, f'{key}[{i}]') for i, text in enumerate(getattr(opinion, key))] for key in fields}
+    if withheld:
+        updates['research_view'] = 'INSUFFICIENT_EVIDENCE'
+    return opinion.model_copy(update=updates), withheld

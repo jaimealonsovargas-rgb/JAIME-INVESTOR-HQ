@@ -76,7 +76,7 @@ def features(evidence):
         level_sd = (sum((x-mean)**2 for x in values)/(len(values)-1)).sqrt()
         metrics = {'period_return': values[-1]/values[0]-1, 'mean_level': mean, 'sample_volatility': sd,
                    'last_change': changes[-1], 'range': max(values)-min(values), 'min_level': min(values), 'max_level': max(values),
-                   'z_score': (values[-1]-mean)/level_sd if level_sd else Decimal(0)}
+                   **({'z_score': (values[-1]-mean)/level_sd} if level_sd else {})}
         return {'state': 'STALE' if any(e['freshness'] != 'FRESH' for e in rows) else 'AVAILABLE', 'frequency': 'observed intervals; not annualized',
                 'sample_size': len(rows), 'items': [{'name': k, 'value': str(v), 'evidence_ids': [e['id'] for e in rows]} for k, v in metrics.items()],
                 'method_version': 'hq.descriptive.1', 'input_hash': digest([e['hash'] for e in rows])}
@@ -88,8 +88,24 @@ def current_evidence(data, items):
     with Session(data.engine) as session:
         for e in items:
             item = {**e}; content = e['content']; source = CATALOG.get(content.get('access_id'))
+            if e['provider'] == 'HQ_MASTER':
+                from app.portfolio_service import PortfolioService
+                summary = PortfolioService(data.engine, data).summary()
+                item['rights_ok'] = True
+                item['available'] = digest(content) == e['hash'] and content['ledger_hash'] == summary['ledger_hash']
+                item['freshness'] = 'FRESH' if item['available'] and summary['valuation_status'] == 'FRESH' else 'STALE'
+                checked.append(item); continue
+            if e['provider'] == 'HQ_DERIVED':
+                # Derived records retain source evidence links; no invented vendor attribution.
+                inputs = [x for x in items if x['id'] in content['inputs']]
+                origin = current_evidence(data, [x for x in inputs if x['provider'] != 'HQ_DERIVED'])
+                item['rights_ok'] = len(origin) == len(content['inputs']) and all(x['rights_ok'] for x in origin)
+                item['available'] = item['rights_ok'] and all(x['available'] for x in origin) and digest(content) == e['hash']
+                item['freshness'] = 'FRESH' if origin and all(x['freshness'] == 'FRESH' for x in origin) else 'STALE'
+                if not item['rights_ok']: item['content'] = {'excerpt': 'RIGHTS_RESTRICTED'}
+                checked.append(item); continue
             row = session.get(DataRecord, cache_key(source)) if source else None
-            allowed = bool(source and all((source.rights.access_allowed, source.rights.display_allowed, source.rights.storage_allowed, source.rights.redistribution_allowed)))
+            allowed = bool(source and data.initial(source).state == 'NOT_VERIFIED' and all((source.rights.access_allowed, source.rights.display_allowed, source.rights.storage_allowed, source.rights.redistribution_allowed)))
             item['rights_ok'] = allowed
             item['available'] = bool(row) and digest(content) == e['hash']
             received = datetime.fromisoformat(e['retrieved_at'])

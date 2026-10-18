@@ -1,0 +1,35 @@
+{
+  "selected_candidate": {
+    "model_repo": "Qwen/Qwen3-1.7B-GGUF",
+    "model_revision": "90862c4b9d2787eaed51d12237eafdfe7c5f6077",
+    "file": {
+      "rfilename": "Qwen3-1.7B-Q8_0.gguf",
+      "blobId": "53cddf830ca488f735739d5e0b43591544e9ad82",
+      "size": 1834426016,
+      "lfs": {
+        "sha256": "061b54daade076b5d3362dac252678d17da8c68f07560be70818cace6590cb1a",
+        "size": 1834426016,
+        "pointerSize": 135
+      }
+    },
+    "license": "apache-2.0"
+  },
+  "runtime": {
+    "runtime_tag": "b11696",
+    "runtime_url": "https://github.com/ggml-org/llama.cpp/releases/download/b11696/llama-b11696-bin-win-cpu-x64.zip",
+    "runtime_digest": "sha256:1e7c47dff58467540d53e6cf302d83951bcb165afb252c2952ed3872190fc60d"
+  },
+  "binary_sha256": "f80013791ebd80edf5b3e52a4f3a90007153e78fd871b257f77a5ffc1a2cf7e9",
+  "configuration": {
+    "context": 4096,
+    "threads": 3,
+    "parallel": 1,
+    "host": "127.0.0.1",
+    "port": 8089,
+    "no_agent": true,
+    "no_webui": true
+  },
+  "reference_model": "https://huggingface.co/Qwen/Qwen3-1.7B-GGUF/tree/90862c4b9d2787eaed51d12237eafdfe7c5f6077",
+  "reference_runtime": "https://github.com/ggml-org/llama.cpp/releases/tag/b11696",
+  "weights_in_repository": false
+}
