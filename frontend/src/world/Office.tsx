@@ -30,7 +30,7 @@ export interface SceneMetrics {
 }
 declare global { interface Window { __HQ_METRICS__?: SceneMetrics; __HQ_FRAMES__?: number[];__HQ_MOVING_FRAMES__?:number[]; __HQ_COLLIDERS__?:ReadonlyArray<Collider> } }
 
-export default memo(function Office({ view, quality, measuring, onMetrics, player, mode,onOpen,onNear,overview }: { view: View; quality: Quality; measuring: boolean; onMetrics: (m: SceneMetrics) => void; player:PlayerRuntime; mode:'play'|'inspection';onOpen:(id:string)=>void;onNear:(id:string|undefined)=>void;overview?:HQOverviewData }) {
+export default memo(function Office({ view, quality, measuring, onMetrics, player, mode,onOpen,onPersonOpen,onNear,overview }: { view: View; quality: Quality; measuring: boolean; onMetrics: (m: SceneMetrics) => void; player:PlayerRuntime; mode:'play'|'inspection';onOpen:(id:string)=>void;onPersonOpen:(id:string)=>void;onNear:(id:string|undefined)=>void;overview?:HQOverviewData }) {
   const maps = useTexture([
     '/materials/dark_wood_diffuse.jpg', '/materials/dark_wood_nor_gl.jpg', '/materials/dark_wood_rough.jpg',
     '/materials/marble_01_diffuse.jpg', '/materials/marble_01_nor_gl.jpg', '/materials/marble_01_rough.jpg',
@@ -125,7 +125,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
     <primitive object={model} />
     <VideowallLabels overview={overview}/>
     <Player runtime={player} contact={materials.contact}/>
-    <Personnel contact={materials.contact} states={overview?.sections.find(s=>s.section_id==='agents')?.value?.department_states}/>
+    <Personnel contact={materials.contact} onOpen={onPersonOpen} states={overview?.sections.find(s=>s.section_id==='agents')?.value?.department_states}/>
     <Monitors player={player} onOpen={onOpen} onNear={onNear}/>
     {DEPARTMENTS.map(d => <Html key={d.id} position={[d.center[0],2.76,d.center[2]-d.size[1]/2+.15]} transform distanceFactor={4} zIndexRange={[5,0]} style={{pointerEvents: 'none'}}><div className="department-label" data-department={d.id} style={{width:d.id==='committee'?480:320}}>{d.label}</div></Html>)}
 

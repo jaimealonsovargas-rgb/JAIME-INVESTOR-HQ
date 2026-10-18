@@ -2,7 +2,7 @@
 .world canvas { touch-action: none; outline: none; }
 .world-header { position: absolute; inset: 0 0 auto; padding: 24px 36px 42px; display: flex; align-items: center; justify-content: space-between; border: 0; background: linear-gradient(#0b1624c9, transparent); pointer-events: none; }
 .world-brand { display: flex; align-items: center; gap: 16px; font-size: 12px; letter-spacing: .16em; text-shadow: 0 1px 10px #0006; }
-.world-brand > span { font: 48px/1 Georgia, serif; color: #d9bb8f; }
+.world-brand > span { font: 48px/1 Arial, sans-serif; color: #d9bb8f; }
 .world-brand small { display: block; margin-top: 7px; font-size: 8px; color: #d0ceca; letter-spacing: .19em; }
 .world-badges { display: flex; align-items: center; gap: 22px; pointer-events: auto; }
 .world-badges > span { font-size: 9px; letter-spacing: .16em; border: 1px solid #b9915e90; padding: 7px 12px; }
@@ -12,7 +12,7 @@
 .world button:focus-visible, .world select:focus-visible { outline: 2px solid #f7d6a0; outline-offset: 4px; }
 .world-caption { position: absolute; left: 36px; bottom: 134px; pointer-events: none; text-shadow: 0 2px 18px #000; }
 .world-caption > span { font-size: 9px; letter-spacing: .22em; color: #edc78f; }
-.world-caption h1 { font: 36px/1.1 Georgia, serif; margin: 9px 0 8px; letter-spacing: -.015em; }
+.world-caption h1 { font: 36px/1.1 Arial, sans-serif; margin: 9px 0 8px; letter-spacing: -.015em; }
 .world-caption p { font-size: 11px; margin: 0; color: #e5ded3; }
 .world-toolbar { position: absolute; inset: auto 0 0; padding: 30px 36px 15px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; border: 0; background: linear-gradient(transparent, #08131df2 42%); }
 .world-toolbar nav { display: flex; gap: 5px; }
@@ -33,7 +33,7 @@
 .world-help span { float: right; letter-spacing: .16em; font-size: 9px; }
 .architecture-info { position: absolute; right: 36px; top: 104px; width: 370px; max-height: calc(100% - 230px); overflow: auto; display: block; background: #13212cf5; padding: 28px; border: 1px solid #ab93685c; box-shadow: 0 16px 60px #0005; }
 .architecture-info .close-info { float: right; padding: 0 8px; font-size: 23px; }
-.architecture-info h2 { font: 26px/1.25 Georgia, serif; margin: 24px 0 12px; }
+.architecture-info h2 { font: 26px/1.25 Arial, sans-serif; margin: 24px 0 12px; }
 .architecture-info p { font-size: 12px; line-height: 1.7; color: #c4cccc; }
 .architecture-info .info-kicker { font-size: 8px; letter-spacing: .13em; color: #d3b382; }
 .architecture-info ol { list-style: none; padding: 10px 0; margin: 0; }

@@ -30,6 +30,7 @@ export default function World() {
   const [overview,setOverview]=useState<HQOverviewData>();
   const [near,setNear]=useState<string>();
   const openPanel=useCallback((id:string)=>{const monitor=MONITOR_DEFINITIONS.find(m=>m.id===id);if(monitor&&canInteract(player,monitor)){player.paused=true;player.speed=0;player.invalidate?.();setPanel(id);}},[player]);
+  const openPersonPanel=useCallback((id:string)=>{if(!MONITOR_DEFINITIONS.some(m=>m.id===id)||player.paused)return;player.paused=true;player.speed=0;player.velocity=0;player.invalidate?.();setPanel(id);},[player]);
   const closePanel=useCallback(()=>{player.paused=false;player.holdCamera=true;player.invalidate?.();setPanel(undefined);document.querySelector('canvas')?.focus();},[player]);
   player.mode=mode;
   useEffect(()=>{const back=(e:KeyboardEvent)=>{if(e.key==='Escape'&&player.mode==='inspection'){setMode('play');document.querySelector('canvas')?.focus();}};window.addEventListener('keydown',back);return()=>window.removeEventListener('keydown',back);},[player]);
@@ -49,7 +50,7 @@ export default function World() {
         gl={GL_SETTINGS}
         fallback={<div className="world-fallback">WebGL no disponible. <a href="?diagnostico=1">Abrir diagnóstico</a></div>}>
         <AdaptiveResolution quality={quality} player={player} onDprChange={setRenderDpr}/>
-        <Suspense fallback={null}><Office view={view} quality={quality} measuring={measuring} onMetrics={onMetrics} player={player} mode={mode} onOpen={openPanel} onNear={setNear} overview={overview} /></Suspense>
+        <Suspense fallback={null}><Office view={view} quality={quality} measuring={measuring} onMetrics={onMetrics} player={player} mode={mode} onOpen={openPanel} onPersonOpen={openPersonPanel} onNear={setNear} overview={overview} /></Suspense>
       </Canvas>
     </SceneErrorBoundary>
     <header className="world-header">
@@ -73,7 +74,7 @@ export default function World() {
     <footer className="world-toolbar">
       <nav aria-label="Cámara"><button aria-pressed={mode==='play'} onClick={()=>{setMode('play');document.querySelector('canvas')?.focus();}}>Recorrer</button>{Object.entries(VIEWS).map(([key, value]) => <button key={key} aria-pressed={mode==='inspection'&&view === key} onClick={() => { setMode('inspection');setView(key as View); setMetrics(m => m ? {...m, samples: 0} : m); }}>{value.label}</button>)}</nav>
       <div className="world-tools"><label>Gráficos <select value={quality} onChange={e => { const next=e.target.value as Quality;setQuality(next);setRenderDpr(QUALITY[next].dpr);setMetrics(m => m ? {...m, samples: 0} : m); }}><option value="balanced">Equilibrado automático</option><option value="fixed">Equilibrado fijo (80 %)</option><option value="detail">Detalle</option></select></label><span className="resolution-status" aria-label="Resolución de la escena 3D">{Math.round(renderDpr*100)} % 3D</span><button disabled={measuring} onClick={() => setMeasuring(true)}>{measuring ? 'Midiendo…' : 'Medir FPS'}</button><output aria-label="Fotogramas por segundo">{metrics && metrics.samples > 10 ? `${measuring ? '' : 'Última: '}${metrics.fps.toFixed(0)} FPS` : 'En reposo'}</output></div>
-      <p className="world-help">{mode==='play'?'↑↓←→ desplazarse en pantalla · Cámara isométrica · Acércate al agente':'Vista general · Esc para volver'} <span>NPC AMBIENTALES · RESEARCH P4 BAJO DEMANDA</span></p>
+      <p className="world-help">{mode==='play'?'↑↓←→ Moverse · Pulsa sobre una persona o acércate para abrir su panel':'Pulsa sobre una persona · Esc para volver al recorrido'} <span>NPC AMBIENTALES · RESEARCH P4 BAJO DEMANDA</span></p>
     </footer>
   </main>;
 }

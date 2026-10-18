@@ -22,7 +22,7 @@ export function textTexture(title: string, subtitle = '', kind: 'sign' | 'screen
     ctx.textAlign='center';ctx.fillStyle='#172b38';ctx.font='130px Arial';ctx.fillText(title,512,150,940);
     ctx.font='30px Arial';ctx.fillText(subtitle,512,220,940);
   } else {
-    ctx.textAlign = 'center'; ctx.font = kind === 'brand' ? '58px Georgia' : '44px Arial';
+    ctx.textAlign = 'center'; ctx.font = kind === 'brand' ? '58px Arial' : '44px Arial';
     ctx.fillText(title, 512, 110, 940);
     ctx.fillStyle = '#aeb8bb'; ctx.font = '21px Arial'; ctx.fillText(subtitle, 512, 169, 950);
   }

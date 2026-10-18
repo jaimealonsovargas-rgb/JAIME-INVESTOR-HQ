@@ -3,11 +3,11 @@
 body { margin: 0; }
 main { max-width: 1160px; margin: auto; padding: 32px 48px; }
 header { display: flex; gap: 20px; align-items: center; font-size: 12px; letter-spacing: .16em; border-bottom: 1px solid #444748; padding-bottom: 24px; }
-.monogram { font: 36px Georgia, serif; color: #d3b68a; }
+.monogram { font: 36px Arial, sans-serif; color: #d3b68a; }
 .phase { margin-left: auto; color: #c1b8a9; font-size: 10px; }
 section { padding: 54px 0 40px; max-width: 720px; }
 .eyebrow { font-size: 11px; letter-spacing: .2em; color: #d3b68a; }
-h1 { font: 400 clamp(44px, 6vw, 72px)/1.08 Georgia, serif; letter-spacing: -.03em; margin: 20px 0 24px; }
+h1 { font: 400 clamp(44px, 6vw, 72px)/1.08 Arial, sans-serif; letter-spacing: -.03em; margin: 20px 0 24px; }
 .intro { color: #bbbfc0; font-size: 16px; max-width: 625px; }
 .status { margin: 30px 0 24px; border-left: 1px solid #8a785f; padding: 6px 0 6px 20px; display: flex; gap: 14px; }
 .status strong { font-size: 12px; letter-spacing: .08em; }
