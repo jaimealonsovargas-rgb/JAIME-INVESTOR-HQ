@@ -57,7 +57,7 @@ def features(evidence):
     groups = {}
     for e in evidence:
         c = e['content']
-        if e['scope'] == 'INSTRUMENT' and c.get('value') is not None and e['rights_ok']:
+        if e['scope'] == 'INSTRUMENT' and c.get('value') is not None and e['rights_ok'] and e.get('available', True):
             groups.setdefault((e['provider'], c['feed'], c['series_id'], c['unit'], c['venue']), []).append(e)
     if not groups:
         return {'state': 'NO_DATA', 'reason': 'No hay serie comparable del instrumento.', 'items': []}
@@ -105,9 +105,11 @@ def current_evidence(data, items):
                 if not item['rights_ok']: item['content'] = {'excerpt': 'RIGHTS_RESTRICTED'}
                 checked.append(item); continue
             row = session.get(DataRecord, cache_key(source)) if source else None
+            latest = session.get(DataRecord, 'status:' + source.id) if source else None
+            withdrawn = bool(latest and latest.payload.get('http_status') in (403, 404, 410))
             allowed = bool(source and data.initial(source).state == 'NOT_VERIFIED' and all((source.rights.access_allowed, source.rights.display_allowed, source.rights.storage_allowed, source.rights.redistribution_allowed)))
             item['rights_ok'] = allowed
-            item['available'] = bool(row) and digest(content) == e['hash']
+            item['available'] = bool(row) and not withdrawn and digest(content) == e['hash']
             received = datetime.fromisoformat(e['retrieved_at'])
             item['freshness'] = 'FRESH' if (datetime.now(timezone.utc)-received).total_seconds() <= content.get('stale_after_seconds', 0) else 'STALE'
             if not allowed:

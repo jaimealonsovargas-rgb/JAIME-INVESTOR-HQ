@@ -266,3 +266,43 @@ def test_unsupported_narrative_withheld_without_repairing_claims():
     bad=candidate.model_copy(update={'claims':[candidate.claims[0].model_copy(update={'evidence_ids':['INVENTED']})]})
     with pytest.raises(ValueError,match='UNKNOWN_EVIDENCE'):
         withhold_unsupported_narrative(bad,[record])
+
+
+def test_unavailable_source_cannot_produce_available_features():
+    from app.research_evidence import features
+    records=[{'id':str(i),'provider':'TEST_ONLY','scope':'INSTRUMENT','rights_ok':True,'available':False,'observed_at':str(i),'freshness':'FRESH','hash':str(i),'content':{'value':str(i+1),'feed':'test','series_id':'A','unit':'USD','venue':'TEST'}} for i in range(3)]
+    assert features(records)['state']=='NO_DATA'
+
+
+def test_runtime_schema_requires_actual_debate_fields():
+    from app.local_llm import grounded_schema
+    schema=grounded_schema({'evidence':[{'id':'E1','excerpt':'Public evidence.'}]})
+    assert set(schema['required'])==set(schema['properties'])
+    assert {'thesis','risks','key_disagreements','invalidation_conditions'} <= set(schema['required'])
+
+
+def test_facts_extracted_by_python_not_invented_by_model():
+    from app.local_llm import attach_extracts
+    data={'evidence':[{'id':'E1','excerpt':'Value 114.2'}]}
+    enriched=attach_extracts(opinion(),data)
+    assert enriched.claims[0].text==data['evidence'][0]['excerpt']
+    assert enriched.claims[0].evidence_ids==['E1']
+    with pytest.raises(ValueError,match='MODEL_FACT_GENERATION_DENIED'):
+        attach_extracts(enriched,data)
+
+
+def test_source_withdrawal_degrades_cached_evidence(migrated):
+    from sqlalchemy.orm import Session
+    from app.database import DataRecord
+    from app.data_catalog import CATALOG
+    from app.data_service import DataService,cache_key
+    from app.research_evidence import current_evidence
+    from app.research_contracts import digest,utc
+    engine,store,case=setup_store(migrated)
+    now=utc();content={'access_id':'A01','excerpt':'Reference 1.12','stale_after_seconds':3600}
+    evidence={'id':'E1','provider':'ECB','content':content,'hash':digest(content),'retrieved_at':now}
+    with Session(engine) as session,session.begin():
+        session.add(DataRecord(key=cache_key(CATALOG['A01']),payload={},expires_at=now,updated_at=now))
+        session.add(DataRecord(key='status:A01',payload={'http_status':404},expires_at=now,updated_at=now))
+    assert current_evidence(DataService(engine),[evidence])[0]['available'] is False
+    engine.dispose()

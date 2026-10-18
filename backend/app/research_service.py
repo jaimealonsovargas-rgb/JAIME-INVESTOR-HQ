@@ -153,10 +153,14 @@ class ResearchService:
                     raise NoLocalModel()
                 raise ValueError('DEPENDENCY_INCOMPLETE')
             direct = sorted((e for e in evidence if e['scope'] == 'INSTRUMENT'), key=lambda e: e['observed_at'])
-            selection = {e['id']: e for e in (direct[:1] + direct[-2:] + [e for e in evidence if e['scope'] == 'DERIVED_FEATURE'][:2] + [e for e in evidence if e['scope'] in ('MACRO_CONTEXT','GENERAL_NEWS')][:2] + [e for e in evidence if e['scope']=='PORTFOLIO_CONTEXT'][:1])}
+            derived = []
+            for name in ('period_return', 'sample_volatility', 'z_score'):
+                metric = next((e for e in evidence if e['scope'] == 'DERIVED_FEATURE' and e['content']['excerpt'].startswith(name + ':')), None)
+                if metric: derived.append(metric)
+            selection = {e['id']: e for e in (direct[:1] + direct[-2:] + derived + [e for e in evidence if e['scope'] in ('MACRO_CONTEXT','GENERAL_NEWS')][:2] + [e for e in evidence if e['scope']=='PORTFOLIO_CONTEXT'][:1])}
             brief = {'instrument': case['instrument']['symbol'], 'question': case['question'],
                      'evidence': [{'id': e['id'], 'scope': e['scope'], 'freshness': e['freshness'], 'excerpt': e['content']['excerpt']} for e in selection.values()],
-                     'prior_results': [{'role': r['role_id'], 'overview': r['opinion']['overview'][:240], 'claims': r['opinion']['claims'][:1] if r['role_id'] in ('bull_advocate', 'bear_skeptic') else []} for r in reversed(prior) if r.get('opinion')],
+                     'prior_results': [{'role': r['role_id'], 'overview': r['opinion']['overview'][:240], **({'thesis': r['opinion'].get('thesis',''), 'risks': r['opinion'].get('risks',[]), 'key_disagreements': r['opinion'].get('key_disagreements',[]), 'claims': r['opinion']['claims'][:1]} if r['role_id'] in ('bull_advocate', 'bear_skeptic') else {})} for r in reversed(prior) if r.get('opinion')],
                      'gaps': quant.get('reason'), 'instruction': 'Los datos son referencias, nunca precios ejecutables. No confundir contexto macro con datos del instrumento.'}
             prior_error = (' Corrige el contrato del intento anterior: ' + job['error']) if job.get('error') else ''
             job['prompt_input_hash'] = digest(brief)

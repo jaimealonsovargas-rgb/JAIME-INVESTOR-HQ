@@ -4,7 +4,7 @@ import os
 import time
 from urllib.parse import urlsplit
 import httpx
-from app.research_contracts import Opinion, canonical
+from app.research_contracts import Opinion, canonical, digest
 
 
 class NoLocalModel(Exception):
@@ -12,24 +12,34 @@ class NoLocalModel(Exception):
 
 
 def grounded_schema(data):
-    """Small llama.cpp-compatible schema. Facts are constrained to evidence excerpts;
+    """Small llama.cpp-compatible schema. Python supplies the exact facts;
     free qualitative narrative remains explicitly unverified and validated separately.
     """
     schema = Opinion.model_json_schema()
     schema.pop('$defs', None)
-    records = [e for e in data.get('evidence', [])[:16] if e.get('excerpt')]
-    schema['properties']['claims'] = {'type': 'array', 'maxItems': min(2, len(records)), 'items': {
-        'type': 'object', 'additionalProperties': False,
-        'required': ['claim_type', 'text', 'evidence_ids', 'confidence'],
-        'properties': {'claim_type': {'const': 'FACT'},
-            'text': {'enum': [e['excerpt'] for e in records] or ['NO_DATA']},
-            'evidence_ids': {'type': 'array', 'items': {'enum': [e['id'] for e in records] or ['NO_EVIDENCE']}, 'minItems': 1, 'maxItems': 1},
-            'confidence': {'enum': ['LOW','MEDIUM','HIGH']}}}}
+    schema['required'] = list(schema['properties'])
+    # This initial pipeline has no validated sufficiency rubric for a directional
+    # investment conclusion. Descriptive research must not turn into a bullish
+    # rating merely because the model has completed a response.
+    schema['properties']['research_view'] = {'const': 'INSUFFICIENT_EVIDENCE'}
+    # Facts and IDs are copied by Python, not generated. The model supplies only
+    # interpretation; a separate validator still checks every extracted claim.
+    schema['properties']['claims'] = {'type': 'array', 'maxItems': 0, 'items': {'type': 'string'}}
     for key in ('overview','thesis'):
         schema['properties'][key] = {'type': 'string', 'maxLength': 400}
     for key in ('unknowns','invalidation_conditions','catalysts','risks','key_disagreements'):
-        schema['properties'][key] = {'type': 'array', 'maxItems': 2, 'items': {'type': 'string','maxLength':250}}
+        schema['properties'][key] = {'type': 'array', 'maxItems': 1, 'items': {'type': 'string','maxLength':250}}
     return schema
+
+
+def attach_extracts(opinion, data):
+    if opinion.claims:
+        raise ValueError('MODEL_FACT_GENERATION_DENIED')
+    if opinion.research_view != 'INSUFFICIENT_EVIDENCE':
+        raise ValueError('UNSUPPORTED_DIRECTIONAL_VIEW')
+    records = [e for e in data.get('evidence', []) if e.get('excerpt')][:12]
+    return Opinion.model_validate({**opinion.model_dump(), 'claims': [
+        {'claim_type': 'FACT', 'text': e['excerpt'], 'evidence_ids': [e['id']], 'confidence': 'MEDIUM'} for e in records]})
 
 
 class LocalLLM:
@@ -78,4 +88,5 @@ class LocalLLM:
         if choice.get('finish_reason') != 'stop':
             raise ValueError('TRUNCATED_OUTPUT')
         parsed = Opinion.model_validate(json.loads(choice['message']['content']))
-        return parsed, {'runtime': 'llama.cpp', 'model': self.status['model'], 'duration_ms': round((time.perf_counter()-start)*1000), 'usage': body.get('usage', {})}
+        parsed = attach_extracts(parsed, data)
+        return parsed, {'runtime': 'llama.cpp', 'model': self.status['model'], 'duration_ms': round((time.perf_counter()-start)*1000), 'usage': body.get('usage', {}), 'raw_model_output_hash': digest(choice['message']['content']), 'claims_origin': 'PYTHON_EXACT_EVIDENCE_EXTRACTION'}
