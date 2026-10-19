@@ -1,0 +1,60 @@
+{
+  "at": "2026-10-19T07:08:38.082158+00:00",
+  "method": "SQLite online backup then two isolated engine reopen/recovery cycles; no HTTP, no new jobs",
+  "checks": [
+    {
+      "iteration": 1,
+      "integrity": "ok",
+      "schema": "0004_research",
+      "counts": {
+        "agents": 30,
+        "agent_jobs": 90,
+        "research_cases": 3,
+        "evidence": 254,
+        "agent_results": 52,
+        "research_claims": 148,
+        "ledger_events": 1,
+        "instruments": 98
+      },
+      "ledger_hash": "fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836",
+      "dossier_status": "INCOMPLETE",
+      "jobs_hash": "c8931f04494d6399b0879432ad509b4b8162c6906e8535e6dc8b9d4b13d37847",
+      "result_hashes": {
+        "21429f26-09cb-40a6-9fd0-1c0196b5fbb1": "3b30442f506e803acf142609df38a1e02d558d26dd770548b3239d393c5fd4ee",
+        "52a5f8f5-b4c5-4bb3-a0b6-4da24d613468": "5f2550b13d2b67974431211ffce323c6771e2a4af21cd0839f20cb18c9055ed9",
+        "284864db-bd65-4560-a2bc-de4039c64dc9": "cef9c03399c29add8fc4f3b8231384a1c611ddded29186ccab14bece9f19c774",
+        "c594504b-94c4-45f3-bdd5-a83b6cab113e": "b90900a23cf262f4e4611a6b233999865a2422688a46d8b6f19155c044ca3157",
+        "0cf174ff-de66-42fb-9d4f-05e4fb14fe66": "7d08f5c5edea80160b91bb70534acac33ae9f839b737f0cc9101c31ad5a76656",
+        "9d24048a-9888-48b1-9a30-ada512a4f04e": "e4b60cf948fd19de79d04ab0d5d6122295381c87a239bda7ce7db8f8d403412f",
+        "02db244e-975d-430d-b055-cd4a492ca40e": "b81e8909f687d9dd4b0fb050b12d4da88df74f5e65a5d1bd98ac023e99db0248"
+      }
+    },
+    {
+      "iteration": 2,
+      "integrity": "ok",
+      "schema": "0004_research",
+      "counts": {
+        "agents": 30,
+        "agent_jobs": 90,
+        "research_cases": 3,
+        "evidence": 254,
+        "agent_results": 52,
+        "research_claims": 148,
+        "ledger_events": 1,
+        "instruments": 98
+      },
+      "ledger_hash": "fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836",
+      "dossier_status": "INCOMPLETE",
+      "jobs_hash": "c8931f04494d6399b0879432ad509b4b8162c6906e8535e6dc8b9d4b13d37847",
+      "result_hashes": {
+        "21429f26-09cb-40a6-9fd0-1c0196b5fbb1": "3b30442f506e803acf142609df38a1e02d558d26dd770548b3239d393c5fd4ee",
+        "52a5f8f5-b4c5-4bb3-a0b6-4da24d613468": "5f2550b13d2b67974431211ffce323c6771e2a4af21cd0839f20cb18c9055ed9",
+        "284864db-bd65-4560-a2bc-de4039c64dc9": "cef9c03399c29add8fc4f3b8231384a1c611ddded29186ccab14bece9f19c774",
+        "c594504b-94c4-45f3-bdd5-a83b6cab113e": "b90900a23cf262f4e4611a6b233999865a2422688a46d8b6f19155c044ca3157",
+        "0cf174ff-de66-42fb-9d4f-05e4fb14fe66": "7d08f5c5edea80160b91bb70534acac33ae9f839b737f0cc9101c31ad5a76656",
+        "9d24048a-9888-48b1-9a30-ada512a4f04e": "e4b60cf948fd19de79d04ab0d5d6122295381c87a239bda7ce7db8f8d403412f",
+        "02db244e-975d-430d-b055-cd4a492ca40e": "b81e8909f687d9dd4b0fb050b12d4da88df74f5e65a5d1bd98ac023e99db0248"
+      }
+    }
+  ]
+}

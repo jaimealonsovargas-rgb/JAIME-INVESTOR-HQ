@@ -1,0 +1,8 @@
+.venv/Scripts/python.exe : No known vulnerabilities found
+En línea: 2 Carácter: 1
++ .venv/Scripts/python.exe scripts/manage.py audit *> output/p4-preflig ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (No known vulnerabilities found:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+found 0 vulnerabilities

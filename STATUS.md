@@ -1,5 +1,23 @@
 # Estado del proyecto
 
+## 2026-10-19 · P4 pendiente de aceptación semántica · STOP antes de P5
+
+Continuación de P4, sin reconstruir P1–P3. Esquema **0004_research**, 30 roles lógicos, scheduler persistente 1 LLM/2 quant/4 fetch. Commits anteriores conservados: 6c17a31, 34baca4, 325c17b, 6c8153c. Nuevos: **64049f7** (paneles simplificados/clic NPC) y **65d976d** (contexto independiente Bull/Bear y rechazo de tesis duplicada).
+
+**Petición visual implementada:** listas negras, sans serif local, texto principal a 16 px y notas a 14 px, panel izquierdo a 100 px bajo la marca. Los 16 NPC tienen clic; prueba nativa sobre los nueve principales: **9/9** paneles, pausa/cierre/control correctos. Fuentes y fechas desplegables; no se inventan minigráficos. Captura `docs/evidencias/P4/simple-sidebars.png`. Responsive sin overflow, diagnóstico P0 operativo. Capturas finales en contexto nuevo a 1920×1080 CSS y DPR de dispositivo 1, sin el zoom heredado. Frontend revalidado tras el último ajuste de letra.
+
+**QA:** `manage.py check` exit 0: **182 pytest + 49 Vitest**, TypeScript/build; `audit` exit 0, cero vulnerabilidades conocidas. Alembic check sin diferencias. Backup SQLite y dos reaperturas/recovery preservan jobs, resultados y MASTER. Runtime detenido realmente: `NO_LOCAL_MODEL` verificado, sin fallback. MASTER mantiene hash `fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836`, 10000.00 EUR ficticios y cero posiciones. HTTP /api/orders=403 verificado previamente; cierre HTTP final pendiente.
+
+**FPS tras cambio visual:** Intel Graphics/D3D11, Equilibrado adaptativo, movimiento nativo y LLM activo: Recepción **58,09**, Trading **58,68**, Comité **58,32**, Sistemas **59,44**; p95 18,6–21,7 ms, DPR 0,81–0,84. Viewport de captura 1920×1080; canvas CSS reportó 2133×1200 por zoom del navegador. Frente a muestra previa 59,59–59,91: ligera caída; no es A/B controlado. Un intento de Sistemas interrumpido por proximidad se excluyó; repetición válida archivada. No se ejecutaron builds/tests durante las muestras.
+
+**No declarar P4 terminada:** Qwen3-1.7B Q8_0 pasa JSON/grounding del fixture, pero sus argumentos reales son repetitivos y confunden ocasionalmente tipo de referencia con spread. Run p4.5 `3653e0d1-5901-4fb5-b2e1-cd2564b4658b` terminó mecánicamente, sin aceptación semántica. Run p4.6 `3f573ece-9f82-459b-b5a7-413c324416b4` terminó INCOMPLETE: Bear rechazado y Chair bloqueado. Historial conservado. No basta con nueve estados SUCCEEDED.
+
+**Bloqueo confirmado en ambos candidatos:** run Qwen2.5 **08dec597-8a6b-4a6a-9426-ad5dd3e29545**, caso BCE **ccadc542-5ddf-415f-8692-676415729886**, terminó INCOMPLETE: siete jobs SUCCEEDED, Bear FAILED (`DEBATE_DUPLICATE_THESIS`, dos intentos), Chair BLOCKED (`DEPENDENCY_INCOMPLETE`). El modelo también confundió el identificador de serie con una plataforma. No se acepta el debate ni se declara P4 completa. No descargar un tercer candidato sin revisar el límite de dos modelos del encargo. El runtime de prueba se ha detenido para liberar RAM; API/UI reflejan NO_LOCAL_MODEL. Los dos GGUF y sus hashes permanecen locales; el manifest identifica Qwen3 como candidato probado, no modelo aprobado semánticamente.
+
+**Cierre de esta iteración:** regresión HTTP final: 30 roles, 98 instrumentos, MASTER intacto y /api/orders=403. Backup/reopen repetido con todos los jobs terminales. Capturas y evidencia real en [P4](docs/evidencias/P4/README.md). Próximo trabajo exacto: resolver la calidad semántica del runtime dentro de los límites autorizados; no rehacer interfaz, scheduler, fuentes ni pruebas ya válidas. P4 sigue bloqueada por calidad, P5/P6 no iniciados. PAPER ONLY, coste 0 EUR. Publicación normal de los commits de esta iteración y comprobación HEAD=origin/main al cerrar.
+
+---
+
 ## 2026-10-16 · Cierre P3 · STOP antes de P4
 
 P3 autorizado por el prompt maestro y Astra confirmado por el usuario. Entorno real **Windows local**, no Cloud. Trabajo P1/P2 preservado; sincronización inicial fast-forward de 460c7e0 a 901f6f0 sin reset/clean/force. Implementación: **c8b8ab2** (ledger/API), **cf00a19** (FX devengado/semántica de feeds), **4725693** (HUD/videowall DOM). La evidencia y este cierre se guardan en el commit posterior; publicación normal de main y verificación HEAD=origin/main al finalizar.

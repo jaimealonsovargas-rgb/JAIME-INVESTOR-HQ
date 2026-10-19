@@ -1,0 +1,7 @@
+{
+  "state": "NO_LOCAL_MODEL",
+  "runtime": "llama.cpp",
+  "model": null,
+  "endpoint": "http://127.0.0.1:8089",
+  "last_checked_at": "2026-10-19T07:03:51.838857+00:00"
+}

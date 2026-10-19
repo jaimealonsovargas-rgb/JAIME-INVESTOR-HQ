@@ -25,7 +25,7 @@ for iteration in range(2):
     engine=create_db_engine(settings.database_url)
     data=DataService(engine);portfolio=PortfolioService(engine,data);store=ResearchStore(engine)
     before=portfolio.summary();store.initialize();store.recover()
-    dossier=ResearchService(engine,data,portfolio).dossier('7ccf5c8b-ff3f-4847-b06d-28f12eb13159')
+    dossier=ResearchService(engine,data,portfolio).dossier('ccadc542-5ddf-415f-8692-676415729886')
     with engine.connect() as conn:
         integrity=conn.exec_driver_sql('PRAGMA integrity_check').scalar()
         version=conn.exec_driver_sql('SELECT version_num FROM alembic_version').scalar()

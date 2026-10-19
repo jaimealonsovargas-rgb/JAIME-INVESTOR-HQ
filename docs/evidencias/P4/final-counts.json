@@ -1,0 +1,17 @@
+{
+  "counts": {
+    "agents": 30,
+    "agent_jobs": 90,
+    "research_cases": 3,
+    "evidence": 254,
+    "agent_results": 52,
+    "research_claims": 148,
+    "audit_events": 165
+  },
+  "jobs_by_state": {
+    "BLOCKED": 4,
+    "CANCELLED": 28,
+    "FAILED": 6,
+    "SUCCEEDED": 52
+  }
+}

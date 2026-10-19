@@ -37,3 +37,12 @@ PAPER ONLY; orders_enabled=false; POST /api/orders=403. MASTER, ledger, NAV y po
 ## Validación
 
 Resultados exactos, capturas auténticas, benchmark y limitaciones de la ejecución: [evidencias P4](evidencias/P4/README.md). Los fixtures marcados TEST_ONLY nunca se escriben en la base operativa. Ningún mock cuenta como conexión, research real ni benchmark de mercado.
+
+
+## Revisión de interfaz y debate · 18–19 de octubre
+
+Paneles laterales negros simplificados y tipografía local Arial/Segoe UI, sin descargas. El rail izquierdo comienza debajo de la marca; texto de paneles ampliado, detalles de procedencia desplegables. Sin sparklines inventados: los feeds sin historia autorizada no los muestran. Clic sobre los 16 NPC abre el mismo panel departamental que la proximidad, pausa el recorrido y devuelve el control al cerrar. QA nativo de los nueve principales: nueve aperturas/cierres correctos y movimiento posterior.
+
+Contrato p4.6: Bull parte de evidencia sin opiniones previas; Bear recibe la tesis Bull; Chair recibe ambas. Una tesis copiada exactamente, incluso con diferencias de puntuación, se rechaza. Este guard no certifica calidad semántica; hace falta leer el debate real. Los intentos p4.5/p4.6 de Qwen3 no superaron la aceptación semántica; la alternativa Qwen2.5 existente se evalúa sin descargar candidatos adicionales.
+
+El segundo candidato Qwen2.5 también repitió la tesis: Bear rechazado tras dos intentos y Chair bloqueado. P4 no está terminada. Ambos modelos permanecen descargados, pero no hay modelo aceptado semánticamente; el servidor de prueba se detuvo para liberar RAM. No se descargó un tercer candidato.

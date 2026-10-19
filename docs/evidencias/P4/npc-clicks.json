@@ -1,0 +1,112 @@
+{
+  "at": "2026-10-18T21:08:28.423Z",
+  "method": "Native mouse clicks on projected visible NPC anchors, no direct state mutation; keyboard movement after closing",
+  "layout": {
+    "railTop": 100,
+    "brandBottom": 72,
+    "font": "Arial, sans-serif",
+    "railWidth": 280
+  },
+  "results": [
+    {
+      "id": "reception",
+      "title": "Estado de la sede",
+      "clicked": {
+        "x": 941.3000392414169,
+        "y": 618.9078599177018
+      },
+      "paused": true,
+      "released": true
+    },
+    {
+      "id": "research",
+      "title": "Dossiers de inversión",
+      "clicked": {
+        "x": 565.3235771783008,
+        "y": 385.3835985602826
+      },
+      "paused": true,
+      "released": true
+    },
+    {
+      "id": "quant",
+      "title": "Estrategias y backtests",
+      "clicked": {
+        "x": 911.362668980454,
+        "y": 386.334661949758
+      },
+      "paused": true,
+      "released": true
+    },
+    {
+      "id": "risk",
+      "title": "Control de riesgo",
+      "clicked": {
+        "x": 1168.8544214368735,
+        "y": 386.334661949758
+      },
+      "paused": true,
+      "released": true
+    },
+    {
+      "id": "trading",
+      "title": "Posiciones",
+      "clicked": {
+        "x": 1263.0105510732253,
+        "y": 486.11071509942883
+      },
+      "paused": true,
+      "released": true
+    },
+    {
+      "id": "performance",
+      "title": "Rentabilidad y atribución",
+      "clicked": {
+        "x": 1296.2406937734395,
+        "y": 642.3582307190453
+      },
+      "paused": true,
+      "released": true
+    },
+    {
+      "id": "execution",
+      "title": "Órdenes y reconciliación",
+      "clicked": {
+        "x": 541.1626868263432,
+        "y": 670.1730168210433
+      },
+      "paused": true,
+      "released": true
+    },
+    {
+      "id": "systems",
+      "title": "Sistemas y calidad de datos",
+      "clicked": {
+        "x": 637.2050958963392,
+        "y": 502.6229945651237
+      },
+      "paused": true,
+      "released": true
+    },
+    {
+      "id": "committee",
+      "title": "Decisiones y actas",
+      "clicked": {
+        "x": 950.9162331053462,
+        "y": 538.1771932209209
+      },
+      "paused": true,
+      "released": true
+    }
+  ],
+  "before": [
+    0,
+    0,
+    13.1
+  ],
+  "after": [
+    -0.8284852065579748,
+    0,
+    13.1
+  ]
+}

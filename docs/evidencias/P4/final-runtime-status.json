@@ -1,0 +1,93 @@
+{
+  "checked_at": "2026-10-19T07:09:23.635392+00:00",
+  "mode": "ON_DEMAND",
+  "capacity": {
+    "llm": 1,
+    "quant": 2,
+    "fetch": 4
+  },
+  "peaks": {
+    "llm": 1,
+    "quant": 1,
+    "fetch": 1
+  },
+  "active_jobs": 0,
+  "queue": 0,
+  "failures": 10,
+  "runtime": {
+    "state": "NO_LOCAL_MODEL",
+    "runtime": "llama.cpp",
+    "model": null,
+    "endpoint": "http://127.0.0.1:8089",
+    "last_checked_at": "2026-10-19T07:09:11.382554+00:00"
+  },
+  "latest_job": {
+    "attempts": 1,
+    "case_id": "ccadc542-5ddf-415f-8692-676415729886",
+    "depends_on": "092a05be-8eb5-4dd7-b532-4c463e02696f",
+    "duration_ms": 526,
+    "error": "DEPENDENCY_INCOMPLETE",
+    "finished_at": "2026-10-19T07:08:00.049352+00:00",
+    "id": "910775aa-0884-4101-b629-c5526071fc24",
+    "input_hash": "a31dfc49fdfe9289fa6831fed25ac143c5e40008411c583760d7d0ac76665894",
+    "kind": "llm",
+    "model": null,
+    "output_hash": null,
+    "priority": 10,
+    "queued_at": "2026-10-19T07:04:31.300323+00:00",
+    "refresh_public": false,
+    "role_id": "cio_chair",
+    "run_key": "08dec597-8a6b-4a6a-9426-ad5dd3e29545",
+    "runtime": "llama.cpp",
+    "started_at": "2026-10-19T07:07:59.521533+00:00",
+    "state": "BLOCKED",
+    "template_version": "p4.6-independent-debate"
+  },
+  "last_completed": {
+    "attempts": 1,
+    "candidate_output_hash": "2144b82748fcd336d6afdf47ce12b526c97818ad389054b86b2411de0d2eaf31",
+    "case_id": "ccadc542-5ddf-415f-8692-676415729886",
+    "depends_on": "52a5f8f5-b4c5-4bb3-a0b6-4da24d613468",
+    "duration_ms": 39189,
+    "error": null,
+    "finished_at": "2026-10-19T07:06:42.992448+00:00",
+    "id": "21429f26-09cb-40a6-9fd0-1c0196b5fbb1",
+    "input_hash": "3b30442f506e803acf142609df38a1e02d558d26dd770548b3239d393c5fd4ee",
+    "kind": "llm",
+    "model": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+    "output_hash": "6cff473e5375eb6ac1ee5ae416b836e3b6162869a1d8eda3d6b306c615a464c3",
+    "priority": 10,
+    "prompt_input_hash": "ffbc062e4b94f2b26d6137791143fd1e1c6209ae6109a231b54b5a6f52c06ba8",
+    "queued_at": "2026-10-19T07:04:31.300270+00:00",
+    "refresh_public": false,
+    "role_id": "bull_advocate",
+    "run_key": "08dec597-8a6b-4a6a-9426-ad5dd3e29545",
+    "runtime": "llama.cpp",
+    "selected_evidence_ids": [
+      "291990a491f234b444ee91ec634b3030270548499430a71e5d55f1ffabb9b030",
+      "67351bfabe9015ac8dce1c0473c36fc98ee8e53a905b521cf4a69ce6faa833f7",
+      "64760598ca0f457a3b3efe56aadc7d77bf9bf167e175f37b5cce063b977de9dc",
+      "1dda1c71a6da4438ec96e9eddf56c7b47e8d586cff43a7902dc92516617ba290",
+      "b3a4792ee07e1e2fb1fc4dfdfffe92aad285d252925bbefda529805a788054b0",
+      "ec36e9222b9ad2fe615d83ef3a7edf05bd895b5f1bb39531d254922a977c1b06",
+      "cd3e07f8ff6ec8521a1dbfe3bbe26bbe32d3c5aa0ec2b7cbf3b0cb78218daae9",
+      "6dfb67139d2aaae0d99614158ff7f3cd8769a3e199ad293fbe216f3af81b3fa8",
+      "a95ca247d20eca786d9cc64dedd6c7aeb5d0bb9d57eb8c27baaf90e520fff1b1"
+    ],
+    "started_at": "2026-10-19T07:06:03.801571+00:00",
+    "state": "SUCCEEDED",
+    "template_version": "p4.6-independent-debate"
+  },
+  "roles": 30,
+  "department_states": {
+    "risk": "IDLE",
+    "research": "DONE",
+    "committee": "ERROR",
+    "systems_data": "DONE",
+    "quant": "DONE",
+    "trading_execution": "DONE",
+    "performance": "IDLE"
+  },
+  "orders_enabled": false,
+  "trading_mode": "PAPER_ONLY"
+}

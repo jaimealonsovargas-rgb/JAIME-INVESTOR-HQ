@@ -1,5 +1,5 @@
 async(page)=>{
- await page.setViewportSize({width:1920,height:1080});await page.goto('http://127.0.0.1:5174');await page.bringToFront();const cdp=await page.context().newCDPSession(page);await cdp.send('Emulation.setFocusEmulationEnabled',{enabled:true});
+ await page.setViewportSize({width:1920,height:1080});await page.goto('http://127.0.0.1:5174');await page.keyboard.press('Control+0');await page.bringToFront();const cdp=await page.context().newCDPSession(page);await cdp.send('Emulation.setFocusEmulationEnabled',{enabled:true});
  await page.waitForFunction(()=>window.__HQ_AGENT_INTERACTIONS__?.[0]?.screen);
  await page.screenshot({path:'output/playwright/p4/simple-sidebars.png'});
  const layout=await page.evaluate(()=>{const left=document.querySelector('.rail-left'),brand=document.querySelector('.world-brand');return{railTop:left.getBoundingClientRect().top,brandBottom:brand.getBoundingClientRect().bottom,font:getComputedStyle(document.querySelector('.financial-rail h2')).fontFamily,railWidth:left.getBoundingClientRect().width};});
