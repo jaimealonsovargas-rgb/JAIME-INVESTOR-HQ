@@ -65,25 +65,25 @@ class LocalLLM:
         self.status['last_checked_at'] = utc()
         return self.status
 
-    async def chat(self, system, data, max_tokens=700):
+    async def chat(self, system, data, max_tokens=700, contract=None, seed=17):
         if (await self.probe())['state'] != 'AVAILABLE':
             raise NoLocalModel()
         # Conservative budget, no silently truncated evidence or huge external documents.
         def model_view(value):
             if isinstance(value, dict):
-                return {k: model_view(v) for k, v in value.items() if k not in ('id', 'evidence_ids')}
+                return {k: model_view(v) for k, v in value.items() if k != 'evidence_id'}
             if isinstance(value, list):
                 return [model_view(v) for v in value]
             return value
         prompt = canonical(model_view(data))
-        if len(prompt) > 14000 or not 1 <= max_tokens <= 900:
+        if len(prompt) > 20000 or not 1 <= max_tokens <= (1500 if contract else 900):
             raise ValueError('CONTEXT_BUDGET')
         start = time.perf_counter()
         payload = {'model': self.status['model'], 'messages': [{'role': 'system', 'content': system},
-                   {'role': 'user', 'content': 'UNTRUSTED_CONTENT_JSON\n' + prompt}], 'temperature': 0,
+                   {'role': 'user', 'content': 'UNTRUSTED_CONTENT_JSON\n' + prompt}], 'temperature': .2 if contract else 0, 'seed': seed,
                    'max_tokens': max_tokens, 'stream': False,
                    'chat_template_kwargs': {'enable_thinking': False}, 'reasoning_effort': 'none',
-                   'response_format': {'type': 'json_object', 'schema': grounded_schema(data)}}
+                   'response_format': {'type': 'json_object', 'schema': contract.model_json_schema() if contract else grounded_schema(data)}}
         async with httpx.AsyncClient(trust_env=False, follow_redirects=False, transport=self.transport, timeout=295) as client:
             try:
                 response = await client.post(self.endpoint + '/v1/chat/completions', json=payload)
@@ -96,6 +96,7 @@ class LocalLLM:
         choice = body['choices'][0]
         if choice.get('finish_reason') != 'stop':
             raise ValueError('TRUNCATED_OUTPUT')
-        parsed = Opinion.model_validate(json.loads(choice['message']['content']))
-        parsed = attach_extracts(parsed, data)
-        return parsed, {'runtime': 'llama.cpp', 'model': self.status['model'], 'duration_ms': round((time.perf_counter()-start)*1000), 'usage': body.get('usage', {}), 'model_prompt_hash': digest(prompt), 'raw_model_output_hash': digest(choice['message']['content']), 'claims_origin': 'PYTHON_EXACT_EVIDENCE_EXTRACTION'}
+        parsed = (contract or Opinion).model_validate(json.loads(choice['message']['content']))
+        if contract is None:
+            parsed = attach_extracts(parsed, data)
+        return parsed, {'runtime': 'llama.cpp', 'model': self.status['model'], 'duration_ms': round((time.perf_counter()-start)*1000), 'usage': body.get('usage', {}), 'model_prompt_hash': digest(prompt), 'raw_model_output_hash': digest(choice['message']['content']), 'claims_origin': 'STRUCTURED_HYPOTHESES' if contract else 'PYTHON_EXACT_EVIDENCE_EXTRACTION'}

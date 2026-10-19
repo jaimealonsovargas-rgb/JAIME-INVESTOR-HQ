@@ -182,7 +182,8 @@ def test_timeout_is_retried_only_once_and_cancel_releases_worker(migrated):
     asyncio.run(scenario())
 
 
-def test_no_model_pipeline_does_not_fabricate_results(migrated):
+def test_no_model_pipeline_does_not_fabricate_results(migrated, monkeypatch):
+    inject_test_market(monkeypatch)
     from app.data_service import DataService
     async def scenario():
         engine, store, case = setup_store(migrated)
@@ -199,12 +200,19 @@ def test_no_model_pipeline_does_not_fabricate_results(migrated):
     asyncio.run(scenario())
 
 
-def test_chair_preserves_both_views_and_lineage(migrated):
+def test_chair_preserves_both_views_and_lineage(migrated, monkeypatch):
+    inject_test_market(monkeypatch)
     from app.data_service import DataService
     class FakeLocal:
         status = {'state':'AVAILABLE','model':'TEST_ONLY','runtime':'fixture'}
         async def probe(self): return self.status
         async def chat(self, system, data, **kwargs):
+            if kwargs.get('contract'):
+                from test_research_planning import fixture_responses
+                answers=fixture_responses()
+                answer=next(a for a in answers if isinstance(a,kwargs['contract']))
+                payload=json.dumps(answer.model_dump()).replace('E001',data['evidence_pack']['records'][0]['id'])
+                return kwargs['contract'].model_validate_json(payload), {'model':'TEST_ONLY','runtime':'fixture'}
             view = 'Bull: cobertura de fuente.' if 'bull_advocate' in system else 'Bear: evidencia insuficiente.' if 'Refutar' in system else 'Síntesis condicionada.'
             return Opinion(overview=view,thesis=view,risks=['Muestra insuficiente.'],key_disagreements=['Cobertura no equivale a capacidad predictiva.'],claims=[],unknowns=['Sin datos adicionales.'],invalidation_conditions=['Fuente retirada.'],research_view='INSUFFICIENT_EVIDENCE'), {'model':'TEST_ONLY','runtime':'fixture'}
     async def scenario():
@@ -322,3 +330,45 @@ def test_debate_context_is_independent_and_copied_thesis_rejected():
     assert len(role_context('cio_chair',prior)) == 2
     with pytest.raises(ValueError,match='DEBATE_ARGUMENT_MISSING'):
         validate_debate('bull_advocate',opinion(),[])
+
+
+def inject_test_market(monkeypatch):
+    from app.research_contracts import digest, utc
+    def collect(data, case, refresh):
+        records=[]
+        for i in range(3):
+            content={'feed':'TEST_ONLY','series_id':'TEST_ONLY','unit':'USD','currency':'USD','venue':'TEST_ONLY','data_kind':'market_quote','value':str(100+i),'excerpt':f'TEST_ONLY quote {100+i} USD'}
+            records.append({'id':str(i),'case_id':case['id'],'provider':'TEST_ONLY','source':'TEST_ONLY','url':'test:fixture','observed_at':f'2026-10-0{i+1}T00:00:00+00:00','retrieved_at':utc(),'rights':{'license':'TEST_ONLY'},'rights_ok':True,'freshness':'FRESH','scope':'INSTRUMENT','available':True,'hash':digest(content),'content':content,'provenance':'TEST_ONLY'})
+        return records
+    monkeypatch.setattr('app.research_service.collect',collect)
+    monkeypatch.setattr('app.research_service.current_evidence',lambda data,items:items)
+
+
+@pytest.mark.parametrize('goal,expected_count,quality', [('macro_reference',4,'NOT_APPLICABLE'), ('data_quality',4,'NOT_APPLICABLE'), ('investable_thesis',9,'ABSTAINED')])
+def test_objective_without_market_never_calls_model(migrated, monkeypatch, goal, expected_count, quality):
+    from app.data_service import DataService
+    monkeypatch.setattr('app.research_service.collect', lambda *args: [])
+    class NeverModel:
+        status = {'state':'NO_LOCAL_MODEL'}
+        async def probe(self): return self.status
+        async def chat(self, *args, **kwargs):
+            raise AssertionError('Insufficient evidence must not trigger inference')
+    async def scenario():
+        engine, store, _ = setup_store(migrated)
+        case = store.create_case({'id':'TEST_ONLY','symbol':'TEST_ONLY','asset_class':'FX'}, 'Pregunta TEST_ONLY.', goal, goal)
+        service = ResearchService(engine, DataService(engine), None, NeverModel())
+        await service.start()
+        try:
+            service.run(case['id'], 'objective-run')
+            for _ in range(200):
+                if all(j['state']=='SUCCEEDED' for j in store.list('agent_jobs')): break
+                await asyncio.sleep(.01)
+            dossier = service.dossier(case['id'])
+            assert dossier['status'] == 'COMPLETE'
+            assert len(dossier['jobs']) == expected_count
+            assert dossier['quality']['state'] == quality
+            assert all(r['structured'] is None and not r['claims'] and r['metrics']['model'] is None for r in dossier['results'])
+        finally:
+            await service.stop()
+            engine.dispose()
+    asyncio.run(scenario())

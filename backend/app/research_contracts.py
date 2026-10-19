@@ -49,6 +49,7 @@ class Opinion(Strict):
 
 
 class CreateCase(Strict):
+    research_goal: Literal['data_quality', 'macro_reference', 'investable_thesis'] | None = None
     instrument_id: str = Field(min_length=1, max_length=64)
     question: str = Field(default='Evaluar evidencia, contexto y límites del instrumento.', min_length=1, max_length=800)
 

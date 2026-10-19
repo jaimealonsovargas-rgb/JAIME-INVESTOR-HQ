@@ -49,7 +49,7 @@ def router(service):
             instrument = next((x for x in InstrumentRegistry(session).list() if str(x.id) == body.instrument_id), None)
         if not instrument:
             raise HTTPException(422, 'UNKNOWN_INSTRUMENT')
-        return call(service.store.create_case, instrument.model_dump(mode='json'), sanitize(body.question), key)
+        return call(service.store.create_case, instrument.model_dump(mode='json'), sanitize(body.question), key, body.research_goal)
 
     @api.get('/api/research/cases/{case_id}')
     def detail(case_id: str, run_key: str | None = None):

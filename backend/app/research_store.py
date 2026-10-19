@@ -6,6 +6,7 @@ from contextlib import contextmanager
 from app.research_schema import TABLES
 from app.research_contracts import canonical, digest, utc
 from app.research_roles import ROLES, pipeline, TEMPLATE_VERSION
+from app.research_planning import research_goal
 
 TERMINAL = {'SUCCEEDED', 'FAILED', 'CANCELLED', 'BLOCKED', 'NO_LOCAL_MODEL'}
 
@@ -65,9 +66,10 @@ class ResearchStore:
         row = {'id': str(uuid.uuid4()), 'event': event, 'at': utc(), **fields}
         c.execute('INSERT INTO audit_events VALUES (?,?)', (row['id'], canonical(row)))
 
-    def create_case(self, instrument, question, key):
+    def create_case(self, instrument, question, key, goal=None):
         payload = {'id': str(uuid.uuid4()), 'instrument': instrument, 'question': question, 'created_at': utc(), 'thesis_version': 1}
-        request_hash = digest({'instrument_id': instrument['id'], 'question': question})
+        if goal is not None: payload['research_goal'] = goal
+        request_hash = digest({'instrument_id': instrument['id'], 'question': question, **({'research_goal': goal} if goal else {})})
         payload['request_hash'] = request_hash
         with self.connection(True) as c:
             old = c.execute('SELECT payload FROM research_cases WHERE request_key=?', (key,)).fetchone()
@@ -92,12 +94,14 @@ class ResearchStore:
             if c.execute("SELECT 1 FROM agent_jobs WHERE case_id=? AND state IN ('QUEUED','RUNNING')", (case_id,)).fetchone():
                 raise ValueError('CASE_ALREADY_RUNNING')
             jobs = []; previous = None
-            for role in pipeline(case['instrument']['asset_class']):
-                kind = 'llm' if ROLES[role]['llm_required'] else 'fetch' if role == 'data_quality' else 'quant'
+            goal = research_goal(case)
+            roles = pipeline(case['instrument']['asset_class']) if goal=='investable_thesis' else ['data_quality','momentum_trend','volatility_regime','macro_global']
+            for role in roles:
+                kind = 'llm' if ROLES[role]['llm_required'] and goal=='investable_thesis' else 'fetch' if role == 'data_quality' else 'quant'
                 job = {'id': str(uuid.uuid4()), 'role_id': role, 'case_id': case_id, 'run_key': key, 'state': 'QUEUED',
                        'kind': kind, 'priority': priority, 'depends_on': previous, 'queued_at': utc(), 'started_at': None,
                        'finished_at': None, 'input_hash': None, 'output_hash': None, 'error': None, 'runtime': None,
-                       'model': None, 'template_version': TEMPLATE_VERSION, 'attempts': 0, 'refresh_public': refresh, 'duration_ms': None}
+                       'model': None, 'research_goal': goal, 'template_version': TEMPLATE_VERSION, 'attempts': 0, 'refresh_public': refresh, 'duration_ms': None}
                 c.execute('INSERT INTO agent_jobs VALUES (?,?,?,?,?,?,?,?,?)', (job['id'], case_id, role, key, kind, 'QUEUED', priority, previous, canonical(job)))
                 jobs.append(job); previous = job['id']
             self.audit(c, 'RUN_QUEUED', case_id=case_id, run_key=key, jobs=[j['id'] for j in jobs])
