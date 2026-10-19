@@ -25,3 +25,9 @@ Siempre leer primero `AGENTS.md`, `STATUS.md` y `tasks/Px_*.md` correspondiente.
 - Evidencia cierre P3: [evidencias/P3](evidencias/P3/README.md).
 
 Los documentos P0-P3 históricos se conservan para auditoría, pero no reabren fases ya cerradas. P4 no autoriza riesgo formal P5 ni ejecución P6.
+
+## P4 · estabilización posterior a QA (2026-10-19)
+- [Auditoría de fallos semánticos, watchlist e integraciones](AUDITORIA_P4_CALIDAD_HUD_INTEGRACIONES_2026_10_19.md).
+- [Prompt maestro Codex para corrección por gates](PROMPT_CODEX_P4_ESTABILIZACION_HUD_INTEGRACIONES_2026_10_19.md).
+- [Issue #6 — seguimiento](https://github.com/jaimealonsovargas-rgb/JAIME-INVESTOR-HQ/issues/6).
+- **P4 sigue pendiente de aceptación semántica**; P5/P6 no autorizados. No confundir tests correctos con análisis financiero aceptado.
