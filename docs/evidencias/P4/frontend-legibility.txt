@@ -1,42 +1,83 @@
-
-> jaime-investor-hq-frontend@0.0.1 test
-> vitest run
-
-
- RUN  v5.0.4 C:/Users/javie/Documents/GitHub/JAIME-INVESTOR-HQ/frontend
-
-
- Test Files  9 passed (9)
-      Tests  49 passed (49)
-   Start at  09:12:43
-   Duration  1.75s (tests 59%, import 24%, transform 13%, worker 4%)
-
-
-> jaime-investor-hq-frontend@0.0.1 build
-> tsc --noEmit && vite build
-
-vite v8.3.4 building client environment for production...
-transforming...
-✓ 657 modules transformed.
-rendering chunks...
-computing gzip size...
-dist/index.html                   0.75 kB │ gzip:   0.47 kB
-dist/assets/index-CuG1-o7Z.css    2.00 kB │ gzip:   0.88 kB
-dist/assets/World-CI5GL1Kw.css   27.91 kB │ gzip:   6.96 kB
-dist/assets/Office-CBHIhQAP.js  127.84 kB │ gzip:  41.85 kB
-dist/assets/index-D-SqhL4l.js   258.81 kB │ gzip:  80.54 kB
-dist/assets/World-Ced3qG7l.js   991.42 kB │ gzip: 266.33 kB
-
-npm.cmd : [plugin builtin:vite-reporter] 
-En línea: 9 Carácter: 1
-+ npm.cmd --prefix frontend run build *>> output/p4-preflight/frontend- ...
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: ([plugin builtin:vite-reporter] :String) [], RemoteException
-    + FullyQualifiedErrorId : NativeCommandError
- 
-(!) Some chunks are larger than 500 kB after minification. Consider:
-- Using dynamic import() to code-split the application
-- Use build.rolldownOptions.output.codeSplitting to improve chunking: 
-https://rolldown.rs/reference/OutputOptions.codeSplitting
-- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
-✓ built in 881ms
+
+
+> jaime-investor-hq-frontend@0.0.1 test
+
+> vitest run
+
+
+
+
+
+ RUN  v5.0.4 C:/Users/javie/Documents/GitHub/JAIME-INVESTOR-HQ/frontend
+
+
+
+
+
+ Test Files  9 passed (9)
+
+      Tests  49 passed (49)
+
+   Start at  09:12:43
+
+   Duration  1.75s (tests 59%, import 24%, transform 13%, worker 4%)
+
+
+
+
+
+> jaime-investor-hq-frontend@0.0.1 build
+
+> tsc --noEmit && vite build
+
+
+
+vite v8.3.4 building client environment for production...
+
+transforming...
+
+✓ 657 modules transformed.
+
+rendering chunks...
+
+computing gzip size...
+
+dist/index.html                   0.75 kB │ gzip:   0.47 kB
+
+dist/assets/index-CuG1-o7Z.css    2.00 kB │ gzip:   0.88 kB
+
+dist/assets/World-CI5GL1Kw.css   27.91 kB │ gzip:   6.96 kB
+
+dist/assets/Office-CBHIhQAP.js  127.84 kB │ gzip:  41.85 kB
+
+dist/assets/index-D-SqhL4l.js   258.81 kB │ gzip:  80.54 kB
+
+dist/assets/World-Ced3qG7l.js   991.42 kB │ gzip: 266.33 kB
+
+
+
+npm.cmd : [plugin builtin:vite-reporter]
+
+En línea: 9 Carácter: 1
+
++ npm.cmd --prefix frontend run build *>> output/p4-preflight/frontend- ...
+
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    + CategoryInfo          : NotSpecified: ([plugin builtin:vite-reporter] :String) [], RemoteException
+
+    + FullyQualifiedErrorId : NativeCommandError
+
+
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+
+- Using dynamic import() to code-split the application
+
+- Use build.rolldownOptions.output.codeSplitting to improve chunking:
+
+https://rolldown.rs/reference/OutputOptions.codeSplitting
+
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+✓ built in 881ms
