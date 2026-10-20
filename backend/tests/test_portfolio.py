@@ -268,7 +268,8 @@ def test_p2_cache_alias_capability_rights_and_feed_selection(client, monkeypatch
     service = client.app.state.portfolio
     monkeypatch.setattr(client.app.state.data, 'clock', lambda: NOW)
     # Strictly TEST_ONLY cache, no network; never counted as a real connection in delivery.
-    source = replace(CATALOG['A18'], rights=quote().rights)
+    # Isolated TEST_ONLY entitlement; production A18 remains prohibited for AI.
+    source = replace(CATALOG['A18'], rights=quote().rights, block=None)
     monkeypatch.setitem(CATALOG, 'A18', source)
     observation = quote('123', 'USD').model_copy(update={'access_id':'A18','provider':source.provider,'feed':source.feed,'venue':source.venue,'series_id':'TEST_ONLY_SYMBOL'})
     instrument = Instrument(id=uuid4(),symbol='TEST_ONLY_SYMBOL',venue=source.venue,currency='USD',asset_class='EQUITY',provider_capabilities=(ProviderCapability(provider=source.provider, feed=source.feed, research=True, valuation=False, checked_at=NOW, license='TEST_ONLY',source='https://example.org/TEST_ONLY',reason='TEST_ONLY'),))

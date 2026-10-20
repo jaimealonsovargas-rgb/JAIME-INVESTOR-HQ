@@ -1,5 +1,37 @@
 # Estado del proyecto
 
+## 2026-10-20 · Continuación P2 + P4 · histórico y refresco EN CURSO
+
+Continuado desde `5fd14e2`, conservando todos los cambios locales del HUD, evidencia y runtime. Objetivo vigente: fuente real → actualización/persistencia → caso → LLM → Bull/Bear/Chair → dossier. **No declarar SUCCESS: aceptación semántica y E2E generativo siguen pendientes.** Sin nuevos modelos ni P5/P6.
+
+**Checkpoint de datos:** migración `0005_data_history` aplicada con backup SQLite `output/p4-data-refresh/before-0005-20261020-072922.db`, Alembic sin drift. Archivo de observaciones separado de la caché, revisiones conservadas y lectura condicionada a derechos/configuración actuales. Refresco secuencial con plazos persistentes, lease, backoff y cuotas; 30 s tras arrancar, comprobación de vencimientos cada 60 s, consultas según TTL (mínimo 300 s). Sin brókeres ni fuentes restringidas. `GET /api/data/refresh` informa estado real; PC/backend apagado implica ausencia de actualizaciones. Fechas móviles en presets existentes OCDE/BIS/Treasury/FMI/ESMA/BEA/BLS v2. No se confunde cadencia de consulta con calendario de publicación. Una cotización spot antigua sigue STALE aunque se vuelva a descargar.
+
+**Prueba real de datos:** pasada por las 35 modalidades, con 2 brókeres excluidos. 17 conexiones verificadas en la pasada, de ellas 16 peticiones HTTP nuevas y una caché verificada; 12 respuestas utilizables para su uso P2 autorizado (no equivalen a 12 fuentes aptas para IA o valoración). 11 sin credenciales, una configuración SEC pendiente, 2 planes/endpoints pendientes, 5 restricciones, CoinPaprika STALE y GDELT TIMEOUT. Los contadores históricos de Data Quality (18 conexiones) incluyen verificaciones anteriores y no certifican disponibilidad actual. Archivo inicial: 730 observaciones. Reiniciar el planificador conserva vencimientos y no repite consultas. MASTER conserva hash `fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836`.
+
+**Corrección Eurostat verificada aparte:** el preset antiguo `prc_hicp_midx` estaba archivado (terminaba en 2025). Se usa `prc_hicp_minr`, ECOICOP2/TOTAL/I25; HTTP real devuelve julio–septiembre de 2026. Feed/unidad separados de la base anterior. Coinbase queda bloqueado en HQ: condiciones Market Data 2026-08-07 §3(5), verificadas el 20-10, prohíben operación/benchmark de IA sin consentimiento escrito. No se relajan derechos para aumentar cifras.
+
+**Pruebas:** 78 focalizadas iniciales correctas. Primera regresión completa: 199 correctas y 2 fallos (lista de rutas y degradación de evidencia incompleta). Corregidos ambos; repetición de las 58 afectadas correcta. La nueva restricción Coinbase requirió aislar explícitamente los derechos ficticios del fixture de cartera; 9 pruebas afectadas correctas. Gate final `manage.py check` **exit 0: 202 pytest, 52 Vitest + 1 opt-in omitido, TypeScript/build**. Logs negativos conservados. Evidencias actuales en `output/p4-data-refresh/` y `docs/evidencias/P4/datos-20261020/`.
+
+**Checkpoint anterior ya verificado:** 194 pytest, 52 Vitest + 1 opt-in omitido, build y audit exit 0; 9/9 clics NPC, UI responsive y offline sin overflow ni errores. Los FPS de la noche anterior no dan aceptación: con carga concurrente 39,71–41,10; pasada posterior sin LLM 11,04–25,59 con dos ventanas inválidas. No atribuir la diferencia al LLM ni al HUD: condiciones no controladas. Hoy cargador confirmado, ahorro desactivado, 2,45 GiB libres / 15,69 GiB; falta repetir benchmark prudente y FPS.
+
+**Siguiente paso exacto:** publicar checkpoint pequeño de datos y preservar el HUD anterior. Corregir inferencia con una hipótesis nueva (contrato compacto y abstención explícita cuando la premisa contradice evidencia), probar primero Qwen2.5 existente, luego caso real suficiente/insuficiente desde API/UI. Investigación nueva: documentación oficial CoinPaprika confirma IA personal gratuita e histórico diario; falta separar permiso local de redistribución e implementar/verificar ese histórico antes de usarlo. Ningún candidato tiene aún aceptación semántica. No repetir benchmarks fallidos sin cambiar hipótesis. PAPER ONLY, 0 EUR, órdenes bloqueadas, sin mutación financiera.
+
+---
+
+## 2026-10-19 · P4 avanzado EN CURSO · checkpoint de contratos y HUD
+
+Trabajo anterior preservado; documentación sincronizada por fast-forward hasta **137f9db**. Backup local consistente: `output/p4-advanced/before.db`. Sin migración nueva (0004_research), sin cambios financieros ni P5/P6.
+
+Implementados objetivos `data_quality` / `macro_reference` / `investable_thesis`, EvidencePack tipado con alias estables, contratos separados Bull/Bear/Chair y referencias cruzadas, guardas contra duplicados y cifras sin respaldo. Los informes de referencia usan cuatro jobs deterministas; una tesis sin evidencia comparable se abstiene sin llamar al LLM. Ejecución técnica y calidad se muestran por separado. Validación léxica/estructural NO certifica razonamiento financiero.
+
+HUD negro, rails 340 px adaptables, tarjetas de argumentos y sparklines SVG solo con >=3 observaciones reales del mismo feed/venue/unidad/divisa/frecuencia; sin historia se muestra ausencia. Build TypeScript correcto y **52 tests frontend**; último gate backend anterior a ampliar las pruebas de objetivos: **46 tests focalizados** correctos. Pruebas ampliadas en ejecución; no contar como pasadas todavía.
+
+Benchmark auténtico TEST_ONLY aislado: Qwen3-1.7B Q8_0 produjo tesis repetidas y una inferencia favorable no sustentada por plazos de cobro crecientes; Chair agotó timeout. **No aceptado semánticamente**. Salidas originales conservadas en `output/p4-advanced/debate-qwen3.json`; el guard nuevo rechaza tesis repetidas que la primera validación estructural dejó pasar. Qwen2.5-1.5B Q4_K_M en evaluación con el mismo fixture y contratos. No se han insertado hechos ficticios en P2/P3. TTFT no medido en estas llamadas no streaming; no confundir duración total con tokens/s de generación.
+
+Siguiente paso exacto: terminar comparación de los dos candidatos; cerrar pruebas de objetivos/abstención, revisar integraciones read-only, reiniciar backend con nuevo código y demostrar BCE informativo/abstención reales, QA visual responsive y FPS, pruebas completas, evidencias y publicación normal. **P4 avanzado no terminado ni publicado todavía.** Mantener PAPER ONLY / 0 EUR / STOP antes de P5.
+
+---
+
 ## 2026-10-19 · P4 pendiente de aceptación semántica · STOP antes de P5
 
 Continuación de P4, sin reconstruir P1–P3. Esquema **0004_research**, 30 roles lógicos, scheduler persistente 1 LLM/2 quant/4 fetch. Commits anteriores conservados: 6c17a31, 34baca4, 325c17b, 6c8153c. Nuevos: **64049f7** (paneles simplificados/clic NPC) y **65d976d** (contexto independiente Bull/Bear y rechazo de tesis duplicada).

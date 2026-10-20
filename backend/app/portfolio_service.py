@@ -12,20 +12,15 @@ from app.database import DataRecord, InstrumentAlias, InstrumentRegistry
 from app.portfolio_store import canonical, digest, read_journal
 from app.portfolio_valuation import value_portfolio, permitted, freshness
 from app.portfolio_performance import performance
+from app.market_history import comparable_history
+from app.data_history import read_source
 
 
 def authorized_observations(data):
     observations = []
     with Session(data.engine) as session:
-        for row in session.scalars(select(DataRecord).where(DataRecord.key.startswith('cache:'))):
-            result = DataResult.model_validate(row.payload)
-            source = CATALOG.get(result.access_id)
-            if not source or row.key != cache_key(source) or data.initial(source).state != 'NOT_VERIFIED':
-                continue
-            rights = source.rights
-            if not result.real_connection or not all((rights.access_allowed, rights.display_allowed, rights.storage_allowed, rights.redistribution_allowed)):
-                continue
-            observations.extend(o for o in result.observations if permitted(o))
+        for source in CATALOG.values():
+            observations.extend(o for o in read_source(session, data, source) if permitted(o))
     return sorted(observations, key=lambda o: (o.observed_at, o.received_at), reverse=True)
 
 
@@ -101,10 +96,10 @@ class PortfolioService:
         for o in observations:
             if o.data_kind not in ('market_quote', 'fx_reference', 'yield_curve', 'macro_series'):
                 continue
-            unique.setdefault((o.provider, o.feed, o.series_id, o.currency, o.unit), o)
+            unique.setdefault((o.provider, o.feed, o.series_id, o.currency, o.unit, o.venue, o.period_precision), o)
         rows = [dict(symbol=o.series_id, name=o.series_id, value=str(o.value) if o.value is not None else None,
             daily_change_pct=None, daily_change_reason='Sin cierre anterior comparable verificado; no equivale a 0%.',
-            status=freshness(o, now), observation=o.model_dump(mode='json')) for o in unique.values()]
+            status=freshness(o, now), observation=o.model_dump(mode='json'), history=comparable_history(o,observations,now)) for o in unique.values()]
         quotes = [r for r in rows if r['observation']['data_kind'] == 'market_quote'][:10]
         pulse = [r for r in rows if r['observation']['data_kind'] != 'market_quote'][:4]
         return dict(checked_at=now.isoformat(), watchlists=['CORE', 'OPPORTUNITIES', 'PORTFOLIO'], selected='CORE',

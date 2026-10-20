@@ -11,6 +11,7 @@ from app.main import create_app
 
 @pytest.fixture(autouse=True)
 def no_network(monkeypatch):
+    monkeypatch.setenv('DATA_AUTO_REFRESH_ENABLED', 'false')
     # asyncio en Windows necesita socketpair sobre loopback para su propio loop.
     original_connect = socket.socket.connect
     original_connect_ex = socket.socket.connect_ex

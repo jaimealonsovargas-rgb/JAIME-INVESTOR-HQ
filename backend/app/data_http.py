@@ -11,6 +11,7 @@ from urllib.parse import urlsplit
 import httpx
 from app.data_catalog import CATALOG, Source
 from app.data_config import DataSettings
+from app.data_windows import request_window
 
 MAX_BYTES = 8 * 1024 * 1024
 READ_POSTS = {('api.openfigi.com','/v3/mapping'),('api.bls.gov','/publicAPI/v2/timeseries/data/')}
@@ -65,7 +66,8 @@ class SafeDataHttp:
         self.real = transport is None
 
     def fetch(self, source: Source):
-        params=dict(source.params);headers={'User-Agent':'JAIME-Investor-HQ-P2/0.1 (local read-only data)',**source.headers};payload=source.payload
+        params,payload=request_window(source,datetime.now(timezone.utc))
+        headers={'User-Agent':'JAIME-Investor-HQ-P2/0.1 (local read-only data)',**source.headers}
         secrets=[self.settings.secret(key) for key in source.credentials]
         if source.credentials and not all(secrets):
             raise FetchError('CONFIG_REQUIRED' if source.auth=='sec' else 'NO_CREDENTIALS')

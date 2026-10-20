@@ -12,6 +12,7 @@ from app.data_contracts import DataResult
 from app.data_http import SafeDataHttp, FetchError
 from app.data_parsers import parse
 from app.data_registry import ingest
+from app.data_history import archive
 
 REASONS = {
  'AVAILABLE_VERIFIED':'Datos reales recibidos y uso local autorizado.',
@@ -30,7 +31,10 @@ REASONS = {
 }
 
 def cache_key(source):
-    identity=repr((source.url,source.params,source.feed,source.rights.model_dump(mode='json')))
+    parts=(source.url,source.params,source.feed,source.rights.model_dump(mode='json'))
+    if source.id in ('A05','A07','A08','A11','A12','B02','B03'):
+        parts += ('rolling-v1',)
+    identity=repr(parts)
     return 'cache:'+source.id+':'+hashlib.sha256(identity.encode()).hexdigest()[:32]
 
 
@@ -55,7 +59,7 @@ class DataService:
                 initial=self.initial(source);record=session.get(DataRecord,'status:'+source.id)
                 result=DataResult.model_validate(record.payload) if record else initial
                 # Configuración actual manda; una clave retirada no conserva AVAILABLE.
-                if initial.state in ('DISABLED','NO_CREDENTIALS','CONFIG_REQUIRED','PLAN_REQUIRED','NOT_IMPLEMENTED'):
+                if initial.state in ('DISABLED','NO_CREDENTIALS','CONFIG_REQUIRED','PLAN_REQUIRED','NOT_IMPLEMENTED','RIGHTS_RESTRICTED'):
                     result=initial.model_copy(update={'checked_at':result.checked_at,'latency_ms':result.latency_ms,'http_status':result.http_status,'real_connection':result.real_connection})
                 elif not source.rights.display_allowed or not source.rights.access_allowed:
                     result=result.model_copy(update={'state':'RIGHTS_RESTRICTED','reason':REASONS['RIGHTS_RESTRICTED'],'usable':False})
@@ -78,7 +82,9 @@ class DataService:
                 cached=session.get(DataRecord,key)
                 if cached and now<datetime.fromisoformat(cached.expires_at):
                     result=DataResult.model_validate(cached.payload).model_copy(update={'cache_hit':True})
-                    if self.http.real:ingest(session,result.observations)
+                    if self.http.real and result.real_connection:
+                        ingest(session,result.observations)
+                        archive(session,source,key,result.observations)
                     return result
                 quota=session.get(DataQuota,source.provider)
                 if quota is None:
@@ -117,7 +123,9 @@ class DataService:
                 self._save(session,'status:'+source.id,public,expiry)
                 if source.rights.storage_allowed and result.observations:
                     self._save(session,key,result.model_dump(mode='json'),expiry)
-                    if self.http.real:ingest(session,result.observations)
+                    if self.http.real and result.real_connection:
+                        ingest(session,result.observations)
+                        archive(session,source,key,result.observations)
                 # Cache acotada; nunca guarda cuerpos/headers/secretos originales.
                 keys=list(session.scalars(select(DataRecord.key).order_by(DataRecord.updated_at.desc()).offset(256)))
                 if keys:session.execute(delete(DataRecord).where(DataRecord.key.in_(keys)))

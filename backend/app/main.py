@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+import asyncio
 from datetime import datetime, timezone
 
 from fastapi import FastAPI, Request, Query
@@ -15,8 +16,9 @@ from app.providers import provider_statuses
 from app.security import ExecutionUnavailable, deny_order_execution
 from app.data_config import DataSettings
 from app.data_service import DataService
+from app.data_refresh import DataRefresher
 from app.data_catalog import CATALOG
-from app.data_contracts import DataResult, QualityReport
+from app.data_contracts import DataResult, QualityReport, RefreshReport
 from app.hq_overview import HQOverview, overview
 from app.portfolio_store import initialize_master, JournalIntegrityError
 from app.portfolio_service import PortfolioService
@@ -40,8 +42,10 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
             initialize_master(engine)
             app.state.portfolio.snapshot()
             await app.state.research.start()
+            app.state.data_refresh.start()
             yield
         finally:
+            await asyncio.to_thread(app.state.data_refresh.stop)
             await app.state.research.stop()
             engine.dispose()
 
@@ -50,6 +54,7 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
                   docs_url=None, redoc_url=None)
     app.state.engine = engine
     app.state.data = DataService(engine, data_settings)
+    app.state.data_refresh = DataRefresher(app.state.data)
     app.state.portfolio = PortfolioService(engine, app.state.data)
     app.state.research = ResearchService(engine, app.state.data, app.state.portfolio)
     app.include_router(research_router(app.state.research))
@@ -106,6 +111,10 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
     @app.get('/api/data/quality',response_model=QualityReport)
     def data_quality():
         return app.state.data.quality()
+
+    @app.get('/api/data/refresh', response_model=RefreshReport)
+    def data_refresh():
+        return app.state.data_refresh.status()
 
     @app.get('/api/data/sources/{access_id}', response_model=DataResult)
     def data_source(access_id: str):

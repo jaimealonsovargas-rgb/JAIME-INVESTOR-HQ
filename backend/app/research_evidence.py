@@ -3,11 +3,12 @@ from datetime import datetime, timezone
 from decimal import Decimal, localcontext
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from app.database import DataRecord, InstrumentAlias
+from app.database import DataRecord, DataObservation, InstrumentAlias
 from app.data_catalog import CATALOG
-from app.data_contracts import DataResult
+from app.data_contracts import DataResult, Observation
 from app.data_service import cache_key
 from app.research_contracts import digest, utc, sanitize
+from app.data_history import read_source
 
 
 def collect(data, case, refresh=False):
@@ -28,13 +29,7 @@ def collect(data, case, refresh=False):
             source = CATALOG[access]
             if data.initial(source).state != 'NOT_VERIFIED' or not all((source.rights.access_allowed, source.rights.display_allowed, source.rights.storage_allowed, source.rights.redistribution_allowed)):
                 continue
-            row = s.get(DataRecord, cache_key(source))
-            if not row:
-                continue
-            result = DataResult.model_validate(row.payload)
-            if not result.real_connection:
-                continue
-            for obs in result.observations:
+            for obs in read_source(s, data, source, limit=60):
                 if not all((obs.rights.access_allowed, obs.rights.display_allowed, obs.rights.storage_allowed, obs.rights.redistribution_allowed)):
                     continue
                 direct = (obs.provider, obs.series_id) in identifiers or (obs.provider, obs.series_id) == (case['instrument'].get('provider'), case['instrument']['symbol'])
@@ -58,7 +53,8 @@ def features(evidence):
     for e in evidence:
         c = e['content']
         if e['scope'] == 'INSTRUMENT' and c.get('value') is not None and e['rights_ok'] and e.get('available', True):
-            groups.setdefault((e['provider'], c['feed'], c['series_id'], c['unit'], c['venue']), []).append(e)
+            groups.setdefault((e['provider'], c['feed'], c['series_id'], c['unit'], c['venue'],
+                               c.get('currency'), c.get('period_precision'), c.get('data_kind')), []).append(e)
     if not groups:
         return {'state': 'NO_DATA', 'reason': 'No hay serie comparable del instrumento.', 'items': []}
     rows = max(groups.values(), key=len)
@@ -105,13 +101,18 @@ def current_evidence(data, items):
                 if not item['rights_ok']: item['content'] = {'excerpt': 'RIGHTS_RESTRICTED'}
                 checked.append(item); continue
             row = session.get(DataRecord, cache_key(source)) if source else None
+            archived = session.get(DataObservation, content.get('id', ''))
+            stored = bool(row) or bool(archived and source and archived.source_identity == cache_key(source))
             latest = session.get(DataRecord, 'status:' + source.id) if source else None
             withdrawn = bool(latest and latest.payload.get('http_status') in (403, 404, 410))
             allowed = bool(source and data.initial(source).state == 'NOT_VERIFIED' and all((source.rights.access_allowed, source.rights.display_allowed, source.rights.storage_allowed, source.rights.redistribution_allowed)))
             item['rights_ok'] = allowed
-            item['available'] = bool(row) and not withdrawn and digest(content) == e['hash']
-            received = datetime.fromisoformat(e['retrieved_at'])
-            item['freshness'] = 'FRESH' if (datetime.now(timezone.utc)-received).total_seconds() <= content.get('stale_after_seconds', 0) else 'STALE'
+            item['available'] = stored and not withdrawn and digest(content) == e['hash']
+            try:
+                observation = Observation.model_validate({k: v for k, v in content.items() if k in Observation.model_fields})
+                item['freshness'] = 'STALE' if observation.stale(data.clock()) else 'FRESH'
+            except ValueError:
+                item.update(available=False, freshness='STALE')
             if not allowed:
                 item['content'] = {'excerpt': 'RIGHTS_RESTRICTED'}
             checked.append(item)

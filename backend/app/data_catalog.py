@@ -86,3 +86,16 @@ PUBLIC_NEWS = Source('A20','ECB','BCE · noticias RSS / Agent Reach auditado',
     'https://www.ecb.europa.eu/home/html/rss.en.html',country='EU',asset_class='NEWS',venue='PUBLISHER',ttl=1800,limit=2,
     quota_note='Canal público auditado; 2/min local, cache 30 min. Sin artículos completos, cookies ni sesión.')
 CATALOG = {s.id:s for s in (*SOURCES,*OPTIONAL,PUBLIC_NEWS)}
+# Market Data Terms 2026-08-07, section 3(5), rechecked 2026-10-20:
+# AI operation/benchmarking requires written consent. Keep adapter for tests;
+# HQ research must not fetch or consume this data.
+CATALOG['A18'] = replace(CATALOG['A18'], block='RIGHTS_RESTRICTED',
+    rights=Rights(license='Coinbase: uso IA prohibido sin consentimiento escrito (3.5)',
+        source='https://www.coinbase.com/legal/market_data',
+        checked_at=datetime(2026,10,20,tzinfo=timezone.utc),
+        scope='restricted', attribution='Coinbase Market Data Terms, 2026-08-07'))
+# Eurostat archived ECOICOP1 in 2026. The new series must not be spliced into I15.
+CATALOG['A04'] = replace(CATALOG['A04'],
+    url='https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_minr',
+    feed='prc_hicp_minr/ECOICOP2/I25',
+    params={'geo':'ES','coicop18':'TOTAL','unit':'I25','lastTimePeriod':'3'})

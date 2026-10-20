@@ -69,8 +69,9 @@ class Observation(Contract):
         return self
 
     def stale(self, now: datetime) -> bool:
-        # Series y EOD conservan su periodo histórico; no se convierten en realtime.
-        return (now - self.received_at).total_seconds() > self.stale_after_seconds
+        # Re-fetching an old spot quote must never make its market timestamp fresh.
+        anchor = self.observed_at if self.data_kind == 'market_quote' and self.period_precision == 'instant' else self.received_at
+        return (now - anchor).total_seconds() > self.stale_after_seconds
 
 class DataResult(Contract):
     access_id: str
@@ -109,6 +110,26 @@ class SourceQuality(Contract):
     usable: bool
     cache_hit: bool
     normalized_count: int = Field(ge=0)
+
+
+class RefreshSource(Contract):
+    access_id: str
+    eligible: bool
+    cadence_seconds: int = Field(ge=300)
+    state: str
+    attempted_at: AwareDatetime | None
+    succeeded_at: AwareDatetime | None
+    next_due_at: AwareDatetime | None
+    failures: int = Field(ge=0, le=8)
+
+
+class RefreshReport(Contract):
+    enabled: bool
+    running: bool
+    concurrency: Literal[1]
+    last_error: Literal['REFRESH_FAILED'] | None
+    sources: tuple[RefreshSource, ...]
+    note: str
 
 class QualityReport(Contract):
     checked_at: AwareDatetime

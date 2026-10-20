@@ -6,7 +6,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
 
 from app.contracts import Instrument
 
-SCHEMA_VERSION = "0004_research"
+SCHEMA_VERSION = "0005_data_history"
 
 
 class Base(DeclarativeBase):
@@ -58,6 +58,27 @@ class DataQuota(Base):
     window_start: Mapped[str] = mapped_column(String(40))
     used: Mapped[int] = mapped_column(Integer)
     blocked_until: Mapped[str | None] = mapped_column(String(40))
+    failures: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class DataObservation(Base):
+    """Authorized observations survive cache replacement; revisions remain separate."""
+    __tablename__ = 'data_observations'
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    access_id: Mapped[str] = mapped_column(String(8), index=True)
+    source_identity: Mapped[str] = mapped_column(String(120))
+    observed_at: Mapped[str] = mapped_column(String(40), index=True)
+    received_at: Mapped[str] = mapped_column(String(40))
+    payload: Mapped[dict] = mapped_column(JSON)
+
+
+class DataRefresh(Base):
+    __tablename__ = 'data_refresh'
+    access_id: Mapped[str] = mapped_column(String(8), primary_key=True)
+    next_due_at: Mapped[str] = mapped_column(String(40))
+    attempted_at: Mapped[str | None] = mapped_column(String(40))
+    succeeded_at: Mapped[str | None] = mapped_column(String(40))
+    state: Mapped[str] = mapped_column(String(32))
     failures: Mapped[int] = mapped_column(Integer, default=0)
 
 

@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-20T07:29:24.914687+00:00",
+  "backup": "output\\p4-data-refresh\\before-0005-20261020-072922.db",
+  "schema": "0005_data_history",
+  "ledger_hash": "fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836",
+  "master_unchanged": true,
+  "schema_drift": false
+}

@@ -6,6 +6,7 @@ from app.config import ROOT
 class DataSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=ROOT / '.env', extra='ignore', hide_input_in_errors=True)
     data_public_enabled: bool = True
+    data_auto_refresh_enabled: bool = True
     data_disabled_sources: str = ''
     agent_reach_public_enabled: bool = False
     vibe_data_adapter_enabled: bool = False
