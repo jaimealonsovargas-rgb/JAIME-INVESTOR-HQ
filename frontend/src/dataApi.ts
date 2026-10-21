@@ -1,8 +1,9 @@
 export const DATA_STATES=['AVAILABLE_VERIFIED','DELAYED','STALE','NO_DATA','NO_CREDENTIALS','CONFIG_REQUIRED','AUTH_FAILED','RATE_LIMITED','RIGHTS_RESTRICTED','OFFLINE','TIMEOUT','INVALID_PAYLOAD','ERROR','NOT_IMPLEMENTED','PLAN_REQUIRED','DISABLED','NOT_VERIFIED'] as const;
 export type DataState=typeof DATA_STATES[number];
-export interface DataRights {license:string;source:string;scope:string;attribution:string;access_allowed:boolean;display_allowed:boolean;storage_allowed:boolean;redistribution_allowed:boolean}
+export interface DataRights {license:string;source:string;scope:string;attribution:string;access_allowed:boolean;display_allowed:boolean;storage_allowed:boolean;redistribution_allowed:boolean;local_research_allowed?:boolean}
 export interface DataSource {access_id:string;provider:string;name:string;implemented:boolean;data_kind:string;asset_class:string;country:string|null;market:string;feed:string;docs:string;rights:DataRights;quota_note:string;quota_used:number;next_allowed_at:string|null;state:DataState;reason:string;checked_at:string|null;latency_ms:number|null;http_status:number|null;real_connection:boolean;usable:boolean;normalized_count:number}
 export interface DataQuality {checked_at:string;counts:Record<string,number>;sources:DataSource[]}
+export interface DataRefresh {enabled:boolean;running:boolean;concurrency:1;last_error:string|null;note:string;sources:{access_id:string;eligible:boolean;cadence_seconds:number;state:string;attempted_at:string|null;succeeded_at:string|null;next_due_at:string|null;failures:number}[]}
 export interface DataObservation {id:string;series_id:string;provider:string;feed:string;venue:string;data_kind:string;period:string;period_precision:string;observed_at:string;received_at:string;published_at:string|null;value:string|null;currency:string|null;unit:string;metadata:Record<string,string>;quality_flags:string[];rights:DataRights;source_ref:string;execution_eligible:false}
 export interface SourceResult {access_id:string;state:DataState;reason:string;checked_at:string|null;latency_ms:number|null;real_connection:boolean;usable:boolean;cache_hit:boolean;normalized_count:number;observations:DataObservation[]}
 const object=(value:unknown):value is Record<string,unknown>=>typeof value==='object'&&value!==null&&!Array.isArray(value);
@@ -35,4 +36,14 @@ export function validateSource(value:unknown):SourceResult{
  return value as unknown as SourceResult;
 }
 export async function fetchDataQuality(signal?:AbortSignal){return validateQuality(await get('/api/data/quality',signal));}
+export function validateRefresh(value:unknown):DataRefresh{
+ if(!object(value)||typeof value.enabled!=='boolean'||typeof value.running!=='boolean'||value.concurrency!==1||!text(value.note)||(value.last_error!==null&&value.last_error!=='REFRESH_FAILED')||!Array.isArray(value.sources))throw Error('Contrato de actualización inválido.');
+ const ids=new Set<string>();
+ for(const row of value.sources){
+  if(!object(row)||!text(row.access_id)||ids.has(String(row.access_id))||typeof row.eligible!=='boolean'||!text(row.state)||!Number.isInteger(row.cadence_seconds)||Number(row.cadence_seconds)<300||!Number.isInteger(row.failures)||Number(row.failures)<0||Number(row.failures)>8||!['attempted_at','succeeded_at','next_due_at'].every(k=>nullableDate(row[k])))throw Error('Plan de actualización inválido.');
+  ids.add(String(row.access_id));
+ }
+ return value as unknown as DataRefresh;
+}
+export async function fetchDataRefresh(signal?:AbortSignal){return validateRefresh(await get('/api/data/refresh',signal));}
 export async function fetchSource(id:string,signal?:AbortSignal){if(!/^[AB]\d{2}$/.test(id))throw Error('Fuente no registrada.');const result=validateSource(await get('/api/data/sources/'+id,signal));if(result.access_id!==id)throw Error('Respuesta de otra fuente.');return result;}

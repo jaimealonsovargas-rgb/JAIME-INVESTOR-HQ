@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {validateQuality,validateSource,safeHttps} from './dataApi';
+import {validateQuality,validateSource,validateRefresh,safeHttps} from './dataApi';
 
 const rights={license:'TEST_ONLY',source:'https://example.org/TEST_ONLY',scope:'open',attribution:'TEST_ONLY',access_allowed:true,display_allowed:true,storage_allowed:true,redistribution_allowed:true};
 const row={access_id:'A01',provider:'TEST_ONLY',name:'TEST_ONLY',implemented:true,data_kind:'macro_series',asset_class:'MACRO_SERIES',country:'ES',market:'TEST_ONLY',feed:'TEST_ONLY',docs:'https://example.org/TEST_ONLY',rights,quota_note:'TEST_ONLY',quota_used:1,next_allowed_at:null,state:'AVAILABLE_VERIFIED',reason:'TEST_ONLY',checked_at:'2026-10-14T00:00:00Z',latency_ms:25,http_status:200,real_connection:true,usable:true,normalized_count:1};
@@ -16,4 +16,17 @@ describe('Contratos frontend de datos reales',()=>{
   expect(()=>validateSource({...result,observations:[{...observation,execution_eligible:true}]})).toThrow();
  });
  it('no admite enlaces ejecutables ni secretos en URLs',()=>{expect(safeHttps('javascript:alert(1)')).toBe(false);expect(safeHttps('https://key:secret@example.org')).toBe(false);expect(safeHttps('https://example.org')).toBe(true);});
+});
+
+it('admite visualización personal sin atribuir redistribución y rechaza ausencia de permiso de pantalla',()=>{
+ const personal={...rights,scope:'personal',redistribution_allowed:false,local_research_allowed:true};
+ expect(validateSource({...result,observations:[{...observation,rights:personal}]}).observations[0].rights.redistribution_allowed).toBe(false);
+ expect(()=>validateSource({...result,observations:[{...observation,rights:{...personal,display_allowed:false}}]})).toThrow();
+});
+
+it('valida el refresco persistente sin aceptar concurrencia, cadencias o fuentes duplicadas',()=>{
+ const source={access_id:'A21',eligible:true,cadence_seconds:86400,state:'DELAYED',attempted_at:null,succeeded_at:null,next_due_at:null,failures:0};
+ const report={enabled:true,running:true,concurrency:1,last_error:null,note:'TEST_ONLY',sources:[source]};
+ expect(validateRefresh(report).sources[0].succeeded_at).toBeNull();
+ for(const change of [{concurrency:4},{sources:[source,source]},{sources:[{...source,cadence_seconds:30}]},{sources:[{...source,next_due_at:'invalid'}]},{last_error:'SECRET'}])expect(()=>validateRefresh({...report,...change})).toThrow();
 });

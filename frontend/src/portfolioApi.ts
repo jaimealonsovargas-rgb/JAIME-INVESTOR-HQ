@@ -5,7 +5,8 @@ export interface Position {instrument:string;symbol:string;currency:string;qty:s
 export interface Portfolio {portfolio_id:'MASTER';base_currency:'EUR';trading_mode:'PAPER_ONLY';orders_enabled:false;as_of:string;seeded_at:string;ledger_hash:string;ledger_status:string;valuation_status:ValuationStatus;nav_eur:string|null;cash_eur:string|null;market_value_eur:string|null;liabilities_eur:string;accruals_eur:string|null;positions_count:number;events_count:number;invested_pct:string|null;realized_pnl_eur:string;unrealized_pnl_eur:string|null;fx_effect_eur:string|null;total_pnl_eur:string|null;cumulative_return_pct:string|null;income_eur:string;fees_eur:string;positions:Position[];performance:Record<string,string|number|null>}
 export interface LedgerRow {kind:string;source_ref:string;occurred_at:string;amount:string;currency:string;actor:string;entries:{account:string;currency:string;debit:string;credit:string}[]}
 export interface LedgerPage {items:LedgerRow[];total:number;offset:number;limit:number;ledger_hash:string}
-export interface MarketRow {symbol:string;name:string;value:string|null;daily_change_pct:string|null;daily_change_reason:string;status:ValuationStatus;observation:DataObservation}
+export interface MarketHistory {state:'AVAILABLE'|'STALE'|'NO_DATA';reason:string;identity:Record<string,string|null>;points:{observed_at:string;value:string;observation_id:string}[]}
+export interface MarketRow {history?:MarketHistory;symbol:string;name:string;value:string|null;daily_change_pct:string|null;daily_change_reason:string;status:ValuationStatus;observation:DataObservation}
 export interface Markets {checked_at:string;items:MarketRow[];pulse:MarketRow[];reason:string}
 export const isDecimal=(v:unknown):v is string=>typeof v==='string'&&/^-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?$/.test(v)&&v.length<=150;
 export const nullableDecimal=(v:unknown)=>v===null||isDecimal(v);
@@ -45,6 +46,8 @@ export function validateMarkets(value:unknown):Markets {
  if(!record(value)||!validTime(value.checked_at)||!Array.isArray(value.items)||!Array.isArray(value.pulse)||typeof value.reason!=='string')throw Error('Mercados sin contrato.');
  for(const row of [...value.items,...value.pulse]){
   if(!record(row)||typeof row.symbol!=='string'||!nullableDecimal(row.value)||!nullableDecimal(row.daily_change_pct)||!validStatus(row.status)||!record(row.observation))throw Error('Fila de mercado inválida.');
+  const observation=row.observation;
+  if(row.history!==undefined){const h=row.history as MarketHistory;if(!record(h)||!['AVAILABLE','STALE','NO_DATA'].includes(h.state)||!Array.isArray(h.points)||h.points.length>60||!record(h.identity)||!['provider','feed','series_id','venue','currency','unit','period_precision','data_kind'].every(k=>h.identity[k]===observation[k])||h.points.some((p,i)=>!validTime(p.observed_at)||!isDecimal(p.value)||typeof p.observation_id!=='string'||(i>0&&p.observed_at<=h.points[i-1].observed_at))||(h.state==='NO_DATA'?h.points.length!==0:h.points.length<3))throw Error('Historia no comparable.');}
   validateSource({access_id:row.observation.access_id,state:'AVAILABLE_VERIFIED',reason:'Cache P2',checked_at:value.checked_at,real_connection:true,usable:false,cache_hit:true,normalized_count:1,observations:[row.observation]});
  }
  return value as unknown as Markets;

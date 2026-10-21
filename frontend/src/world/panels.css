@@ -1,4 +1,4 @@
-.monitor-dialog { width:min(1320px,calc(100vw - 64px)); max-width:none;max-height:calc(100dvh - 72px);padding:0;border:1px solid #8f795254;border-radius:5px;background:#101e28;color:#ece8df;box-shadow:0 28px 90px #0008;overflow:hidden;font:16px/1.6 Arial,sans-serif; }
+.monitor-dialog { width:min(1320px,calc(100vw - 64px)); max-width:none;max-height:calc(100dvh - 72px);padding:0;border:1px solid #8f795254;border-radius:5px;background:#000;color:#ece8df;box-shadow:0 28px 90px #0008;overflow:hidden;font:16px/1.6 Arial,sans-serif; }
 .monitor-dialog[open] {display:flex;flex-direction:column;animation:terminal-reveal 180ms ease-out;}
 .monitor-dialog::backdrop {background:#050b10a8;}
 .panel-chrome {padding:18px 30px;display:flex;align-items:center;justify-content:space-between;background:#0c1821;gap:20px;font-size:14px;letter-spacing:.075em;color:#c6b79b;}

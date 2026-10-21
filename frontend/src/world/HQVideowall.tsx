@@ -32,12 +32,12 @@ export function ExecutiveSummary({id,value}:{id:string;value:ExecutiveValue}){
  return id==='portfolio'?<dl className="hq-counts"><div><dt>NAV · virtual</dt><dd>{eur(value.nav_eur)}</dd></div><div><dt>Caja</dt><dd>{eur(value.cash_eur)}</dd></div><div><dt>Rentabilidad</dt><dd>{percent(value.cumulative_return_pct)}</dd></div><div><dt>Performance</dt><dd>{value.performance?.twr_pct==null?'Historia insuficiente':percent(value.performance.twr_pct as string)}</dd></div></dl>:<dl className="hq-counts"><div><dt>Posiciones</dt><dd>{value.positions_count}</dd></div><div><dt>Valor de mercado</dt><dd>{eur(value.market_value_eur)}</dd></div><div><dt>Exposición</dt><dd>{percent(value.invested_pct)}</dd></div></dl>;
 }
 async function fetchOverview(signal:AbortSignal):Promise<HQOverviewData>{
- const response=await fetch('/api/hq/overview',{signal:AbortSignal.any([signal,AbortSignal.timeout(6000)]),credentials:'omit',cache:'no-store'});
+ const response=await fetch('/api/hq/overview',{signal:AbortSignal.any([signal,AbortSignal.timeout(15000)]),credentials:'omit',cache:'no-store'});
  if(!response.ok)throw Error('Servicio local no disponible');return validateOverview(await response.json());
 }
 export default function HQVideowall({onPause,onOverview}:{onPause:(paused:boolean)=>void;onOverview:(data:HQOverviewData|undefined)=>void}){
  const [open,setOpen]=useState(false),dialog=useRef<HTMLDialogElement>(null),button=useRef<HTMLButtonElement>(null);
- const query=useQuery({queryKey:['hq-overview'],queryFn:({signal})=>fetchOverview(signal),retry:false,refetchInterval:30000,refetchOnWindowFocus:false});
+ const query=useQuery({queryKey:['hq-overview'],queryFn:({signal})=>fetchOverview(signal),retry:(count,error)=>count<1&&(error instanceof TypeError||error.name==='TimeoutError'),retryDelay:1500,refetchInterval:30000,refetchOnWindowFocus:false});
  useEffect(()=>{onOverview(query.isSuccess&&!query.isError?query.data:undefined);},[query.data,query.isSuccess,query.isError,onOverview]);
  const close=()=>{setOpen(false);onPause(false);};
  useEffect(()=>{const node=dialog.current;if(open){node?.showModal();node?.querySelector('button')?.focus();}else if(node?.open){node.close();(document.querySelector('canvas')??button.current)?.focus();}},[open]);
