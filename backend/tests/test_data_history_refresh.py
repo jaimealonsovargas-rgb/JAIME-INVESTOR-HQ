@@ -116,6 +116,24 @@ def test_refresh_failure_backoff_and_persisted_lease(migrated):
     worker.stop()
 
 
+def test_cache_hit_does_not_extend_ttl_on_restart(migrated):
+    data = setup(migrated); source = CATALOG['A21']
+    checked = NOW - timedelta(minutes=20)
+    data.query = lambda access: DataResult(access_id=access, state='DELAYED', reason='TEST_ONLY',
+        real_connection=True, cache_hit=True, checked_at=checked)
+    worker = DataRefresher(data)
+    worker.eligible = lambda s: s.id == source.id
+    worker.tick()
+    with Session(data.engine) as s, s.begin():
+        row = s.get(DataRefresh, source.id)
+        assert datetime.fromisoformat(row.next_due_at) == checked + timedelta(seconds=source.ttl)
+        # Repair a persisted schedule from an older backend that extended cache lifetime.
+        row.next_due_at = (NOW + timedelta(days=1)).isoformat()
+    worker.tick()
+    with Session(data.engine) as s:
+        assert datetime.fromisoformat(s.get(DataRefresh, source.id).next_due_at) == checked + timedelta(seconds=source.ttl)
+
+
 def test_rolling_dates_are_generated_not_supplied_and_do_not_mutate_catalog():
     params, _ = request_window(CATALOG['A08'], NOW)
     assert params['field_tdr_date_value_month'] == '202610'
@@ -131,7 +149,7 @@ def test_refresh_endpoint_reports_disabled_worker_without_network(client):
     response = client.get('/api/data/refresh')
     assert response.status_code == 200
     assert not response.json()['enabled'] and not response.json()['running']
-    assert len(response.json()['sources']) == 35
+    assert len(response.json()['sources']) == 36
     assert client.post('/api/orders').status_code == 403
 
 

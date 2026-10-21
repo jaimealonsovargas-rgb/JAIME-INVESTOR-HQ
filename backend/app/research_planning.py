@@ -4,6 +4,29 @@ from app.research_contracts import digest, sanitize
 GOALS = {'data_quality', 'macro_reference', 'investable_thesis'}
 
 
+def role_evidence_gap(role_id, evidence):
+    """Do not ask a model to manufacture microstructure from aggregated prices."""
+    if role_id == 'macro_global':
+        macro = [e for e in evidence if e['scope'] == 'MACRO_CONTEXT' and e['rights_ok']
+                 and e.get('available', True) and e['freshness'] == 'FRESH'
+                 and e['content'].get('data_kind') == 'macro_series']
+        if not macro:
+            return 'NO_DATA: no hay series macroeconómicas relevantes para una explicación del instrumento; una referencia de divisas no identifica causas ni régimen macro.'
+        return None
+    if role_id not in ('market_structure', 'liquidity_slippage'):
+        return None
+    direct = [e['content'] for e in evidence if e['scope'] == 'INSTRUMENT'
+              and e['rights_ok'] and e.get('available', True) and e['freshness'] == 'FRESH']
+    # Only explicitly typed, authorized microstructure data could open this lane.
+    # Existing daily aggregates are not an order book, spread, venue rule or depth.
+    kinds = {'market_structure', 'order_book'} if role_id == 'market_structure' else {'order_book'}
+    if not any(c.get('data_kind') in kinds for c in direct):
+        return ('NO_DATA: falta evidencia específica de microestructura; los precios agregados no describen reglas ni libro de una plaza.'
+                if role_id == 'market_structure' else
+                'NO_DATA: faltan bid/ask, profundidad y costes verificables; no se estima spread ni slippage desde precios diarios.')
+    return None
+
+
 def research_goal(case):
     explicit = case.get('research_goal')
     if explicit in GOALS:

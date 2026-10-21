@@ -31,8 +31,11 @@ REASONS = {
 }
 
 def cache_key(source):
-    parts=(source.url,source.params,source.feed,source.rights.model_dump(mode='json'))
-    if source.id in ('A05','A07','A08','A11','A12','B02','B03'):
+    rights=source.rights.model_dump(mode='json')
+    if not rights['local_research_allowed']:
+        rights.pop('local_research_allowed')  # Preserve earlier cache identities when policy is unchanged.
+    parts=(source.url,source.params,source.feed,rights)
+    if source.id in ('A05','A07','A08','A11','A12','A21','B02','B03'):
         parts += ('rolling-v1',)
     identity=repr(parts)
     return 'cache:'+source.id+':'+hashlib.sha256(identity.encode()).hexdigest()[:32]
@@ -80,7 +83,8 @@ class DataService:
             with Session(self.engine) as session, session.begin():
                 session.connection().exec_driver_sql('BEGIN IMMEDIATE')
                 cached=session.get(DataRecord,key)
-                if cached and now<datetime.fromisoformat(cached.expires_at):
+                if (cached and now<datetime.fromisoformat(cached.expires_at)
+                        and now<datetime.fromisoformat(cached.updated_at)+timedelta(seconds=source.ttl)):
                     result=DataResult.model_validate(cached.payload).model_copy(update={'cache_hit':True})
                     if self.http.real and result.real_connection:
                         ingest(session,result.observations)
@@ -102,7 +106,7 @@ class DataService:
                 raw,status=self.http.fetch(source);received=self.clock();observations=parse(source,raw,received)
                 state='AVAILABLE_VERIFIED' if observations and source.rights.display_allowed else 'RIGHTS_RESTRICTED' if observations else 'NO_DATA'
                 if state=='AVAILABLE_VERIFIED' and source.kind=='market_quote':
-                    if any('HISTORICAL_EOD' in o.quality_flags for o in observations):state='DELAYED'
+                    if any(any(f.startswith('HISTORICAL_') for f in o.quality_flags) for o in observations):state='DELAYED'
                     elif all((received-o.observed_at).total_seconds()>max(60,source.ttl) for o in observations):state='STALE'
                 result=DataResult(access_id=source.id,state=state,reason=REASONS[state],checked_at=received,latency_ms=round((time.perf_counter()-start)*1000),http_status=status,real_connection=self.http.real and bool(observations),usable=bool(observations) and source.rights.display_allowed and self.http.real and state!='STALE',normalized_count=len(observations),observations=observations if source.rights.display_allowed else ())
                 failure=None

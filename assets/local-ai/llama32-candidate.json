@@ -1,0 +1,14 @@
+{
+  "model": "Llama-3.2-3B-Instruct",
+  "quant": "Q4_K_M",
+  "repo": "bartowski/Llama-3.2-3B-Instruct-GGUF",
+  "revision": "5ab33fa94d1d04e903623ae72c95d1696f09f9e8",
+  "file": "Llama-3.2-3B-Instruct-Q4_K_M.gguf",
+  "sha256": "6c1a2b41161032677be168d354123594c0e6e67d2b9227c84f296ad037c728ff",
+  "bytes": 2019377696,
+  "license": "Llama 3.2 Community License",
+  "license_source": "https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama3_2/LICENSE",
+  "acceptance": "CANDIDATE_NOT_APPROVED",
+  "authorization": "User P4 avanzado attachment explicitly requests compact model such as Llama 3.2 3B Q4",
+  "attribution": "Built with Llama. Llama 3.2 is licensed under the Llama 3.2 Community License, Copyright Meta Platforms, Inc. All Rights Reserved."
+}

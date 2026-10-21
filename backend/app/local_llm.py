@@ -11,6 +11,27 @@ class NoLocalModel(Exception):
     pass
 
 
+def model_view(value):
+    """Compact repeated source metadata without dropping fact IDs, units or scope."""
+    if isinstance(value, dict):
+        if value.get('schema_version') == 'evidence-pack.v1' and isinstance(value.get('records'), list):
+            fields = ('scope', 'data_kind', 'provider', 'series_id', 'feed', 'venue',
+                      'currency', 'unit', 'period_precision')
+            sources, identities, records = {}, {}, []
+            for row in value['records']:
+                descriptor = {k: row[k] for k in fields if row.get(k) is not None}
+                identity = canonical(descriptor)
+                source_id = identities.setdefault(identity, 'S' + str(len(identities) + 1))
+                sources[source_id] = descriptor
+                records.append({**{k: row.get(k) for k in ('id', 'observed_at', 'usable', 'excerpt')}, 'source_id': source_id})
+            return {'schema_version': 'evidence-pack.compact.v1', 'sources': sources, 'records': records}
+        return {k: model_view(v) for k, v in value.items() if k != 'evidence_id'
+                and not (k == 'evidence' and 'evidence_pack' in value)}
+    if isinstance(value, list):
+        return [model_view(v) for v in value]
+    return value
+
+
 def grounded_schema(data):
     """Small llama.cpp-compatible schema. Python supplies the exact facts;
     free qualitative narrative remains explicitly unverified and validated separately.
@@ -43,13 +64,15 @@ def attach_extracts(opinion, data):
 
 
 class LocalLLM:
-    def __init__(self, endpoint=None, transport=None):
+    def __init__(self, endpoint=None, transport=None, *, bounded_thinking=None):
         endpoint = endpoint or os.environ.get('HQ_LOCAL_LLM_URL', 'http://127.0.0.1:8089')
         u = urlsplit(endpoint)
         if u.scheme != 'http' or u.hostname not in ('127.0.0.1', 'localhost') or u.username or u.password or u.query or u.fragment or u.path not in ('', '/'):
             raise ValueError('LOCAL_LLM_LOOPBACK_ONLY')
         self.endpoint = f'http://127.0.0.1:{u.port or 8089}'
         self.transport = transport
+        self.bounded_thinking = (os.environ.get('HQ_LOCAL_LLM_THINKING', 'false').lower() == 'true'
+                                 if bounded_thinking is None else bounded_thinking)
         self.status = {'state': 'NO_LOCAL_MODEL', 'runtime': 'llama.cpp', 'model': None, 'endpoint': self.endpoint, 'last_checked_at': None}
 
     async def probe(self):
@@ -69,21 +92,20 @@ class LocalLLM:
         if (await self.probe())['state'] != 'AVAILABLE':
             raise NoLocalModel()
         # Conservative budget, no silently truncated evidence or huge external documents.
-        def model_view(value):
-            if isinstance(value, dict):
-                return {k: model_view(v) for k, v in value.items() if k != 'evidence_id'}
-            if isinstance(value, list):
-                return [model_view(v) for v in value]
-            return value
         prompt = canonical(model_view(data))
         if len(prompt) > 20000 or not 1 <= max_tokens <= (1500 if contract else 900):
             raise ValueError('CONTEXT_BUDGET')
         start = time.perf_counter()
+        schema = contract.model_json_schema() if contract else grounded_schema(data)
+        if contract and contract.__name__ in ('BullResponse', 'BearResponse', 'ChairResponse'):
+            key = {'BullResponse':'arguments','BearResponse':'objections','ChairResponse':'findings'}[contract.__name__]
+            schema['properties'][key]['maxItems'] = 1  # One independent argument per compact first pass.
         payload = {'model': self.status['model'], 'messages': [{'role': 'system', 'content': system},
                    {'role': 'user', 'content': 'UNTRUSTED_CONTENT_JSON\n' + prompt}], 'temperature': .2 if contract else 0, 'seed': seed,
                    'max_tokens': max_tokens, 'stream': False,
-                   'chat_template_kwargs': {'enable_thinking': False}, 'reasoning_effort': 'none',
-                   'response_format': {'type': 'json_object', 'schema': contract.model_json_schema() if contract else grounded_schema(data)}}
+                   'chat_template_kwargs': {'enable_thinking': self.bounded_thinking},
+                   'reasoning_effort': 'low' if self.bounded_thinking else 'none',
+                   'response_format': {'type': 'json_object', 'schema': schema}}
         async with httpx.AsyncClient(trust_env=False, follow_redirects=False, transport=self.transport, timeout=295) as client:
             try:
                 response = await client.post(self.endpoint + '/v1/chat/completions', json=payload)
@@ -99,4 +121,5 @@ class LocalLLM:
         parsed = (contract or Opinion).model_validate(json.loads(choice['message']['content']))
         if contract is None:
             parsed = attach_extracts(parsed, data)
-        return parsed, {'runtime': 'llama.cpp', 'model': self.status['model'], 'duration_ms': round((time.perf_counter()-start)*1000), 'usage': body.get('usage', {}), 'model_prompt_hash': digest(prompt), 'raw_model_output_hash': digest(choice['message']['content']), 'claims_origin': 'STRUCTURED_HYPOTHESES' if contract else 'PYTHON_EXACT_EVIDENCE_EXTRACTION'}
+        timings = {k:v for k,v in body.get('timings', {}).items() if k in ('prompt_n','prompt_ms','predicted_n','predicted_ms','predicted_per_second') and isinstance(v,(int,float))}
+        return parsed, {'runtime': 'llama.cpp', 'model': self.status['model'], 'duration_ms': round((time.perf_counter()-start)*1000), 'usage': body.get('usage', {}), 'timings': timings, 'bounded_thinking': self.bounded_thinking, 'model_prompt_hash': digest(prompt), 'raw_model_output_hash': digest(choice['message']['content']), 'claims_origin': 'STRUCTURED_HYPOTHESES' if contract else 'PYTHON_EXACT_EVIDENCE_EXTRACTION'}

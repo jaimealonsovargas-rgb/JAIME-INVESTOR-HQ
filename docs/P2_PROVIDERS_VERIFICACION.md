@@ -1,5 +1,18 @@
 # P2 · Verificación de proveedores
 
+## Actualización verificada 20-10-2026
+
+Catálogo actual: **36 modalidades / 31 proveedores / 34 adaptadores**. Se añade A21 del proveedor CoinPaprika existente, no un proveedor nuevo. La tabla histórica inferior conserva sus fechas; no representa disponibilidad actual. La pasada completa y los errores/restricciones posteriores están en `P2_REFRESH_Y_PERSISTENCIA.md`.
+
+| Acceso | Prueba HTTP real | Evidencia / alcance | Derechos |
+|---|---|---|---|
+| A21 · CoinPaprika diario | 200, 2026-10-20T14:45:15.887871Z, 8712 ms | 90 instantáneas diarias; 60 puntos visibles comparables. GET `/v1/tickers/btc-bitcoin/historical`, ventana móvil; no OHLCV ni precio ejecutable | [IA personal local](https://coinpaprika.com/api/agents), [sin redistribución](https://coinpaprika.com/api/licensing); Powered by CoinPaprika |
+| A15 · CoinPaprika spot | 200, 2026-10-20T14:45:07.129833Z, 1071 ms | Una observación agregada, feed separado; TTL 900 s | Mismo permiso personal local; no valoración MASTER |
+| A04 · Eurostat | 200, prueba real en `docs/evidencias/P4/datos-20261020/eurostat-ecoicop2-real.json` | Preset ECOICOP2 `prc_hicp_minr`, I25; sin empalmar base antigua | Fuente oficial reutilizable bajo sus condiciones |
+| A18 · Coinbase | Acceso bloqueado antes de HTTP | `RIGHTS_RESTRICTED` aunque la tabla histórica contenga un 200 anterior | Condiciones actuales prohíben operación/evaluación IA sin consentimiento escrito |
+
+## Matriz histórica de 14-10-2026
+
 35 modalidades de acceso / 31 proveedores distintos (catálogo original de 34 más RSS oficial BCE). La documentación acredita un endpoint o derecho; **solo un HTTP 200 con respuesta válida acredita conexión**. Mocks, 401/403, cuerpos inválidos y existencia de documentación no cuentan. Uso exclusivo local; no redistribuir feeds personales/internos. No se han creado cuentas ni contratado planes.
 
 Esta matriz describe un preset acotado por adaptador, no cobertura universal. Catálogo ejecutable: `backend/app/data_catalog.py`. Último smoke: 2026-10-14T23:10:20.937175+00:00. Latencia incluye DNS/TLS/descarga real; no se inventa retraso del feed.

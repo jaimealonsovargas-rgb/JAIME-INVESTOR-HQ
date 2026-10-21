@@ -9,7 +9,7 @@ from app.research_contracts import Opinion, ground, digest, utc, withhold_unsupp
 from app.research_roles import ROLES, POLICY, authorize, TEMPLATE_VERSION
 from app.research_store import ResearchStore, TERMINAL
 from app.research_debate import role_context, validate_debate
-from app.research_planning import research_goal, evidence_pack, sufficiency
+from app.research_planning import research_goal, evidence_pack, sufficiency, role_evidence_gap
 from app.research_arguments import CONTRACTS, TASKS, validate_arguments, to_opinion
 from app.research_evidence import collect, features, current_evidence
 
@@ -145,8 +145,10 @@ class ResearchService:
         async with self.quant_slots:
             quant = await bounded_thread(features, evidence)
         if job['role_id'] in ('momentum_trend', 'volatility_regime') and quant['items']:
-            for metric in quant['items']:
-                content = {'excerpt': f"{metric['name']}: {metric['value']}", 'value': metric['value'], 'method': quant['method_version'], 'inputs': metric['evidence_ids'], 'stale_after_seconds': 3600}
+            derived_metrics = [*quant['items'], {'name': 'trend_path', 'value': None,
+                'description': quant['path_description'], 'evidence_ids': quant['items'][0]['evidence_ids']}]
+            for metric in derived_metrics:
+                content = {'excerpt': f"{metric['name']}: {metric.get('description') or metric['value']}", 'value': metric['value'], 'method': quant['method_version'], 'inputs': metric['evidence_ids'], 'stale_after_seconds': 3600}
                 item = {'case_id': case['id'], 'run_key': job['run_key'], 'provider': 'HQ_DERIVED', 'source': quant['method_version'], 'url': 'local:research_evidence.features', 'retrieved_at': utc(), 'observed_at': utc(), 'rights': {'license': 'Cálculo propio sobre datos autorizados'}, 'rights_ok': True, 'freshness': 'FRESH' if quant['state'] == 'AVAILABLE' else 'STALE', 'trust_class': 'DETERMINISTIC_DERIVATION', 'content': content, 'hash': digest(content), 'provenance': quant['input_hash'], 'scope': 'DERIVED_FEATURE', 'available': True}
                 item['id'] = digest(item); new_evidence.append(item)
             evidence = evidence + new_evidence
@@ -156,16 +158,23 @@ class ResearchService:
         goal = job.get('research_goal', research_goal(case))
         pack = evidence_pack(evidence)
         quality = sufficiency(goal, pack)
+        gap = role_evidence_gap(job['role_id'], evidence) if goal == 'investable_thesis' else None
+        if gap:
+            quality = {'state': 'ABSTAINED', 'reason': gap}
         use_model = role['llm_required'] and goal=='investable_thesis' and quality['state']=='PENDING_REVIEW'
         job['runtime'] = 'llama.cpp' if use_model else 'python-decimal'
         if use_model:
-            if job['role_id'] == 'cio_chair' and not {'bull_advocate', 'bear_skeptic'}.issubset({r['role_id'] for r in prior}):
+            required_roles = {'bull_advocate', 'bear_skeptic'} if job['role_id']=='cio_chair' else {'bull_advocate'} if job['role_id']=='bear_skeptic' else set()
+            if not required_roles.issubset({r['role_id'] for r in prior}):
                 if (await self.llm.probe())['state'] != 'AVAILABLE':
                     raise NoLocalModel()
                 raise ValueError('DEPENDENCY_INCOMPLETE')
             direct = sorted((e for e in evidence if e['scope'] == 'INSTRUMENT'), key=lambda e: e.get('observed_at') or '')
+            if quant.get('items'):
+                comparable_ids = set(quant['items'][0]['evidence_ids'])
+                direct = [e for e in direct if e['id'] in comparable_ids]
             derived = []
-            for name in ('period_return', 'sample_volatility', 'z_score'):
+            for name in ('period_return', 'sample_volatility', 'z_score', 'trend_path'):
                 metric = next((e for e in evidence if e['scope'] == 'DERIVED_FEATURE' and e['content']['excerpt'].startswith(name + ':')), None)
                 if metric: derived.append(metric)
             selection = {e['id']: e for e in (direct[:1] + direct[-2:] + derived + [e for e in evidence if e['scope'] in ('MACRO_CONTEXT','GENERAL_NEWS')][:2] + [e for e in evidence if e['scope']=='PORTFOLIO_CONTEXT'][:1])}

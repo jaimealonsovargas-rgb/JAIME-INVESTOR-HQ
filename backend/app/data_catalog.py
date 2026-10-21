@@ -99,3 +99,15 @@ CATALOG['A04'] = replace(CATALOG['A04'],
     url='https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_minr',
     feed='prc_hicp_minr/ECOICOP2/I25',
     params={'geo':'ES','coicop18':'TOTAL','unit':'I25','lastTimePeriod':'3'})
+PERSONAL_CRYPTO = Rights(license='CoinPaprika Keyless: investigación IA personal, no comercial, sin redistribución',
+    source='https://coinpaprika.com/terms-api', checked_at=datetime(2026,10,20,tzinfo=timezone.utc),
+    scope='personal', access_allowed=True, display_allowed=True, storage_allowed=True,
+    local_research_allowed=True, redistribution_allowed=False, attribution='Powered by CoinPaprika')
+CATALOG['A15'] = replace(CATALOG['A15'], rights=PERSONAL_CRYPTO, ttl=900,
+    quota_note='Free: actualizaciones hasta 10 min; consulta local 15 min. 20.000/mes, sin clave.')
+CATALOG['A21'] = Source('A21','COINPAPRIKA','CoinPaprika · histórico diario personal',
+    'https://api.coinpaprika.com/v1/tickers/btc-bitcoin/historical','paprika_history',
+    'market_quote','aggregate/btc-bitcoin/daily',PERSONAL_CRYPTO,
+    'https://coinpaprika.com/api/historical-data',asset_class='CRYPTO',venue='AGGREGATED',
+    params={'interval':'1d'},ttl=3600,limit=5,
+    quota_note='Free: hasta un año diario; HQ revalida 90 días cada hora. Sin horario de publicación certificado. No OHLCV ni ejecución.')

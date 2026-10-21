@@ -1,7 +1,21 @@
 """TEST_ONLY scenarios; no writes to the operational database."""
 import pytest
 from app.research_arguments import BullResponse, BearResponse, ChairResponse, validate_arguments, duplicate
-from app.research_planning import research_goal, evidence_pack, sufficiency
+from app.research_planning import research_goal, evidence_pack, sufficiency, role_evidence_gap
+
+
+def test_daily_prices_cannot_activate_microstructure_or_liquidity_inference():
+    prices = [{'scope': 'INSTRUMENT', 'rights_ok': True, 'available': True,
+               'freshness': 'FRESH', 'content': {'data_kind': 'market_quote', 'venue': 'AGGREGATED'}}]
+    for role in ('market_structure', 'liquidity_slippage'):
+        assert role_evidence_gap(role, prices).startswith('NO_DATA:')
+        assert role_evidence_gap(role, []).startswith('NO_DATA:')
+    assert role_evidence_gap('bull_advocate', prices) is None
+    book = [{**prices[0], 'content': {'data_kind': 'order_book'}}]
+    assert role_evidence_gap('liquidity_slippage', book) is None
+    assert role_evidence_gap('liquidity_slippage', [{**book[0], 'freshness': 'STALE'}])
+    reference = [{**prices[0], 'scope': 'MACRO_CONTEXT', 'content': {'data_kind': 'reference_rate'}}]
+    assert role_evidence_gap('macro_global', reference).startswith('NO_DATA:')
 
 
 def fixture_responses():

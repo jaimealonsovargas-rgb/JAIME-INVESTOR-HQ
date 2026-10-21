@@ -29,6 +29,7 @@ FIXTURES={
  'kraken':{'error':[],'result':{'TEST_ONLY':[['1.234567890123456789','1',1756684800]],'last':'TEST_ONLY'}},
  'binance':[{'T':1756684800000,'p':'1.234567890123456789','a':1}],
  'paprika':{'last_updated':'2026-09-01T00:00:00Z','quotes':{'USD':{'price':'1.234567890123456789'}},'id':'TEST_ONLY','name':'TEST_ONLY','symbol':'TEST_ONLY'},
+ 'paprika_history':[{'timestamp':'2026-09-01T00:00:00Z','price':'1.234567890123456789'}],
  'coingecko':{'TEST_ONLY':{'last_updated_at':1756684800,'usd':'1.234567890123456789'}},
  'coinbase':{'time':'2026-09-01T00:00:00Z','price':'1.5','bid':'1.4','ask':'1.6'},
  'gdelt':{'articles':[{'url':'https://example.org/TEST_ONLY','title':'TEST_ONLY','seendate':'20260901T000000Z'}]},
@@ -60,8 +61,8 @@ def test_each_useful_adapter_normalizes_its_response(source):
     assert all(not isinstance(o.value,float) for o in rows)
 
 def test_catalog_counts_do_not_inflate():
-    assert len(CATALOG)==35 and len({s.provider for s in CATALOG.values()})==31
-    assert sum(s.implemented for s in CATALOG.values())==33
+    assert len(CATALOG)==36 and len({s.provider for s in CATALOG.values()})==31
+    assert sum(s.implemented for s in CATALOG.values())==34
 
 def http(settings,handler):
     return SafeDataHttp(settings,httpx.MockTransport(handler),resolver=lambda _h:None)
@@ -89,6 +90,16 @@ def test_dns_private_denied(monkeypatch):
 def service(migrated,handler=None,settings=None,clock=None):
     settings=settings or DataSettings(_env_file=None)
     return DataService(create_db_engine(migrated.database_url),settings,http(settings,handler or (lambda request:httpx.Response(200,content=body('sdmx_csv')))),clock or (lambda:NOW))
+
+
+def test_shorter_current_ttl_invalidates_older_long_cache(migrated, monkeypatch):
+    from dataclasses import replace
+    calls = []; now = [NOW]
+    data = service(migrated, lambda request: (calls.append(request) or httpx.Response(200, content=body('sdmx_csv'))), clock=lambda: now[0])
+    data.query('A01')
+    monkeypatch.setitem(CATALOG, 'A01', replace(CATALOG['A01'], ttl=300))
+    now[0] += timedelta(seconds=301)
+    assert not data.query('A01').cache_hit and len(calls) == 2
 
 def test_cache_expiry_decimal_and_mock_not_connection(migrated):
     calls=[];now=[NOW]
@@ -146,7 +157,7 @@ def test_registry_identity_asset_class_and_null_macro(migrated):
 
 def test_quality_does_not_query_or_expose_secrets(client):
     result=client.get('/api/data/quality');assert result.status_code==200
-    assert result.json()['counts']['candidate_access_modes']==35
+    assert result.json()['counts']['candidate_access_modes']==36
     assert result.json()['counts']['verified_connections']==0
     assert client.get('/api/data/sources/https://evil.test').status_code==404
     assert client.post('/api/orders',json={'mode':'LIVE'}).status_code==403

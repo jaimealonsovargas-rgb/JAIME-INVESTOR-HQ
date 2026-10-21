@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from app.database import DataRefresh
 from app.data_catalog import CATALOG
+from app.data_rights import readable
 
 # Explicit exclusions remain even if credentials are configured in .env.
 BROKER_SOURCES = frozenset({'B04', 'B05'})
@@ -13,6 +14,12 @@ BROKER_SOURCES = frozenset({'B04', 'B05'})
 def interval(source):
     # Polling cadence is not publication frequency or a promise of real-time data.
     return max(300, source.ttl)
+
+
+def next_success_at(source, checked_at, attempted_at):
+    # A cache hit retains the original check: restarting must not extend its life.
+    return max(checked_at + timedelta(seconds=interval(source)),
+               attempted_at + timedelta(seconds=300))
 
 
 class DataRefresher:
@@ -25,8 +32,7 @@ class DataRefresher:
     def eligible(self, source):
         return (source.id not in BROKER_SOURCES and source.implemented
                 and self.data.initial(source).state == 'NOT_VERIFIED'
-                and all((source.rights.access_allowed, source.rights.display_allowed,
-                         source.rights.storage_allowed, source.rights.redistribution_allowed)))
+                and readable(source.rights, local_research=True))
 
     def tick(self):
         for source in CATALOG.values():
@@ -38,6 +44,9 @@ class DataRefresher:
             with Session(self.data.engine) as session, session.begin():
                 session.connection().exec_driver_sql('BEGIN IMMEDIATE')
                 row = session.get(DataRefresh, source.id)
+                if row and not row.failures and row.succeeded_at and row.attempted_at and row.state in ('AVAILABLE_VERIFIED', 'DELAYED', 'STALE'):
+                    capped = next_success_at(source, datetime.fromisoformat(row.succeeded_at), datetime.fromisoformat(row.attempted_at))
+                    row.next_due_at = min(datetime.fromisoformat(row.next_due_at), capped).isoformat()
                 if row and datetime.fromisoformat(row.next_due_at) > now:
                     continue
                 # Lease exceeds transport deadline and prevents overlapping backend instances.
@@ -56,7 +65,8 @@ class DataRefresher:
                 if success:
                     row.succeeded_at = result.checked_at.isoformat()
                 delay = interval(source) if success else min(86400, 300 * 2 ** (row.failures - 1))
-                row.next_due_at = (now + timedelta(seconds=delay)).isoformat()
+                row.next_due_at = (next_success_at(source, result.checked_at, now)
+                                   if success else now + timedelta(seconds=delay)).isoformat()
 
     def status(self):
         with Session(self.data.engine) as session:

@@ -88,6 +88,25 @@ def test_no_model_no_fake_output():
     asyncio.run(scenario())
 
 
+def test_compact_context_preserves_source_types_units_and_exact_facts():
+    from app.local_llm import model_view
+    rows = [{'id': f'E{i}', 'evidence_id': f'IMMUTABLE_{i}', 'scope': 'INSTRUMENT',
+             'data_kind': 'market_quote', 'provider': 'TEST_ONLY', 'feed': 'TEST_DAILY',
+             'venue': 'AGGREGATED', 'currency': 'USD', 'unit': 'USD per BTC',
+             'period_precision': 'day', 'observed_at': f'2026-10-0{i+1}T00:00:00Z',
+             'usable': i != 2, 'excerpt': f'TEST_ONLY exact {i}', 'rights': {'license': 'TEST_ONLY'}} for i in range(3)]
+    payload = {'evidence_pack': {'schema_version': 'evidence-pack.v1', 'records': rows}, 'evidence': rows}
+    compact = model_view(payload)
+    assert 'evidence' not in compact
+    pack = compact['evidence_pack']
+    assert len(pack['sources']) == 1
+    for original, record in zip(rows, pack['records']):
+        assert all(record[k] == original[k] for k in ('id', 'observed_at', 'usable', 'excerpt'))
+        descriptor = pack['sources'][record['source_id']]
+        assert all(descriptor[k] == original[k] for k in ('unit', 'currency', 'data_kind', 'scope', 'period_precision'))
+    assert rows[0]['rights'] == {'license': 'TEST_ONLY'}  # Persisted lineage is untouched.
+
+
 def test_malformed_llm_and_injection_are_data():
     requests = []
     def handler(request):
@@ -194,7 +213,12 @@ def test_no_model_pipeline_does_not_fabricate_results(migrated, monkeypatch):
             await asyncio.sleep(.01)
         states = {j['role_id']:j['state'] for j in store.list('agent_jobs')}
         assert states['bull_advocate'] == states['bear_skeptic'] == states['cio_chair'] == 'NO_LOCAL_MODEL'
-        assert len(store.list('agent_results')) == 3
+        results = store.list('agent_results')
+        assert len(results) == 6
+        assert all(r['metrics']['runtime'] == 'python-decimal' and r['metrics']['model'] is None
+                   and r['structured'] is None for r in results)
+        gaps = [r for r in results if r['role_id'] in ('market_structure', 'liquidity_slippage', 'macro_global')]
+        assert len(gaps) == 3 and all(r['quality']['state'] == 'ABSTAINED' and not r['claims'] for r in gaps)
         assert service.dossier(case['id'])['status'] == 'INCOMPLETE'
         await service.stop(); engine.dispose()
     asyncio.run(scenario())
@@ -236,6 +260,9 @@ def test_derived_features_decimal_and_no_mixed_feeds():
     result=features(evidence)
     assert result['sample_size']==3
     assert next(m for m in result['items'] if m['name']=='period_return')['value']=='0.2'
+    assert 'no contiene bajadas' in result['path_description']
+    evidence[-1]['content']['value'] = '10.5'
+    assert 'tanto subidas como bajadas' in features(evidence)['path_description']
     evidence[-1]['content']['feed']='different'
     assert features(evidence)['state']=='NO_DATA'
 

@@ -15,6 +15,9 @@ def request_window(source, now):
     elif source.id == 'A12':
         start = (now - timedelta(days=7)).strftime('%Y-%m-%d')
         params['fq'] = f'publication_date:[{start}T00:00:00Z TO {now:%Y-%m-%d}T23:59:59Z]'
+    elif source.id == 'A21':
+        params.update(start=(now - timedelta(days=90)).strftime('%Y-%m-%d'),
+                      end=now.strftime('%Y-%m-%d'))
     elif source.id == 'B02':
         params['Year'] = str(now.year - 1)
     elif source.id == 'B03':

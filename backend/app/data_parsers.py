@@ -57,6 +57,7 @@ def parse(source: Source, raw: bytes, received: datetime):
         flags=('REFERENCE_NOT_EXECUTABLE',) if source.kind in ('fx_reference','yield_curve','macro_series') else ('NON_EXECUTABLE_P2',)
         if source.parser=='imf':flags+=('ESTIMATE_OR_FORECAST',)
         if source.parser in ('alpaca','alpha'):flags+=('HISTORICAL_EOD',)
+        if source.parser=='paprika_history':flags+=('HISTORICAL_DAILY_SNAPSHOT',)
         flags+=('UNKNOWN_FEED_DELAY',)
         if precision!='instant':flags+=('PERIOD_START_NOT_PUBLICATION',)
         fields=dict(provider=source.provider,access_id=source.id,feed=source.feed,series_id=series,data_kind=source.kind,venue=source.venue,country=country or source.country,asset_class=source.asset_class,source_ref=source.url or source.docs,payload_hash=digest,observed_at=when,received_at=received,period=str(period),period_precision=precision,currency=currency,unit=unit,value=val,bid=number(bid),ask=number(ask),metadata={str(k):str(v) for k,v in (metadata or {}).items() if v is not None},delay_seconds=None,stale_after_seconds=source.ttl,rights=source.rights,quality_flags=flags)
@@ -198,6 +199,16 @@ def parse(source: Source, raw: bytes, received: datetime):
                 emit(datetime.fromtimestamp(float(Decimal(row['T'])/1000),UTC).isoformat(),row['p'],'USDT per BTC','BTCUSDT',currency='USDT',metadata={'aggTradeId':row['a'],'quote_asset':'USDT (not USD)'})
         elif parser=='paprika':
             emit(data['last_updated'],data['quotes']['USD']['price'],'USD per BTC',data['id'],currency='USD',metadata={'name':data['name'],'symbol':data['symbol'],'price_type':'aggregated'})
+        elif parser=='paprika_history':
+            if not isinstance(data,list) or len(data)>100:
+                raise ValueError('Historia diaria fuera del presupuesto.')
+            for row in data:
+                timestamp, _ = period_time(row['timestamp'])
+                if timestamp.date() >= received.date():
+                    continue  # Do not treat today's partial aggregate as a complete daily sample.
+                emit(timestamp.date().isoformat(),row['price'],'USD per BTC','btc-bitcoin',currency='USD',
+                     metadata={'price_type':'aggregated daily snapshot; not exchange close or OHLCV',
+                               'source_timestamp':row['timestamp'],'symbol':'BTC'})
         elif parser=='coingecko':
             for coin,row in data.items():
                 emit(datetime.fromtimestamp(row['last_updated_at'],UTC).isoformat(),row['usd'],'USD per crypto',coin,currency='USD',metadata={'price_type':'aggregated'})

@@ -16,12 +16,13 @@ class Rights(Contract):
     display_allowed: bool = False
     storage_allowed: bool = False
     redistribution_allowed: bool = False
+    local_research_allowed: bool = False
     scope: Literal['open', 'personal', 'internal', 'restricted'] = 'restricted'
     attribution: str
 
     @model_validator(mode='after')
     def proof(self):
-        if any((self.access_allowed, self.display_allowed, self.storage_allowed, self.redistribution_allowed)) and (not self.checked_at or not self.source.startswith('https://')):
+        if any((self.access_allowed, self.display_allowed, self.storage_allowed, self.redistribution_allowed, self.local_research_allowed)) and (not self.checked_at or not self.source.startswith('https://')):
             raise ValueError('Derechos sin prueba documental.')
         return self
 
