@@ -56,6 +56,8 @@ TASKS = {
 }
 for role_id in TASKS:
     TASKS[role_id] += (' Prioriza UN argumento sólido y breve; añade otros solo si son independientes. '
+        'Redacta argumentos cualitativos: no copies cifras, fechas, porcentajes ni cantidades en palabras. '
+        'Python ya presenta los valores exactos y sus fuentes. Los identificadores van solo en campos de IDs. '
         'No cambies ni niegues los hechos aportados para defender tu rol. Un mecanismo explica cómo una causa produce un efecto; '
         'no escribas la etiqueta "mecanismo causal" como respuesta. El supuesto debe ser una condición NO demostrada, '
         'no un hecho contrario a las fuentes. Menos de sesenta palabras por campo.')

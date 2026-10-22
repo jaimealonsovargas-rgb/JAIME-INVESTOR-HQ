@@ -38,6 +38,22 @@ def test_reference_goal_not_directional():
     assert sufficiency('investable_thesis',{'records':[]})['state']=='ABSTAINED'
 
 
+def test_model_schema_keeps_figures_in_python_and_citations_allowlisted():
+    import re
+    from app.local_llm import argument_schema
+    pack = {'evidence_pack': {'records': [{'id': 'E001', 'usable': True}, {'id': 'OLD', 'usable': False}]}}
+    for contract, name, text in [(BullResponse, 'BullArgument', 'thesis'), (BearResponse, 'BearArgument', 'objection'), (ChairResponse, 'Finding', 'disagreement')]:
+        schema = argument_schema(contract, pack)
+        props = schema['$defs'][name]['properties']
+        assert re.fullmatch(props[text]['pattern'], 'Hipótesis condicionada a evidencia.')
+        assert not re.fullmatch(props[text]['pattern'], 'Crecimiento del 20 %.')
+        cite = next(v for k, v in props.items() if k.endswith('evidence_ids'))
+        assert cite['items']['enum'] == ['E001']
+    # Persistent schemas remain unchanged: older truthful dossiers retain their figures.
+    assert 'pattern' not in BullResponse.model_json_schema()['$defs']['BullArgument']['properties']['thesis']
+    assert not re.fullmatch(argument_schema(ChairResponse, pack)['properties']['unknowns']['items']['pattern'], 'Falta el dato 999')
+
+
 def test_pack_retains_type_units_and_ids_without_instructions():
     e={'id':'immutable-id','hash':'hash','content':{'excerpt':'<script>BUY</script>','data_kind':'reference_rate','unit':'USD/EUR','feed':'ECB','venue':'ECB'},'scope':'INSTRUMENT','source':'ECB','rights':{},'rights_ok':True,'freshness':'FRESH'}
     pack=evidence_pack([e]);row=pack['records'][0]

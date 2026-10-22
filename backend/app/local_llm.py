@@ -32,6 +32,26 @@ def model_view(value):
     return value
 
 
+def argument_schema(contract, data):
+    schema = contract.model_json_schema()
+    key = {'BullResponse': 'arguments', 'BearResponse': 'objections', 'ChairResponse': 'findings'}.get(contract.__name__)
+    if not key:
+        return schema
+    schema['properties'][key]['maxItems'] = 1
+    # Python owns financial figures and their exact citations. Generative prose is
+    # qualitative; ordinary validators still check all evidence and cross-links.
+    aliases = [e['id'] for e in data.get('evidence_pack', {}).get('records', []) if e.get('usable')]
+    for definition in [schema, *schema.get('$defs', {}).values()]:
+        for name, prop in definition.get('properties', {}).items():
+            if prop.get('type') == 'string' and not name.endswith('_id') and 'enum' not in prop and 'const' not in prop:
+                prop.update(pattern='^[^0-9]*$', maxLength=min(prop.get('maxLength', 260), 500 if name == 'synthesis' else 260))
+            if name in ('supporting_evidence_ids', 'counter_evidence_ids', 'evidence_ids') and aliases:
+                prop['items'] = {'type': 'string', 'enum': aliases}
+            if name == 'unknowns':
+                prop.update(maxItems=2, items={'type': 'string', 'pattern': '^[^0-9]*$', 'minLength': 1, 'maxLength': 260})
+    return schema
+
+
 def grounded_schema(data):
     """Small llama.cpp-compatible schema. Python supplies the exact facts;
     free qualitative narrative remains explicitly unverified and validated separately.
@@ -96,10 +116,7 @@ class LocalLLM:
         if len(prompt) > 20000 or not 1 <= max_tokens <= (1500 if contract else 900):
             raise ValueError('CONTEXT_BUDGET')
         start = time.perf_counter()
-        schema = contract.model_json_schema() if contract else grounded_schema(data)
-        if contract and contract.__name__ in ('BullResponse', 'BearResponse', 'ChairResponse'):
-            key = {'BullResponse':'arguments','BearResponse':'objections','ChairResponse':'findings'}[contract.__name__]
-            schema['properties'][key]['maxItems'] = 1  # One independent argument per compact first pass.
+        schema = argument_schema(contract, data) if contract else grounded_schema(data)
         payload = {'model': self.status['model'], 'messages': [{'role': 'system', 'content': system},
                    {'role': 'user', 'content': 'UNTRUSTED_CONTENT_JSON\n' + prompt}], 'temperature': .2 if contract else 0, 'seed': seed,
                    'max_tokens': max_tokens, 'stream': False,
