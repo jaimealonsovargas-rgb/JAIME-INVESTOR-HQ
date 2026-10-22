@@ -25,3 +25,15 @@ Implementados objetivos tipados, EvidencePack, contratos separados de debate, ab
 ## Cierre acotado del Goal · 22-10-2026
 
 Entrega **PARTIAL**, por instrucción del usuario de detener intentos indefinidos. P4 no se marca terminada: debate suficiente no aceptado y FPS bajo carga por debajo del objetivo. [Informe y evidencia](../docs/evidencias/P4/cierre-20261022/README.md). 212 pytest +54 Vitest, TypeScript/build/audit y restart correctos. Próximo paso: esperar instrucciones; P5/P6 siguen prohibidos.
+
+## Realineación aprobada de visión · 23-10-2026 (solo documentación)
+
+La meta ya no se limita a research por preguntas: el backend debe poder iniciar investigación por reloj, datos y eventos **mientras esté encendido**, incluso con la oficina 3D cerrada. El estado actual sigue centrado en `ResearchCase.question` y P4 sigue **PARTIAL**. La realineación **no implica** que ya exista autonomía operativa.
+
+**Próximo Goal P4, solo tras instrucción del usuario:** diseñar/implementar un puente mínimo `AutonomyEvent` → `ResearchRouter` → `ResearchTask`, sin sustituir los expedientes históricos. Primera iteración con trigger programado y una ruta de trabajo determinista real; estados persistentes, idempotencia, restart, cancelación, abstención, límites de recursos, auditoría y ejecución sin UI. Los triggers de filing, riesgo, resultados P5/P6 y brokers permanecen deshabilitados hasta disponer de fuentes y fases autorizadas.
+
+El planificador debe seleccionar roles pertinentes en vez de invocar nueve roles y Bull/Bear/Chair por defecto. Una investigación ordinaria conserva datos/features Python y opcionalmente una síntesis LLM corta; un debate profundo sigue siendo opt-in o gate de promoción futuro, con validación semántica intacta. **No** repetir el debate fallido ni marcar P4 terminada por un JSON válido.
+
+Tests de aceptación propuestos: `AUT-01` evento sin pregunta/UI; `AUT-02` recuperación sin duplicados; `AUT-03` LLM apagado con trabajos Python útiles; `AUT-04` datos insuficientes = abstención; `SEC` órdenes403/MASTER inalterado; RAM y latencia medidas, no supuestas. Mantener 30 roles y 1 LLM. Ver [contrato de realineación](../docs/REALINEACION_FONDO_AUTONOMO_2026_10_23.md).
+
+**P5/P6 siguen NO AUTORIZADOS.**

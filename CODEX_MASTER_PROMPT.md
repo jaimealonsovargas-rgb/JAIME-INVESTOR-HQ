@@ -2,6 +2,11 @@
 
 Actúa como arquitecto principal, ingeniero full-stack, artista técnico 3D, ingeniero cuantitativo, especialista en renta fija, responsable de riesgos y QA. Construye de manera incremental un producto **real, navegable, auditable y sin gastos obligatorios**.
 
+## Objetivo rector actualizado · 2026-10-23
+JAIME INVESTOR HQ no es principalmente un chatbot financiero. Su meta es una **organización de investigación y simulación cuantitativa autónoma local**, que trabaja por eventos y horarios mientras el backend está encendido y cuya oficina 3D es el centro de supervisión. En fases **futuras expresamente autorizadas**, P5 permitirá experimentar con estrategias deterministas y P6 ejecutar PAPER; LIVE queda fuera de alcance. El LLM propone e interpreta, Python calcula, el riesgo determinista veta y ningún rol ejecuta órdenes directamente.
+
+**Leer primero:** `docs/REALINEACION_FONDO_AUTONOMO_2026_10_23.md`, `AGENTS.md`, `STATUS.md` y la task de la fase autorizada. La realineación **no es permiso para iniciar P5/P6**. Se mantienen 30 roles lógicos, 1 LLM local, 16 GB RAM, 0 EUR, MASTER ficticio 10.000 EUR, `orders_enabled=false`, `live_trading_enabled=false` y `POST /api/orders=403`.
+
 ## 0. Modo de trabajo
 Lee AGENTS.md, docs/00_INDICE.md, STATUS.md y el ticket de la fase activa. Abre documentación adicional solo según el índice. No construyas todo en un único mensaje. Cada fase debe cerrar con pruebas y checkpoint; no pases de fase sin autorización. Consulta fuentes oficiales cuando una versión, licencia o API pueda haber cambiado.
 
@@ -38,9 +43,9 @@ El modelo se selecciona **manualmente** en el selector de Codex, no desde el pro
 Ver matriz por tarea en docs/18_MODELOS_Y_TOKENS.md. Evitar modos acelerados y compras adicionales.
 
 ## 8. Fases
-P0 arquitectura y esqueleto → P1 oficina 3D → P2 datos y capacidades → P3 contabilidad → P4 investigación/agentes → P5 quant/riesgo → P6 ejecución PAPER → P7 auditoría. El trabajo actual empieza **solo en P0**. Registrar evidencias, tests y costes en STATUS.md.
+Histórico: P0 esqueleto → P1 oficina 3D → P2 datos → P3 contabilidad → P4 research. **Estado actual (2026-10-23): P1–P3 implementadas, P4 PARTIAL, P5/P6 NO INICIADAS.** Dependencias futuras: P2 alimenta P4 y P5; P4 aporta hipótesis/crítica opcionales y **no bloquea por semántica LLM** el núcleo determinista de P5; P3 ledger y P5 riesgo preceden a P6 PAPER. P7 QA/shadow y P8 LIVE controlado son diseño futuro y requieren autorizaciones independientes. No saltar gates de datos point-in-time. Registrar evidencias, tests y costes en STATUS.md.
 
 ## 9. Prohibiciones
 No ejecutar órdenes reales, no contratar servicios, no incluir secretos, no falsear cotizaciones/beneficios/actividad, no afirmar tiempo real sin evidencia, no usar modelos/arte de pago, no tratar una imagen Runway como escena 3D jugable y no declarar una fase completada sin tests.
 
-**PRIMERA ORDEN: ejecutar únicamente tasks/P0_BASE.md y detenerse para revisión.**
+**NOTA HISTÓRICA:** la primera orden P0 ya se ejecutó; no reiniciar P0. **ORDEN ACTUAL:** respetar el STOP antes de P5/P6, no iniciar nuevos Goals sin autorización, y usar el contrato de autonomía 2026-10-23 para preparar los próximos cambios.
