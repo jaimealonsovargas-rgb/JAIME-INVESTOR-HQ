@@ -32,3 +32,57 @@
 .market-symbol{grid-column:1;grid-row:1}.market-price{grid-column:3;grid-row:1}.market-change{grid-column:3;grid-row:2}.market-row .financial-state{grid-column:1/3;grid-row:2}
 .market-sparkline,.market-sparkline-empty{grid-column:2;grid-row:1;width:72px;height:34px;color:#d3dce1}.market-sparkline.is-stale{color:#a7afb4}.market-sparkline-empty{display:grid;place-items:center;color:#8d999f}
 @media(min-width:1280px) and (max-width:1599px){.financial-rail{width:300px}.world-caption{left:336px;max-width:calc(100vw - 672px)}}
+
+/* Density belongs only to the two rails; shared department components keep their type scale. */
+.financial-hud .financial-rail>header{gap:8px}
+.financial-hud .financial-rail>header h2{margin-right:auto}
+.financial-hud .rail-density{min-height:32px;max-width:100px;padding:4px;background:#0e1418;border:1px solid #53646d;border-radius:3px;color:#dce5ea}
+.financial-hud .rail-collapsed .rail-density{display:none}
+.financial-hud select:focus-visible{outline:2px solid #b8d9ef;outline-offset:2px}
+.financial-hud[data-density="compact"] .financial-rail>header{padding:10px 12px}
+.financial-hud[data-density="compact"] .financial-rail h2{font-size:16px}
+.financial-hud[data-density="compact"] .rail-body{padding:12px 14px;font-size:13px;line-height:1.4}
+.financial-hud[data-density="compact"] .rail-tabs button{font-size:13px;padding:8px 5px;min-height:34px}
+.financial-hud[data-density="compact"] .financial-rail select{font-size:13px;min-height:32px}
+.financial-hud[data-density="compact"] .watchlist-select{font-size:13px;gap:8px;margin-bottom:4px}
+.financial-hud[data-density="compact"] .watchlist-select select{padding:4px 6px;max-width:145px}
+.financial-hud[data-density="compact"] .market-row{padding:9px 0}
+.financial-hud[data-density="compact"] .market-row summary{grid-template-columns:minmax(0,1fr) 56px 90px;gap:4px 8px;min-height:44px}
+.financial-hud[data-density="compact"] .market-row summary>span{margin:0}
+.financial-hud[data-density="compact"] .market-symbol{font-size:13px}
+.financial-hud[data-density="compact"] .market-price{font-size:14px;overflow-wrap:anywhere}
+.financial-hud[data-density="compact"] .market-price small{font-size:13px;max-width:104px;margin-top:2px;line-height:1.3}
+.financial-hud[data-density="compact"] .market-change,
+.financial-hud[data-density="compact"] .financial-state{font-size:13px}
+.financial-hud[data-density="compact"] .market-sparkline,
+.financial-hud[data-density="compact"] .market-sparkline-empty{width:56px;height:30px}
+.financial-hud[data-density="compact"] .market-detail{font-size:13px;line-height:1.5;padding-top:6px}
+.financial-hud[data-density="compact"] .market-detail p{margin:8px 0}
+.financial-hud[data-density="compact"] .market-detail a{display:inline-block;min-height:32px;padding:5px 0;box-sizing:border-box}
+.financial-hud[data-density="compact"] .rail-section-title{font-size:14px;margin-top:12px;padding-top:10px}
+.financial-hud[data-density="compact"] .rail-eyebrow{font-size:13px;margin-bottom:12px}
+.financial-hud[data-density="compact"] .rail-eyebrow .financial-state{margin-top:4px}
+.financial-hud[data-density="compact"] .nav-value{margin-bottom:12px}
+.financial-hud[data-density="compact"] .nav-value small{font-size:13px;margin-bottom:4px}
+.financial-hud[data-density="compact"] .nav-value strong{font-size:24px}
+.financial-hud[data-density="compact"] .financial-metrics{font-size:13px}
+.financial-hud[data-density="compact"] .financial-metrics>div{gap:8px;padding:8px 0}
+.financial-hud[data-density="compact"] .financial-note,
+.financial-hud[data-density="compact"] .financial-source{font-size:13px;line-height:1.45;margin-top:12px}
+.financial-hud[data-density="compact"] .financial-empty{font-size:13px;line-height:1.45;padding:8px 0}
+.financial-hud[data-density="compact"] .financial-empty strong{font-size:16px}
+.financial-hud[data-density="compact"] .financial-empty small{font-size:13px}
+.financial-hud[data-density="compact"] .ledger-activity{margin:0}
+.financial-hud[data-density="compact"] .ledger-activity li{font-size:13px;gap:5px;padding:9px 0}
+.financial-hud[data-density="compact"] .ledger-activity strong{font-size:16px}
+.financial-hud[data-density="compact"] .ledger-activity time,
+.financial-hud[data-density="compact"] .ledger-activity small{font-size:13px}
+.financial-hud[data-density="compact"] .phase-reserved{font-size:13px;gap:4px;padding:10px 0}
+.financial-hud[data-density="compact"] .resume-office{font-size:13px;margin-top:12px;padding:8px;min-height:34px}
+.financial-hud[data-density="compact"] .financial-positions article{font-size:13px;gap:5px;padding:9px 0}
+.financial-hud[data-density="compact"] .financial-positions article small{font-size:13px}
+.financial-hud[data-density="compact"] .minimap-grid button{min-height:36px}
+.financial-hud[data-density="compact"] .minimap-grid button span{font-size:13px}
+.financial-hud[data-density="compact"] .minimap-title,
+.financial-hud[data-density="compact"] .minimap p{font-size:13px}
+@media(min-width:1280px){.financial-hud[data-density="compact"] .financial-rail{width:306px}}

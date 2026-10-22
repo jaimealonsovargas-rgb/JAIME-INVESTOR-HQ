@@ -1,0 +1,71 @@
+{
+  "classification": "REAL_APPLICATION_PERSONAL_LOCAL_ONLY",
+  "reason": "Las capturas incluyen datos CoinPaprika de uso personal sin redistribución pública.",
+  "screenshots": [
+    {
+      "path": "output/playwright/hud-density/before-1366-left.png",
+      "sha256": "70b34fa7cf3d53d0153506c941d198d9345fb46e2822de1f58af581515b2e51d",
+      "bytes": 16493
+    },
+    {
+      "path": "output/playwright/hud-density/before-1366-office.png",
+      "sha256": "d488c2d62e69368bd1100f5bb3347d0ba46e55330f3bbd03cc2b01c6192c2726",
+      "bytes": 365100
+    },
+    {
+      "path": "output/playwright/hud-density/before-1366-right.png",
+      "sha256": "d5e89a7535b4ea19948d763348552a0e00cdde690269b18bccebab92577ee728",
+      "bytes": 14086
+    },
+    {
+      "path": "output/playwright/hud-density/before-1920-left.png",
+      "sha256": "2b460abb6a941aec249198bfa1c71588fc56a9a6cf3434ea88cf02a2b89de1d5",
+      "bytes": 29914
+    },
+    {
+      "path": "output/playwright/hud-density/before-1920-office.png",
+      "sha256": "b63cd76738ce1f77e1e95079ff0a3becff96f41112600a611cd5ddaceacb8ff0",
+      "bytes": 632164
+    },
+    {
+      "path": "output/playwright/hud-density/before-1920-right.png",
+      "sha256": "b9d7f7dca0c4b8b99e0da88d8dd1a922b1bab2732659ba95d03816ddc77596e4",
+      "bytes": 25695
+    },
+    {
+      "path": "output/playwright/hud-density/compact-1366-left.png",
+      "sha256": "a50824d126136b95205e2674831b6b299c206b2e5f87c597d247b64c169d07c9",
+      "bytes": 23987
+    },
+    {
+      "path": "output/playwright/hud-density/compact-1366-office.png",
+      "sha256": "b1d518e0765373151f749ca4ceeac592b7b81916c1cf68536b4ea6a433a44a33",
+      "bytes": 373173
+    },
+    {
+      "path": "output/playwright/hud-density/compact-1366-right.png",
+      "sha256": "fa28f06efbd6e16567d4630e44bf92c2604b232efe0298596bf2c6a8651ea8d5",
+      "bytes": 16056
+    },
+    {
+      "path": "output/playwright/hud-density/compact-1920-left.png",
+      "sha256": "f5cfd0519ccd46d20cd6fc5d9fdf0c4ff48e7de5925dae2185c440ddfa8a7b6b",
+      "bytes": 37518
+    },
+    {
+      "path": "output/playwright/hud-density/compact-1920-office.png",
+      "sha256": "9c026cf04a095cf52f820a13d3d7f102bc869bf9ee04ec9868b35ea6a24313c0",
+      "bytes": 660244
+    },
+    {
+      "path": "output/playwright/hud-density/compact-1920-right.png",
+      "sha256": "0dccbf4dd6060069c7a87fa95be7a297dead296e0fc2d1e52161fed1c3b52082",
+      "bytes": 22895
+    },
+    {
+      "path": "output/playwright/hud-density/compact-390-markets.png",
+      "sha256": "5e025ad96204c500505fdf2978c5799ab5a3358f27f2a9b5c68c7dd7ebc4a72f",
+      "bytes": 87691
+    }
+  ]
+}

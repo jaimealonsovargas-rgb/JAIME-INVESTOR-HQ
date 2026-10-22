@@ -39,12 +39,19 @@ export default function FinancialHud({player,mode}:{player:PlayerRuntime;mode:'p
  const [tab,setTab]=useState<typeof TABS[number]>('Cartera');
  const [left,setLeft]=useState(()=>window.innerWidth>=1280),[right,setRight]=useState(()=>window.innerWidth>=1280);
  const [list,setList]=useState('CORE'),[offset,setOffset]=useState(0);
+ const [density,setDensity]=useState<'compact'|'normal'>(()=>{
+  try{const saved=localStorage.getItem('hq.financial-density.v1');if(saved==='compact'||saved==='normal')return saved;}catch{/* Storage can be unavailable in private/restricted browsers. */}
+  return window.innerWidth>=1280?'compact':'normal';
+ });
+ function changeDensity(value:'compact'|'normal'){
+  setDensity(value);try{localStorage.setItem('hq.financial-density.v1',value);}catch{/* The current view still works without persistence. */}
+ }
  const portfolio=usePortfolio();
  const markets=useQuery({queryKey:['markets-watchlist'],queryFn:({signal})=>fetchMarkets(signal),retry:false,refetchInterval:30000,refetchOnWindowFocus:false});
  const ledger=useQuery({queryKey:['portfolio-ledger',offset],queryFn:({signal})=>fetchLedger(signal,offset),enabled:tab==='Actividad',retry:false,refetchInterval:30000,refetchOnWindowFocus:false});
  const data=portfolio.isSuccess&&!portfolio.isError?portfolio.data:undefined;
- return <div className="financial-hud">
- <aside className={'financial-rail rail-left '+(left?'':'rail-collapsed')} aria-label="Watchlist y mercados"><header><h2>Lista</h2><button aria-expanded={left} aria-controls="market-body" onClick={()=>setLeft(!left)} aria-label={left?'Plegar mercados':'Abrir mercados'}>{left?'⌃':'⌄'}</button></header>{left?<div id="market-body" className="rail-body"><label className="watchlist-select">Watchlist<select value={list} onChange={e=>setList(e.target.value)}><option>CORE</option><option>OPPORTUNITIES</option><option>PORTFOLIO</option></select></label>
+ return <div className="financial-hud" data-density={density}>
+ <aside className={'financial-rail rail-left '+(left?'':'rail-collapsed')} aria-label="Watchlist y mercados"><header><h2>Lista</h2><select className="rail-density" aria-label="Densidad de los paneles" value={density} onChange={e=>changeDensity(e.target.value as 'compact'|'normal')}><option value="compact">Compacta</option><option value="normal">Normal</option></select><button aria-expanded={left} aria-controls="market-body" onClick={()=>setLeft(!left)} aria-label={left?'Plegar mercados':'Abrir mercados'}>{left?'⌃':'⌄'}</button></header>{left?<div id="market-body" className="rail-body"><label className="watchlist-select">Watchlist<select value={list} onChange={e=>setList(e.target.value)}><option>CORE</option><option>OPPORTUNITIES</option><option>PORTFOLIO</option></select></label>
  {list==='OPPORTUNITIES'?<p className="financial-empty">Aún no hay oportunidades guardadas. El research no añade activos automáticamente.</p>:list==='PORTFOLIO'?(data?<Positions data={data}/>:<Unavailable/>):markets.isError||!markets.data?<Unavailable pending={markets.isPending}/>:<>{markets.data.items.length?markets.data.items.map(r=><MarketItem key={r.observation.id} row={r}/>):<p className="financial-empty">Sin cotizaciones autorizadas disponibles.</p>}<h3 className="rail-section-title">Referencias</h3>{markets.data.pulse.length?markets.data.pulse.map(r=><MarketItem key={r.observation.id} row={r}/>):<p className="financial-empty">Sin referencias autorizadas.</p>}<p className="financial-note">Referencias P2 · No ejecutables. Cada feed conserva su fuente y fecha.</p></>}
  </div>:null}</aside>
  <aside className={'financial-rail rail-right '+(right?'':'rail-collapsed')} aria-label="Cartera y actividad"><header><h2>Capital virtual</h2><button aria-expanded={right} aria-controls="portfolio-body" onClick={()=>setRight(!right)} aria-label={right?'Plegar cartera':'Abrir cartera'}>{right?'⌃':'⌄'}</button></header>{right?<div id="portfolio-body"><div className="rail-tabs" role="tablist" aria-label="Vistas financieras" onKeyDown={e=>tabsKeyboard(e,tab,setTab)}>{TABS.map(t=><button key={t} id={'tab-'+t} role="tab" tabIndex={tab===t?0:-1} aria-selected={tab===t} aria-controls={'view-'+t} onClick={()=>setTab(t)}>{t}</button>)}</div>

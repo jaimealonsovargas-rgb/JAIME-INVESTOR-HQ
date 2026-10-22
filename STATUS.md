@@ -1,5 +1,17 @@
 # Estado del proyecto
 
+## 2026-10-22 · Goal acotado HUD compacto — completado
+
+Compactación limitada a los dos paneles laterales. Vista Compacta por defecto en escritorio desde1280px, Normal en menor tamaño; selector accesible que afecta ambos rails y conserva la preferencia. Base/símbolos13px, precios14px, encabezados16px, patrimonio24px; filas9px verticales e interior12×14px. Ancho306px, Normal conserva340px a1920 y300px a1366. Sin cambios de tipografía en departamentos, escena ni runtime.
+
+**Navegador real:** seis filas disponibles (feeds/referencias reales). A1920×1080 pasan3→6 filas completas (+100%); a1366×768,2→3 (+50%). Sparklines, unidades, estados y procedencia conservados. Seis detalles contrastados con API, cuatro pestañas y teclado correctos; controles inferiores descubiertos, sin overflow/erroresJS. Alternancia/persistencia verificadas. Comprobación adicional390×844 correcta. Capturas antes/después de ambos rails y vista completa en `output/playwright/hud-density/`; se mantienen locales por licencia de datos. [Evidencia y medidas](docs/evidencias/HUD_COMPACTO_20261022/README.md).
+
+**Pruebas:** `manage.py check` exit0:212pytest,54Vitest+1opt-in omitido, TypeScript/build. `git diff --check` correcto. MASTER10000EUR/hash intacto, orders_enabled=false, POST/api/orders403;30roles,0jobs/cola, runtimeNO_LOCAL_MODEL. Sin inferencias, nuevas dependencias ni conexiones a brokers. Coste0EUR. No se repite el debate fallido ni se afirma mejorar FPS.
+
+**Preparación técnica:** propuesta breve añadida a `docs/P4_PROFUNDIDAD_Y_CIERRE.md` para profundidad por run/idempotencia, selección ordinaria/profunda, contrato compacto, presupuesto y gates. No implementada. `docs/Plan_JAIME_P5_P6.md` permanece como requisito futuro. **P4 continúa PARTIAL; P5/P6 no iniciados.** Este Goal visual termina sin abrir otra fase.
+
+---
+
 ## 2026-10-22 · Cierre solicitado P2 + P4 — PARTIAL
 
 **P4 no está listo.** Se cierra la ejecución acotada solicitada por el usuario, conservando fallos y sin nuevas inferencias largas. P5/P6 no iniciados. Informe verificable: [cierre y diagnóstico](docs/evidencias/P4/cierre-20261022/README.md). Las entradas anteriores son históricas, no el estado actual.

@@ -1,0 +1,26 @@
+[
+  {
+    "resolution": [
+      1920,
+      1080
+    ],
+    "before": 3,
+    "after": 6,
+    "increase_pct": 100.0,
+    "available": 6,
+    "before_width": 340,
+    "after_width": 306
+  },
+  {
+    "resolution": [
+      1366,
+      768
+    ],
+    "before": 2,
+    "after": 3,
+    "increase_pct": 50.0,
+    "available": 6,
+    "before_width": 300,
+    "after_width": 306
+  }
+]
