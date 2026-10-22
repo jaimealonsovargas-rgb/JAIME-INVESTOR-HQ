@@ -1,5 +1,17 @@
 # Estado del proyecto
 
+## 2026-10-23 · Realineación arquitectónica a autonomía local — SOLO DOCUMENTACIÓN
+
+Se ha contrastado una auditoría integral recibida del usuario con el repositorio GitHub. Decisión de producto: JAIME debe ser un núcleo de investigación y futura simulación cuantitativa **autónomo mientras el backend esté encendido**, supervisado por la oficina 3D, no principalmente un sistema de preguntas y debates. Se conservan la interfaz, P2/P3, 30 roles, un único LLM local, 16 GB RAM y presupuesto 0 EUR.
+
+**Cambios de este Goal:** visión, instrucciones Codex, ADR, índice, especificaciones P2/P4/P5/P6 y contrato rector en [REALINEACION_FONDO_AUTONOMO_2026_10_23](docs/REALINEACION_FONDO_AUTONOMO_2026_10_23.md). P4 debe poder recibir eventos autónomos en un **Goal futuro**; P5 debe ser determinista y no depender del éxito del debate LLM; P2 necesita readiness point-in-time; P6 requerirá OMS e InternalPaperBroker antes de brokers externos. **Nada de esto se ha implementado en este Goal.**
+
+**Estado real heredado:** HUD compacto ya completado y probado (entrada 2026-10-22); P4 sigue PARTIAL, Bull TIMEOUT/Bear/Chair BLOCKED, y P5/P6 NO INICIADOS. **No se han ejecutado pruebas locales ni inferencias LLM en esta actualización documental.** No se han cambiado Python, TypeScript, SQL, dependencias, datos de mercado ni credenciales.
+
+**Invariantes:** MASTER 10.000 EUR ficticios, PAPER ONLY, `orders_enabled=false`, `live_trading_enabled=false`, `POST /api/orders=403` **sin modificar**. Sin gastos, sin brokers ni órdenes. Siguiente paso: revisar/autorizar **un Goal acotado P4** para evento programado, routing, idempotencia y ejecución sin UI; después readiness P2. **STOP antes de P5/P6 hasta autorización expresa.**
+
+---
+
 ## 2026-10-22 · Goal acotado HUD compacto — completado
 
 Compactación limitada a los dos paneles laterales. Vista Compacta por defecto en escritorio desde1280px, Normal en menor tamaño; selector accesible que afecta ambos rails y conserva la preferencia. Base/símbolos13px, precios14px, encabezados16px, patrimonio24px; filas9px verticales e interior12×14px. Ancho306px, Normal conserva340px a1920 y300px a1366. Sin cambios de tipografía en departamentos, escena ni runtime.
