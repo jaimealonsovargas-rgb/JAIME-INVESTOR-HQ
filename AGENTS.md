@@ -17,6 +17,8 @@
 - Investigación/criterios del runtime local: `docs/INVESTIGACION_P4_ORQUESTACION_IA_LOCAL.md`.
 - La arquitectura visual histórica sigue en `docs/ESPECIFICACION_DEFINITIVA_2026_10_15.md` y `docs/PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md`.
 - **STOP vigente antes de P5**. No implementar todavía motor de riesgo/veto formal, backtesting final ni ejecución P6.
+- Dirección aprobada el 2026-10-23: JAIME aspira a investigar de forma autónoma mientras el equipo esté encendido. La oficina supervisa el núcleo; una pregunta humana no es el único origen futuro de trabajo. Véase `docs/ARQUITECTURA_AUTONOMIA_P4_P5.md`.
+- La calidad del LLM P4 no será una dependencia técnica del futuro núcleo determinista P5, pero esta decisión **no autoriza iniciar P5**. Ninguna investigación o estrategia puede alterar MASTER ni generar órdenes en P4.
 
 ## P4 — prioridad vigente
 - Implementar **30 roles IA lógicos**, no 30 LLM/procesos residentes.
@@ -25,6 +27,8 @@
 - Benchmark local como máximo 1–2 modelos compactos cuantizados razonables para ~16 GB RAM; registrar modelo, licencia, quant, hash, TTFT, tokens/s, RAM aproximada y cumplimiento de JSON/grounding.
 - Scheduler persistente, on-demand/event-driven, con prioridades, cancelación, timeout y recuperación tras restart. No polling agresivo ni ejecución de los 30 roles en cada evento.
 - Pipeline inicial de 6–10 roles por caso; Bull/Bear/CIO deben mostrar desacuerdos reales. El Bear/Skeptic actúa como crítico.
+- Profundidad adaptativa: investigación ordinaria centrada en Python, con síntesis local opcional; debate Bull/Bear/Chair solo por selección explícita y evidencia suficiente. Los fallos de modelo no invalidan resultados deterministas ni autorizan conclusiones inventadas.
+- Preparar el contrato de eventos de investigación autónoma sin disparar trabajos masivos ni convertir la UI en scheduler. Futuras hipótesis/experimentos pertenecerán a un dominio distinto de ResearchCase.
 - Jobs/resultados deben ser auténticos: NPC/animaciones no prueban actividad IA.
 
 ## Grounding y permisos

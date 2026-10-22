@@ -2,6 +2,8 @@
 
 **STOP antes de P5.** Fuente ejecutable: `docs/PLAN_P4_AGENTES_RESEARCH_LOCAL_AI.md`.
 
+La dirección aprobada el 2026-10-23 requiere que P4 prepare research iniciado por eventos además de casos iniciados por preguntas. `AutonomyEvent`/`ResearchTask` tendrán contrato y procedencia propios; no se convertirán en backtests ni órdenes. El modo ordinario usa Python y, como máximo, una síntesis local opcional; el modo profundo activa explícitamente Bull/Bear/Chair con presupuesto y abstención. Ver `docs/ARQUITECTURA_AUTONOMIA_P4_P5.md` y `docs/P4_PROFUNDIDAD_Y_CIERRE.md`. Los 30 `role_id` permanecen estables.
+
 Implementar **30 roles IA lógicos** bajo demanda, no 30 LLM residentes. Registry, permisos deny-by-default, jobs persistentes, research cases, evidencia, claims, resultados versionados y auditoría.
 
 Runtime preferente: IA **local y gratuita**, máximo 1 inferencia simultánea; 2 jobs quant CPU y 4 fetches ligeros. Benchmark local de 1–2 modelos compactos cuantizados; si no son utilizables, mostrar `NO_LOCAL_MODEL` y mantener modo determinista sin fingir outputs.

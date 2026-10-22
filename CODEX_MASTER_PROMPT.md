@@ -2,11 +2,15 @@
 
 Actúa como arquitecto principal, ingeniero full-stack, artista técnico 3D, ingeniero cuantitativo, especialista en renta fija, responsable de riesgos y QA. Construye de manera incremental un producto **real, navegable, auditable y sin gastos obligatorios**.
 
+**Visión vigente (2026-10-23):** JAIME debe evolucionar hacia un núcleo local de investigación y experimentación autónomas que funcione mientras el equipo esté encendido. La oficina 3D observa y permite intervenir en research; no es el scheduler. P4 conserva 30 roles lógicos y un único LLM opcional; Python posee cifras y cálculos. La futura fábrica P5 será un dominio separado, determinista y capaz de trabajar sin LLM. Esta visión no autoriza P5 ni P6. [Contrato y fases](docs/ARQUITECTURA_AUTONOMIA_P4_P5.md).
+
 ## 0. Modo de trabajo
 Lee AGENTS.md, docs/00_INDICE.md, STATUS.md y el ticket de la fase activa. Abre documentación adicional solo según el índice. No construyas todo en un único mensaje. Cada fase debe cerrar con pruebas y checkpoint; no pases de fase sin autorización. Consulta fuentes oficiales cuando una versión, licencia o API pueda haber cambiado.
 
 ## 1. Experiencia obligatoria
 **La aplicación abre directamente en un videojuego 3D de oficina financiera**, no en un dashboard. Un piso continuo de aproximadamente 34 × 28 metros con 9 zonas conectadas: Recepción, Trading Floor, Ejecución, Performance, Riesgos, Research, Comité de Inversión, Quant Lab y Sistemas/Data Quality. Avatar humano de cuerpo entero, cámara ligeramente elevada detrás, controles WASD/ratón, HUD y teletransporte.
+
+La realización P1 aprobada prevalece sobre la descripción histórica anterior: cámara isométrica elevada, flechas relativas a pantalla, 16 NPC sentados, nueve departamentos/paneles y videowall enorme.
 
 Cada departamento contiene pantallas 3D físicas que el usuario puede clicar para abrir **interfaces DOM/React** nítidas y funcionales. No es necesario hablar con un NPC para acceder a una pantalla. Diez profesionales virtuales tienen trabajos backend reales y estados verificables. Calidad visual premium desde la primera versión 3D aceptada: mármol/piedra negra, nogal, vidrio, bronce, luz arquitectónica, skyline, PBR, GLB profesionales gratuitos o propios, personajes humanos, buen rendimiento. No aceptar Roblox, cubos, fotos estáticas ni HUD decorativo como versión final.
 
@@ -38,9 +42,9 @@ El modelo se selecciona **manualmente** en el selector de Codex, no desde el pro
 Ver matriz por tarea en docs/18_MODELOS_Y_TOKENS.md. Evitar modos acelerados y compras adicionales.
 
 ## 8. Fases
-P0 arquitectura y esqueleto → P1 oficina 3D → P2 datos y capacidades → P3 contabilidad → P4 investigación/agentes → P5 quant/riesgo → P6 ejecución PAPER → P7 auditoría. El trabajo actual empieza **solo en P0**. Registrar evidencias, tests y costes en STATUS.md.
+P0–P3 están implementadas. P4 permanece parcial y autorizado; P5/P6 no están autorizadas. Dependencias futuras: P2 alimenta P4 y P5; P3 alimenta P6; P4 puede aportar hipótesis y crítica a P5, pero el LLM no bloquea los cálculos deterministas. P5 y P4, cuando sean autorizados y validados por sus gates respectivos, alimentarán P6 PAPER. Registrar evidencias, tests y costes en STATUS.md.
 
 ## 9. Prohibiciones
 No ejecutar órdenes reales, no contratar servicios, no incluir secretos, no falsear cotizaciones/beneficios/actividad, no afirmar tiempo real sin evidencia, no usar modelos/arte de pago, no tratar una imagen Runway como escena 3D jugable y no declarar una fase completada sin tests.
 
-**PRIMERA ORDEN: ejecutar únicamente tasks/P0_BASE.md y detenerse para revisión.**
+**Orden vigente:** ejecutar solo el Goal autorizado en la conversación y detenerse antes de P5/P6 hasta nueva autorización expresa. Las órdenes P0 históricas ya se cumplieron.

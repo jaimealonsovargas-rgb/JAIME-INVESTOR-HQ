@@ -33,5 +33,6 @@ Los documentos P0-P3 históricos se conservan para auditoría, pero no reabren f
 - **P4 sigue pendiente de aceptación semántica**; P5/P6 no autorizados. No confundir tests correctos con análisis financiero aceptado.
 
 ## Requisitos de diseño futuro registrados (2026-10-22)
+- [Realineación hacia research autónomo local](ARQUITECTURA_AUTONOMIA_P4_P5.md): contrato propuesto de eventos/tareas, dependencias y gates; P5/P6 siguen sin autorización.
 - [Plan_JAIME_P5_P6](Plan_JAIME_P5_P6.md): documento aportado por el usuario, no autorización de implementación ni verificación de proveedores.
 - [Profundidad adaptativa y límites de cierre P4](P4_PROFUNDIDAD_Y_CIERRE.md): encaje con los contratos existentes y condiciones para una ejecución más eficiente. **No inicia P5/P6.**
