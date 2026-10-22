@@ -1,0 +1,7 @@
+{
+  "model": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+  "pid": 41572,
+  "launch_to_health_seconds": 7.463890199986054,
+  "includes_hash_verification": true,
+  "cold_os_cache_guaranteed": false
+}

@@ -1,5 +1,7 @@
 # Integraciones externas: evaluación real P2, 2026-10-15
 
+**Actualización P4 avanzado, 2026-10-19:** la tabla siguiente conserva la auditoría P2. HQ ya tiene treinta roles operativos y scheduler persistente (no el runtime Vibe); el catálogo declarativo P2 sigue separado. Se ha reutilizado A20 en el caso BCE de research. Liquid continúa con scopes read+trade según su documentación oficial revisada; no conectado. Los factores Vibe STREV/HIGH52W inspeccionados necesitan cierres diarios/panel transversal no disponibles y no se presentan como ejecutados. [Matriz y límites actualizados](P4_AVANZADO_VALIDACION.md#integraciones-read-only).
+
 No se conectaron cuentas, wallets, OAuth ni modelos de pago. Los entornos `.venv-agent-reach` y `.venv-vibe` están aislados e ignorados por Git. Evidencias/SBOM: [integraciones](evidencias/P2/integraciones/); licencias originales, notices, pins y hashes: `assets/integrations/`.
 
 | Integración | Pin / licencia | Comprobación ejecutada | Decisión y límite |

@@ -1,0 +1,38 @@
+[
+  {
+    "private_path": "output/playwright/p4/history-committee.png",
+    "sha256": "f103e071bedc1c957f0c93a791e4faf37a0ec49cb96ce3ae930422786825eec4",
+    "bytes": 105049,
+    "reason_private": "CoinPaprika: local personal use; no public redistribution of market values."
+  },
+  {
+    "private_path": "output/playwright/p4/history-quant.png",
+    "sha256": "c7d6e19dc77fccf71a8c2a29bba65607b98fc120e0e34aaddf4fda1293b1b205",
+    "bytes": 109635,
+    "reason_private": "CoinPaprika: local personal use; no public redistribution of market values."
+  },
+  {
+    "private_path": "output/playwright/p4/history-research.png",
+    "sha256": "6ad45771759f8b42b3e73f84588b1240efa30de170dfb542706f969fa574806e",
+    "bytes": 98546,
+    "reason_private": "CoinPaprika: local personal use; no public redistribution of market values."
+  },
+  {
+    "private_path": "output/playwright/p4/history-systems.png",
+    "sha256": "85ab1e73d8fb67d64e49fe60ca2e97909bb0617007f852eead8e2fcbf2f6bb1b",
+    "bytes": 106786,
+    "reason_private": "CoinPaprika: local personal use; no public redistribution of market values."
+  },
+  {
+    "private_path": "output/playwright/p4/history-videowall.png",
+    "sha256": "4ea5130ba6cfe886ac988c35d2e533bfb1fef9bfb1003f7ba12c125ba92b4fe0",
+    "bytes": 539612,
+    "reason_private": "CoinPaprika: local personal use; no public redistribution of market values."
+  },
+  {
+    "private_path": "output/playwright/p4/history-watchlist.png",
+    "sha256": "9199d5b2499f8c04475e3bcfdfbc4ba4a4f1eb3c7c6716ae657f28147120fbec",
+    "bytes": 629144,
+    "reason_private": "CoinPaprika: local personal use; no public redistribution of market values."
+  }
+]

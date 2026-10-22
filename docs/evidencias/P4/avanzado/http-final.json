@@ -1,0 +1,592 @@
+{
+  "status": {
+    "checked_at": "2026-10-19T21:57:01.203619+00:00",
+    "mode": "ON_DEMAND",
+    "capacity": {
+      "llm": 1,
+      "quant": 2,
+      "fetch": 4
+    },
+    "peaks": {
+      "llm": 0,
+      "quant": 0,
+      "fetch": 0
+    },
+    "active_jobs": 0,
+    "queue": 0,
+    "failures": 10,
+    "runtime": {
+      "state": "NO_LOCAL_MODEL",
+      "runtime": "llama.cpp",
+      "model": null,
+      "endpoint": "http://127.0.0.1:8089",
+      "last_checked_at": "2026-10-19T21:57:01.200787+00:00"
+    },
+    "latest_job": {
+      "attempts": 1,
+      "case_id": "65885284-5037-4346-b1fa-06808398f0cd",
+      "depends_on": "bd148e9d-5325-4085-b37c-43ae533ee501",
+      "duration_ms": 259,
+      "error": null,
+      "finished_at": "2026-10-19T15:19:29.492287+00:00",
+      "id": "c9522b97-2cd8-4152-b4dc-630c37b6efc3",
+      "input_hash": "a86b42b23af9f1b19f02ad132ceaacb97587735b473bcd94569ad85a6d7f93ed",
+      "kind": "llm",
+      "model": null,
+      "output_hash": "94fe701de1a39d96faf4bb335b2f81ae0e8c4221bb82739531d565fd49ec0eb1",
+      "priority": 10,
+      "queued_at": "2026-10-19T15:19:22.837767+00:00",
+      "refresh_public": false,
+      "research_goal": "investable_thesis",
+      "role_id": "cio_chair",
+      "run_key": "advanced-run-investable_thesis",
+      "runtime": "python-decimal",
+      "started_at": "2026-10-19T15:19:29.224967+00:00",
+      "state": "SUCCEEDED",
+      "template_version": "p4.7-typed-objectives"
+    },
+    "last_completed": {
+      "attempts": 1,
+      "case_id": "65885284-5037-4346-b1fa-06808398f0cd",
+      "depends_on": "bd148e9d-5325-4085-b37c-43ae533ee501",
+      "duration_ms": 259,
+      "error": null,
+      "finished_at": "2026-10-19T15:19:29.492287+00:00",
+      "id": "c9522b97-2cd8-4152-b4dc-630c37b6efc3",
+      "input_hash": "a86b42b23af9f1b19f02ad132ceaacb97587735b473bcd94569ad85a6d7f93ed",
+      "kind": "llm",
+      "model": null,
+      "output_hash": "94fe701de1a39d96faf4bb335b2f81ae0e8c4221bb82739531d565fd49ec0eb1",
+      "priority": 10,
+      "queued_at": "2026-10-19T15:19:22.837767+00:00",
+      "refresh_public": false,
+      "research_goal": "investable_thesis",
+      "role_id": "cio_chair",
+      "run_key": "advanced-run-investable_thesis",
+      "runtime": "python-decimal",
+      "started_at": "2026-10-19T15:19:29.224967+00:00",
+      "state": "SUCCEEDED",
+      "template_version": "p4.7-typed-objectives"
+    },
+    "roles": 30,
+    "department_states": {
+      "risk": "IDLE",
+      "committee": "DONE",
+      "research": "DONE",
+      "performance": "IDLE",
+      "systems_data": "DONE",
+      "trading_execution": "DONE",
+      "quant": "DONE"
+    },
+    "orders_enabled": false,
+    "trading_mode": "PAPER_ONLY"
+  },
+  "master": {
+    "portfolio_id": "MASTER",
+    "base_currency": "EUR",
+    "trading_mode": "PAPER_ONLY",
+    "orders_enabled": false,
+    "as_of": "2026-10-19T21:57:01.209719Z",
+    "ledger_status": "VERIFIED_APPEND_ONLY",
+    "ledger_hash": "fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836",
+    "events_count": 1,
+    "seeded_at": "2026-10-16T10:12:45.113258Z",
+    "valuation_status": "FRESH",
+    "nav_eur": "10000.00",
+    "cash_eur": "10000.00",
+    "market_value_eur": "0.00",
+    "accruals_eur": "0.00",
+    "liabilities_eur": "0.00",
+    "contributed_eur": "10000.00",
+    "positions_count": 0,
+    "invested_pct": "0E+2",
+    "realized_pnl_eur": "0.00",
+    "unrealized_pnl_eur": "0.00",
+    "income_eur": "0.00",
+    "fees_eur": "0.00",
+    "total_pnl_eur": "0.00",
+    "fx_effect_eur": "0.00",
+    "cumulative_return_pct": "0",
+    "cash_accounts": [
+      {
+        "currency": "EUR",
+        "amount": "10000.00",
+        "reserved": "0",
+        "value_eur": "10000.00",
+        "valuation_status": "FRESH"
+      }
+    ],
+    "positions": [],
+    "provenance": [],
+    "valuation_method": "FIFO; purchase fees capitalized; native-currency journal; EUR base; HALF_EVEN display to cents; no short or liabilities in V1",
+    "performance": {
+      "nav_eur": "10000.00",
+      "cash_eur": "10000.00",
+      "market_value_eur": "0.00",
+      "realized_pnl_eur": "0.00",
+      "unrealized_pnl_eur": "0.00",
+      "fx_effect_eur": "0.00",
+      "total_pnl_eur": "0.00",
+      "cumulative_return_pct": "0",
+      "valuation_status": "FRESH",
+      "as_of": "2026-10-19T21:57:01.209719+00:00",
+      "daily_return_pct": "0",
+      "twr_pct": "0",
+      "mwr_xirr_pct": null,
+      "max_drawdown_pct": "0",
+      "reason": "TWR/drawdown sobre snapshots diarios existentes, sin interpolación; XIRR requiere 30 días y raíz única convencional.",
+      "observations": 3,
+      "period_start": "2026-10-16T10:12:45.122906+00:00",
+      "period_end": "2026-10-19T07:04:14.952085+00:00"
+    }
+  },
+  "orders_status": 403,
+  "case_ids": [
+    "65885284-5037-4346-b1fa-06808398f0cd",
+    "66dc5f17-849a-4e32-a90a-76e45a7ba447",
+    "ccadc542-5ddf-415f-8692-676415729886",
+    "fe57cb7e-1897-4231-9dbd-9e55d33e2a0d",
+    "7ccf5c8b-ff3f-4847-b06d-28f12eb13159"
+  ],
+  "health": {
+    "status": "ok",
+    "phase": "P0",
+    "trading_mode": "PAPER_ONLY",
+    "orders_enabled": false,
+    "database": "ok",
+    "schema_version": "0004_research",
+    "checked_at": "2026-10-19T21:57:01.302720Z"
+  },
+  "watchlist": {
+    "checked_at": "2026-10-19T21:57:01.305691Z",
+    "watchlists": [
+      "CORE",
+      "OPPORTUNITIES",
+      "PORTFOLIO"
+    ],
+    "selected": "CORE",
+    "items": [],
+    "pulse": [
+      {
+        "symbol": "EXR.D.USD.EUR.SP00.A",
+        "name": "EXR.D.USD.EUR.SP00.A",
+        "value": "1.1225",
+        "daily_change_pct": null,
+        "daily_change_reason": "Sin cierre anterior comparable verificado; no equivale a 0%.",
+        "status": "FRESH",
+        "observation": {
+          "id": "814bef863cec7c5c365a192bde550273663e634ae03477b44f4da2ad0d9d4f4a",
+          "provider": "ECB",
+          "access_id": "A01",
+          "feed": "EXR/D.USD.EUR.SP00.A",
+          "series_id": "EXR.D.USD.EUR.SP00.A",
+          "data_kind": "fx_reference",
+          "venue": "STATISTICS",
+          "country": "EU",
+          "asset_class": "FX",
+          "source_ref": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A",
+          "payload_hash": "bed5c94f1d4c98130291cf7eccd2bf1174379b30a9b00b9a26ccb494ead3055d",
+          "observed_at": "2026-10-19T00:00:00Z",
+          "received_at": "2026-10-19T15:19:30.063377Z",
+          "published_at": null,
+          "period": "2026-10-19",
+          "period_precision": "day",
+          "currency": "USD",
+          "unit": "USD/EUR",
+          "value": "1.1225",
+          "bid": null,
+          "ask": null,
+          "metadata": {
+            "UNIT_MULT": "0",
+            "OBS_STATUS": "A",
+            "DECIMALS": "4",
+            "CURRENCY_DENOM": "EUR",
+            "base_currency": "EUR",
+            "quote_currency": "USD",
+            "rate_type": "ECB_REFERENCE"
+          },
+          "delay_seconds": null,
+          "stale_after_seconds": 86400,
+          "quality_flags": [
+            "REFERENCE_NOT_EXECUTABLE",
+            "UNKNOWN_FEED_DELAY",
+            "PERIOD_START_NOT_PUBLICATION"
+          ],
+          "rights": {
+            "license": "BCE · atribución",
+            "source": "https://www.ecb.europa.eu/services/using-our-site/disclaimer/html/index.en.html",
+            "checked_at": "2026-10-14T00:00:00Z",
+            "access_allowed": true,
+            "display_allowed": true,
+            "storage_allowed": true,
+            "redistribution_allowed": true,
+            "scope": "open",
+            "attribution": "BCE · atribución"
+          },
+          "execution_eligible": false
+        },
+        "history": {
+          "state": "AVAILABLE",
+          "reason": "Historia comparable de un único feed; no implica retorno diario.",
+          "identity": {
+            "provider": "ECB",
+            "feed": "EXR/D.USD.EUR.SP00.A",
+            "series_id": "EXR.D.USD.EUR.SP00.A",
+            "venue": "STATISTICS",
+            "currency": "USD",
+            "unit": "USD/EUR",
+            "period_precision": "day",
+            "data_kind": "fx_reference"
+          },
+          "points": [
+            {
+              "observed_at": "2026-10-06T00:00:00+00:00",
+              "value": "1.1269",
+              "observation_id": "f11f984e07e210403a7d982e00e9d530ff173d2a752420a6fa8227f098a7ca8e"
+            },
+            {
+              "observed_at": "2026-10-07T00:00:00+00:00",
+              "value": "1.1177",
+              "observation_id": "9aa597976fa0dc2a14870c320f9db592a7fe92b3d9cf55e95ff035f93d60f79d"
+            },
+            {
+              "observed_at": "2026-10-08T00:00:00+00:00",
+              "value": "1.1186",
+              "observation_id": "7537b1017ef4d0c959dc9d7b68f633cfde6fc94f4c89a22bb283d033a42d339f"
+            },
+            {
+              "observed_at": "2026-10-09T00:00:00+00:00",
+              "value": "1.1206",
+              "observation_id": "c786b0e4b15aa95bb4181c771e22dfed2210a2c40cc4947e591e35e3e6ba38b2"
+            },
+            {
+              "observed_at": "2026-10-12T00:00:00+00:00",
+              "value": "1.1181",
+              "observation_id": "b3aa8c85ffcb432cac2923ac556b76dd6e52ff091a54e138613af8fb6abf16df"
+            },
+            {
+              "observed_at": "2026-10-13T00:00:00+00:00",
+              "value": "1.1188",
+              "observation_id": "9275658ba35ce91cf96f60ba7251ab7d2cb3e5ad3638b2292d0a7ee2d8c10861"
+            },
+            {
+              "observed_at": "2026-10-14T00:00:00+00:00",
+              "value": "1.1195",
+              "observation_id": "b7b7f3d0047d1a09e005aef92a9752f107d06135e495e55308c6ace03ebb63c9"
+            },
+            {
+              "observed_at": "2026-10-15T00:00:00+00:00",
+              "value": "1.1208",
+              "observation_id": "1d741cf6a4ccabe71e0c1f1815db2a5734b4e4b7984be5f668bf65a836fc57de"
+            },
+            {
+              "observed_at": "2026-10-16T00:00:00+00:00",
+              "value": "1.1253",
+              "observation_id": "f82a475bcee54b3752689bca4e0633fdc74b26bdddf17ef6f9301a671786c785"
+            },
+            {
+              "observed_at": "2026-10-19T00:00:00+00:00",
+              "value": "1.1225",
+              "observation_id": "814bef863cec7c5c365a192bde550273663e634ae03477b44f4da2ad0d9d4f4a"
+            }
+          ]
+        }
+      },
+      {
+        "symbol": "CUUR0000SA0",
+        "name": "CUUR0000SA0",
+        "value": "336.940",
+        "daily_change_pct": null,
+        "daily_change_reason": "Sin cierre anterior comparable verificado; no equivale a 0%.",
+        "status": "STALE",
+        "observation": {
+          "id": "962c7227ef88154d25c81133c32844371bf7f8e83718966b61a654a4eff2e1ab",
+          "provider": "BLS",
+          "access_id": "A10",
+          "feed": "CUUR0000SA0",
+          "series_id": "CUUR0000SA0",
+          "data_kind": "macro_series",
+          "venue": "STATISTICS",
+          "country": "US",
+          "asset_class": "MACRO_SERIES",
+          "source_ref": "https://api.bls.gov/publicAPI/v1/timeseries/data/CUUR0000SA0",
+          "payload_hash": "cdcf30c6d4d24ddc9ef8f48b9c3afedd9ebbe2086ca4a7cb26201d441f501473",
+          "observed_at": "2026-09-01T00:00:00Z",
+          "received_at": "2026-10-14T19:23:33.888388Z",
+          "published_at": null,
+          "period": "2026-09",
+          "period_precision": "month",
+          "currency": null,
+          "unit": "CPI index 1982-84=100",
+          "value": "336.940",
+          "bid": null,
+          "ask": null,
+          "metadata": {
+            "periodName": "September",
+            "footnotes": "[{}]"
+          },
+          "delay_seconds": null,
+          "stale_after_seconds": 86400,
+          "quality_flags": [
+            "REFERENCE_NOT_EXECUTABLE"
+          ],
+          "rights": {
+            "license": "BLS · dominio público",
+            "source": "https://www.bls.gov/opub/copyright-information.htm",
+            "checked_at": "2026-10-14T00:00:00Z",
+            "access_allowed": true,
+            "display_allowed": true,
+            "storage_allowed": true,
+            "redistribution_allowed": true,
+            "scope": "open",
+            "attribution": "BLS · dominio público"
+          },
+          "execution_eligible": false
+        },
+        "history": {
+          "state": "STALE",
+          "reason": "Historia comparable de un único feed; no implica retorno diario.",
+          "identity": {
+            "provider": "BLS",
+            "feed": "CUUR0000SA0",
+            "series_id": "CUUR0000SA0",
+            "venue": "STATISTICS",
+            "currency": null,
+            "unit": "CPI index 1982-84=100",
+            "period_precision": "month",
+            "data_kind": "macro_series"
+          },
+          "points": [
+            {
+              "observed_at": "2024-01-01T00:00:00+00:00",
+              "value": "308.417",
+              "observation_id": "5d022d4df71e477fff65f325024336c86eb486ddb83146a348f3e0c26ddf1d93"
+            },
+            {
+              "observed_at": "2024-02-01T00:00:00+00:00",
+              "value": "310.326",
+              "observation_id": "5a54c0f824f178ea8753d7e31419378e936526df4193db0267d7a55892137fa2"
+            },
+            {
+              "observed_at": "2024-03-01T00:00:00+00:00",
+              "value": "312.332",
+              "observation_id": "a485b32e075964918c5d19d2343cb0816823057f260d2a46b8e0ea947193f7e6"
+            },
+            {
+              "observed_at": "2024-04-01T00:00:00+00:00",
+              "value": "313.548",
+              "observation_id": "9269ad059edbd98bdbc6f7a6fbbf6a1dfa34938cc0565e443435d5926dbe0a86"
+            },
+            {
+              "observed_at": "2024-05-01T00:00:00+00:00",
+              "value": "314.069",
+              "observation_id": "66887b06101e7fe7d9c27dac659bcd3c9238696646724d78dc934d7ff786cfde"
+            },
+            {
+              "observed_at": "2024-06-01T00:00:00+00:00",
+              "value": "314.175",
+              "observation_id": "0ffae07fa685075b3bdc4ea2da31b7e9028368d48ceaca1f0e556c5c1ad1b7c5"
+            },
+            {
+              "observed_at": "2024-07-01T00:00:00+00:00",
+              "value": "314.540",
+              "observation_id": "83d41275d91bbc1d6dc8b83b5761c8df1608b44905929f7b1623b51a02fe1e13"
+            },
+            {
+              "observed_at": "2024-08-01T00:00:00+00:00",
+              "value": "314.796",
+              "observation_id": "5a6075d3d481fb5cc8eba8d9d7dd71332839290648939fdf352092c161f46cfa"
+            },
+            {
+              "observed_at": "2024-09-01T00:00:00+00:00",
+              "value": "315.301",
+              "observation_id": "0341c14c03bbef8cad8b868f8eae8eec9349f77a0cadd5d807270435822173dc"
+            },
+            {
+              "observed_at": "2024-10-01T00:00:00+00:00",
+              "value": "315.664",
+              "observation_id": "108765a351966c3c599a53675fd34b54cb40f72168529498076331d16e75b6ef"
+            },
+            {
+              "observed_at": "2024-11-01T00:00:00+00:00",
+              "value": "315.493",
+              "observation_id": "cde6f394bd683815e4883e614949df761cfb89041990dd70a783cc7f22622490"
+            },
+            {
+              "observed_at": "2024-12-01T00:00:00+00:00",
+              "value": "315.605",
+              "observation_id": "b3ee4aa7b493328419a63588225bc6fc52f7363e84b0f60dd4a4c07df52c8705"
+            },
+            {
+              "observed_at": "2025-01-01T00:00:00+00:00",
+              "value": "317.671",
+              "observation_id": "926d1bf34f15a40badc06b5d8e07419f61dd074a9086bf3b9c6a23ce58ad4981"
+            },
+            {
+              "observed_at": "2025-02-01T00:00:00+00:00",
+              "value": "319.082",
+              "observation_id": "94ef96f7165d1137f4d5866798c84bb2cb23e51d44fcf928084879600910ca2b"
+            },
+            {
+              "observed_at": "2025-03-01T00:00:00+00:00",
+              "value": "319.799",
+              "observation_id": "b31c73f7cd64b57f7585b537a3bd62b466d15b9f55080859284c3bbb0695b7ce"
+            },
+            {
+              "observed_at": "2025-04-01T00:00:00+00:00",
+              "value": "320.795",
+              "observation_id": "b92203334f0e10c15da9189106e7fa679f0b58ad782271d61e8875e92e4d1de0"
+            },
+            {
+              "observed_at": "2025-05-01T00:00:00+00:00",
+              "value": "321.465",
+              "observation_id": "7f8b744a545df934198f97500e919e54d75a2ab555d8681222ad1321c356b4a1"
+            },
+            {
+              "observed_at": "2025-06-01T00:00:00+00:00",
+              "value": "322.561",
+              "observation_id": "e35710eab6557e475c793603295f6cec77f500304055e2a9d17dff25203edcee"
+            },
+            {
+              "observed_at": "2025-07-01T00:00:00+00:00",
+              "value": "323.048",
+              "observation_id": "876cb52c5c8f9e96d0d0ce95d764cfa98cd8ca4eec35e6c0cd739f14cad756b0"
+            },
+            {
+              "observed_at": "2025-08-01T00:00:00+00:00",
+              "value": "323.976",
+              "observation_id": "dd3fa23caf7bb0cf8a46b73752baf5be1fca3edda4ec64b8cf2f49e409a0a02d"
+            },
+            {
+              "observed_at": "2025-09-01T00:00:00+00:00",
+              "value": "324.800",
+              "observation_id": "911873c99dea1142a5628f062e29dca47b472ae063bec344ddd3ce392aebbd10"
+            },
+            {
+              "observed_at": "2025-11-01T00:00:00+00:00",
+              "value": "324.122",
+              "observation_id": "4743784bff01fdeed5ed7530ab1510dbcbfd12d88955518997a18e359aac5d5a"
+            },
+            {
+              "observed_at": "2025-12-01T00:00:00+00:00",
+              "value": "324.054",
+              "observation_id": "79ef360b22fd70d3466b0decc11c9ca06e60fb639c603ad8b0a04c8b1f74d782"
+            },
+            {
+              "observed_at": "2026-01-01T00:00:00+00:00",
+              "value": "325.252",
+              "observation_id": "c5540cd18e0acc45d4f377582c474845981d40666961f1598d1a0f8251fb20ed"
+            },
+            {
+              "observed_at": "2026-02-01T00:00:00+00:00",
+              "value": "326.785",
+              "observation_id": "c0b0f66d92be24906e68298305a009176e53e7b618e98f8b677fc015335c46d5"
+            },
+            {
+              "observed_at": "2026-03-01T00:00:00+00:00",
+              "value": "330.213",
+              "observation_id": "14c2cfd7e7d257239795dd666485e5ca6c751b2bb0f4dcf24633a0f58037dfbd"
+            },
+            {
+              "observed_at": "2026-04-01T00:00:00+00:00",
+              "value": "333.020",
+              "observation_id": "be32ee74105f4b4b1c85138318c6197ae9db9ab223475b4790ecfe97c616bac0"
+            },
+            {
+              "observed_at": "2026-05-01T00:00:00+00:00",
+              "value": "335.123",
+              "observation_id": "68fe042f04c21599ce46c3cbbaf9220bdd27129c46a3b82d68790af0000863d5"
+            },
+            {
+              "observed_at": "2026-06-01T00:00:00+00:00",
+              "value": "333.952",
+              "observation_id": "929afbcbe108d188cadcc13129895c94c7ee36d2ade8f21ccd644c591c302339"
+            },
+            {
+              "observed_at": "2026-07-01T00:00:00+00:00",
+              "value": "333.918",
+              "observation_id": "96866ba235152ecc7243442f9d63a8762471894e30dbaf1bba77f69bdbc89ede"
+            },
+            {
+              "observed_at": "2026-08-01T00:00:00+00:00",
+              "value": "334.980",
+              "observation_id": "5d20a03f2ec7ef1c786442e7a79a3c37ee444eb49cb278f866d43f2d6de2e82e"
+            },
+            {
+              "observed_at": "2026-09-01T00:00:00+00:00",
+              "value": "336.940",
+              "observation_id": "962c7227ef88154d25c81133c32844371bf7f8e83718966b61a654a4eff2e1ab"
+            }
+          ]
+        }
+      },
+      {
+        "symbol": "M.N.B.ES",
+        "name": "M.N.B.ES",
+        "value": "107.02",
+        "daily_change_pct": null,
+        "daily_change_reason": "Sin cierre anterior comparable verificado; no equivale a 0%.",
+        "status": "STALE",
+        "observation": {
+          "id": "7fa1d27aead33b2ca8c80fc8f31c53b0b7dbe1a8a573eb0c7752ff1146d4a09f",
+          "provider": "BIS",
+          "access_id": "A07",
+          "feed": "WS_EER/M.N.B.ES",
+          "series_id": "M.N.B.ES",
+          "data_kind": "macro_series",
+          "venue": "STATISTICS",
+          "country": "ES",
+          "asset_class": "MACRO_SERIES",
+          "source_ref": "https://stats.bis.org/api/v1/data/WS_EER/M.N.B.ES",
+          "payload_hash": "5f7bf239ea40c278c7490eead25fe982d2ad3bf85822766df9efe8ba86248842",
+          "observed_at": "2026-08-01T00:00:00Z",
+          "received_at": "2026-10-14T19:29:00.664697Z",
+          "published_at": null,
+          "period": "2026-08",
+          "period_precision": "month",
+          "currency": null,
+          "unit": "SDMX index",
+          "value": "107.02",
+          "bid": null,
+          "ask": null,
+          "metadata": {
+            "OBS_STATUS": "A"
+          },
+          "delay_seconds": null,
+          "stale_after_seconds": 86400,
+          "quality_flags": [
+            "REFERENCE_NOT_EXECUTABLE"
+          ],
+          "rights": {
+            "license": "BIS estadísticas · atribución",
+            "source": "https://data.bis.org/help/legal",
+            "checked_at": "2026-10-14T00:00:00Z",
+            "access_allowed": true,
+            "display_allowed": true,
+            "storage_allowed": true,
+            "redistribution_allowed": true,
+            "scope": "open",
+            "attribution": "BIS estadísticas · atribución"
+          },
+          "execution_eligible": false
+        },
+        "history": {
+          "state": "NO_DATA",
+          "reason": "Sin histórico comparable suficiente.",
+          "identity": {
+            "provider": "BIS",
+            "feed": "WS_EER/M.N.B.ES",
+            "series_id": "M.N.B.ES",
+            "venue": "STATISTICS",
+            "currency": null,
+            "unit": "SDMX index",
+            "period_precision": "month",
+            "data_kind": "macro_series"
+          },
+          "points": []
+        }
+      }
+    ],
+    "reason": "Cache P2 autorizada; sin consultas externas ni gestión de agentes. Variaciones no disponibles sin cierre diario comparable."
+  }
+}

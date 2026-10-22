@@ -15,3 +15,13 @@ Vibe-Trading permanece sin brokers/generated-code; usar solo presets/factores au
 UI: roles/estado/jobs reales por departamento, dossiers Research, Quant con provenance, Bull/Bear/Chair en Comité, runtime/cola en Sistemas y módulo AGENTES P4 del videowall.
 
 Invariantes: **0 EUR**, PAPER ONLY, `orders_enabled=false`, `/api/orders=403`, ningún agente muta ledger/cash/positions/NAV/orders/fills. P5 riesgo formal/backtests y P6 ejecución siguen fuera de alcance.
+
+## Checkpoint P4 avanzado · 19–20 de octubre
+
+Implementados objetivos tipados, EvidencePack, contratos separados de debate, abstención, validación de referencias cruzadas y HUD con históricos reales. Caso BCE informativo de cuatro roles y caso de abstención verificados por HTTP. Clic en nueve NPC, responsive y modo offline comprobados. Detalle: [validación avanzada](../docs/P4_AVANZADO_VALIDACION.md).
+
+**Gate semántico pendiente:** los dos Qwen existentes y Llama 3.2 3B Q4 (autorizado explícitamente en el nuevo prompt del usuario) no superan el benchmark de debate. No se considera P4 avanzada completa. JSON válido y extractos verificados no equivalen a razonamiento financiero válido. Vibe continúa metadata-only; no hay cierres diarios suficientes para ejecutar los factores inspeccionados. No habilitar P5/P6.
+
+## Cierre acotado del Goal · 22-10-2026
+
+Entrega **PARTIAL**, por instrucción del usuario de detener intentos indefinidos. P4 no se marca terminada: debate suficiente no aceptado y FPS bajo carga por debajo del objetivo. [Informe y evidencia](../docs/evidencias/P4/cierre-20261022/README.md). 212 pytest +54 Vitest, TypeScript/build/audit y restart correctos. Próximo paso: esperar instrucciones; P5/P6 siguen prohibidos.

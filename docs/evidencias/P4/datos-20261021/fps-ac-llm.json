@@ -1,0 +1,81 @@
+{
+  "at": "2026-10-21T10:18:37.285Z",
+  "method": "Real Windows Intel / headed Chrome / 1920x1080 / balanced adaptive / native arrows / 16 seated NPC. Runtime/job states captured below; not a controlled before-after comparison.",
+  "power_before": {
+    "at": "2026-10-21T10:16:52.506604+00:00",
+    "ACLineStatus": 1,
+    "BatteryFlag": 8,
+    "BatteryLifePercent": 42,
+    "SystemStatusFlag": 0,
+    "BatteryLifeTime": 4294967295,
+    "BatteryFullLifeTime": 4294967295
+  },
+  "free_ram_gib_before": 2.19,
+  "llm_before": {
+    "runtime": {
+      "state": "AVAILABLE",
+      "runtime": "llama.cpp",
+      "model": "Qwen3-1.7B-Q8_0",
+      "endpoint": "http://127.0.0.1:8089",
+      "last_checked_at": "2026-10-21T10:17:11.513854+00:00"
+    },
+    "active_jobs": 1,
+    "queue": 2
+  },
+  "llm_after": {
+    "runtime": {
+      "state": "AVAILABLE",
+      "runtime": "llama.cpp",
+      "model": "Qwen3-1.7B-Q8_0",
+      "endpoint": "http://127.0.0.1:8089",
+      "last_checked_at": "2026-10-21T10:18:27.665254+00:00"
+    },
+    "active_jobs": 1,
+    "queue": 2
+  },
+  "target_met": false,
+  "rooms": [
+    {
+      "name": "RECEPCIÓN",
+      "valid": true,
+      "moving_fps": 31.679298910385114,
+      "moving_p95_ms": 65.40000000596046,
+      "dpr": 0.72,
+      "width": 1920,
+      "height": 1080,
+      "renderer": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "name": "TRADING",
+      "valid": true,
+      "moving_fps": 33.731888570504346,
+      "moving_p95_ms": 57.6000000089407,
+      "dpr": 0.7,
+      "width": 1920,
+      "height": 1080,
+      "renderer": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "name": "COMITÉ DE INVERSIÓN",
+      "valid": true,
+      "moving_fps": 34.19434893392268,
+      "moving_p95_ms": 58.20000000298023,
+      "dpr": 0.7,
+      "width": 1920,
+      "height": 1080,
+      "renderer": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "name": "SISTEMAS",
+      "valid": true,
+      "moving_fps": 37.70753761003642,
+      "moving_p95_ms": 52.79999999701977,
+      "dpr": 0.7,
+      "width": 1920,
+      "height": 1080,
+      "renderer": "ANGLE (Intel, Intel(R) Graphics (0x0000A7AC) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    }
+  ],
+  "raw_sha256": "525474c0013c99ea2184be3cb02b29b27168fc7e1f2e87d6634cee542986fd84",
+  "raw_private_path": "output/p4-data-refresh/fps-p411-ac.txt"
+}

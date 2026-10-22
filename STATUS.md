@@ -1,5 +1,57 @@
 # Estado del proyecto
 
+## 2026-10-22 · Cierre solicitado P2 + P4 — PARTIAL
+
+**P4 no está listo.** Se cierra la ejecución acotada solicitada por el usuario, conservando fallos y sin nuevas inferencias largas. P5/P6 no iniciados. Informe verificable: [cierre y diagnóstico](docs/evidencias/P4/cierre-20261022/README.md). Las entradas anteriores son históricas, no el estado actual.
+
+**Implementado/verificado:** persistencia/refresco P2 con derechos, histórico personal autorizado y TTL corregido; datos reales en watchlist; objetivos de research diferenciados, contexto compacto, abstención por mandato, grounding/citas y salida cualitativa separada de cifras Python; HUD sans serif y paneles legibles. Schema `0005_data_history`; 30 roles lógicos, una inferencia máxima. Fuente/cadencia no se presenta como cotización en tiempo real. Catálogo31proveedores/36modalidades/34adaptadores; conteos de conexiones fechados en informe, no inflados por mocks.
+
+**Pruebas finales:** `manage.py check` exit0: **212 pytest, 54 Vitest +1 opt-in omitido, TypeScript/build**, 97,24s. `manage.py audit` exit0: cero vulnerabilidades conocidas. Alembic0005head, sin drift. Restart real conserva9jobs/estados/intentos/errores y hashMASTER. UI real4/4 departamentos Research/Quant/Comité/Sistemas por clic NPC, sin JSerrors/overflow; 6sparklines reales, texto16px, dossier INCOMPLETE visible y videowall con estados auténticos. Nueve NPC y offline/responsive se verificaron en el checkpoint anterior. Capturas privadas `output/playwright/p4/history-*.png`; hashes públicos, sin redistribuir precios de CoinPaprika.
+
+**Fallo E2E:** p4.11 terminó INCOMPLETE:6jobs Python SUCCEEDED, Bull TIMEOUT tras2intentos y Bear/Chair BLOCKED. El p4.10 había rechazado UNGROUNDED_NUMBER. No se ha certificado ningún debate suficiente nuevo; la abstención con evidencia insuficiente sí está probada. No se convierte JSON válido en aceptación financiera.
+
+**Diagnóstico acotado:** una petición sintética por modelo existente, máximo128tokens/120s, sin nuevos modelos. Qwen3Q8:590entrada/42salida, contexto32,50s, TTFT33,98s, generación6,27tok/s, total40,51s. Qwen2.5Q4:586/28, contexto6,03s, TTFT6,20s, generación18,73tok/s, total7,49s. Ambos JSON válidos solo para diagnóstico. No es A/B causal: Qwen3 estaba en batería y RAM mínima68,55MiB; Qwen2.5 en red y mínimo2,15GiB. CPU proceso~19–21%del total12lógicos (3threads), lecturas page-in globales medias1226/s→131/s. Presión/paginación reales, no toda atribuible al modelo. RSS pico1,79/1,75GiB; memoria privada1,33/0,89GiB. Carga Qwen2.5health7,46s incluyendohash, no cold-cache garantizada. Los runs largos previos bajaban de2tok/s en tramos y agotaron300s; se conservan.
+
+**Oficina:** medición21-10 con red/avatar/LLM:31,68–37,71FPS, cuatro ventanas válidas, Equilibrado1920×1080/DPR0,70–0,72. No alcanza40–45; no se afirma mejoraFPS con Qwen2.5. Runtime descargado de RAM al terminar las dos pruebas; API muestra NO_LOCAL_MODEL, cola0/activos0, backend/preview siguen disponibles.
+
+**Pendiente:** debate semántico suficiente, rendimiento gráfico bajo carga, calendarios/publicaciones completos y cobertura point-in-time/corporate actions para futuros usos. Estudio de profundidad adaptativa y registro del plan futuro en [P4_PROFUNDIDAD_Y_CIERRE](docs/P4_PROFUNDIDAD_Y_CIERRE.md); la modalidad descriptiva compacta nueva es propuesta, no implementación. Plan_JAIME_P5_P6 se conserva como requisito futuro, sin activar laboratorio, órdenes ni integraciones.
+
+**Seguridad:** MASTER10.000EUR ficticios, cero posiciones; hash `fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836` intacto. PAPER_ONLY, orders_enabled=false, POST/api/orders403. Coste0EUR. Próximo paso: **esperar instrucciones del usuario**, sin repetir inferencias ni empezar otra fase. Commits/push se verifican al terminar este cierre.
+
+---
+
+## 2026-10-21 · Continuación P2/P4 · NO SUCCESS
+
+Trabajo local preservado. Commit de seguridad **955fd38** actualiza únicamente certifi por GHSA-6q48-6c7w-9gw2; audit repetido exit0, sin vulnerabilidades conocidas Python/npm. Regresión completa anterior: **209 pytest, 54 Vitest +1 opt-in omitido, TypeScript/build exit0**. Después: 50 tests research por contexto compacto, 76 datos/refresh/derechos, y el test adicional de reducción de TTL correctos. `git diff --check` sin errores. No confundir estas pruebas con aceptación semántica.
+
+**Datos:** A21 verificado de nuevo por HTTP200 el 21-10 a las 10:02:26 UTC, 1290 ms, 90 observaciones y última fecha 20-10. Revalidación horaria de histórico diario (no hora de publicación certificada), fechas UTC, feed agregado separado del spot. Un cache hit no prolonga el TTL y reducir el TTL vigente invalida una caché antigua más larga. Archivo local y MASTER sin cambios financieros. Catálogo36/31proveedores/34adaptadores. Metadatos de prueba en `output/p4-data-refresh/history-refresh-20261021.json`; datos personales fuera de Git.
+
+**Research:** caso `de7188a7-de42-4318-b5ae-e77b5c86dc76`. p4.8 rechazado semánticamente: el LLM afirmó incrementos diarios, pese a 22 intervalos positivos y20 negativos; cancelación HTTP200 conservando resultados. p4.9 añade abstención determinista de microestructura/liquidez/macro cuando no existe evidencia del mandato, selecciona historia sin que la desplacen noticias/spot y calcula trayectoria completa. Bull agotó ambos intentos de300s; Bear/Chair BLOCKED. No hay debate aceptado en esa versión.
+
+**Prueba actual:** p4.10 compacta metadatos repetidos mediante diccionario de fuentes, manteniendo IDs, unidades, scope, fechas y extractos exactos; el manifiesto completo se conserva. Qwen3-1.7B Q8_0 existente, llama.cpp b11696, ctx4096, thinking256, repackCPU, threads3 y una inferencia. Run `history-source-p410-run` terminó rechazado: Bull `UNGROUNDED_NUMBER` en ambos intentos; Bear/Chair bloqueados. Archivo privado `research-history-p410.json`. No se ha descargado otro modelo. El gate semántico sigue pendiente. La prueba p4.11 separa narrativa cualitativa de cifras exactas presentadas por Python, acota citas a evidencia usable y conserva los validadores. Run `history-qualitative-p411-run` en curso; primer intento Bull TIMEOUT, segundo en curso. 51 tests focalizados correctos.
+
+**FPS reales durante p4.10:** cuatro ventanas válidas con flechas, Chrome1920×1080, Intel/D3D11 y Equilibrado adaptativo. MovingFPS: Recepción35,99; Trading34,38; Comité30,45; Sistemas35,91. DPR0,70–0,72. No alcanza40–45. En esta muestra del21-10 Windows indica batería43%, ACLineStatus0, sin ahorro; no es comparable con cargador. RAM libre1,61GiB, working set modelo2.384.920.576bytes durante captura. Evidencia `fps-p410.txt` y `hardware-p410.json`; no inventar un benchmark en corriente. Captura privada `output/playwright/p4/advanced-moving-office.png`.
+
+**Cargador reconfirmado el 21-10:** Win32 ACLineStatus1, BatteryFlag8 (cargando), 41%, sin ahorro; RAM libre2,19GiB. Repetición real con avatar/LLM activo: Recepción31,68; Trading33,73; Comité34,19; Sistemas37,71 FPS, cuatro ventanas válidas, DPR0,70–0,72. Sigue por debajo40–45; no se atribuye la diferencia exclusivamente a alimentación. Metadatos públicos `docs/evidencias/P4/datos-20261021/fps-ac-llm.json`; bruto y captura privados.
+
+**UI real:** nueve NPC/paneles ya comprobados en checkpoint anterior; repetición actual Research/Quant/Comité/Sistemas4/4 mediante clic NPC, caso BTC visible, pausa movimiento correcta, sin errores JS/overflow, seis sparklines reales y tipografía sans serif16px. Videowall muestra estados backend y errores reales. HTTPórdenes403 y hashMASTER conservado.
+
+Siguiente paso exacto: terminar/revisar el run p4.11 ya activo, registrar límites y cerrar commits/push sin declarar P4 terminada si falla semántica. Backend/preview/modelo locales activos; consultar puertos8000/5174/8089 antes de reiniciar. Sin P5/P6, 0EUR, PAPER ONLY.
+
+---
+
+## 2026-10-20 · Reanudación exacta · histórico conectado, caso generativo en marcha
+
+Checkpoint `e24a6b2` publicado en origin/main. Cambios locales anteriores de HUD/runtime conservados. Catálogo ampliado a 36 modalidades / 31 proveedores / 34 adaptadores con **A21 CoinPaprika histórico diario**: HTTP real, 90 observaciones; API de watchlist muestra 60 puntos comparables. A15 spot separado. Permiso explícito de IA personal local, sin redistribución ni valoración MASTER; datos y capturas con valores personales permanecen en `output/`. MASTER conserva su hash. 74 pruebas focalizadas de datos correctas antes del último ajuste de selección de evidencia y tests de contrato frontend; regresión completa actual todavía pendiente.
+
+Los tres experimentos TEST_ONLY de premisa no certifican semántica: Qwen2.5 acertó etiquetas pero contradijo hechos; Qwen3 con reasoning confundió una etiqueta y, al explicar primero, volvió a fallar una etiqueta. No se ha instalado otro modelo. Resultados locales `premise-qwen25.json`, `premise-qwen3-thinking.json`, `premise-qwen3-explain-first.json`; no cuentan como research real.
+
+Runtime actual Qwen3-1.7B Q8_0, ctx4096, reasoning256, no-repack, 3 threads, una inferencia. Caso HTTP real `de7188a7-de42-4318-b5ae-e77b5c86dc76`, pregunta acotada al histórico BTC y sus límites. Sigue EN CURSO, **no aceptado**; `output/p4-data-refresh/research-history-real.json` conserva dossier privado y estados. El primer rol generativo terminó en 168469 ms, 4,94 tokens/s de generación; TTFT no medido. No confundir ejecución correcta con calidad semántica.
+
+Cargador vuelto a confirmar por Win32 `ACLineStatus=1`, batería28 %, ahorro desactivado; con el LLM activo quedan 0,68 GiB libres. No ejecutar builds junto al benchmark. El backend activo todavía usa la selección anterior de evidencia; el cambio en disco evita que macro/noticias desplacen el histórico y requiere reinicio cuando los jobs terminen. Siguiente paso: revisar el caso en curso, corregir problemas reales, verificar UI y gate final; no repetir investigación del repositorio. PAPER ONLY, 0 EUR, P5/P6 no iniciados.
+
+---
+
 ## 2026-10-20 · Continuación P2 + P4 · histórico y refresco EN CURSO
 
 Continuado desde `5fd14e2`, conservando todos los cambios locales del HUD, evidencia y runtime. Objetivo vigente: fuente real → actualización/persistencia → caso → LLM → Bull/Bear/Chair → dossier. **No declarar SUCCESS: aceptación semántica y E2E generativo siguen pendientes.** Sin nuevos modelos ni P5/P6.

@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-22T15:59:55.542Z",
+  "classification": "UI_METADATA_NO_PRIVATE_MARKET_VALUES",
+  "departments": [
+    {
+      "id": "research",
+      "opened": true,
+      "caseVisible": true,
+      "paused": true
+    },
+    {
+      "id": "quant",
+      "opened": true,
+      "caseVisible": true,
+      "paused": true
+    },
+    {
+      "id": "committee",
+      "opened": true,
+      "caseVisible": true,
+      "paused": true
+    },
+    {
+      "id": "systems",
+      "opened": true,
+      "caseVisible": true,
+      "paused": true
+    }
+  ],
+  "errors": [],
+  "watchlist": {
+    "sparklines": 6,
+    "font": "Arial, \"Segoe UI\", sans-serif",
+    "fontSize": "16px",
+    "overflow": false
+  },
+  "wallAgents": "AGENTES\nRESEARCH LOCAL\n0\n\nJobs activos · 0 en cola\n\nNO_LOCAL_MODEL\n\n30 roles lógicos · una inferencia\n\n19 fallos / bloqueos\n\nÚltimo completado: volatility_regime\n22/10/2026\nSIMULACIÓN · PAPER ONLY",
+  "master": "fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836",
+  "ordersStatus": 403
+}

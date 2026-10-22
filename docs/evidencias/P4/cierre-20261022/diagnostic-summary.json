@@ -1,0 +1,176 @@
+[
+  {
+    "classification": "TEST_ONLY_TIMING_NOT_SEMANTIC_ACCEPTANCE",
+    "attempt_limit": 1,
+    "max_output_tokens": 128,
+    "deadline_seconds": 120,
+    "logical_cpus": 12,
+    "at_utc": "2026-10-22T15:53:35Z",
+    "model": "Qwen3-1.7B-Q8_0",
+    "payload_hash": "d53f9a206e258661dc30928ee807f03e57583318319e6d64c5dd0e83e2b3bace",
+    "ttft_seconds": 33.97783210000489,
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 42,
+      "prompt_tokens": 590,
+      "total_tokens": 632,
+      "prompt_tokens_details": {
+        "cached_tokens": 3
+      }
+    },
+    "server_timings": {
+      "cache_n": 3,
+      "prompt_n": 587,
+      "prompt_ms": 32498.822,
+      "prompt_per_token_ms": 55.36426235093697,
+      "prompt_per_second": 18.062193146570053,
+      "predicted_n": 42,
+      "predicted_ms": 6538.761,
+      "predicted_per_token_ms": 159.48197560975612,
+      "predicted_per_second": 6.270301055505776
+    },
+    "elapsed_seconds": 40.50940260000061,
+    "json_valid": true,
+    "total_wall_seconds": 42.44210370001383,
+    "resource_summary": {
+      "available_bytes": {
+        "min": 71876608,
+        "max": 1683795968,
+        "mean": 467965171.8095238
+      },
+      "system_committed_bytes": {
+        "min": 31102611456,
+        "max": 31355932672,
+        "mean": 31232710851.04762
+      },
+      "process_rss_bytes": {
+        "min": 14827520,
+        "max": 1918562304,
+        "mean": 1654612163.047619
+      },
+      "process_private_bytes": {
+        "min": 1210183680,
+        "max": 1426952192,
+        "mean": 1409708714.6666667
+      },
+      "process_cpu_percent_all_logical": {
+        "min": 0.0,
+        "max": 24.73423548440502,
+        "mean": 19.335596902456235
+      },
+      "process_faults_per_sec": {
+        "min": 0.0,
+        "max": 89285.49239105836,
+        "mean": 15961.30471883124
+      },
+      "system_cpu_percent": {
+        "min": 15.573162593127797,
+        "max": 82.12878010362743,
+        "mean": 46.5971625999323
+      },
+      "page_reads_per_sec": {
+        "min": 2.960624581256661,
+        "max": 5153.166230495803,
+        "mean": 1226.076445630415
+      },
+      "pages_input_per_sec": {
+        "min": 20.724372068796626,
+        "max": 105992.86246674333,
+        "mean": 17790.413295692244
+      },
+      "ac": {
+        "min": 0,
+        "max": 0,
+        "mean": 0
+      }
+    },
+    "raw_sha256": "9146f28786b7c16e74859d46b083ff0ef1c711e8a0ebc502c953305e22ec3eba"
+  },
+  {
+    "classification": "TEST_ONLY_TIMING_NOT_SEMANTIC_ACCEPTANCE",
+    "attempt_limit": 1,
+    "max_output_tokens": 128,
+    "deadline_seconds": 120,
+    "logical_cpus": 12,
+    "at_utc": "2026-10-22T15:57:30Z",
+    "model": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+    "payload_hash": "b25b65a2ffea34d91130798df14ee3fd33d1a7226009ca9890c8a3d1667ab499",
+    "ttft_seconds": 6.199388700013515,
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 28,
+      "prompt_tokens": 586,
+      "total_tokens": 614,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    },
+    "server_timings": {
+      "cache_n": 0,
+      "prompt_n": 586,
+      "prompt_ms": 6033.891,
+      "prompt_per_token_ms": 10.296742320819112,
+      "prompt_per_second": 97.11809510645784,
+      "predicted_n": 28,
+      "predicted_ms": 1441.405,
+      "predicted_per_token_ms": 53.38537037037037,
+      "predicted_per_second": 18.731723561386286
+    },
+    "elapsed_seconds": 7.494206200004555,
+    "json_valid": true,
+    "total_wall_seconds": 8.849338300002273,
+    "resource_summary": {
+      "available_bytes": {
+        "min": 2309373952,
+        "max": 2389299200,
+        "mean": 2330413283.5555553
+      },
+      "system_committed_bytes": {
+        "min": 25102290944,
+        "max": 25117798400,
+        "mean": 25107050040.88889
+      },
+      "process_rss_bytes": {
+        "min": 1801019392,
+        "max": 1877635072,
+        "mean": 1858646471.1111112
+      },
+      "process_private_bytes": {
+        "min": 944517120,
+        "max": 954404864,
+        "mean": 950375310.2222222
+      },
+      "process_cpu_percent_all_logical": {
+        "min": 0.13000758861580475,
+        "max": 25.01026144094375,
+        "mean": 20.506816192761498
+      },
+      "process_faults_per_sec": {
+        "min": 0.0,
+        "max": 24507.28584470372,
+        "mean": 5308.651465230354
+      },
+      "system_cpu_percent": {
+        "min": 30.21658537794979,
+        "max": 49.11523923397393,
+        "mean": 42.70456321772859
+      },
+      "page_reads_per_sec": {
+        "min": 107.36903219031939,
+        "max": 188.39158936215492,
+        "mean": 131.08085827859546
+      },
+      "pages_input_per_sec": {
+        "min": 3166.893931118136,
+        "max": 4103.7469492274695,
+        "mean": 3576.1966336798014
+      },
+      "ac": {
+        "min": 1,
+        "max": 1,
+        "mean": 1
+      }
+    },
+    "raw_sha256": "6fabeec1ab43e38f821e0d5d989bc60bbc7d12190e1d55962800115e935a6bec"
+  }
+]

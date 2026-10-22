@@ -31,3 +31,7 @@ Los documentos P0-P3 históricos se conservan para auditoría, pero no reabren f
 - [Prompt maestro Codex para corrección por gates](PROMPT_CODEX_P4_ESTABILIZACION_HUD_INTEGRACIONES_2026_10_19.md).
 - [Issue #6 — seguimiento](https://github.com/jaimealonsovargas-rgb/JAIME-INVESTOR-HQ/issues/6).
 - **P4 sigue pendiente de aceptación semántica**; P5/P6 no autorizados. No confundir tests correctos con análisis financiero aceptado.
+
+## Requisitos de diseño futuro registrados (2026-10-22)
+- [Plan_JAIME_P5_P6](Plan_JAIME_P5_P6.md): documento aportado por el usuario, no autorización de implementación ni verificación de proveedores.
+- [Profundidad adaptativa y límites de cierre P4](P4_PROFUNDIDAD_Y_CIERRE.md): encaje con los contratos existentes y condiciones para una ejecución más eficiente. **No inicia P5/P6.**

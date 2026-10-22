@@ -55,7 +55,7 @@ dist/assets/Office-BWzNSeYX.js  127.84 kB │ gzip:  41.85 kB
 dist/assets/index-Tqy2v3WZ.js   258.81 kB │ gzip:  80.54 kB
 dist/assets/World-Bfge8gh9.js   995.07 kB │ gzip: 267.59 kB
 
-[plugin builtin:vite-reporter] 
+[plugin builtin:vite-reporter]
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
@@ -68,4 +68,3 @@ Additional callback time came from the callbacks below and from callbacks under 
 1 callback is listed without a time. Its calls overlapped, so the time inside one call includes work from other calls. To find its cost, profile the build with `node --cpu-prof`:
   - plugin vite:css transform (7 calls)
 See https://rolldown.rs/reference/InputOptions.checks#bundlertimings for more details.
-

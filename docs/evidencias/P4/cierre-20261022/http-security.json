@@ -1,0 +1,152 @@
+{
+  "agents": {
+    "http": 200,
+    "body": {
+      "checked_at": "2026-10-22T15:59:24.498554+00:00",
+      "mode": "ON_DEMAND",
+      "capacity": {
+        "llm": 1,
+        "quant": 2,
+        "fetch": 4
+      },
+      "peaks": {
+        "llm": 1,
+        "quant": 1,
+        "fetch": 1
+      },
+      "active_jobs": 0,
+      "queue": 0,
+      "failures": 19,
+      "runtime": {
+        "state": "NO_LOCAL_MODEL",
+        "runtime": "llama.cpp",
+        "model": null,
+        "endpoint": "http://127.0.0.1:8089",
+        "last_checked_at": "2026-10-22T15:59:24.494021+00:00"
+      },
+      "latest_job": {
+        "attempts": 1,
+        "case_id": "de7188a7-de42-4318-b5ae-e77b5c86dc76",
+        "depends_on": "3e1afa9d-585d-488b-932d-d1342ef67de7",
+        "duration_ms": 8562,
+        "error": "DEPENDENCY_INCOMPLETE",
+        "finished_at": "2026-10-21T10:23:31.481156+00:00",
+        "id": "0a052023-3001-4688-94fa-c69f14a492a9",
+        "input_hash": "78fb0481ec8629ea54c674c4bc00a011c668727948cbf2eafd2da46460b8fa41",
+        "kind": "llm",
+        "model": null,
+        "output_hash": null,
+        "priority": 10,
+        "queued_at": "2026-10-21T10:13:14.710486+00:00",
+        "refresh_public": false,
+        "research_goal": "investable_thesis",
+        "role_id": "cio_chair",
+        "run_key": "history-qualitative-p411-run",
+        "runtime": "llama.cpp",
+        "started_at": "2026-10-21T10:23:22.893371+00:00",
+        "state": "BLOCKED",
+        "template_version": "p4.11-qualitative-debate"
+      },
+      "last_completed": {
+        "attempts": 1,
+        "case_id": "de7188a7-de42-4318-b5ae-e77b5c86dc76",
+        "depends_on": "8b8833a6-23fe-4d96-ac2a-024523bff3d2",
+        "duration_ms": 511,
+        "error": null,
+        "finished_at": "2026-10-21T10:13:17.112839+00:00",
+        "id": "36f60bb5-d121-4f73-8610-36fd3c7719f3",
+        "input_hash": "35c9f0694cc72b6a050adcb6ad38777df7f79051776192809c1060cbb62a3f50",
+        "kind": "quant",
+        "model": null,
+        "output_hash": "43c864034371289604bb5ca92dd33bb9dd88288875f062896e0b47d2160385e9",
+        "priority": 10,
+        "queued_at": "2026-10-21T10:13:14.710395+00:00",
+        "refresh_public": false,
+        "research_goal": "investable_thesis",
+        "role_id": "volatility_regime",
+        "run_key": "history-qualitative-p411-run",
+        "runtime": "python-decimal",
+        "started_at": "2026-10-21T10:13:16.597819+00:00",
+        "state": "SUCCEEDED",
+        "template_version": "p4.11-qualitative-debate"
+      },
+      "roles": 30,
+      "department_states": {
+        "risk": "IDLE",
+        "performance": "IDLE",
+        "committee": "ERROR",
+        "trading_execution": "DONE",
+        "research": "DONE",
+        "quant": "DONE",
+        "systems_data": "DONE"
+      },
+      "orders_enabled": false,
+      "trading_mode": "PAPER_ONLY"
+    }
+  },
+  "master": {
+    "http": 200,
+    "body": {
+      "portfolio_id": "MASTER",
+      "base_currency": "EUR",
+      "trading_mode": "PAPER_ONLY",
+      "orders_enabled": false,
+      "as_of": "2026-10-22T15:59:24.521394Z",
+      "ledger_status": "VERIFIED_APPEND_ONLY",
+      "ledger_hash": "fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836",
+      "events_count": 1,
+      "seeded_at": "2026-10-16T10:12:45.113258Z",
+      "valuation_status": "FRESH",
+      "nav_eur": "10000.00",
+      "cash_eur": "10000.00",
+      "market_value_eur": "0.00",
+      "accruals_eur": "0.00",
+      "liabilities_eur": "0.00",
+      "contributed_eur": "10000.00",
+      "positions_count": 0,
+      "invested_pct": "0E+2",
+      "realized_pnl_eur": "0.00",
+      "unrealized_pnl_eur": "0.00",
+      "income_eur": "0.00",
+      "fees_eur": "0.00",
+      "total_pnl_eur": "0.00",
+      "fx_effect_eur": "0.00",
+      "cumulative_return_pct": "0",
+      "cash_accounts": [
+        {
+          "currency": "EUR",
+          "amount": "10000.00",
+          "reserved": "0",
+          "value_eur": "10000.00",
+          "valuation_status": "FRESH"
+        }
+      ],
+      "positions": [],
+      "provenance": [],
+      "valuation_method": "FIFO; purchase fees capitalized; native-currency journal; EUR base; HALF_EVEN display to cents; no short or liabilities in V1",
+      "performance": {
+        "nav_eur": "10000.00",
+        "cash_eur": "10000.00",
+        "market_value_eur": "0.00",
+        "realized_pnl_eur": "0.00",
+        "unrealized_pnl_eur": "0.00",
+        "fx_effect_eur": "0.00",
+        "total_pnl_eur": "0.00",
+        "cumulative_return_pct": "0",
+        "valuation_status": "FRESH",
+        "as_of": "2026-10-22T15:59:24.521394+00:00",
+        "daily_return_pct": "0",
+        "twr_pct": "0",
+        "mwr_xirr_pct": null,
+        "max_drawdown_pct": "0",
+        "reason": "TWR/drawdown sobre snapshots diarios existentes, sin interpolación; XIRR requiere 30 días y raíz única convencional.",
+        "observations": 5,
+        "period_start": "2026-10-16T10:12:45.122906+00:00",
+        "period_end": "2026-10-21T09:58:51.509817+00:00"
+      }
+    }
+  },
+  "orders_http": 403,
+  "schema": "0005_data_history",
+  "alembic_check": "No new upgrade operations detected."
+}
