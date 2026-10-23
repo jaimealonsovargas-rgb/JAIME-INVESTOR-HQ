@@ -2,6 +2,7 @@
 import re
 from pydantic import Field
 from app.research_contracts import Strict, Opinion, Claim
+from app.research_semantics import validate_financial_prose
 
 
 class CompactResearch(Strict):
@@ -19,9 +20,8 @@ def validate_compact(answer: CompactResearch, pack: dict) -> tuple[Opinion, dict
         raise ValueError('NUMBERS_OUTSIDE_CLAIMS')
     if re.search(r'\b(comprar|vender|buy|sell|rentabilidad garantizada|subirá|bajará)\b', prose, re.I):
         raise ValueError('UNSUPPORTED_DIRECTIONAL_VIEW')
-    if any(row['scope'] == 'DERIVED_FEATURE' and row['usable'] for row in pack['records']) and re.search(
-            r'\b(no se (?:calculan|calcularon|han calculado) (?:estad[ií]sticas|m[eé]tricas|indicadores)|sin (?:estad[ií]sticas|m[eé]tricas) calculadas)\b', prose, re.I):
-        raise ValueError('CONTRADICTS_COMPUTED_FEATURES')
+    for text in [answer.summary, *answer.limitations]:
+        validate_financial_prose(text, pack)
     excerpts = [usable[eid] for eid in answer.evidence_ids]
     facts = [Claim(claim_type='FACT', text=row['excerpt'], evidence_ids=[row['evidence_id']], confidence='MEDIUM')
              for row in excerpts]

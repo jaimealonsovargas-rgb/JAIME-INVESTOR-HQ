@@ -4,6 +4,8 @@ from difflib import SequenceMatcher
 from typing import Literal
 from pydantic import Field
 from app.research_contracts import Strict, Opinion, Claim
+from app.research_brief import computed_context
+from app.research_semantics import validate_financial_prose
 
 
 class BullArgument(Strict):
@@ -50,17 +52,15 @@ class ChairResponse(Strict):
 
 CONTRACTS = {'bull_advocate': BullResponse, 'bear_skeptic': BearResponse, 'cio_chair': ChairResponse}
 TASKS = {
-    'bull_advocate': 'Construye el mejor caso A FAVOR de la tesis. Explica un mecanismo causal CONDICIONAL, con evidencias citadas, supuesto y falsación. No enumeres solo carencias. Uno a tres argumentos diferentes.',
-    'bear_skeptic': 'Construye el mejor caso EN CONTRA. Refuta o limita un mecanismo concreto de Bull mediante una evidencia contraria o laguna específica. Cita target_bull_argument_id. No copies su tesis ni su mecanismo. Explica qué prueba cambiaría tu juicio.',
-    'cio_chair': 'Confronta cada argumento Bull y su objeción Bear por ID. Explica el desacuerdo real, pondera las fuentes y límites y sintetiza sin BUY/SELL ni órdenes. Abstente si la evidencia no resuelve el desacuerdo.',
+    'bull_advocate': 'UN argumento favorable: mecanismo causal CONDICIONAL, evidencia citada, supuesto no demostrado y falsación observable. No enumeres solo carencias.',
+    'bear_skeptic': 'UNA objeción a un mecanismo de Bull: cita su ID, refuta con evidencia contraria o laguna concreta y explica qué prueba cambiaría tu juicio. No copies a Bull.',
+    'cio_chair': 'UN desacuerdo entre el par Bull/Bear citado por IDs. Pondera fuentes y límites, conserva ambas posturas y sintetiza. Abstente si la evidencia no resuelve el desacuerdo.',
 }
 for role_id in TASKS:
-    TASKS[role_id] += (' Prioriza UN argumento sólido y breve; añade otros solo si son independientes. '
-        'Redacta argumentos cualitativos: no copies cifras, fechas, porcentajes ni cantidades en palabras. '
-        'Python ya presenta los valores exactos y sus fuentes. Los identificadores van solo en campos de IDs. '
-        'No cambies ni niegues los hechos aportados para defender tu rol. Un mecanismo explica cómo una causa produce un efecto; '
-        'no escribas la etiqueta "mecanismo causal" como respuesta. El supuesto debe ser una condición NO demostrada, '
-        'no un hecho contrario a las fuentes. Menos de sesenta palabras por campo.')
+    TASKS[role_id] += (' Una oración breve por campo: unas quince palabras, máximo ciento diez caracteres. '
+        'Prosa cualitativa sin cifras, fechas, porcentajes ni cantidades escritas; Python muestra las métricas. '
+        'IDs solo en campos de IDs. No niegues los hechos aportados. El mecanismo explica causa y efecto, '
+        'no repite su etiqueta. Sin BUY/SELL ni órdenes.')
 
 
 def tokens(text):
@@ -99,8 +99,22 @@ def validate_arguments(role_id, response, pack, prior):
         numeric = r'(?<![\w])[-+]?\d+(?:[.,]\d+)*'
         source_numbers = set(re.findall(numeric, ' '.join(e['excerpt'] for e in pack['records'] if e['id'] in citations)))
         text = ' '.join(v for k, v in row.items() if isinstance(v, str) and not k.endswith('_id'))
+        for key, value in row.items():
+            if isinstance(value, str) and not key.endswith('_id'):
+                validate_financial_prose(value, pack)
         if any(n not in source_numbers for n in re.findall(numeric, text)):
             raise ValueError('UNGROUNDED_NUMBER')
+        # Reject an observed metric merely copied into the causal slot. Do not
+        # pretend a whitelist of Spanish verbs is a universal semantic verifier.
+        if role_id == 'bull_advocate' and any(duplicate(row['mechanism'], fact['finding'])
+                for fact in computed_context(pack)['findings']):
+            raise ValueError('DEBATE_MECHANISM_MISSING')
+        if role_id == 'bull_advocate' and (duplicate(row['thesis'], row['assumption']) or
+                re.match(r'\s*mecanismo causal(?: condicional)?\s*:', row['mechanism'], re.I)):
+            raise ValueError('DEBATE_CONTRACT_PARROT')
+        if role_id != 'cio_chair' and any(re.search(r'\b(?:en|de|del|que|pero|se|la|el|un|una)\s*$', row[field], re.I)
+                for field in ('mechanism', 'falsification' if role_id == 'bull_advocate' else 'change_of_mind')):
+            raise ValueError('DEBATE_INCOMPLETE_SENTENCE')
         path = next((e['excerpt'].casefold() for e in pack['records']
                      if e.get('data_kind') == 'derived_feature' and e['excerpt'].startswith('trend_path:') and e['usable']), '')
         prose = text.casefold()
@@ -124,6 +138,8 @@ def validate_arguments(role_id, response, pack, prior):
         citations = {i for row in rows for i in row['evidence_ids']}
         numbers = set(re.findall(numeric, ' '.join(e['excerpt'] for e in pack['records'] if e['id'] in citations)))
         narrative = ' '.join([data['synthesis'], *data['unknowns']])
+        for text in [data['synthesis'], *data['unknowns']]:
+            validate_financial_prose(text, pack)
         if any(n not in numbers for n in re.findall(numeric, narrative)):
             raise ValueError('UNGROUNDED_NUMBER')
     return {'state': 'ACCEPTED', 'basis': 'STRUCTURAL_AND_LEXICAL_CHECKS_ONLY', 'human_review': 'PENDING'}
