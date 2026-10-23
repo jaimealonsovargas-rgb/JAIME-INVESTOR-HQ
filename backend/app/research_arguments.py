@@ -76,7 +76,7 @@ def duplicate(a, b):
 
 
 def validate_arguments(role_id, response, pack, prior):
-    """Structural/lexical guard only, NOT a proof of financial reasoning."""
+    """Structural guard and narrow factual contradiction checks, not full semantic proof."""
     available = {e['id'] for e in pack['records'] if e['usable']}
     bull = {a['argument_id']: a for a in prior.get('bull_advocate', {}).get('arguments', [])}
     bear = {a['argument_id']: a for a in prior.get('bear_skeptic', {}).get('objections', [])}
@@ -101,6 +101,13 @@ def validate_arguments(role_id, response, pack, prior):
         text = ' '.join(v for k, v in row.items() if isinstance(v, str) and not k.endswith('_id'))
         if any(n not in source_numbers for n in re.findall(numeric, text)):
             raise ValueError('UNGROUNDED_NUMBER')
+        path = next((e['excerpt'].casefold() for e in pack['records']
+                     if e.get('data_kind') == 'derived_feature' and e['excerpt'].startswith('trend_path:') and e['usable']), '')
+        prose = text.casefold()
+        if 'tanto subidas como bajadas' in path and re.search(
+                r'(subi[oó]|baj[oó]|creci[oó]|cay[oó]|alza|descenso|crecimiento|ca[ií]da).{0,35}(cada d[ií]a|todos los d[ií]as|sin retrocesos|sin subidas)|'
+                r'(cada d[ií]a|todos los d[ií]as|sin retrocesos|sin subidas).{0,35}(subi[oó]|baj[oó]|creci[oó]|cay[oó]|alza|descenso|crecimiento|ca[ií]da)', prose):
+            raise ValueError('CONTRADICTS_OBSERVED_PATH')
         if role_id == 'bear_skeptic':
             target = bull.get(row['target_bull_argument_id'])
             if not target:

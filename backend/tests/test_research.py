@@ -2,6 +2,7 @@ import asyncio
 import json
 import sqlite3
 from dataclasses import replace
+from decimal import Decimal
 from datetime import datetime, timezone
 import httpx
 import pytest
@@ -85,6 +86,26 @@ def test_no_model_no_fake_output():
         llm = LocalLLM(transport=httpx.MockTransport(lambda r: httpx.Response(503)))
         with pytest.raises(NoLocalModel): await llm.chat(POLICY, {})
         assert llm.status['state'] == 'NO_LOCAL_MODEL'
+    asyncio.run(scenario())
+
+
+def test_bounded_debate_schema_and_local_format_error():
+    from app.local_llm import argument_schema
+    from app.research_arguments import BullResponse
+    schema = argument_schema(BullResponse, {'evidence_pack': {'records': [{'id':'E1','usable':True}]}})
+    assert schema['properties']['arguments']['maxItems'] == 1
+    argument = schema['$defs']['BullArgument']['properties']
+    assert argument['thesis']['maxLength'] <= 120 and argument['mechanism']['maxLength'] <= 120
+    assert argument['supporting_evidence_ids']['items']['enum'] == ['E1']
+    def handler(request):
+        if request.url.path.endswith('/models'):
+            return httpx.Response(200, json={'data':[{'id':'TEST_ONLY'}]})
+        return httpx.Response(500, json={'error':{'message':'The model produced output that does not match the expected peg-native format'}})
+    async def scenario():
+        llm = LocalLLM(transport=httpx.MockTransport(handler))
+        with pytest.raises(ValueError, match='LOCAL_LLM_FORMAT'):
+            await llm.chat('TEST_ONLY', {'evidence_pack':{'records':[]}}, contract=BullResponse,
+                           max_tokens=384, timeout_seconds=1)
     asyncio.run(scenario())
 
 
@@ -224,6 +245,34 @@ def test_no_model_pipeline_does_not_fabricate_results(migrated, monkeypatch):
     asyncio.run(scenario())
 
 
+def test_optional_summary_cannot_promote_expired_evidence(migrated, monkeypatch):
+    inject_test_market(monkeypatch)
+    from app.data_service import DataService
+
+    async def scenario():
+        engine, store, _ = setup_store(migrated)
+        case = store.create_case({'id':'TEST_ONLY','symbol':'TEST_ONLY','asset_class':'FX'},
+                                 'Describir observaciones.', 'expiring-case', 'descriptive_research')
+        service = ResearchService(engine, DataService(engine), None,
+                                  LocalLLM(transport=httpx.MockTransport(lambda r: httpx.Response(503))))
+        await service.start()
+        try:
+            service.run(case['id'], 'summary-without-model', depth='ordinary', summary=True)
+            for _ in range(200):
+                if all(j['state'] not in ('RUNNING','QUEUED') for j in store.list('agent_jobs')): break
+                await asyncio.sleep(.01)
+            fresh = service.dossier(case['id'])
+            assert fresh['status'] == 'PARTIAL' and fresh['quality']['state'] == 'VERIFIED_DATA'
+            monkeypatch.setattr('app.research_service.current_evidence',
+                                lambda data, items: [{**e, 'freshness':'STALE'} if e['scope']=='INSTRUMENT' else e for e in items])
+            expired = service.dossier(case['id'])
+            assert expired['status'] == 'PARTIAL' and expired['quality']['state'] == 'ABSTAINED'
+        finally:
+            await service.stop()
+            engine.dispose()
+    asyncio.run(scenario())
+
+
 def test_chair_preserves_both_views_and_lineage(migrated, monkeypatch):
     inject_test_market(monkeypatch)
     from app.data_service import DataService
@@ -260,11 +309,85 @@ def test_derived_features_decimal_and_no_mixed_feeds():
     result=features(evidence)
     assert result['sample_size']==3
     assert next(m for m in result['items'] if m['name']=='period_return')['value']=='0.2'
+    assert next(m for m in result['items'] if m['name']=='max_drawdown_observed')['value']=='0'
     assert 'no contiene bajadas' in result['path_description']
     evidence[-1]['content']['value'] = '10.5'
     assert 'tanto subidas como bajadas' in features(evidence)['path_description']
+    assert abs(Decimal(next(m for m in features(evidence)['items'] if m['name']=='max_drawdown_observed')['value']) - (Decimal('10.5')/Decimal('11')-1)) < Decimal('1e-27')
     evidence[-1]['content']['feed']='different'
     assert features(evidence)['state']=='NO_DATA'
+
+
+def test_adaptive_plan_idempotency_and_historical_runs(migrated):
+    engine, store, case = setup_store(migrated)
+    ordinary = store.enqueue(case['id'], 'ordinary-key', 10, False, 'ordinary', False)
+    assert [j['role_id'] for j in ordinary] == ['data_quality', 'momentum_trend', 'volatility_regime']
+    assert all(j['analysis_depth'] == 'ordinary' and j['max_attempts'] == 1 for j in ordinary)
+    assert store.enqueue(case['id'], 'ordinary-key', 10, False, 'ordinary', False) == ordinary
+    with pytest.raises(ValueError, match='IDEMPOTENCY_CONFLICT'):
+        store.enqueue(case['id'], 'ordinary-key', 10, False, 'deep', False)
+    store.cancel(ordinary[0]['id'])
+    deep = store.enqueue(case['id'], 'deep-key', 10, False, 'deep', False)
+    assert [j['role_id'] for j in deep][-3:] == ['bull_advocate', 'bear_skeptic', 'cio_chair']
+    assert len(deep) == 7 and len({j['plan_hash'] for j in deep}) == 1
+    assert deep[0]['plan_hash'] != ordinary[0]['plan_hash']
+    store.cancel(deep[0]['id'])
+    legacy = store.enqueue(case['id'], 'legacy-key', 10, False)
+    assert len(legacy) == 9 and legacy[0]['analysis_depth'] is None
+    engine.dispose()
+
+
+def test_new_run_timeout_never_retries(migrated):
+    async def scenario():
+        engine, store, case = setup_store(migrated)
+        service = ResearchService(engine, None, None)
+        service.timeout_seconds = .01
+        job = store.enqueue(case['id'], 'bounded-key', 10, False, 'ordinary')[0]
+        claimed = store.claim('fetch')
+        async def too_slow(_job):
+            await asyncio.sleep(.1)
+        service.perform = too_slow
+        await service.execute(claimed)
+        done = store.get('agent_jobs', job['id'])
+        assert done['state'] == 'FAILED' and done['error'] == 'TIMEOUT' and done['attempts'] == 1
+        assert store.claim('fetch') is None
+        engine.dispose()
+    asyncio.run(scenario())
+
+
+def test_compact_summary_rejects_invented_direction_and_citations():
+    from app.research_compact import CompactResearch, validate_compact
+    pack = {'records': [{'id':'E1','evidence_id':'exact-source','scope':'INSTRUMENT','usable':True,
+                         'excerpt':'TEST_ONLY historical observation'}]}
+    valid = CompactResearch(summary='La evidencia describe una serie histórica, pero no permite pronosticar su trayectoria.',
+                            evidence_ids=['E1'], limitations=['Faltan datos de ejecución.'])
+    narrative, quality = validate_compact(valid, pack)
+    assert quality['state'] == 'PROVISIONAL' and narrative.claims[0].evidence_ids == ['exact-source']
+    for answer, expected in [
+        (valid.model_copy(update={'evidence_ids':['MADE_UP']}), 'UNKNOWN_OR_UNUSABLE_EVIDENCE'),
+        (valid.model_copy(update={'summary':'La rentabilidad será 25%.'}), 'NUMBERS_OUTSIDE_CLAIMS'),
+        (valid.model_copy(update={'summary':'Comprar ahora asegura una subida.'}), 'UNSUPPORTED_DIRECTIONAL_VIEW'),
+    ]:
+        with pytest.raises(ValueError, match=expected): validate_compact(answer, pack)
+    with_metrics = {'records': [*pack['records'], {'id':'E2','evidence_id':'derived-source','scope':'DERIVED_FEATURE',
+                                                   'usable':True,'excerpt':'period_return: TEST_ONLY'}]}
+    contradiction = valid.model_copy(update={'limitations':['No se calculan estadísticas.']})
+    with pytest.raises(ValueError, match='CONTRADICTS_COMPUTED_FEATURES'):
+        validate_compact(contradiction, with_metrics)
+
+
+def test_bull_cannot_deny_mixed_observed_path():
+    from app.research_arguments import BullResponse, validate_arguments
+    response = BullResponse.model_validate({'arguments':[{'argument_id':'B1',
+        'thesis':'El instrumento subió todos los días de la muestra.',
+        'mechanism':'La demanda hipotética explicaría una continuidad, si se comprobara.',
+        'supporting_evidence_ids':['E1'], 'assumption':'La demanda persiste.',
+        'falsification':'Un retroceso posterior invalidaría la hipótesis.'}]})
+    pack = {'records':[{'id':'E1','data_kind':'ohlcv','usable':True,'excerpt':'Serie diaria TEST_ONLY.'},
+                       {'id':'E2','data_kind':'derived_feature','usable':True,
+                        'excerpt':'trend_path: La muestra contiene tanto subidas como bajadas; no crece ni cae todos los días.'}]}
+    with pytest.raises(ValueError, match='CONTRADICTS_OBSERVED_PATH'):
+        validate_arguments('bull_advocate', response, pack, {})
 
 
 def test_numeric_substring_is_not_evidence():
@@ -371,8 +494,8 @@ def inject_test_market(monkeypatch):
     monkeypatch.setattr('app.research_service.current_evidence',lambda data,items:items)
 
 
-@pytest.mark.parametrize('goal,expected_count,quality', [('macro_reference',4,'NOT_APPLICABLE'), ('data_quality',4,'NOT_APPLICABLE'), ('investable_thesis',9,'ABSTAINED')])
-def test_objective_without_market_never_calls_model(migrated, monkeypatch, goal, expected_count, quality):
+@pytest.mark.parametrize('goal,expected_count,quality,depth', [('macro_reference',4,'NOT_APPLICABLE',None), ('data_quality',4,'NOT_APPLICABLE',None), ('descriptive_research',4,'ABSTAINED',None), ('investable_thesis',9,'ABSTAINED',None), ('descriptive_research',3,'ABSTAINED','ordinary')])
+def test_objective_without_market_never_calls_model(migrated, monkeypatch, goal, expected_count, quality, depth):
     from app.data_service import DataService
     monkeypatch.setattr('app.research_service.collect', lambda *args: [])
     class NeverModel:
@@ -386,7 +509,7 @@ def test_objective_without_market_never_calls_model(migrated, monkeypatch, goal,
         service = ResearchService(engine, DataService(engine), None, NeverModel())
         await service.start()
         try:
-            service.run(case['id'], 'objective-run')
+            service.run(case['id'], 'objective-run', depth=depth)
             for _ in range(200):
                 if all(j['state']=='SUCCEEDED' for j in store.list('agent_jobs')): break
                 await asyncio.sleep(.01)

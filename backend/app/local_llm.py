@@ -44,11 +44,11 @@ def argument_schema(contract, data):
     for definition in [schema, *schema.get('$defs', {}).values()]:
         for name, prop in definition.get('properties', {}).items():
             if prop.get('type') == 'string' and not name.endswith('_id') and 'enum' not in prop and 'const' not in prop:
-                prop.update(pattern='^[^0-9]*$', maxLength=min(prop.get('maxLength', 260), 500 if name == 'synthesis' else 260))
+                prop.update(pattern='^[^0-9]*$', maxLength=min(prop.get('maxLength', 120), 220 if name == 'synthesis' else 120))
             if name in ('supporting_evidence_ids', 'counter_evidence_ids', 'evidence_ids') and aliases:
                 prop['items'] = {'type': 'string', 'enum': aliases}
             if name == 'unknowns':
-                prop.update(maxItems=2, items={'type': 'string', 'pattern': '^[^0-9]*$', 'minLength': 1, 'maxLength': 260})
+                prop.update(maxItems=2, items={'type': 'string', 'pattern': '^[^0-9]*$', 'minLength': 1, 'maxLength': 120})
     return schema
 
 
@@ -108,7 +108,7 @@ class LocalLLM:
         self.status['last_checked_at'] = utc()
         return self.status
 
-    async def chat(self, system, data, max_tokens=700, contract=None, seed=17):
+    async def chat(self, system, data, max_tokens=700, contract=None, seed=17, timeout_seconds=295):
         if (await self.probe())['state'] != 'AVAILABLE':
             raise NoLocalModel()
         # Conservative budget, no silently truncated evidence or huge external documents.
@@ -123,11 +123,17 @@ class LocalLLM:
                    'chat_template_kwargs': {'enable_thinking': self.bounded_thinking},
                    'reasoning_effort': 'low' if self.bounded_thinking else 'none',
                    'response_format': {'type': 'json_object', 'schema': schema}}
-        async with httpx.AsyncClient(trust_env=False, follow_redirects=False, transport=self.transport, timeout=295) as client:
+        async with httpx.AsyncClient(trust_env=False, follow_redirects=False, transport=self.transport, timeout=timeout_seconds) as client:
             try:
                 response = await client.post(self.endpoint + '/v1/chat/completions', json=payload)
             except httpx.TimeoutException:
                 raise TimeoutError('LOCAL_LLM_TIMEOUT') from None
+            if response.status_code >= 500:
+                try:
+                    failure = response.json().get('error', {}).get('message', '')
+                except ValueError:
+                    failure = ''
+                raise ValueError('LOCAL_LLM_FORMAT' if 'peg-native format' in failure else 'LOCAL_LLM_SERVER_ERROR')
             response.raise_for_status()
             if len(response.content) > 64000:
                 raise ValueError('OUTPUT_BUDGET')

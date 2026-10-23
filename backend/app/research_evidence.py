@@ -98,8 +98,14 @@ def features(evidence):
         mean = sum(values)/len(values); avg = sum(changes)/len(changes)
         sd = (sum((x-avg)**2 for x in changes)/(len(changes)-1)).sqrt()
         level_sd = (sum((x-mean)**2 for x in values)/(len(values)-1)).sqrt()
+        peak = values[0]
+        drawdowns = []
+        for value in values:
+            peak = max(peak, value)
+            drawdowns.append(value/peak-1)
         metrics = {'period_return': values[-1]/values[0]-1, 'mean_level': mean, 'sample_volatility': sd,
                    'last_change': changes[-1], 'range': max(values)-min(values), 'min_level': min(values), 'max_level': max(values),
+                   'max_drawdown_observed': min(drawdowns),
                    **({'z_score': (values[-1]-mean)/level_sd} if level_sd else {})}
         return {'state': 'STALE' if any(e['freshness'] != 'FRESH' for e in rows) else 'AVAILABLE', 'frequency': 'observed intervals; not annualized',
                 'sample_size': len(rows), 'path_description': path_description,

@@ -57,7 +57,8 @@ def router(service):
 
     @api.post('/api/research/cases/{case_id}/run')
     async def run(case_id: str, body: RunCase, request: Request):
-        return call(service.run, case_id, mutation(request), body.priority, body.refresh_public)
+        return call(service.run, case_id, mutation(request), body.priority, body.refresh_public,
+                    body.analysis_depth, body.include_local_summary)
 
     @api.get('/api/agent-jobs/{job_id}')
     def job(job_id: str):

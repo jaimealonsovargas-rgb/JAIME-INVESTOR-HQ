@@ -49,7 +49,7 @@ class Opinion(Strict):
 
 
 class CreateCase(Strict):
-    research_goal: Literal['data_quality', 'macro_reference', 'investable_thesis'] | None = None
+    research_goal: Literal['data_quality', 'macro_reference', 'descriptive_research', 'investable_thesis'] | None = None
     instrument_id: str = Field(min_length=1, max_length=64)
     question: str = Field(default='Evaluar evidencia, contexto y límites del instrumento.', min_length=1, max_length=800)
 
@@ -57,6 +57,8 @@ class CreateCase(Strict):
 class RunCase(Strict):
     priority: int = Field(default=10, ge=0, le=100)
     refresh_public: bool = False
+    analysis_depth: Literal['ordinary', 'deep'] = 'ordinary'
+    include_local_summary: bool = False
 
 
 def ground(opinion: Opinion, evidence: list[dict]) -> list[dict]:

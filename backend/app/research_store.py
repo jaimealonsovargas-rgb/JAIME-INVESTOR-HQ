@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from app.research_schema import TABLES
 from app.research_contracts import canonical, digest, utc
 from app.research_roles import ROLES, pipeline, TEMPLATE_VERSION
-from app.research_planning import research_goal
+from app.research_planning import research_goal, planned_roles
 
 TERMINAL = {'SUCCEEDED', 'FAILED', 'CANCELLED', 'BLOCKED', 'NO_LOCAL_MODEL'}
 
@@ -82,29 +82,42 @@ class ResearchStore:
             self.audit(c, 'CASE_CREATED', case_id=payload['id'])
         return payload
 
-    def enqueue(self, case_id, key, priority, refresh):
+    def enqueue(self, case_id, key, priority, refresh, depth=None, summary=False):
         case = self.get('research_cases', case_id)
+        if depth not in (None, 'ordinary', 'deep') or (depth != 'ordinary' and summary):
+            raise ValueError('INVALID_RESEARCH_PLAN')
         with self.connection(True) as c:
             old = c.execute('SELECT payload FROM agent_jobs WHERE case_id=? AND run_key=? ORDER BY rowid', (case_id, key)).fetchall()
             if old:
                 jobs = [json.loads(r[0]) for r in old]
-                if jobs[0]['priority'] != priority or jobs[0]['refresh_public'] != refresh:
+                if (jobs[0]['priority'] != priority or jobs[0]['refresh_public'] != refresh
+                    or jobs[0].get('analysis_depth') != depth or jobs[0].get('include_local_summary', False) != summary):
                     raise ValueError('IDEMPOTENCY_CONFLICT')
                 return jobs
             if c.execute("SELECT 1 FROM agent_jobs WHERE case_id=? AND state IN ('QUEUED','RUNNING')", (case_id,)).fetchone():
                 raise ValueError('CASE_ALREADY_RUNNING')
             jobs = []; previous = None
-            goal = research_goal(case)
-            roles = pipeline(case['instrument']['asset_class']) if goal=='investable_thesis' else ['data_quality','momentum_trend','volatility_regime','macro_global']
+            goal = (research_goal(case) if depth is None else
+                    'investable_thesis' if depth == 'deep' else
+                    research_goal(case) if research_goal(case) in ('data_quality', 'macro_reference') else 'descriptive_research')
+            roles = (pipeline(case['instrument']['asset_class']) if goal=='investable_thesis'
+                     else ['data_quality','momentum_trend','volatility_regime','macro_global']) if depth is None else planned_roles(case['instrument']['asset_class'], depth, summary)
+            plan_hash = digest({'case_request_hash': case['request_hash'], 'depth': depth, 'summary': summary,
+                                'goal': goal, 'roles': roles, 'priority': priority, 'refresh_public': refresh})
             for role in roles:
-                kind = 'llm' if ROLES[role]['llm_required'] and goal=='investable_thesis' else 'fetch' if role == 'data_quality' else 'quant'
+                kind = 'llm' if (ROLES[role]['llm_required'] and goal=='investable_thesis') or (depth == 'ordinary' and role == 'reporting_postmortem') else 'fetch' if role == 'data_quality' else 'quant'
                 job = {'id': str(uuid.uuid4()), 'role_id': role, 'case_id': case_id, 'run_key': key, 'state': 'QUEUED',
                        'kind': kind, 'priority': priority, 'depends_on': previous, 'queued_at': utc(), 'started_at': None,
                        'finished_at': None, 'input_hash': None, 'output_hash': None, 'error': None, 'runtime': None,
-                       'model': None, 'research_goal': goal, 'template_version': TEMPLATE_VERSION, 'attempts': 0, 'refresh_public': refresh, 'duration_ms': None}
+                       'model': None, 'research_goal': goal, 'template_version': TEMPLATE_VERSION, 'attempts': 0, 'refresh_public': refresh, 'duration_ms': None,
+                       'analysis_depth': depth, 'include_local_summary': summary, 'plan_hash': plan_hash,
+                       'max_attempts': 2 if depth is None else 1,
+                       'timeout_seconds': 300 if depth is None else 90 if kind == 'llm' else 60,
+                       'llm_max_tokens': 1400 if depth is None else 384 if depth == 'deep' else 256,
+                       'case_budget_seconds': None if depth is None else 270 if depth == 'deep' else 90}
                 c.execute('INSERT INTO agent_jobs VALUES (?,?,?,?,?,?,?,?,?)', (job['id'], case_id, role, key, kind, 'QUEUED', priority, previous, canonical(job)))
                 jobs.append(job); previous = job['id']
-            self.audit(c, 'RUN_QUEUED', case_id=case_id, run_key=key, jobs=[j['id'] for j in jobs])
+            self.audit(c, 'RUN_QUEUED', case_id=case_id, run_key=key, plan_hash=plan_hash, jobs=[j['id'] for j in jobs])
         return jobs
 
     def update(self, c, job):
@@ -155,7 +168,7 @@ class ResearchStore:
         with self.connection(True) as c:
             for row in c.execute("SELECT payload FROM agent_jobs WHERE state='RUNNING'").fetchall():
                 job = json.loads(row[0])
-                job.update(state='QUEUED' if job['attempts'] < 2 else 'FAILED', error='RESTART_INTERRUPTED')
+                job.update(state='QUEUED' if job['attempts'] < job.get('max_attempts', 2) else 'FAILED', error='RESTART_INTERRUPTED')
                 self.update(c, job)
             self.audit(c, 'SCHEDULER_RECOVERY')
 

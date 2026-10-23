@@ -1,7 +1,18 @@
 """Objective routing and typed evidence, independent of a generative model."""
 from app.research_contracts import digest, sanitize
 
-GOALS = {'data_quality', 'macro_reference', 'investable_thesis'}
+GOALS = {'data_quality', 'macro_reference', 'descriptive_research', 'investable_thesis'}
+
+
+def planned_roles(asset_class, depth, summary=False):
+    """Route work by asset and depth, without changing the 30-role registry."""
+    asset = asset_class.upper()
+    quantitative = ['data_quality', 'momentum_trend', 'volatility_regime']
+    if depth == 'ordinary':
+        return quantitative + (['reporting_postmortem'] if summary else [])
+    specialist = ('fundamental_equity' if asset == 'EQUITY' else
+                  'credit_fixed_income' if 'BOND' in asset else 'mean_reversion')
+    return [quantitative[0], specialist, *quantitative[1:], 'bull_advocate', 'bear_skeptic', 'cio_chair']
 
 
 def role_evidence_gap(role_id, evidence):
@@ -12,6 +23,13 @@ def role_evidence_gap(role_id, evidence):
                  and e['content'].get('data_kind') == 'macro_series']
         if not macro:
             return 'NO_DATA: no hay series macroeconómicas relevantes para una explicación del instrumento; una referencia de divisas no identifica causas ni régimen macro.'
+        return None
+    if role_id in ('fundamental_equity', 'valuation', 'credit_fixed_income'):
+        kinds = ({'filing', 'financial_statement'} if role_id != 'credit_fixed_income'
+                 else {'bond_terms', 'credit_filing'})
+        if not any(e['scope'] == 'INSTRUMENT' and e['rights_ok'] and e.get('available', True)
+                   and e['freshness'] == 'FRESH' and e['content'].get('data_kind') in kinds for e in evidence):
+            return 'NO_DATA: faltan datos fundamentales o contractuales autorizados para este especialista.'
         return None
     if role_id not in ('market_structure', 'liquidity_slippage'):
         return None
@@ -62,7 +80,7 @@ def evidence_pack(evidence):
 
 def sufficiency(goal, pack):
     direct = [e for e in pack['records'] if e['scope']=='INSTRUMENT' and e['usable']]
-    if goal != 'investable_thesis':
+    if goal not in ('investable_thesis', 'descriptive_research'):
         return {'state': 'NOT_APPLICABLE', 'reason': 'Informe de referencia/calidad; debate direccional no aplicable.'}
     groups = {}
     for e in direct:
@@ -73,4 +91,6 @@ def sufficiency(goal, pack):
     # Conservative evidence gate, not a suitability assessment or P5 risk veto.
     if not any(len(times) >= 3 for times in groups.values()):
         return {'state': 'ABSTAINED', 'reason': 'ABSTAIN_INSUFFICIENT_EVIDENCE: falta evidencia de mercado comparable y vigente.'}
+    if goal == 'descriptive_research':
+        return {'state': 'VERIFIED_DATA', 'reason': 'Serie comparable disponible para descripción Python; no valida una tesis de inversión.'}
     return {'state': 'PENDING_REVIEW', 'reason': 'Evidencia mínima disponible; los argumentos todavía requieren validación.'}
