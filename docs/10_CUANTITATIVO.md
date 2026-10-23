@@ -8,8 +8,20 @@ Métricas con muestras suficientes: retorno, volatilidad, Sharpe con risk-free/f
 
 El comité recibe evidencias y objeciones. Riesgos tiene veto final. Backtest ≠ resultados reales ni prueba de rentabilidad futura.
 
-## Contrato futuro de preparación P5 (diseño, no implementación)
+## Contrato P5 futuro — no implementado ni autorizado
 
-Separar `RESEARCH_READY`, `BACKTEST_READY` y `EXECUTION_SIM_READY` por dataset, universo, instrumento y uso permitido. El histórico P2 actual no certifica por sí solo universo point-in-time, exclusiones y bajas, fecha de publicación/disponibilidad de fundamentales, revisiones, corporate actions, calendarios, bid/ask ni costes. Un backtest debe rechazar datos conocidos únicamente después de la fecha simulada. Registrar `period_end`, `published_at`, `available_to_strategy_at`, revisión, derechos y procedencia cuando existan; ausencia significa capacidad no verificada.
+**Objetivo:** fábrica científica reproducible, no búsqueda de una estrategia «perfecta». El LLM solo propone hipótesis estructuradas; el motor Python ejecuta backtests, métricas y controles. Los 30 roles siguen siendo lógicos y se seleccionan por mandato; Bull/Bear/Chair revisan únicamente supervivientes tras gates deterministas.
 
-El futuro Strategy Genome será una especificación validada, nunca Python arbitrario ejecutado desde un LLM. Registrar cada hipótesis y ensayo, también los descartados, con hashes de datos/código/configuración, genealogía y uso de OOS. Python calculará señales, métricas, costes y pruebas adversariales. Bull/Bear/Chair revisarán solo candidatos que superen filtros deterministas y con evidencia suficiente. Ver `docs/ARQUITECTURA_AUTONOMIA_P4_P5.md`; **P5 sigue sin autorización de implementación**.
+**StrategyGenome v1** (diseño): hipótesis, mecanismo económico, falsación, familia, universo point-in-time, features, señales, rebalanceo, límites, costes, ventanas train/validation/untouched-OOS, versión y genealogía. Validación de schema, semántica y capacidades P2 antes de compilar un experimento allowlisted. Prohibidos scripts arbitrarios generados por el LLM.
+
+**ExperimentRegistry / StrategyGraveyard** (diseño): registrar todos los trials **antes** de observar su resultado, incluidos fallos y variantes; preservar parent/child, dataset snapshot hash, code hash, parameter hash, modelo de costes, calendario, universo, métricas, razón de rechazo y exposiciones heredadas a OOS. Nunca conservar solo los ganadores ni reutilizar un OOS contaminado como virgen.
+
+**Orden de filtros:** integridad temporal/universo → backtest fixture → fees/spread/slippage → estabilidad de parámetros y contribuciones → regímenes y leave-one-out → walk-forward → PSR/DSR/PBO-CSCV **si hay muestras y condiciones válidas** → untouched OOS → comité → cartera y veto determinista. No convertir Sharpe, PBO ni DSR en garantías.
+
+**Métricas candidatas:** CAGR, volatilidad, Sharpe con risk-free/frecuencia, PSR/DSR/PBO aplicables, Sortino, Calmar, máximo drawdown y duración, turnover, hit rate, payoff, profit factor, exposiciones, beta, correlaciones, concentración por activo/trade/año, sensibilidad a costes, robustez de parámetros, regímenes y proxy de capacidad. Cada métrica exige definiciones, unidades y tamaños de muestra.
+
+**Gates de datos:** `RESEARCH_READY`, `BACKTEST_READY`, `EXECUTION_SIM_READY` por instrumento/universo/periodo. Fundamentales necesitan `published_at` y `available_to_strategy_at`; universos históricos incluyen deslistados cuando corresponda; calendario, ajustes y corporate actions deben ser compatibles con el fill simulado. Un `NO_DATA` rechaza el experimento, no se imputa silenciosamente.
+
+**Tests futuros:** fixtures matemáticos exactos, look-ahead intencional rechazado, delisting en universo histórico, sensibilidad a costes, registro completo de 500 variantes sintéticas, contaminación OOS heredada, ejecución sin LLM, repetición byte-equivalente o tolerancia numérica explícita. Un fixture sintético valida software, **no alfa**.
+
+Referencias de diseño: [Realineación 2026-10-23](REALINEACION_FONDO_AUTONOMO_2026_10_23.md) y [Plan estratégico P5/P6](Plan_JAIME_P5_P6.md). **P5 NO INICIADO: autorización expresa requerida.**

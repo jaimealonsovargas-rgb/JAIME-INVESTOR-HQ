@@ -16,20 +16,25 @@
 - **P4 está autorizado** por `docs/AUTORIZACION_P4_2026_10_16.md` y se ejecuta según `docs/PLAN_P4_AGENTES_RESEARCH_LOCAL_AI.md` y `tasks/P4_RESEARCH_AGENTES.md`.
 - Investigación/criterios del runtime local: `docs/INVESTIGACION_P4_ORQUESTACION_IA_LOCAL.md`.
 - La arquitectura visual histórica sigue en `docs/ESPECIFICACION_DEFINITIVA_2026_10_15.md` y `docs/PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md`.
-- **STOP vigente antes de P5**. No implementar todavía motor de riesgo/veto formal, backtesting final ni ejecución P6.
-- Dirección aprobada el 2026-10-23: JAIME aspira a investigar de forma autónoma mientras el equipo esté encendido. La oficina supervisa el núcleo; una pregunta humana no es el único origen futuro de trabajo. Véase `docs/ARQUITECTURA_AUTONOMIA_P4_P5.md`.
-- La calidad del LLM P4 no será una dependencia técnica del futuro núcleo determinista P5, pero esta decisión **no autoriza iniciar P5**. Ninguna investigación o estrategia puede alterar MASTER ni generar órdenes en P4.
+- **STOP vigente antes de P5/P6**. La realineación documental del 2026-10-23 no autoriza código P5, riesgo/veto formal ni ejecución P6. El próximo Goal de implementación P4/P2 también requiere instrucción expresa.
+- **Visión rectora vigente:** `docs/REALINEACION_FONDO_AUTONOMO_2026_10_23.md`; oficina 3D = supervisión, núcleo backend = trabajo autónomo solo mientras está encendido. P4 sigue PARTIAL, HUD compacto terminado.
 
-## P4 — prioridad vigente
+## P4 — estado PARTIAL y prioridad vigente
 - Implementar **30 roles IA lógicos**, no 30 LLM/procesos residentes.
 - Concurrencia por defecto: **1 inferencia LLM local, 2 jobs quant CPU, 4 fetches ligeros**; ajustar solo con benchmark real.
 - Runtime preferente: **local, gratuito y localhost-only** detrás de una interfaz `LocalLLM`; si no hay modelo usable, marcar `NO_LOCAL_MODEL`, nunca fallback silencioso a pago.
 - Benchmark local como máximo 1–2 modelos compactos cuantizados razonables para ~16 GB RAM; registrar modelo, licencia, quant, hash, TTFT, tokens/s, RAM aproximada y cumplimiento de JSON/grounding.
 - Scheduler persistente, on-demand/event-driven, con prioridades, cancelación, timeout y recuperación tras restart. No polling agresivo ni ejecución de los 30 roles en cada evento.
-- Pipeline inicial de 6–10 roles por caso; Bull/Bear/CIO deben mostrar desacuerdos reales. El Bear/Skeptic actúa como crítico.
-- Profundidad adaptativa: investigación ordinaria centrada en Python, con síntesis local opcional; debate Bull/Bear/Chair solo por selección explícita y evidencia suficiente. Los fallos de modelo no invalidan resultados deterministas ni autorizan conclusiones inventadas.
-- Preparar el contrato de eventos de investigación autónoma sin disparar trabajos masivos ni convertir la UI en scheduler. Futuras hipótesis/experimentos pertenecerán a un dominio distinto de ResearchCase.
+- Pipeline actual por caso: 6–10 roles según objetivo; Bull/Bear/CIO siguen PARTIAL y deben mostrar desacuerdos reales si se invocan. Evolución propuesta: selección por evento y rol necesario, sin debate obligatorio en cada investigación; comité profundo tras filtros deterministas o solicitud explícita.
 - Jobs/resultados deben ser auténticos: NPC/animaciones no prueban actividad IA.
+
+## Objetivo arquitectónico de autonomía (documentado, NO implementado)
+- JAIME es un núcleo local de investigación y futura simulación cuantitativa **proactivo mientras backend está encendido**, no solo un asistente de preguntas. La oficina 3D observa; no activa por sí sola el trabajo ni es un requisito para ejecutarlo.
+- Conservar `ResearchCase` y expedientes históricos. Proponer `AutonomyEvent` y `ResearchTask` tipados, persistentes e idempotentes para disparadores por reloj/datos/eventos, con router determinista y presupuestos explícitos. **El pipeline actual sigue centrado en `question`; no afirmar que esto ya funciona.**
+- Los cálculos, métricas, features y futuros backtests pertenecen a Python. El LLM solo propone/interpreta bajo evidencia, sin generar scripts ejecutables ni controlar órdenes.
+- El cierre semántico Bull/Bear/Chair no debe bloquear **el diseño** del futuro P5 determinista; P5 solo se implementará con autorización propia, readiness P2 y tests. Mantener roles, 1 LLM, 16 GB RAM y 0 EUR.
+- P2 distinguirá `RESEARCH_READY`, `BACKTEST_READY` y `EXECUTION_SIM_READY` por instrumento/universo/periodo; son gates **futuros**, no capacidades ya certificadas.
+- `ResourceGovernor` y perfiles interactivo/investigación/batch son propuesta para futuro Goal, no feature activa. No ejecutar barridos quant ni iniciar P5 por esta documentación.
 
 ## Grounding y permisos
 - Cada rol declara misión, inputs, output JSON schema, tools allowlisted y límites.

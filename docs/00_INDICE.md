@@ -1,5 +1,7 @@
 # Índice — lectura selectiva por fase
 
+**VISIÓN RECTORA DE AUTONOMÍA (2026-10-23):** [Realineación a fondo cuantitativo autónomo local](REALINEACION_FONDO_AUTONOMO_2026_10_23.md). Es **diseño documental**, no autorización de implementación P5/P6. La oficina 3D supervisa; el backend futuro investiga por eventos mientras está encendido. P4 PARTIAL, HUD compacto completado.
+
 **DOCUMENTO RECTOR VISUAL (2026-10-15):** [especificación consolidada](ESPECIFICACION_DEFINITIVA_2026_10_15.md) · [plan maestro Sims/videowall/agentes](PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md).
 
 **AUTORIZACIÓN VIGENTE (2026-10-16):** P3 está cerrada y aprobada. [P4 autorizado](AUTORIZACION_P4_2026_10_16.md) · [plan maestro P4](PLAN_P4_AGENTES_RESEARCH_LOCAL_AI.md) · [investigación IA local/grounding](INVESTIGACION_P4_ORQUESTACION_IA_LOCAL.md). **STOP ahora antes de P5**.
@@ -11,8 +13,8 @@
 | P2 | 04_INSTRUMENTOS, 06_DATOS_APIS, 11_CONTRATOS, 15_FUENTES |
 | P3 | 07_CARTERA_LEDGER, 12_ESQUEMA_DATOS, 20_UI_Y_FLUJOS, evidencias/P3 |
 | P4 | **AUTORIZACION_P4_2026_10_16, PLAN_P4_AGENTES_RESEARCH_LOCAL_AI, INVESTIGACION_P4_ORQUESTACION_IA_LOCAL**, 09_AGENTES, 10_CUANTITATIVO, 06_DATOS_APIS, INTEGRACIONES_TERCEROS_VERIFICACION |
-| P5 | 07_CARTERA_LEDGER, 10_CUANTITATIVO, 11_CONTRATOS |
-| P6 | 06_DATOS_APIS, 07_CARTERA_LEDGER, 11_CONTRATOS, 13_SEGURIDAD |
+| P5 (futuro; NO AUTORIZADO) | REALINEACION_FONDO_AUTONOMO_2026_10_23, 07_CARTERA_LEDGER, 10_CUANTITATIVO, 11_CONTRATOS, tasks/P5_QUANT_RIESGO |
+| P6 (futuro; NO AUTORIZADO) | REALINEACION_FONDO_AUTONOMO_2026_10_23, 06_DATOS_APIS, 07_CARTERA_LEDGER, 11_CONTRATOS, 13_SEGURIDAD, tasks/P6_PAPER |
 | P7 | 16_TESTS_ACEPTACION, 17_AUDITORIA_PREVIA, 18_MODELOS_Y_TOKENS |
 
 Siempre leer primero `AGENTS.md`, `STATUS.md` y `tasks/Px_*.md` correspondiente. **No cargar todos los documentos a la vez.**
@@ -36,3 +38,8 @@ Los documentos P0-P3 históricos se conservan para auditoría, pero no reabren f
 - [Realineación hacia research autónomo local](ARQUITECTURA_AUTONOMIA_P4_P5.md): contrato propuesto de eventos/tareas, dependencias y gates; P5/P6 siguen sin autorización.
 - [Plan_JAIME_P5_P6](Plan_JAIME_P5_P6.md): documento aportado por el usuario, no autorización de implementación ni verificación de proveedores.
 - [Profundidad adaptativa y límites de cierre P4](P4_PROFUNDIDAD_Y_CIERRE.md): encaje con los contratos existentes y condiciones para una ejecución más eficiente. **No inicia P5/P6.**
+
+## Realineación documental · 2026-10-23
+- [Contrato de autonomía, dependencias, eventos, readiness, Strategy Factory y PAPER futuro](REALINEACION_FONDO_AUTONOMO_2026_10_23.md).
+- [Visión actualizada](01_VISION.md), [ADR](../DECISIONES.md), [tarea P4](../tasks/P4_RESEARCH_AGENTES.md), [tarea P2 futura](../tasks/P2_DATOS.md), [especificación P5](../tasks/P5_QUANT_RIESGO.md) y [especificación P6](../tasks/P6_PAPER.md).
+- **Siguiente implementación pendiente de instrucción:** P4 AutonomyEvent/Router mínimo o P2 readiness point-in-time. **STOP antes de P5/P6**; ningún cambio de código o ejecución por este documento.

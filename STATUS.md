@@ -11,6 +11,17 @@
 **QA:** `manage.py check` final exit 0: **220 pytest, 54 Vitest + 1 opt-in omitido, TypeScript/build**; suite Research: **50/50**. `manage.py audit` exit 0, cero vulnerabilidades conocidas; `git diff --check` correcto. Navegador real 1920×1080: oficina y Research por clic NPC, casos A/C/B visibles y consola limpia tras recarga. Los 502 observados solo durante el reinicio manual del backend fueron transitorios. Watchlist y MASTER operativos. Una muestra de 60 FPS/DPR0,8 tuvo movimiento con flechas, pero la proximidad abrió Recepción durante la ventana y **no sustituye** el benchmark válido anterior bajo LLM (31,68–37,71 FPS del 21-10). Capturas privadas auténticas `output/p4-adaptive/`, con hashes en el informe; no se redistribuyen precios CoinPaprika.
 
 **Invariantes:** MASTER `10000.00 EUR` ficticios, 0 posiciones, 1 evento y hash `fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836` intacto; `PAPER_ONLY`, `orders_enabled=false`, HTTP `POST /api/orders=403`, coste adicional 0 EUR. Alineación documental hacia research autónomo y futura fábrica cuantitativa registrada en `docs/ARQUITECTURA_AUTONOMIA_P4_P5.md` (commit `666f28e`), sin implementar P5/P6. Pendiente esencial: Bull/Bear/Chair completo, semánticamente correcto y viable en 16 GB; no declarar P4 `SUCCESS`. Los commits y push de este checkpoint se verificarán al cierre.
+---
+
+## 2026-10-23 · Realineación arquitectónica a autonomía local — SOLO DOCUMENTACIÓN
+
+Se ha contrastado una auditoría integral recibida del usuario con el repositorio GitHub. Decisión de producto: JAIME debe ser un núcleo de investigación y futura simulación cuantitativa **autónomo mientras el backend esté encendido**, supervisado por la oficina 3D, no principalmente un sistema de preguntas y debates. Se conservan la interfaz, P2/P3, 30 roles, un único LLM local, 16 GB RAM y presupuesto 0 EUR.
+
+**Cambios de este Goal:** visión, instrucciones Codex, ADR, índice, especificaciones P2/P4/P5/P6 y contrato rector en [REALINEACION_FONDO_AUTONOMO_2026_10_23](docs/REALINEACION_FONDO_AUTONOMO_2026_10_23.md). P4 debe poder recibir eventos autónomos en un **Goal futuro**; P5 debe ser determinista y no depender del éxito del debate LLM; P2 necesita readiness point-in-time; P6 requerirá OMS e InternalPaperBroker antes de brokers externos. **Nada de esto se ha implementado en este Goal.**
+
+**Estado real heredado:** HUD compacto ya completado y probado (entrada 2026-10-22); P4 sigue PARTIAL, Bull TIMEOUT/Bear/Chair BLOCKED, y P5/P6 NO INICIADOS. **No se han ejecutado pruebas locales ni inferencias LLM en esta actualización documental.** No se han cambiado Python, TypeScript, SQL, dependencias, datos de mercado ni credenciales.
+
+**Invariantes:** MASTER 10.000 EUR ficticios, PAPER ONLY, `orders_enabled=false`, `live_trading_enabled=false`, `POST /api/orders=403` **sin modificar**. Sin gastos, sin brokers ni órdenes. Siguiente paso: revisar/autorizar **un Goal acotado P4** para evento programado, routing, idempotencia y ejecución sin UI; después readiness P2. **STOP antes de P5/P6 hasta autorización expresa.**
 
 ---
 
