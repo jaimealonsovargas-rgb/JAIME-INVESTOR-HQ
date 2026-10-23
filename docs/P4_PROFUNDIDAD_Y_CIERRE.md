@@ -2,6 +2,8 @@
 
 ## Estado actual · 23-10-2026
 
+Actualización posterior: `debate-wire.v2` ya elimina el truncamiento observado en la campaña acotada, manteniendo 384 tokens/90 s por llamada. Se añadieron comparaciones Python, diagnósticos persistentes, cuarentena de rechazos y revalidación de dossiers. Los modelos todavía repiten observaciones/argumentos y no completan un debate financieramente válido; **P4 sigue PARTIAL**. No repetir los ensayos ni aprobar modelos por velocidad o por JSON válido. [Reparación, pruebas reales y continuación exacta](evidencias/P4/reparacion-debate-20261023/README.md).
+
 La propuesta de este documento ya se implementó para las ejecuciones nuevas: `ordinary` por defecto con tres jobs Python, síntesis local opcional única, y `deep` explícito con Bull/Bear/Chair secuenciales. Profundidad y opción de síntesis se persisten en el run y su idempotencia; los runs antiguos no se reinterpretan. Se aplican presupuestos de una llamada por rol, 90 s por llamada LLM, 256/384 tokens y 90/270 s por caso. El dossier conserva resultados Python y muestra `PARTIAL`/`INCOMPLETE` cuando la síntesis falla.
 
 La campaña real del 23-10 verificó A ordinario y C insuficiente, pero B profundo no completó Bull/Bear/Chair tras **dos** intentos con una causa técnica modificada entre ellos. Qwen2.5 produjo una síntesis semánticamente contradictoria y Qwen3 una salida sin grounding suficiente; ambas se retiran del dossier. **P4 permanece PARTIAL.** Resultados, tiempos y límites: [evidencia de profundidad adaptativa](evidencias/P4/adaptativo-20261023/README.md). Los apartados siguientes conservan el diseño y el diagnóstico históricos de 22-10; no son el estado de implementación actual.

@@ -1,0 +1,97 @@
+[
+  {
+    "path": "output\\p4-debate-repair\\qwen25-wire-v1.json",
+    "sha256": "fbe9808f76a8f50ef4640bafd824135bc1aa1df9e8baf8498c563cfa54694787",
+    "bytes": 979778
+  },
+  {
+    "path": "output\\p4-debate-repair\\qwen25-wire-v2.json",
+    "sha256": "cdae9fd195593b571f2962b3e78a87baedf68ef77f853e874437e2cfc7defccc",
+    "bytes": 1154225
+  },
+  {
+    "path": "output\\p4-debate-repair\\qwen3-wire-v2.json",
+    "sha256": "2a1e794e7963eb98540b4319af1ce67d6d8f33113c6265d67e5f0d34baa7a19c",
+    "bytes": 979870
+  },
+  {
+    "path": "output\\p4-debate-repair\\qwen3-reviewed-wire-v2.json",
+    "sha256": "894153a074465583db704ed538b712753ebe7ed1890f49f0e62ecab190032f3e",
+    "bytes": 1155513
+  },
+  {
+    "path": "output\\p4-debate-repair\\ordinary-no-model.json",
+    "sha256": "b2018023c29f41a0605d5981d0a2aff696d4a62b4c0a0dd4610eed29929496f9",
+    "bytes": 813806
+  },
+  {
+    "path": "output\\p4-debate-repair\\insufficient-no-model.json",
+    "sha256": "a4b901322d85af8033f78bb7d0bf139c51befc3b6f7a8af67f182a4ce3208701",
+    "bytes": 101625
+  },
+  {
+    "path": "output\\p4-debate-repair\\summary.json",
+    "sha256": "88e44b5f2e4ac932a8fa448b21d37970ebe115cc0fcd5f693de5b44fa53e79be",
+    "bytes": 10107
+  },
+  {
+    "path": "output\\p4-debate-repair\\fps.json",
+    "sha256": "a2fa19482c789bcc384c727272553896f061aafe3e98a7b021e5643527f58d07",
+    "bytes": 88071
+  },
+  {
+    "path": "output\\p4-debate-repair\\ui.json",
+    "sha256": "2a34f17993906d977f764000e60ad734ccfff6e191f3133cb1cf31a96caf712d",
+    "bytes": 34011
+  },
+  {
+    "path": "output\\p4-debate-repair\\final-invariants.json",
+    "sha256": "b43fba4745e084fa5b433e25debe8ffd13da1e2dcc52f493011fb9052a731b60",
+    "bytes": 365
+  },
+  {
+    "path": "output\\p4-debate-repair\\check.log",
+    "sha256": "c4c573805a1f4aa0841bf56d4683058749499ef9694828cdb143987b4d5051e5",
+    "bytes": 8038
+  },
+  {
+    "path": "output\\p4-debate-repair\\audit.log",
+    "sha256": "66209286ad2785bb07ff9202b6139056493fe4da5e2c8e9985857295d1ba3f6e",
+    "bytes": 856
+  },
+  {
+    "path": "output\\p4-debate-repair\\committee.png",
+    "sha256": "8b198bf09d3619fb49d73b4359031faa1691a1ee495c9c33b493edd3385ca306",
+    "bytes": 89722
+  },
+  {
+    "path": "output\\p4-debate-repair\\moving-no-llm.png",
+    "sha256": "05c612abfe58e5b747006af941811558c1d8149c31d5ebf1eb01731d43b5dd15",
+    "bytes": 661330
+  },
+  {
+    "path": "output\\p4-debate-repair\\office.png",
+    "sha256": "844cb07136a60f078df60a9f743bc2e3beafbb45550447a541079869ff81a942",
+    "bytes": 519643
+  },
+  {
+    "path": "output\\p4-debate-repair\\quant.png",
+    "sha256": "6bcee2d4e5251332ed083d00a3425ba611517dd3525c497efd17bdfb7b3a0e63",
+    "bytes": 101290
+  },
+  {
+    "path": "output\\p4-debate-repair\\research.png",
+    "sha256": "6854bd566065ab1676a626786eed5df90e73bcf1d0987c0ecdc88bb299759c6e",
+    "bytes": 89909
+  },
+  {
+    "path": "output\\p4-debate-repair\\systems.png",
+    "sha256": "a7a928995cbccfec0aaf844e5bae5cc9b03e34451f4a05a8e2e4e2a580f333af",
+    "bytes": 106375
+  },
+  {
+    "path": "output\\p4-debate-repair\\videowall.png",
+    "sha256": "437055345440cf490217cbd15de81e32f9da8bdde48c9eb2d4108aeb50de9ef8",
+    "bytes": 546560
+  }
+]

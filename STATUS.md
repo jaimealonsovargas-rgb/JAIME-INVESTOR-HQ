@@ -1,5 +1,21 @@
 # Estado del proyecto
 
+## 2026-10-23 · Reparación prioritaria Bull/Bear/Chair — PARTIAL
+
+**No hay debate completo financieramente validado; no declarar P4 terminada.** Se reparó el transporte con `debate-wire.v2` (claves/IDs reversibles, todos los campos públicos conservados, gramática y validación Python) y se añadieron comparaciones Python, guardas de contradicción/eco/incompletitud, métricas de fallos y cuarentena local de candidatos rechazados. Los dossiers antiguos se revalidan al abrirlos y ocultan argumentos inválidos. Template `p4.14-debate-wire`, esquema sin cambios `0005_data_history`. No se ampliaron timeouts, tokens ni retries.
+
+**Evidencia real:** cuatro casos acotados, seis inferencias financieras en dos modelos existentes. Ya no hubo TIMEOUT/TRUNCATED_OUTPUT: Bull cerró JSON con 118–161 tokens. Qwen2.5 terminó el caso en 47,824 s y Qwen3 en 84,682 s, pero Bear repitió el argumento y fue rechazado; Chair siguió bloqueado. Revisión final: Bull tampoco aporta un mecanismo favorable válido (Qwen3 además corta frases); ambos argumentos se retiran. Una guarda experimental demasiado amplia se corrigió antes del último ensayo, sin borrar el fallo histórico. **No es un PASS financiero.** [Informe, causas, límites y siguiente paso](docs/evidencias/P4/reparacion-debate-20261023/README.md).
+
+**Rendimiento:** red eléctrica comprobada, ~16 GB, un solo LLM. Qwen2.5 wire v2: 19,27–20,31 s/llamada y 18,60–18,94 tok/s; Qwen3 final: 29,31–45,38 s y 9,24–11,54 tok/s. RAM libre mínima 620,5 / 1066,6 MiB; RSS pico 1159,3 / 2649,2 MiB. Caché y carga distintas: no atribuir causalmente toda la mejora. Runtime descargado de RAM al terminar, sin nuevas inferencias ni descargas.
+
+**QA:** check completo 278 pytest, 54 Vitest + 1 opt-in omitido, TypeScript/build; tras último ajuste de trazabilidad, 21 pruebas focalizadas correctas. Audit: cero vulnerabilidades conocidas; diff-check correcto. Ordinario sin LLM `COMPLETE/VERIFIED_DATA` en 1,036 s; insuficiente `COMPLETE/ABSTAINED` en 1,031 s. Reinicio/lectura real conserva jobs y retira Bull inválido. Capturas privadas de oficina, cuatro paneles y videowall; sin errores JS ni overflow. Intel, movimiento continuo 12 s, Equilibrado1920×1080/DPR0,8: **56,74 FPS móviles**, 670 muestras, p95 22,5 ms, **sin LLM**. No sustituye la prueba bajo inferencia pendiente.
+
+**Seguridad:** 30 roles; cola/activos0; MASTER10000.00EUR ficticios, 0 posiciones y hash intacto `fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836`; PAPER ONLY, orders_enabled=false, POST/api/orders403, coste0EUR. Autonomía programada no implementada; P5/P6 no iniciados. No repetir estos runs: siguiente trabajo debe mejorar hipótesis/evidencia y probar razonamiento por etapa antes de reabrir el pipeline profundo.
+
+**Git de implementación:** `5b34e4b` conserva el contrato, validadores, auditoría y tests de esta reparación. Evidencias y cierre documental se versionan aparte; ningún payload financiero privado ni peso del modelo entra en Git.
+
+---
+
 ## 2026-10-23 · Goal P4 LLM local y profundidad adaptativa — PARTIAL
 
 **P4 aún no cumple su criterio profundo.** La arquitectura propuesta en `docs/P4_PROFUNDIDAD_Y_CIERRE.md` se implementó y probó: `ordinary` por defecto, Python determinista y como máximo una síntesis local opcional; `deep` explícito con Bull/Bear/Chair secuenciales. Los treinta roles, contratos, permisos, jobs persistentes e idempotencia por profundidad se mantienen. Cada nueva inferencia tiene un intento y presupuestos estrictos; sin modelo local la investigación ordinaria continúa y el debate no se fabrica. La UI Research presenta profundidad, estados reales y cuatro métricas Python trazables antes de abrir el dossier. No hay migración: esquema `0005_data_history`.
