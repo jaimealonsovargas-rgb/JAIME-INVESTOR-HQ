@@ -1,5 +1,11 @@
 # P4 — profundidad adaptativa y cierre acotado
 
+## Estado actual · 23-10-2026
+
+La propuesta de este documento ya se implementó para las ejecuciones nuevas: `ordinary` por defecto con tres jobs Python, síntesis local opcional única, y `deep` explícito con Bull/Bear/Chair secuenciales. Profundidad y opción de síntesis se persisten en el run y su idempotencia; los runs antiguos no se reinterpretan. Se aplican presupuestos de una llamada por rol, 90 s por llamada LLM, 256/384 tokens y 90/270 s por caso. El dossier conserva resultados Python y muestra `PARTIAL`/`INCOMPLETE` cuando la síntesis falla.
+
+La campaña real del 23-10 verificó A ordinario y C insuficiente, pero B profundo no completó Bull/Bear/Chair tras **dos** intentos con una causa técnica modificada entre ellos. Qwen2.5 produjo una síntesis semánticamente contradictoria y Qwen3 una salida sin grounding suficiente; ambas se retiran del dossier. **P4 permanece PARTIAL.** Resultados, tiempos y límites: [evidencia de profundidad adaptativa](evidencias/P4/adaptativo-20261023/README.md). Los apartados siguientes conservan el diseño y el diagnóstico históricos de 22-10; no son el estado de implementación actual.
+
 Decisión del usuario del 22-10-2026: cerrar con evidencia, incluso PARTIAL/BLOCKED si el debate no cumple; no repetir inferencias indefinidamente. No se rebaja la aceptación semántica ni se permite ejecutar órdenes. El informe de cierre distingue implementación, ejecución técnica y calidad financiera.
 
 ## Estado y propuesta de profundidad
@@ -45,4 +51,4 @@ P5/P6 no iniciados. No se conecta un broker, OAuth con trading, runtime completo
 5. **Degradación:** conservar resultados Python y jobs fallidos, mostrar `INCOMPLETE`/`NO_LOCAL_MODEL` con causa y retorno inmediato a la oficina. Sin fallback externo, conclusiones sintéticas ni bloqueo global de UI. Cancelar el run debe detener su llamada pendiente y conservar trazabilidad.
 6. **Aceptación antes de dar P4 por listo:** tests de selección, idempotencia por profundidad, presupuestos, cancelación/reinicio y regresión financiera; después una campaña acotada con un caso ordinario real, uno insuficiente y un profundo suficiente. Revisar semánticamente Bull/Bear/Chair contra fuentes y medir memoria/latencia/FPS con condiciones registradas. Si falla, conservar PARTIAL; no repetir automáticamente el mismo experimento.
 
-La implementación anterior requiere una nueva instrucción. Este Goal solo compacta el HUD y verifica UI; no modifica runtime, scheduler, schemas ni resultados. La futura fábrica de estrategias mantiene Python para experimentos masivos y roles para hipótesis/crítica, con registro de descartes y aislamiento de ejecución según `Plan_JAIME_P5_P6.md`.
+La futura fábrica de estrategias mantiene Python para experimentos masivos y roles para hipótesis/crítica, con registro de descartes y aislamiento de ejecución según `Plan_JAIME_P5_P6.md`. Ese requisito arquitectónico no autoriza a iniciar P5/P6.
