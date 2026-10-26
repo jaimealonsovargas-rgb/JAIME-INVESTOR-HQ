@@ -1,6 +1,6 @@
 # Índice — lectura selectiva por fase
 
-**VISIÓN RECTORA DE AUTONOMÍA (2026-10-23):** [Realineación a fondo cuantitativo autónomo local](REALINEACION_FONDO_AUTONOMO_2026_10_23.md). Es **diseño documental**, no autorización de implementación P5/P6. La oficina 3D supervisa; el backend futuro investiga por eventos mientras está encendido. P4 PARTIAL, HUD compacto completado.
+**VISIÓN RECTORA DE AUTONOMÍA (2026-10-23):** [Realineación a fondo cuantitativo autónomo local](REALINEACION_FONDO_AUTONOMO_2026_10_23.md). Primer subconjunto operativo: [ciclo descriptivo P4](P4_AUTONOMIA_PRIMER_CICLO.md), autorizado posteriormente por el usuario. La oficina supervisa; el reloj backend no requiere UI. Otras rutas y P5/P6 siguen siendo diseño futuro. P4 PARTIAL.
 
 **DOCUMENTO RECTOR VISUAL (2026-10-15):** [especificación consolidada](ESPECIFICACION_DEFINITIVA_2026_10_15.md) · [plan maestro Sims/videowall/agentes](PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md).
 
@@ -42,4 +42,4 @@ Los documentos P0-P3 históricos se conservan para auditoría, pero no reabren f
 ## Realineación documental · 2026-10-23
 - [Contrato de autonomía, dependencias, eventos, readiness, Strategy Factory y PAPER futuro](REALINEACION_FONDO_AUTONOMO_2026_10_23.md).
 - [Visión actualizada](01_VISION.md), [ADR](../DECISIONES.md), [tarea P4](../tasks/P4_RESEARCH_AGENTES.md), [tarea P2 futura](../tasks/P2_DATOS.md), [especificación P5](../tasks/P5_QUANT_RIESGO.md) y [especificación P6](../tasks/P6_PAPER.md).
-- **Siguiente implementación pendiente de instrucción:** P4 AutonomyEvent/Router mínimo o P2 readiness point-in-time. **STOP antes de P5/P6**; ningún cambio de código o ejecución por este documento.
+- **Actualización 26-10:** primer ciclo mínimo implementado mediante autorización posterior; ver [contrato y límites](P4_AUTONOMIA_PRIMER_CICLO.md). P2 readiness point-in-time y rutas adicionales necesitan otro Goal. **STOP antes de P5/P6**.

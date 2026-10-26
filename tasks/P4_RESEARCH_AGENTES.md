@@ -39,3 +39,7 @@ El planificador debe seleccionar roles pertinentes en vez de invocar nueve roles
 Tests de aceptación propuestos: `AUT-01` evento sin pregunta/UI; `AUT-02` recuperación sin duplicados; `AUT-03` LLM apagado con trabajos Python útiles; `AUT-04` datos insuficientes = abstención; `SEC` órdenes403/MASTER inalterado; RAM y latencia medidas, no supuestas. Mantener 30 roles y 1 LLM. Ver [contrato de realineación](../docs/REALINEACION_FONDO_AUTONOMO_2026_10_23.md).
 
 **P5/P6 siguen NO AUTORIZADOS.**
+
+## Primer ciclo autónomo autorizado · 25–26-10-2026
+
+Implementado `AutonomyEvent → ResearchRouter → ResearchTask`, migración `0006_autonomy`, una política diaria y fuente P2 A21. Selección del instrumento desde identificadores verificados, tres roles Python, sin pregunta/UI/LLM. Pausa y cancelación persistentes, idempotencia y recuperación sin duplicar jobs; abstención si faltan datos/derechos. Detalle y configuración: [primer ciclo](../docs/P4_AUTONOMIA_PRIMER_CICLO.md). Este subconjunto no implementa descubrimiento general, nuevos triggers, minería ni ejecución. Bull/Bear/Chair siguen pendientes: **P4 PARTIAL**.

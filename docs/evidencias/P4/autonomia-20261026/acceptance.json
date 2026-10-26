@@ -1,0 +1,192 @@
+{
+  "schema": "0006_autonomy",
+  "p4_status": "PARTIAL",
+  "llm_inferences": 0,
+  "runtime": "NO_LOCAL_MODEL",
+  "tasks": [
+    {
+      "id": "9de4081c-285f-5648-a07f-e1c6112581fd",
+      "event_id": "9de4081c-285f-5648-a07f-e1c6112581fd",
+      "case_id": "b757038b-8650-4c7a-a1d7-6ce0ba23823a",
+      "state": "SUCCEEDED",
+      "created_at": "2026-10-26T20:11:59.093642+00:00",
+      "finished_at": "2026-10-26T20:12:05.226391+00:00",
+      "role_ids": [
+        "data_quality",
+        "momentum_trend",
+        "volatility_regime"
+      ],
+      "result": {
+        "elapsed_seconds": 6.132,
+        "evidence_count": 81,
+        "quality_state": "VERIFIED_DATA",
+        "source_receipt": {
+          "access_id": "A21",
+          "cache_hit": false,
+          "checked_at": "2026-10-26T20:12:00.756176+00:00",
+          "latency_ms": 1627,
+          "observation_count": 90,
+          "provider": "COINPAPRIKA",
+          "real_connection": true,
+          "state": "DELAYED"
+        }
+      }
+    },
+    {
+      "id": "60386707-9008-53cc-a18f-eb40748928f2",
+      "event_id": "60386707-9008-53cc-a18f-eb40748928f2",
+      "case_id": "dfe75707-8357-4423-8240-28eb8c410ddf",
+      "state": "SUCCEEDED",
+      "created_at": "2026-10-25T17:02:25.010760+00:00",
+      "finished_at": "2026-10-25T17:02:26.749962+00:00",
+      "role_ids": [
+        "data_quality",
+        "momentum_trend",
+        "volatility_regime"
+      ],
+      "result": {
+        "elapsed_seconds": 1.739,
+        "evidence_count": 81,
+        "quality_state": "VERIFIED_DATA",
+        "source_receipt": {
+          "access_id": "A21",
+          "cache_hit": true,
+          "checked_at": "2026-10-25T16:46:43.834439+00:00",
+          "latency_ms": 3265,
+          "observation_count": 90,
+          "provider": "COINPAPRIKA",
+          "real_connection": true,
+          "state": "DELAYED"
+        }
+      }
+    }
+  ],
+  "unattended": {
+    "acceptance": "PASS",
+    "http_writes": [
+      {
+        "path": "/api/orders",
+        "expected_rejection": true
+      },
+      {
+        "path": "/api/research/autonomy/control",
+        "action": "pause"
+      },
+      {
+        "path": "/api/research/autonomy/control",
+        "action": "resume"
+      }
+    ],
+    "same_tasks_after_restart": true,
+    "pause_survives_restart": true
+  },
+  "unavailable": {
+    "classification": "Actual backend, isolated DB, A21 disabled by configuration. No mock HTTP response.",
+    "acceptance": "PASS",
+    "state": "ABSTAINED",
+    "reason": "DISABLED",
+    "case_id": null
+  },
+  "security": {
+    "master": {
+      "ledger_hash": "fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836",
+      "nav_eur": "10000.00",
+      "cash_eur": "10000.00",
+      "positions_count": 0
+    },
+    "orders_status": 403,
+    "roles": 30,
+    "runtime": {
+      "state": "NO_LOCAL_MODEL",
+      "runtime": "llama.cpp",
+      "model": null,
+      "endpoint": "http://127.0.0.1:8089",
+      "last_checked_at": "2026-10-26T20:14:36.696844+00:00"
+    },
+    "queue": 0,
+    "active_jobs": 0,
+    "schema": "0006_autonomy",
+    "integrity": "ok",
+    "counts": {
+      "agents": 30,
+      "autonomy_events": 2,
+      "research_tasks": 2,
+      "research_cases": 23,
+      "agent_jobs": 225
+    }
+  },
+  "history": {
+    "research_cases": {
+      "existing_rows": 21,
+      "changed_or_missing": 0
+    },
+    "agent_jobs": {
+      "existing_rows": 219,
+      "changed_or_missing": 0
+    },
+    "evidence": {
+      "existing_rows": 1783,
+      "changed_or_missing": 0
+    },
+    "agent_results": {
+      "existing_rows": 152,
+      "changed_or_missing": 0
+    },
+    "research_claims": {
+      "existing_rows": 172,
+      "changed_or_missing": 0
+    },
+    "ledger_events": {
+      "existing_rows": 1,
+      "changed_or_missing": 0
+    }
+  },
+  "resources": {
+    "scope": "First real cycle, warm P2 cache; Windows battery; ~1s sampling. No GPU/LLM benchmark.",
+    "samples": 21,
+    "rss_peak_mib": 115.75,
+    "private_peak_mib": 96.83,
+    "ram_free_min_mib": 1386.57,
+    "cpu_peak_percent_all_logical": 7.719,
+    "cpu_idle_mean_percent_all_logical": 0.151
+  },
+  "browser": {
+    "at": "2026-10-26T20:15:34.532Z",
+    "screens": [
+      "output/playwright/p4-autonomy/systems-1920.png",
+      "output/playwright/p4-autonomy/research-1920.png",
+      "output/playwright/p4-autonomy/systems-1366.png",
+      "output/playwright/p4-autonomy/office.png"
+    ],
+    "checks": [
+      {
+        "id": "systems",
+        "entries": 2,
+        "selected_case": "b757038b-8650-4c7a-a1d7-6ce0ba23823a",
+        "pause_resume": true,
+        "overflow": {
+          "scroll": 1318,
+          "width": 1318
+        }
+      },
+      {
+        "id": "research",
+        "entries": 2,
+        "selected_case": "b757038b-8650-4c7a-a1d7-6ce0ba23823a",
+        "pause_resume": true,
+        "overflow": {
+          "scroll": 1318,
+          "width": 1318
+        }
+      },
+      {
+        "id": "systems-1366",
+        "overflow": {
+          "scroll": 1301,
+          "width": 1301
+        }
+      }
+    ],
+    "errors": []
+  }
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "path": "output/p4-autonomy/acceptance-private.json",
+    "sha256": "97c91616a900a50373f0adf91d781121ee8e970ae3560e8de6e8f612c88cc4f7",
+    "bytes": 87526,
+    "distribution": "private/local"
+  },
+  {
+    "path": "output/p4-autonomy/dossier-private.json",
+    "sha256": "3bd2c5c55b829fe4045f365b680d9e1381cfcb88878584c3b15b10818405dfee",
+    "bytes": 678200,
+    "distribution": "private/local"
+  },
+  {
+    "path": "output/p4-autonomy/unavailable/acceptance-private.json",
+    "sha256": "4dda04f61d5819c711b0d6bd321e9cad70ba5cb0687903ea07c3492e32d45069",
+    "bytes": 24650,
+    "distribution": "private/local"
+  },
+  {
+    "path": "output/p4-autonomy/check-final.log",
+    "sha256": "9b400da79d5bc10324cec4611820a1ece61c2d664166190bc4ff00ccbbfbb14a",
+    "bytes": 8156,
+    "distribution": "private/local"
+  },
+  {
+    "path": "output/p4-autonomy/frontend-final.log",
+    "sha256": "441304e49c48fb6f9f92a88da90986a765fc5b19f7b81c38bb128d0275aed43d",
+    "bytes": 3300,
+    "distribution": "private/local"
+  },
+  {
+    "path": "output/p4-autonomy/audit-filelock-fixed.log",
+    "sha256": "732344ea4271f8a9226cfc387d88f93d67c835c131ff4f82efa643eb6d324ca7",
+    "bytes": 800,
+    "distribution": "private/local"
+  },
+  {
+    "path": "output/playwright/p4-autonomy/office.png",
+    "sha256": "5bd849069916512a729daaf8614c862bd1aa2a90542b9b858605bd9840328543",
+    "bytes": 659062,
+    "distribution": "private/local"
+  },
+  {
+    "path": "output/playwright/p4-autonomy/research-1920.png",
+    "sha256": "e611a62abf33841acdef80b67213e1ad9501f10a3bb375f5a08221c4a2e4c4c8",
+    "bytes": 178974,
+    "distribution": "private/local"
+  },
+  {
+    "path": "output/playwright/p4-autonomy/systems-1366.png",
+    "sha256": "ec7cea137c2ffea1af3e6c7433ff0dc37c5a9561e1dc4cbc7536651036de1866",
+    "bytes": 75543,
+    "distribution": "private/local"
+  },
+  {
+    "path": "output/playwright/p4-autonomy/systems-1920.png",
+    "sha256": "328fac55a86ed1224f3f511d453ede95d0174b9cf6c21e4404339b6b1273fc6f",
+    "bytes": 185058,
+    "distribution": "private/local"
+  }
+]

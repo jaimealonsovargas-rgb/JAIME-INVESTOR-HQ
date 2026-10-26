@@ -1,5 +1,7 @@
 # Realineación arquitectónica: research autónomo local
 
+> **Implementación acotada, 25–26-10-2026:** el nuevo Goal del usuario autoriza y añade el primer ciclo P4 descrito en [P4_AUTONOMIA_PRIMER_CICLO](P4_AUTONOMIA_PRIMER_CICLO.md). Las propuestas generales que siguen no implican que existan otras rutas. P4 continúa PARTIAL; P5/P6 no iniciados.
+
 **Decisión de diseño aprobada el 2026-10-23.** JAIME aspira a trabajar mientras el PC/backend estén encendidos. P4 investiga y documenta; la oficina observa. Este documento no habilita P5, P6, brókeres ni órdenes. La auditoría aportada por el usuario es una propuesta de dirección; sus afirmaciones sobre proveedores, estadística y regulación requieren verificación primaria antes de implementarlas.
 
 ## Dependencias y puertas

@@ -1,5 +1,21 @@
 # Estado del proyecto
 
+## 2026-10-26 · Primer ciclo autónomo P4 — Goal completado, P4 PARTIAL
+
+Implementado `AutonomyEvent → ResearchRouter → ResearchTask`, migración **0006_autonomy**, reloj diario configurable/desactivable, fuente autorizada A21, 3 roles Python y cero inferencias. Reutiliza casos/jobs/evidencia/auditoría, mantiene los 30 roles y toda la historia. Reserva atómica, claves idempotentes, una tarea activa, sin recuperar días perdidos en ráfaga; pausa/cancelación persistentes y recuperación bajo lock exclusivo. Sistemas/Research muestran motivo, fuente, estado, resultado y acceso al dossier; no se rediseña la oficina. [Contrato, configuración y límites](docs/P4_AUTONOMIA_PRIMER_CICLO.md).
+
+**Prueba real sin UI/pregunta/LLM:** tarea del25-10 `60386707-9008-53cc-a18f-eb40748928f2`, SUCCEEDED/VERIFIED_DATA en **1,739 s**, 3 jobs y81 evidencias, usando caché P2 real vigente. Dos reinicios mantuvieron IDs y pausa. Siguiente revisión vencida del26-10 `9de4081c-285f-5648-a07f-e1c6112581fd`, **6,132 s**, petición nueva a CoinPaprika (1627 ms,90 observaciones); sin duplicados ni inferencias. Prueba aislada real con fuente deshabilitada: ABSTAINED/DISABLED sin caso ni cifras. [Informe, evidencias y hashes](docs/evidencias/P4/autonomia-20261026/README.md).
+
+**Recursos:** primer ciclo,21 muestras/~1s, Windows en batería: RSS pico115,75MiB, memoria privada96,83MiB, RAM libre mínima1386,57MiB; CPU pico7,719%del total lógico, reposo posterior0,151%. No son métricas LLM/GPU; FPS no repetidos. Plazo lógico90s, un intento, espera por carril P2≤5s; un bloqueo DNS del SO puede retrasar la liberación del hilo, sin duplicar workers ni publicar resultados cancelados.
+
+**QA:** check final **317 pytest +63 Vitest**, 1 opt-in omitido, TypeScript/build correctos; alembic check sin drift, integridad SQLiteok, diff-check correcto. Auditoría detectó6CVEs en filelock4.1.1; parche mínimo4.2.1 aplicado al lock y entorno: audit final0vulnerabilidades, pipcheck correcto. Primera regresión falló solo la expectativa de rutas OpenAPI, corregida y repetida. Navegador real Sistemas/Research, pausa/reanudar y dossier a1920×1080/1366×768: sin overflow ni erroresJS. Capturas privadas en `output/playwright/p4-autonomy/`; avisos existentes Three.Clock/shader y bundle3D grande conservados.
+
+**Seguridad/historia:** MASTER cash/NAV10000.00EUR ficticios, posiciones0, ledgerhash `fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836`, orders_enabled=false, POST/api/orders403. Comparados los21casos/219jobs/1783evidencias/152resultados/172claims previos y ledger: cero filas alteradas/perdidas. Cola0/activos0, runtimeNO_LOCAL_MODEL. Coste0EUR, sin brokers ni nuevos modelos. La automatización queda activa con próxima revisión27-10 20:11:59UTC; puede pausarse desde Sistemas/Research o desactivarse por entorno.
+
+**Límite:** esta es una única ruta descriptiva; no certifica autonomía general ni una tesis de inversión. Bull/Bear/Chair no se repitieron y siguen pendientes: **P4 PARTIAL, P5/P6 NO INICIADOS**. `Plan_JAIME_P5_P6.md` permanece como requisito futuro. Commits de implementación/seguridad/evidencia y push normal se verifican al cerrar.
+
+---
+
 ## 2026-10-23 · Reparación prioritaria Bull/Bear/Chair — PARTIAL
 
 **No hay debate completo financieramente validado; no declarar P4 terminada.** Se reparó el transporte con `debate-wire.v2` (claves/IDs reversibles, todos los campos públicos conservados, gramática y validación Python) y se añadieron comparaciones Python, guardas de contradicción/eco/incompletitud, métricas de fallos y cuarentena local de candidatos rechazados. Los dossiers antiguos se revalidan al abrirlos y ocultan argumentos inválidos. Template `p4.14-debate-wire`, esquema sin cambios `0005_data_history`. No se ampliaron timeouts, tokens ni retries.
