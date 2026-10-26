@@ -66,10 +66,11 @@ class ResearchStore:
         row = {'id': str(uuid.uuid4()), 'event': event, 'at': utc(), **fields}
         c.execute('INSERT INTO audit_events VALUES (?,?)', (row['id'], canonical(row)))
 
-    def create_case(self, instrument, question, key, goal=None):
+    def create_case(self, instrument, question, key, goal=None, origin=None):
         payload = {'id': str(uuid.uuid4()), 'instrument': instrument, 'question': question, 'created_at': utc(), 'thesis_version': 1}
         if goal is not None: payload['research_goal'] = goal
-        request_hash = digest({'instrument_id': instrument['id'], 'question': question, **({'research_goal': goal} if goal else {})})
+        if origin is not None: payload['origin'] = origin
+        request_hash = digest({'instrument_id': instrument['id'], 'question': question, **({'research_goal': goal} if goal else {}), **({'origin': origin} if origin else {})})
         payload['request_hash'] = request_hash
         with self.connection(True) as c:
             old = c.execute('SELECT payload FROM research_cases WHERE request_key=?', (key,)).fetchone()

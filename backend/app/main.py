@@ -25,6 +25,8 @@ from app.portfolio_service import PortfolioService
 from app.portfolio_contracts import PortfolioSummary, LedgerPage, PortfolioPage, PositionsResponse, MarketWatchlist
 from app.research_service import ResearchService
 from app.research_api import router as research_router
+from app.autonomy_scheduler import AutonomyScheduler
+from app.autonomy_api import router as autonomy_router
 
 
 def create_app(settings: Settings | None = None, data_settings: DataSettings | None = None) -> FastAPI:
@@ -41,10 +43,12 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
         try:
             initialize_master(engine)
             app.state.portfolio.snapshot()
-            await app.state.research.start()
+            await app.state.research.start(app.state.autonomy.prepare_start)
+            app.state.autonomy.start()
             app.state.data_refresh.start()
             yield
         finally:
+            await app.state.autonomy.stop()
             await asyncio.to_thread(app.state.data_refresh.stop)
             await app.state.research.stop()
             engine.dispose()
@@ -57,6 +61,8 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
     app.state.data_refresh = DataRefresher(app.state.data)
     app.state.portfolio = PortfolioService(engine, app.state.data)
     app.state.research = ResearchService(engine, app.state.data, app.state.portfolio)
+    app.state.autonomy = AutonomyScheduler(app.state.research)
+    app.include_router(autonomy_router(app.state.autonomy))
     app.include_router(research_router(app.state.research))
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "[::1]"])
     app.add_middleware(

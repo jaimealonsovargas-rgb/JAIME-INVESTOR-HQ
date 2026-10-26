@@ -37,8 +37,9 @@ class ResearchService:
         self.peaks = dict.fromkeys(CAPACITY, 0)
         self.timeout_seconds = 300
         self.quant_slots = asyncio.Semaphore(CAPACITY['quant'])
+        self.completion_events = set()
 
-    async def start(self):
+    async def start(self, before_workers=None):
         # OS lock survives neither crash nor exit; excludes duplicate schedulers on same DB.
         path = Path(self.store.engine.url.database + '.research.lock')
         self.lock_file = path.open('a+b'); self.lock_file.seek(0)
@@ -54,7 +55,10 @@ class ResearchService:
         except OSError:
             self.lock_file.close(); self.lock_file = None
             raise RuntimeError('RESEARCH_SCHEDULER_ALREADY_RUNNING') from None
-        self.store.initialize(); self.store.recover()
+        self.store.initialize()
+        if before_workers is not None:
+            before_workers()
+        self.store.recover()
         await self.llm.probe()
         self.workers = [asyncio.create_task(self.worker(kind)) for kind, size in CAPACITY.items() for _ in range(size)]
         self.event.set()
@@ -84,6 +88,8 @@ class ResearchService:
                     raise
             finally:
                 self.active.pop(job['id'], None); self.event.set()
+                for listener in self.completion_events:
+                    listener.set()
 
     def run(self, case_id, key, priority=10, refresh=False, depth=None, summary=False):
         result = self.store.enqueue(case_id, key, priority, refresh, depth, summary)

@@ -19,6 +19,8 @@ def collect(data, case, refresh=False):
     sources = {key for key, source in CATALOG.items() if any(provider == source.provider for provider, symbol in identifiers)}
     # Macro reference and already audited public RSS are supplementary, not instrument news.
     sources |= {'A01', 'A20'}
+    if case.get('origin', {}).get('trigger_type') == 'SCHEDULED_RESEARCH':
+        sources &= set(case['origin']['source_access_ids']) & {'A21'}
     if refresh:
         for access in sorted(sources):
             source = CATALOG[access]

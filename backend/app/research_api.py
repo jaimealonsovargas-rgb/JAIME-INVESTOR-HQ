@@ -7,16 +7,17 @@ from app.research_contracts import CreateCase, RunCase, sanitize
 from app.research_roles import ROLES
 
 
+def mutation(request):
+    if request.headers.get('x-hq-research') != '1' or request.headers.get('origin') not in (None, 'http://127.0.0.1:5173', 'http://localhost:5173', 'http://127.0.0.1:5174', 'http://localhost:5174'):
+        raise HTTPException(403, 'RESEARCH_ORIGIN_DENIED')
+    key = request.headers.get('idempotency-key', '')
+    if not re.fullmatch(r'[a-zA-Z0-9_-]{8,128}', key):
+        raise HTTPException(400, 'IDEMPOTENCY_KEY_REQUIRED')
+    return key
+
+
 def router(service):
     api = APIRouter()
-
-    def mutation(request):
-        if request.headers.get('x-hq-research') != '1' or request.headers.get('origin') not in (None, 'http://127.0.0.1:5173', 'http://localhost:5173', 'http://127.0.0.1:5174', 'http://localhost:5174'):
-            raise HTTPException(403, 'RESEARCH_ORIGIN_DENIED')
-        key = request.headers.get('idempotency-key', '')
-        if not re.fullmatch(r'[a-zA-Z0-9_-]{8,128}', key):
-            raise HTTPException(400, 'IDEMPOTENCY_KEY_REQUIRED')
-        return key
 
     def call(fn, *args):
         try:
