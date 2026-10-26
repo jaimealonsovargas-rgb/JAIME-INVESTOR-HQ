@@ -12,7 +12,9 @@ Implementado `AutonomyEvent → ResearchRouter → ResearchTask`, migración **0
 
 **Seguridad/historia:** MASTER cash/NAV10000.00EUR ficticios, posiciones0, ledgerhash `fdf208a2870b7027d00bf2c9e7f8ee78cd27c044bbca5f8bab8fcc3dcd465836`, orders_enabled=false, POST/api/orders403. Comparados los21casos/219jobs/1783evidencias/152resultados/172claims previos y ledger: cero filas alteradas/perdidas. Cola0/activos0, runtimeNO_LOCAL_MODEL. Coste0EUR, sin brokers ni nuevos modelos. La automatización queda activa con próxima revisión27-10 20:11:59UTC; puede pausarse desde Sistemas/Research o desactivarse por entorno.
 
-**Límite:** esta es una única ruta descriptiva; no certifica autonomía general ni una tesis de inversión. Bull/Bear/Chair no se repitieron y siguen pendientes: **P4 PARTIAL, P5/P6 NO INICIADOS**. `Plan_JAIME_P5_P6.md` permanece como requisito futuro. Commits de implementación/seguridad/evidencia y push normal se verifican al cerrar.
+**Límite:** esta es una única ruta descriptiva; no certifica autonomía general ni una tesis de inversión. Bull/Bear/Chair no se repitieron y siguen pendientes: **P4 PARTIAL, P5/P6 NO INICIADOS**. `Plan_JAIME_P5_P6.md` permanece como requisito futuro.
+
+**Git publicado:** backend `8e18833`, UI `1a87a49`, seguridad `f0fe4ff`, evidencia `5b5303a`. Push normal verificado con HEAD/origin/main idénticos en `5b5303a6144a067f1c05eca8ec20c952a398173f` y árbol limpio; esta anotación de cierre se versiona aparte. No se usaron reset, clean ni force-push.
 
 ---
 
