@@ -1,5 +1,15 @@
 # Estado del proyecto
 
+## 2026-11-03 · Skills de agente vendoreadas + política de datos por niveles (D027/D028)
+
+**Cambio de documentación y assets, sin tocar código de runtime.** Añadidas **39 skills de agente** curadas en `.agents/skills/` (ámbito de proyecto, versionadas) desde tres colecciones externas con licencia verificada: 11 de research/valoración de [Maybern/claude-skills](https://github.com/Maybern/claude-skills) (Apache-2.0), 19 quant de [agiprolabs/claude-trading-skills](https://github.com/agiprolabs/claude-trading-skills) (MIT) y 9 de trading floor de [Jakeschincariol/day-trader-skill](https://github.com/Jakeschincariol/day-trader-skill) (MIT). **Excluidas a propósito**: `trader-broker` (ejecuta órdenes en brokers; contradice PAPER ONLY y el guard 403) y `trader-pelosi` (fuera de alcance). Cada skill conserva su aviso de copyright; inventario, mapeo a fases (P4/P5/P6) y reglas de uso en `.agents/skills/README.md`; atribución en `.agents/skills/LICENSES/`.
+
+**D027 — fin de la prohibición total de scraping.** Sustituida por política de tres niveles: Nivel 1 API oficial (sin cambios), Nivel 2 endpoints públicos no oficiales (Yahoo, Stooq, TradingView, Investing) para consulta personal local read-only con etiqueta `UNOFFICIAL_SOURCE`, `scope='internal'`, `redistribution=False`, caché y cuota conservadora — nunca fuente primaria si hay alternativa oficial; Nivel 3 prohibido (escritura a brókeres/exchanges/cuentas, credenciales, publicaciones) — `POST /api/orders = 403` **sin cambios**. Motivo: cerrar el hueco de precios de renta variable europea/española. Docs de política actualizados: `P2_CATALOGO_MAXIMO_FUENTES.md`, `P2_PROVIDERS_VERIFICACION.md`, `ESPECIFICACION_DEFINITIVA_2026_10_15.md`; los prompts históricos se conservan como registro. **AGENTS.md** actualizado con la gobernanza de skills (invariante 10) y la referencia cruzada.
+
+**Honestidad:** este cambio lo preparó un asistente externo a petición del usuario; no pasó por `manage.py check` de Windows (no se modificó código de backend/frontend, solo docs y assets nuevos, por lo que pytest/Vitest/alembic no se ven afectados). **No es autorización de implementación de P5/P6** ni certifica fuentes nuevas conectadas: las skills y el Nivel 2 son capacidades disponibles para el agente, no proveedores en el catálogo P2. Los cambios se entregan en rama `feature/skills-antiscraping-2026-11-03` vía PR para revisión antes de fusionar. P4 sigue PARTIAL; P5/P6 NO INICIADOS.
+
+---
+
 ## 2026-10-26 · Primer ciclo autónomo P4 — Goal completado, P4 PARTIAL
 
 Implementado `AutonomyEvent → ResearchRouter → ResearchTask`, migración **0006_autonomy**, reloj diario configurable/desactivable, fuente autorizada A21, 3 roles Python y cero inferencias. Reutiliza casos/jobs/evidencia/auditoría, mantiene los 30 roles y toda la historia. Reserva atómica, claves idempotentes, una tarea activa, sin recuperar días perdidos en ráfaga; pausa/cancelación persistentes y recuperación bajo lock exclusivo. Sistemas/Research muestran motivo, fuente, estado, resultado y acceso al dossier; no se rediseña la oficina. [Contrato, configuración y límites](docs/P4_AUTONOMIA_PRIMER_CICLO.md).
