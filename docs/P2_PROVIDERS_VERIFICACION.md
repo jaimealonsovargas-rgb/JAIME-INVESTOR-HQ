@@ -111,4 +111,4 @@ D = visualización local; C = cache local; R = redistribución. “Sí” depend
 
 ## Fuentes especializadas
 
-CNMV, BoE y Fed: investigación pendiente de endpoints y permisos. FINRA/CBOE/CME y bonos corporativos: no se presume un feed gratuito. Yahoo/Google/TradingView/Investing/Stooq: sin scraping ni endpoints internos.
+CNMV, BoE y Fed: investigación pendiente de endpoints y permisos. FINRA/CBOE/CME y bonos corporativos: no se presume un feed gratuito. Yahoo/Google/TradingView/Investing/Stooq: fuentes no oficiales de **Nivel 2 (D027)** — consulta local read-only permitida con `UNOFFICIAL_SOURCE`, sin redistribución; nunca fuente primaria si existe alternativa oficial.

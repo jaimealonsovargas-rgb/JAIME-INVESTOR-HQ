@@ -71,7 +71,17 @@ Estados separados por fuente:
 - **Federal Reserve Board** (https://www.federalreserve.gov/data.htm): tipos/estadísticas/series oficiales, CSV/RSS donde se permita.
 - **IR de emisores y RSS de reguladores**: documentos, anuncios y hechos relevantes con URL/fecha y respeto a licencias; no copiar artículos.
 - **FINRA TRACE, CBOE/CME, bonos corporativos individuales, opciones, fondos europeos y exchanges**: precios y derechos suelen ser restringidos; investigar cobertura, pero **no simular feeds gratuitos**.
-- **Yahoo Finance, Google Finance, TradingView, Investing.com y Stooq**: sitios útiles para consultar manualmente, pero **NO scraping ni endpoints internos sin autorización**. Si no hay API oficial autorizada, solo enlaces, no fuente principal.
+- **Yahoo Finance, Google Finance, TradingView, Investing.com y Stooq**: fuentes **no oficiales de Nivel 2** según la política D027 (ver más abajo). Consulta personal local permitida con etiqueta `UNOFFICIAL_SOURCE`, caché, cuota conservadora y sin redistribución; no son fuente primaria para macro/fundamentales ni sustituyen a las APIs oficiales.
+
+### Política de niveles de acceso a datos (ADR D027)
+
+Reemplaza la antigua prohibición total de scraping. Tres niveles:
+
+- **Nivel 1 (preferente)**: API oficial con licencia o clave gratuita (BCE, INE, SEC, FRED...). Sin cambios.
+- **Nivel 2 (tolerado, uso personal local)**: endpoints públicos no oficiales (Yahoo chart endpoint, Stooq, TradingView). Permitidos para consulta local **read-only** con: etiqueta `UNOFFICIAL_SOURCE` en cada observación, `scope='internal'`, `display=False` si la licencia de display no está clara, `redistribution=False`, caché y cuota conservadora. Riesgo asumido: sin SLA, endpoints que pueden cambiar sin aviso, condiciones de servicio grises para uso personal no comercial. Nunca fuente primaria cuando exista Nivel 1 equivalente.
+- **Nivel 3 (prohibido, sin cambios)**: escritura hacia brókeres/exchanges/cuentas (órdenes, transferencias, POST de operación), credenciales de terceros, publicaciones o acciones en redes. `POST /api/orders = 403` se mantiene.
+
+La honestidad del etiquetado (oficial vs. no oficial, frescura, retraso) es la defensa frente a datos malos colando como buenos: una observación de Nivel 2 nunca se presenta con la confianza de una de Nivel 1.
 
 ## 5. Excepción técnica de POST que es solo consulta de datos
 
@@ -86,7 +96,7 @@ Solo si Codex puede asegurar **allowlist exacta de host + path + verbo**, payloa
 | Necesidad | Preferencia y alternativas | Prohibición |
 |---|---|---|
 | Precio US | Alpaca IEX si habilitada; EOD de Alpha Vantage, Twelve, Finnhub según licencia | IEX ≠ SIP; EOD ≠ realtime |
-| Precio Europa | Feed europeo **verificado** con licencia, o solo metadata ESMA | ADR US ≠ acción española; no inventar BME |
+| Precio Europa | Feed europeo **verificado** con licencia, o Yahoo/Stooq como Nivel 2 (`UNOFFICIAL_SOURCE`, EOD/diferido), o solo metadata ESMA | ADR US ≠ acción española; no inventar BME; dato Nivel 2 nunca sin etiqueta |
 | ISIN/FIGI | OpenFIGI y ESMA FIRDS; aliases por proveedor | Ticker ambiguo no identifica activo |
 | Fundamentales US | SEC XBRL, IR emisor; terceros autorizados | No confundir hechos auditados con estimaciones |
 | Macro España | INE, BdE, Eurostat, ECB | IPC general ≠ IPCA sin etiqueta |

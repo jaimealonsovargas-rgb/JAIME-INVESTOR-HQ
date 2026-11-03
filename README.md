@@ -71,6 +71,7 @@ Las funciones incluyen: universo multiactivo; análisis fundamental, técnico, m
 ## Carpetas
 
 - AGENTS.md — reglas permanentes de Codex, seguridad y ahorro de contexto.
+- .agents/skills/ — 39 skills de agente vendoreadas (research/quant/trading floor), con inventario y licencias (ADR D028).
 - CODEX_MASTER_PROMPT.md — visión completa y criterios de construcción.
 - CODEX_START_HERE.md — primer mensaje que pegar en Codex.
 - docs/ — diseño, instrumentos, renta fija, proveedores, contabilidad, agentes, riesgo, modelos, pruebas y auditoría.

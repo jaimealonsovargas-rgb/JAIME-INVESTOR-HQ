@@ -48,7 +48,7 @@ El usuario quiere el **máximo posible de páginas/fuentes**, pero el objetivo p
 - **P2.4a:** FRED, BEA, BLS v2, EIA, Alpha Vantage, CoinGecko Demo, OpenFIGI con clave.
 - **P2.4b:** Alpaca Basic (IEX, no SIP), Trading 212 DEMO, Twelve Data con restricciones de display verificadas.
 - **P2.4c:** Finnhub, FMP, Massive/Polygon, Tiingo, Nasdaq Data Link **solo si existe acceso gratuito realmente compatible**.
-- **Explorar:** CNMV, Bank of England, Fed, emisores IR/RSS, bolsas/reguladores si hay acceso legal. No scraping no autorizado de Yahoo, Google Finance, TradingView, Investing o redes.
+- **Explorar:** CNMV, Bank of England, Fed, emisores IR/RSS, bolsas/reguladores si hay acceso legal. Yahoo, Google Finance, TradingView, Investing y Stooq como **Nivel 2 (ADR D027)**: consulta local read-only con `UNOFFICIAL_SOURCE`, sin redistribución, nunca fuente primaria si hay alternativa oficial.
 
 Cada observación incluye instrumento/ISIN/FIGI/venue, fuente, licencia y derechos de display/storage, fecha UTC, divisa, precisión Decimal, feed, calidad, latencia, ajuste y TTL. **No confundir** FX de referencia BCE con spot ejecutable, curva de rendimiento Treasury con precio de bono, fundamentales SEC con cotización ni IEX con SIP. Cache, backoff, cuotas, offline, circuit breaker, selección por semántica. Estados CANDIDATE / IMPLEMENTED / CONNECTED / USABLE con prueba HTTP real y fecha. Mocks son para tests, no conexión. Los POST de BLS v2/OpenFIGI son consultas allowlisted, no órdenes; **no POST a broker/exchange** en P2.
 
