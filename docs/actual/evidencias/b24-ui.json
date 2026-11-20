@@ -1,0 +1,18 @@
+{
+  "checked_at": "2026-10-30T08:32:54.150Z",
+  "checks": [
+    "No horizontal overflow 1920",
+    "No horizontal overflow 1366",
+    "No horizontal overflow 800",
+    "No horizontal overflow 390",
+    "Exact inputs and receipt visible",
+    "Same-filing earnings comparisons",
+    "Valuation abstention and independent review",
+    "UI build is idempotent with real local API",
+    "Orders remain 403",
+    "Specialist shows actual shared model deliveries",
+    "Disconnected API exposes retry and hides model values"
+  ],
+  "errors": [],
+  "url": "http://127.0.0.1:5173/?activos=1&q=0000320193&valor=dba3ee06718af55b83da5519f58c9650e6917d496d709b228753379ceb13089f#company-analysis"
+}

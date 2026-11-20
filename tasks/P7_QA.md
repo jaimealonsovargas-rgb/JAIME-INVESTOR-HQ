@@ -1,3 +1,5 @@
-# P7 — QA y pulido | Sol Medio + Astra Alto auditoría
+# Referencia histórica — P7_QA
 
-Pruebas unitarias, integración, E2E Playwright, accesibilidad, visuales y rendimiento 3D. Revisar ledger, renta fija, FX, datos, licencias, derechos y seguridad. Manual de instalación Windows y backup local. Informe con resultados reales, defectos y pendientes. No declarar listo sin evidencia.
+Esta ficha dejó de ser cola activa. Continuar en [ACTUAL](ACTUAL.md) según el orden de [ROADMAP](ROADMAP.md). Reglas vigentes en [AGENTS](../AGENTS.md).
+
+[Especificación original preservada](../docs/archive/2026-11-11-continuidad/tasks/P7_QA.md). Sus STOP, autorizaciones y próximos pasos pertenecen a su fecha; P5/P6 Alpaca PAPER ya están autorizadas. Los gates técnicos y el bloqueo actual de órdenes siguen vigentes.

@@ -1,3 +1,5 @@
+> REFERENCIA FECHADA. Prioridades/estado/autorizaciones vigentes: [plan actual](actual/VISION_Y_ARQUITECTURA.md) y [roadmap](../tasks/ROADMAP.md). P5 fue autorizada posteriormente con mejoras previas; P6 no. El cuerpo conserva la propuesta histórica y no acredita funciones actuales.
+
 # Realineación arquitectónica: research autónomo local
 
 > **Implementación acotada, 25–26-10-2026:** el nuevo Goal del usuario autoriza y añade el primer ciclo P4 descrito en [P4_AUTONOMIA_PRIMER_CICLO](P4_AUTONOMIA_PRIMER_CICLO.md). Las propuestas generales que siguen no implican que existan otras rutas. P4 continúa PARTIAL; P5/P6 no iniciados.

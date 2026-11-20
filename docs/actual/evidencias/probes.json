@@ -1,0 +1,24 @@
+{
+  "kind": "SYNTHETIC_FIXTURES_NO_MARKET_VALUES",
+  "baseline_commit": "5b56dc8e699a73e6d4b9519a03088e5b05151b8e",
+  "sec": {
+    "observations": 2,
+    "unique_ids": 1,
+    "distinct_values": 2,
+    "published_at_populated": false,
+    "fundamental_gate": "NO_DATA: faltan datos fundamentales o contractuales autorizados para este especialista.",
+    "archived_rows": 1
+  },
+  "aliases": {
+    "input_providers": 2,
+    "persisted_alias_providers": [
+      "TEST_PROVIDER_A"
+    ]
+  },
+  "history": {
+    "input_unique_days": 60,
+    "only_one_price_revised": true,
+    "returned_rows": 60,
+    "returned_unique_days": 30
+  }
+}

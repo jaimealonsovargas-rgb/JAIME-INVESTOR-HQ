@@ -1,6 +1,6 @@
 # P1.A–B · Arquitectura gráfica
 
-Documento del alcance inicial P1.A–B: hardware, base gráfica y arquitectura de los nueve departamentos. El cierre posterior autorizado de P1.C–F está implementado y documentado en [ACEPTACION_P1](ACEPTACION_P1.md); las restricciones históricas de este documento no son el estado actual.
+Documento del alcance inicial P1.A–B: hardware, base gráfica y arquitectura de los nueve departamentos. El cierre posterior autorizado de P1.C–F está implementado y documentado en [ACEPTACION_P1](archive/2026-10-27/planes/ACEPTACION_P1.md); las restricciones históricas de este documento no son el estado actual.
 
 ## Equipo y presupuesto inicial
 

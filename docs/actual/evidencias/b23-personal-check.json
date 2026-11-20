@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-29T11:45:12.432Z",
+  "health": {
+    "status": "ok",
+    "phase": "P0",
+    "trading_mode": "PAPER_ONLY",
+    "orders_enabled": false,
+    "database": "ok",
+    "schema_version": "0010_market_data",
+    "checked_at": "2026-10-29T11:45:10.397017Z"
+  },
+  "market": {
+    "source": {
+      "state": "NO_CREDENTIALS",
+      "feed": "iex",
+      "mode": "PAPER_READ_ONLY",
+      "reason": "Faltan ALPACA_API_KEY y ALPACA_SECRET_KEY en .env; no compartas claves por chat."
+    },
+    "counts": {
+      "assets": 0,
+      "bars": 0,
+      "bar_sets": 0
+    },
+    "orders_enabled": false
+  },
+  "sec_counts": {
+    "issuers_with_facts": 100,
+    "issuers_with_documents": 100,
+    "snapshots": 202,
+    "receipts": 218
+  },
+  "orders_http": 403,
+  "ui": {
+    "sec_accounts_available": true,
+    "capture_disabled_without_keys": true,
+    "no_synthetic_market_data": true,
+    "errors": []
+  }
+}

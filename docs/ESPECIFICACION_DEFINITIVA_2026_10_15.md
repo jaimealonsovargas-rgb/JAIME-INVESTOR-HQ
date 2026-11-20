@@ -3,7 +3,7 @@
 **Fecha:** 2026-10-15. **Naturaleza:** diseño aprobado y contrato de implementación, NO código ni conexiones verificadas.
 **Misión:** plataforma local-first de investigación y gestión de una cartera de **10.000 EUR virtuales** con datos de mercado **reales y trazables**, decisiones multiagente, compras/ventas **PAPER**, seguimiento y evaluación. **Solo el dinero y los fills son simulados**, nunca las fuentes o los resultados. **Coste adicional 0 EUR; no trading live.**
 
-**Precedencia:** seguridad PAPER ONLY/0 EUR > últimas decisiones del usuario (oficina Sims + videowall + 16 NPC + 30 roles) > este documento > [plan maestro](PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md) > [planes P1/P2](PLAN_EJECUCION_P1_P2.md) > instrucciones históricas. **Autorización actual P1 correctivo + P2 completo; STOP antes de P3**. Especificar P3–P7 no significa ejecutarlas.
+**Precedencia:** seguridad PAPER ONLY/0 EUR > últimas decisiones del usuario (oficina Sims + videowall + 16 NPC + 30 roles) > este documento > [plan maestro](PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md) > [planes P1/P2](archive/2026-10-27/planes/PLAN_EJECUCION_P1_P2.md) > instrucciones históricas. **Autorización actual P1 correctivo + P2 completo; STOP antes de P3**. Especificar P3–P7 no significa ejecutarlas.
 
 ## 1. Imagen aprobada: incorporarla de verdad
 
@@ -113,10 +113,10 @@ No afirmar vigilancia 24/7 si el PC está apagado. La app puede trabajar mientra
 
 ## 10. Handoff y referencias
 
-**Leer primero:** `AGENTS.md` → `STATUS.md` → este documento → [plan maestro](PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md) → [prompt Codex completo](PROMPT_CODEX_EJECUCION_COMPLETA_P1_P2.md) → P1/P2 checkpoints. No cargar todos los documentos en cada turno.
+**Leer primero:** `AGENTS.md` → `STATUS.md` → este documento → [plan maestro](PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md) → [prompt Codex completo](archive/2026-10-27/planes/PROMPT_CODEX_EJECUCION_COMPLETA_P1_P2.md) → P1/P2 checkpoints. No cargar todos los documentos en cada turno.
 
 **Referencia visual:** PNG original principal y secundario del ZIP de handoff, [manifiesto de hashes](../assets/REFERENCIA_APROBADA_MANIFIESTO.md). [Plano SVG secundario](../assets/PLANO_SIMS_VIDEOWALL.svg).
 
-**Planes existentes:** [P1+P2](PLAN_EJECUCION_P1_P2.md), [P2 detallado](PLAN_P2_CHECKPOINTS.md), [fuentes máximas](P2_CATALOGO_MAXIMO_FUENTES.md), [integraciones externas](INTEGRACIONES_TERCEROS_VERIFICACION.md), [ledger](07_CARTERA_LEDGER.md), [agentes](09_AGENTES.md), [quant](10_CUANTITATIVO.md), [aceptación](16_TESTS_ACEPTACION.md). Issues #1, #2 y #3.
+**Planes existentes:** [P1+P2](archive/2026-10-27/planes/PLAN_EJECUCION_P1_P2.md), [P2 detallado](PLAN_P2_CHECKPOINTS.md), [fuentes máximas](P2_CATALOGO_MAXIMO_FUENTES.md), [integraciones externas](INTEGRACIONES_TERCEROS_VERIFICACION.md), [ledger](07_CARTERA_LEDGER.md), [agentes](09_AGENTES.md), [quant](10_CUANTITATIVO.md), [aceptación](16_TESTS_ACEPTACION.md). Issues #1, #2 y #3.
 
 **Regla final:** cuando el render contradiga el producto (rótulos extra, cristales bloqueantes, precios falsos), mantener la estética del render pero cumplir las reglas de producto. No volver a preguntar decisiones ya aprobadas; solo bloquear por pérdida de código, permisos, licencia o coste.

@@ -9,7 +9,7 @@ export const DEPARTMENTS: Department[] = ([
   { id: 'research', label: 'RESEARCH', number: '01', center: [-12, 0, -10], size:[7.4,5],entrance:'south', use: 'Biblioteca · análisis fundamental', phase: 'P4' },
   { id: 'committee', label: 'COMITÉ DE INVERSIÓN', number: '02', center: [0, 0, -3], size:[10,6.2],entrance:'sides', use: 'Consejo · decisiones', phase: 'P5' },
   { id: 'trading', label: 'TRADING', number: '03', center: [12, 0, -3.7], size:[7.4,5.6],entrance:'west', use: 'Mercados · investigación', phase: 'P3' },
-  { id: 'risk', label: 'RIESGOS', number: '04', center: [9, 0, -10], size:[7.4,5],entrance:'south', use: 'Control · límites', phase: 'P5' },
+  { id: 'risk', label: 'RIESGOS', number: '04', center: [12, 0, -10], size:[7.4,5],entrance:'south', use: 'Control · límites', phase: 'P5' },
   { id: 'execution', label: 'EJECUCIÓN', number: '05', center: [-12, 0, 3.6], size:[7.4,5.6],entrance:'east', use: 'Órdenes · reconciliación', phase: 'P6' },
   { id: 'quant', label: 'QUANT LAB', number: '06', center: [0, 0, -10], size:[7.4,5],entrance:'south', use: 'Laboratorio · estrategias', phase: 'P5' },
   { id: 'performance', label: 'PERFORMANCE', number: '07', center: [12, 0, 3.1], size:[7.4,5.6],entrance:'west', use: 'Análisis · atribución', phase: 'P3' },

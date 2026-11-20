@@ -1,0 +1,372 @@
+{
+  "at": "2026-10-30T08:25:17.404023+00:00",
+  "backup": "output\\b24-before-0011.db",
+  "backup_bytes": 468029440,
+  "old_tables_unchanged": 35,
+  "tables": {
+    "agent_jobs": {
+      "count": 234,
+      "sha256": "5a1e353841e4b61fce548051bd1967af21ba2cc6a41d7086eb3d4495bf1f6a5b"
+    },
+    "agent_results": {
+      "count": 167,
+      "sha256": "cea917848428f911cb49abb5d3e5bd55e05f21e23ed90f2b4bb86b39928b4210"
+    },
+    "agents": {
+      "count": 30,
+      "sha256": "723d34a9803f92ee288cdb4ace97b375ee184dd72ab59a92af6dfed57cb6dd0b"
+    },
+    "audit_events": {
+      "count": 568,
+      "sha256": "b7db8d9212f40492073bcd25f09b891ad8df89ecc0e93edd1b44b9ab984c19c1"
+    },
+    "autonomy_control": {
+      "count": 1,
+      "sha256": "b0c55d1c206e88fee6acf1dc199e9fdcc122677e16bc026b32e55acfab106cd8"
+    },
+    "autonomy_events": {
+      "count": 4,
+      "sha256": "bb26c92189f91cb14945939f314abd375dc86de60218748ac6ce33a9c5c06fa3"
+    },
+    "data_downloads": {
+      "count": 68,
+      "sha256": "d2a4d463c09356b519a917f1f63e1720866140d73254649401908b7e0612b5cd"
+    },
+    "data_observations": {
+      "count": 6424,
+      "sha256": "91fba7538578dbcfde548016499bbaf702f63c212ff1140dc7e90abaccfd38fb"
+    },
+    "data_quotas": {
+      "count": 20,
+      "sha256": "40c41ab8086408db58333d95a1b230233c6b009c17a70926df59bacd7f5779af"
+    },
+    "data_records": {
+      "count": 50,
+      "sha256": "824979190ca86c503d9fe7a1189390b63b91c1fb56adc6da81e74942d7194505"
+    },
+    "data_refresh": {
+      "count": 15,
+      "sha256": "90d1af98bdeeface319673de830e6f00f7b81d957b1ab996b4a9a2ff341f0f9b"
+    },
+    "evidence": {
+      "count": 2188,
+      "sha256": "0a09a4a7a7731af7a80b359cb1096bbdb257322fe683f4778e1ea133091304e7"
+    },
+    "instrument_aliases": {
+      "count": 599,
+      "sha256": "e20655319109ce9d8e94045290a8cf6db53531766ab473b1454ec46c0c0fefdd"
+    },
+    "instruments": {
+      "count": 599,
+      "sha256": "7d7a6adb6c0c9473b9613eb26bfaf6b66136897c805d9243b32bd6f8bcaae0f3"
+    },
+    "ledger_entries": {
+      "count": 2,
+      "sha256": "dd9cb6a48031873d2c5f5e0e6242fd247c8aaf42c08cd5bf72223cec23916a42"
+    },
+    "ledger_events": {
+      "count": 1,
+      "sha256": "b7b602e894661899c2ce6dcccf2d3e4814d5237b874ad87905f06e56cf4d5687"
+    },
+    "market_bars": {
+      "count": 21,
+      "sha256": "dd9286135a00b9a368511b99b530923dbdb882a9ad0583b8af81ec56bb3a1c71"
+    },
+    "market_endpoint_status": {
+      "count": 8,
+      "sha256": "85249c769fbf169554f63136cb2563ed7f62a90024da74383a566b54ff664696"
+    },
+    "market_jobs": {
+      "count": 4,
+      "sha256": "c1ed90db48627513d97aa7e32622890b4b00a50b15dddc8ea8bffeea7106ff44"
+    },
+    "market_receipts": {
+      "count": 9,
+      "sha256": "23f479e3afde8e7feb308ea38d45624c01cb5fd34743ce19d45f3cc98b3d6d6d"
+    },
+    "portfolios": {
+      "count": 1,
+      "sha256": "8796e9e41d6a7710d2721cb7b5f75e0168752e68984cf4dd2efac5b9bd2886fb"
+    },
+    "research_cases": {
+      "count": 25,
+      "sha256": "005fc5451761016e2ca2e2c3dfcb537146d6456b5704baa338940e28a429932e"
+    },
+    "research_claims": {
+      "count": 172,
+      "sha256": "4eaa3dd2d0770d9a1cfa6fb4bfaeaded7ee585a20eff5019641735057fbf5c03"
+    },
+    "research_tasks": {
+      "count": 4,
+      "sha256": "7dfac9abae93f5f2079a06aef3c49f3d4235f49e810de7faa9535decfe5c78bf"
+    },
+    "sec_facts": {
+      "count": 356237,
+      "sha256": "01f2993146f92a2b22f611037c68683ae9594b767ab47e866d8932ea8528fb08"
+    },
+    "sec_filings": {
+      "count": 12994,
+      "sha256": "aa4fa94e32bfb7afa8c0f52ac623739baf798401c26d8b921eedd23790822952"
+    },
+    "sec_jobs": {
+      "count": 2,
+      "sha256": "c6c6cb9ddf7ffb6456e491b738e600f0bdffb918bbeda75d18d761ac251bd9d3"
+    },
+    "sec_receipts": {
+      "count": 218,
+      "sha256": "1968e6bd94456950248c7290315a09e35010abef3e4e299a79e27b48c4f8c0d0"
+    },
+    "sec_snapshots": {
+      "count": 202,
+      "sha256": "bc946f24ad19347ce83f7570b268ea971e5e8c003f3a944d2c132a9b89d4e9a2"
+    },
+    "sec_tasks": {
+      "count": 400,
+      "sha256": "d4b8b9e2b96001286b102c1d649253f55dce9cd43c9a1680f7fda7b753fa1275"
+    },
+    "universe_entities": {
+      "count": 8023,
+      "sha256": "97e1f8b55c1dafd3c1209359712f2a67ebc7780820dec3a0ce07388e979ab8e4"
+    },
+    "universe_imports": {
+      "count": 6,
+      "sha256": "7140764041f5deee30dc4e13ea8dbfc1803644c4266ed3c85b53bd1b04b5b55c"
+    },
+    "universe_listings": {
+      "count": 24837,
+      "sha256": "398cb6ae216a85b98bd2c2c03235871c32983ba664b87bcf059edc8cb9401172"
+    },
+    "universe_versions": {
+      "count": 24837,
+      "sha256": "1ae8a1d83a11dcb3aa374e303cbdd9d8636701bef082177ed39df8056675ee9f"
+    },
+    "valuation_snapshots": {
+      "count": 11,
+      "sha256": "dd4545cdc8cfc8314bdce5a296ba5cd28aba0646bbd58102674bd7bbe70dc719"
+    }
+  },
+  "pilot": [
+    {
+      "name": "Apple",
+      "cik": "0000320193",
+      "id": "f780aab1f85183f6397780269c0697ba420357cc0510a1bbe233c2b35c3b2043",
+      "version": 1,
+      "period": {
+        "start": "2024-09-29",
+        "end": "2025-09-27"
+      },
+      "source_hash": "73a86c6aedc31f77cac2ea4df5f80f0b3bd7e6eb58bb4e01444fbedf3afb9c43",
+      "verified_inputs_against_raw": 40,
+      "review_state": "PARTIAL",
+      "checks": [
+        {
+          "id": "operating_margin",
+          "state": "PASS"
+        },
+        {
+          "id": "parent_net_margin",
+          "state": "PASS"
+        },
+        {
+          "id": "current_ratio",
+          "state": "PASS"
+        },
+        {
+          "id": "cfo_margin",
+          "state": "PASS"
+        },
+        {
+          "id": "liabilities_assets",
+          "state": "PASS"
+        },
+        {
+          "id": "cfo_less_ppe",
+          "state": "PASS"
+        },
+        {
+          "id": "change_revenue",
+          "state": "PASS"
+        },
+        {
+          "id": "change_operating_income",
+          "state": "PASS"
+        },
+        {
+          "id": "change_net_income",
+          "state": "PASS"
+        },
+        {
+          "id": "change_operating_cash_flow",
+          "state": "PASS"
+        },
+        {
+          "id": "change_diluted_eps",
+          "state": "PASS"
+        },
+        {
+          "id": "balance",
+          "state": "BLOCKED"
+        },
+        {
+          "id": "cash_roll_forward",
+          "state": "BLOCKED"
+        },
+        {
+          "id": "provenance",
+          "state": "PASS"
+        }
+      ],
+      "metrics_available": 6,
+      "metrics_total": 6,
+      "growth_available": 5
+    },
+    {
+      "name": "Microsoft",
+      "cik": "0000789019",
+      "id": "6bfa08539ce266a83d0c6180b738861d0f8e6c8da1b49cc938f45d8d5d8c9a88",
+      "version": 1,
+      "period": {
+        "start": "2025-07-01",
+        "end": "2026-06-30"
+      },
+      "source_hash": "dd0308149a8e96497989ed7c690b5a49a00bef9ceafbb24638bda41e8ae938dd",
+      "verified_inputs_against_raw": 40,
+      "review_state": "PARTIAL",
+      "checks": [
+        {
+          "id": "operating_margin",
+          "state": "PASS"
+        },
+        {
+          "id": "parent_net_margin",
+          "state": "PASS"
+        },
+        {
+          "id": "current_ratio",
+          "state": "PASS"
+        },
+        {
+          "id": "cfo_margin",
+          "state": "PASS"
+        },
+        {
+          "id": "liabilities_assets",
+          "state": "PASS"
+        },
+        {
+          "id": "cfo_less_ppe",
+          "state": "PASS"
+        },
+        {
+          "id": "change_revenue",
+          "state": "PASS"
+        },
+        {
+          "id": "change_operating_income",
+          "state": "PASS"
+        },
+        {
+          "id": "change_net_income",
+          "state": "PASS"
+        },
+        {
+          "id": "change_operating_cash_flow",
+          "state": "PASS"
+        },
+        {
+          "id": "change_diluted_eps",
+          "state": "PASS"
+        },
+        {
+          "id": "balance",
+          "state": "BLOCKED"
+        },
+        {
+          "id": "cash_roll_forward",
+          "state": "BLOCKED"
+        },
+        {
+          "id": "provenance",
+          "state": "PASS"
+        }
+      ],
+      "metrics_available": 6,
+      "metrics_total": 6,
+      "growth_available": 5
+    },
+    {
+      "name": "Walmart",
+      "cik": "0000104169",
+      "id": "ca510c2c1fcad162a337c9e6ba8790ce7cbd6cc1bb1581db2f101aee28abc4e1",
+      "version": 1,
+      "period": {
+        "start": "2025-02-01",
+        "end": "2026-01-31"
+      },
+      "source_hash": "49330f98609f70fcef4054edc90bc811398a58c4bf26dc0b218d607967a8dbe4",
+      "verified_inputs_against_raw": 40,
+      "review_state": "PARTIAL",
+      "checks": [
+        {
+          "id": "operating_margin",
+          "state": "PASS"
+        },
+        {
+          "id": "parent_net_margin",
+          "state": "PASS"
+        },
+        {
+          "id": "current_ratio",
+          "state": "PASS"
+        },
+        {
+          "id": "cfo_margin",
+          "state": "PASS"
+        },
+        {
+          "id": "liabilities_assets",
+          "state": "BLOCKED"
+        },
+        {
+          "id": "cfo_less_ppe",
+          "state": "PASS"
+        },
+        {
+          "id": "change_revenue",
+          "state": "PASS"
+        },
+        {
+          "id": "change_operating_income",
+          "state": "PASS"
+        },
+        {
+          "id": "change_net_income",
+          "state": "PASS"
+        },
+        {
+          "id": "change_operating_cash_flow",
+          "state": "PASS"
+        },
+        {
+          "id": "change_diluted_eps",
+          "state": "PASS"
+        },
+        {
+          "id": "balance",
+          "state": "BLOCKED"
+        },
+        {
+          "id": "cash_roll_forward",
+          "state": "BLOCKED"
+        },
+        {
+          "id": "provenance",
+          "state": "PASS"
+        }
+      ],
+      "metrics_available": 5,
+      "metrics_total": 6,
+      "growth_available": 5
+    }
+  ]
+}

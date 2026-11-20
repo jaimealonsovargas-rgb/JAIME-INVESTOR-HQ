@@ -1,0 +1,8 @@
+{
+  "schema": "0007_data_lineage",
+  "backup": "output/b1-before-0007.db",
+  "all_existing_tables_unchanged": true,
+  "new_tables": [
+    "data_downloads"
+  ]
+}

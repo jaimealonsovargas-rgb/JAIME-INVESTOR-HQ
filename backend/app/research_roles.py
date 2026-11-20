@@ -4,8 +4,8 @@ from app.research_contracts import Opinion
 from app.research_arguments import CONTRACTS, TASKS
 
 MISSIONS = {
- 'fundamental_equity': 'Evaluar negocio y hechos fundamentales; señalar estados financieros ausentes.',
- 'valuation': 'Comparar valoración y supuestos únicamente con datos aportados; nunca inventar un precio objetivo.',
+ 'fundamental_equity': 'Construir modelos contables versionados con evidencia SEC en el Centro de activos; interpretar el negocio solo con hechos aportados.',
+ 'valuation': 'Revisar los requisitos de valoración del modelo empresarial; abstenerse de DCF y precio objetivo sin inputs suficientes.',
  'macro_global': 'Interpretar el contexto macro global y distinguir referencias de precios ejecutables.',
  'macro_europe_spain': 'Analizar contexto europeo y español con fuentes oficiales.',
  'credit_fixed_income': 'Examinar crédito, vencimiento, cupones y sensibilidad sin confundir yield con precio.',
@@ -15,7 +15,7 @@ MISSIONS = {
  'paper_execution_planning': 'Documentar requisitos de una futura ejecución PAPER; no producir órdenes.',
  'paper_reconciliation': 'Comparar registros existentes de solo lectura; no crear operaciones.',
  'momentum_trend': 'Calcular retornos y medias de una serie comparable, sin señales ejecutables.',
- 'value_quality': 'Calcular ratios solo con numerador y denominador documentados.',
+ 'value_quality': 'Revisar resultados comparables del mismo informe y cambios entre versiones; sin consenso o transcript no atribuir sorpresas ni opiniones.',
  'mean_reversion': 'Calcular z-score descriptivo con muestra suficiente.',
  'volatility_regime': 'Calcular dispersión observada sin anualización injustificada.',
  'portfolio_optimization': 'Describir pesos y restricciones; no alterar cartera ni proponer órdenes.',

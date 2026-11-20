@@ -1,0 +1,89 @@
+{
+  "kind": "READ_ONLY_PERSONAL_DB_SNAPSHOT_MIGRATION",
+  "existing_tables_unchanged": true,
+  "new_tables": [
+    "data_downloads"
+  ],
+  "tables": {
+    "instruments": {
+      "rows": 99,
+      "hash": "7b2a63efda4704e76023ddd290692b3fa877e67a21b497c3d475f00f260a41fe"
+    },
+    "instrument_aliases": {
+      "rows": 99,
+      "hash": "31107890d219cb23b6afebf86969a16b8f04b94099d6f660b3fbc6a8654e147b"
+    },
+    "data_records": {
+      "rows": 46,
+      "hash": "f4ae1611cbac0833f04d4b8b2b4e2cc3dbe24827230cfec59f78cc24176166a2"
+    },
+    "data_quotas": {
+      "rows": 17,
+      "hash": "dce71e944756bdb9b1104eed57a9e47fb39ebd0e605f5bc3b55d133a5d4e314c"
+    },
+    "portfolios": {
+      "rows": 1,
+      "hash": "252a728382a38307cf60ea7c1881a9302151d9296c70727c4eaf87ccfb5e5c71"
+    },
+    "ledger_events": {
+      "rows": 1,
+      "hash": "1079c23bb1c5efb3da1482909fe452576e5b9e4b1f30aa7b23bc4a2c97615bc1"
+    },
+    "ledger_entries": {
+      "rows": 2,
+      "hash": "3752c03efdf1e01500e7b12307779a86f98c28640bc81062864a38d5ae6b0b51"
+    },
+    "valuation_snapshots": {
+      "rows": 9,
+      "hash": "cd06e86ab372e471cb3bc7681e5315276307785a696e4e2f2e3c6655bc709517"
+    },
+    "agents": {
+      "rows": 30,
+      "hash": "d3a17312fc3da1db34e5cbb33bb67feaa16598252348eeba5babdf7716d01d90"
+    },
+    "research_cases": {
+      "rows": 23,
+      "hash": "96e32082c15b4523eaa9f5b610c47f479414b681020f2b390447e6e5d9dfcf2b"
+    },
+    "audit_events": {
+      "rows": 538,
+      "hash": "cd908495c82889c40c1646aeeed83827db29f4f705129121ce9e53b3b8e24655"
+    },
+    "agent_jobs": {
+      "rows": 228,
+      "hash": "10af5b49ea282711456d3e1bd0303ed83295f081adde2a16463629ea5fd6dbe2"
+    },
+    "evidence": {
+      "rows": 2026,
+      "hash": "65b10c7eb5a07c528898e5f05aecceb6824d50baa6d911ea7e665e53a09df351"
+    },
+    "agent_results": {
+      "rows": 161,
+      "hash": "bfa4fc49f901e7aa93e862b69ba4b994d7bc6d28de24b6b59f6ad969f2cd439b"
+    },
+    "research_claims": {
+      "rows": 172,
+      "hash": "c67a54e257a1e8f96ef4e75f33dd03040582180ab6019187e22365df17aa7ecc"
+    },
+    "data_observations": {
+      "rows": 4297,
+      "hash": "46df690c929e442fb7a9d30ffba2cb00a48bf190fabfecfe93e6034d736dad2f"
+    },
+    "data_refresh": {
+      "rows": 14,
+      "hash": "edfddfacca14ae9c95a43044bea1c1d88571c92a0c085ed289c9d0619066e0c4"
+    },
+    "autonomy_control": {
+      "rows": 1,
+      "hash": "f6c47a0ed37d552bceb622ac4d16ce7c09059bc5acca723ec533668b40e61350"
+    },
+    "autonomy_events": {
+      "rows": 2,
+      "hash": "700dae555f7233a4f9d180bf4925852ef77b01ea2977ae072d2be6d0f1de1801"
+    },
+    "research_tasks": {
+      "rows": 2,
+      "hash": "e82087f36c7fd2873bebd6d29fe09cc25ca3e88fff98b3f8b30d12516aaaaecc"
+    }
+  }
+}

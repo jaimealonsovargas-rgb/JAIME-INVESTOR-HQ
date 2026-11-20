@@ -95,6 +95,7 @@ class AutonomyScheduler:
                           evidence_ids=[e['id'] for e in evidence],
                           output_hashes={j['id']: j['output_hash'] for j in jobs},
                           dossier_hash=digest(dossier), source_receipt=(task['result'] or {}).get('source_receipt'),
+                          workflows=dossier['workflows'],
                           elapsed_seconds=round((self.store.clock() - datetime.fromisoformat(task['created_at'])).total_seconds(), 3))
             return self.store.update(task['id'], case_id=dossier['id'], state='SUCCEEDED' if quality['state'] == 'VERIFIED_DATA' else 'ABSTAINED', result=result)
         if datetime.fromisoformat(task['deadline_at']) <= self.store.clock():

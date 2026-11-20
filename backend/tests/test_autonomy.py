@@ -358,6 +358,9 @@ def test_unattended_python_pipeline_without_local_model(migrated, count, expecte
                 assert dossier['quality']['state'] == ('VERIFIED_DATA' if count >= 3 else 'ABSTAINED')
                 assert all(e['provider'] in {'COINPAPRIKA', 'HQ_DERIVED', 'HQ_MASTER'} for e in dossier['evidence'])
                 assert task['result']['dossier_hash'] and task['result']['output_hashes']
+                assert task['result']['workflows']['run_key']==task['run_key']
+                assert task['result']['workflows']['thesis_tracker']['state']=='NO_THESIS'
+                assert task['result']['workflows']['catalyst_calendar']['state']=='NO_CONFIRMED_EVENTS'
                 if count >= 3:
                     quant = next(r for r in dossier['results'] if r['role_id'] == 'momentum_trend')['features']
                     assert quant['sample_size'] == count

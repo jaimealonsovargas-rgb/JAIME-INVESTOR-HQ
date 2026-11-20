@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-27",
+  "repository_package_matches": true,
+  "files_verified": 52,
+  "archived_originals": 8,
+  "html_static_checks": "PASS",
+  "html_tabs": 3,
+  "remote_assets": 0,
+  "javascript_syntax": "PASS node --check",
+  "visual_browser_check": "NOT_PERFORMED: browser policy blocks file protocol",
+  "application_test_suite": "NOT_RERUN: documentation-only delivery",
+  "synthetic_probes": "REPRODUCED: SEC revisions, second provider alias, historical window"
+}

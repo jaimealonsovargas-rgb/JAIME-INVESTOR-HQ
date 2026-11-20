@@ -361,6 +361,9 @@ class ResearchService:
             dossier_quality = {'state':'VERIFIED_DATA','reason':'Cálculos Python disponibles; la síntesis local opcional no terminó.'}
         elif results and any(r.get('quality',{}).get('state')=='REJECTED' for r in results):
             dossier_quality = {'state':'REJECTED','reason':'Uno o más resultados no superaron la validación.'}
-        return {**case, 'thesis_version': len(runs)-runs.index(active_run) if active_run else 0, 'runs': runs, 'active_run_key': active_run, 'jobs': selected_jobs, 'results': results, 'evidence': evidence, 'status': 'IDLE' if not selected_jobs else 'RUNNING' if any(j['state'] in ('QUEUED', 'RUNNING') for j in selected_jobs) else 'PARTIAL' if dossier_quality['state'] == 'REJECTED' and all(j['state'] == 'SUCCEEDED' for j in selected_jobs) else 'COMPLETE' if all(j['state'] == 'SUCCEEDED' for j in selected_jobs) else 'PARTIAL' if optional_failure else 'INCOMPLETE',
+        dossier = {**case, 'thesis_version': len(runs)-runs.index(active_run) if active_run else 0, 'runs': runs, 'active_run_key': active_run, 'jobs': selected_jobs, 'results': results, 'evidence': evidence, 'status': 'IDLE' if not selected_jobs else 'RUNNING' if any(j['state'] in ('QUEUED', 'RUNNING') for j in selected_jobs) else 'PARTIAL' if dossier_quality['state'] == 'REJECTED' and all(j['state'] == 'SUCCEEDED' for j in selected_jobs) else 'COMPLETE' if all(j['state'] == 'SUCCEEDED' for j in selected_jobs) else 'PARTIAL' if optional_failure else 'INCOMPLETE',
                 'research_goal': goal, 'analysis_depth': selected_jobs[0].get('analysis_depth') if selected_jobs else None,
                 'quality': dossier_quality, 'orders_enabled': False, 'advisory_only': True}
+        from app.research_workflows import research_workflows
+        dossier['workflows'] = research_workflows(dossier, self.data.clock())
+        return dossier

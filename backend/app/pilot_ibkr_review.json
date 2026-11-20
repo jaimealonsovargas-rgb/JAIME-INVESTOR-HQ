@@ -1,0 +1,29 @@
+{
+  "version": "pilot-ibkr-review-v1",
+  "reviewed_at": "2026-11-11T08:55:50.330036+00:00",
+  "report_sha256": "402f5bb6c22eba424497a961ad4eabb2ae5855a1e50c9345f128ca8db2a566a2",
+  "pilot_sha256": "ffa5b74c15d30affed3848342063ffb2358475c79041212e118a70a89c115e4d",
+  "bindings": [
+    {
+      "symbol": "AAPL",
+      "identity_spec_sha256": "9bf74154f2262e45b0a3ed1c0463be8257ba6f28ddf7ea39995e5c77546443ba",
+      "instrument_id": "c1ec3456344c050ebfb54613e8700dc3a5d67e49601b8479e917eca8e095a78f",
+      "contract_sha256": "62c1f737f299d8c8b2c7c375b465c18a7ea90ad54cddac8ec8bd18547e003886",
+      "con_id": 265598
+    },
+    {
+      "symbol": "MSFT",
+      "identity_spec_sha256": "25d50cb637f664e0878ca4d979728d5e63d40d122d62542d356c04345b2f54bc",
+      "instrument_id": "fa6a9d7bcb836f22a6b36c4be2f519c70f2def4873e52f5c37fed699da953fd5",
+      "contract_sha256": "6f1050090be7e9cc21715f1c36323fdd2ad3c8f0dba7c6edb416412ff47975c7",
+      "con_id": 272093
+    },
+    {
+      "symbol": "WMT",
+      "identity_spec_sha256": "8e44d9e08ed5faa920edff7372afcece1378355e5804f992b9ad1b8738691696",
+      "instrument_id": "04d749dae60c7c3f07118484b42c34cd7c1d384a93460f25927b3ad83118eba9",
+      "contract_sha256": "6288bf9c81ff78011e690ee05113bfb1e288db1c5962b8b9ebda43e5608f36a3",
+      "con_id": 13824
+    }
+  ]
+}

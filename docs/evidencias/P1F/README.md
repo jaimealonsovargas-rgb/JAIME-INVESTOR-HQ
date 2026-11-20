@@ -27,7 +27,7 @@ Capturas de la aplicación Three.js/R3F en Chrome con ANGLE Intel Graphics/D3D11
 
 ![Sistemas](07-sistemas-overlay.png)
 
-Planta completa complementaria en [B, cierre integral](../P1B/cierre-integral/02-planta.png). Nueve interfaces con capturas individuales en [P1.D](../P1D/). No se usan panorámicas para acreditar jugabilidad.
+Planta completa complementaria en [B, cierre integral](../P1B/cierre-integral/02-planta.png). Nueve interfaces con capturas individuales en [P1.D](../P1D). No se usan panorámicas para acreditar jugabilidad.
 
 ## Rendimiento observado
 
@@ -67,6 +67,6 @@ El log de diff contiene avisos LF/CRLF de Git, sin errores de whitespace. Los lo
 
 [Verificación offline de assets](assets-verificados.json): 33 fuentes humanas, seis mapas PBR, cinco texturas humanas; hashes, glTF real con 163 huesos, cuatro clips y LOD 41.114/13.240/4.040. [Licencias completas](../../../assets/LICENSES.md): gráficos CC0 y herramientas MIT, código MakeHuman AGPL no copiado. Recursos runtime locales, sin CDN. Coste adicional **0 EUR**, ninguna orden real y ningún dato financiero/actividad de agentes inventado.
 
-[Entrega y reproducción](../../ACEPTACION_P1.md). P1 cerrada; **P2 no iniciada**.
+[Entrega y reproducción](../../archive/2026-10-27/planes/ACEPTACION_P1.md). P1 cerrada; **P2 no iniciada**.
 
 [Fuentes y parámetros de las pruebas de navegador](qa/README.md) conservados para revisión/reproducción.

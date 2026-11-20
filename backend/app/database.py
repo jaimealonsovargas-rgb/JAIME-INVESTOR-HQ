@@ -1,12 +1,12 @@
 from pathlib import Path
 
-from sqlalchemy import JSON, String, UniqueConstraint, ForeignKey, Integer, create_engine, event, select, text
+from sqlalchemy import JSON, String, UniqueConstraint, ForeignKey, Integer, create_engine, event, select, text, or_, func
 from sqlalchemy.engine import Engine, make_url
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
 
 from app.contracts import Instrument
 
-SCHEMA_VERSION = "0006_autonomy"
+SCHEMA_VERSION = "0015_history_batches"
 
 
 class Base(DeclarativeBase):
@@ -19,6 +19,20 @@ from app.research_schema import register as register_research_schema
 register_research_schema(Base.metadata)
 from app.autonomy_schema import register as register_autonomy_schema
 register_autonomy_schema(Base.metadata)
+from app.universe_schema import register as register_universe_schema
+register_universe_schema(Base.metadata)
+from app.sec_schema import register as register_sec_schema
+register_sec_schema(Base.metadata)
+from app.market_schema import register as register_market_schema
+register_market_schema(Base.metadata)
+from app.company_schema import register as register_company_schema
+register_company_schema(Base.metadata)
+from app.cycle_schema import register as register_cycle_schema
+register_cycle_schema(Base.metadata)
+from app.quant_schema import register as register_quant_schema
+register_quant_schema(Base.metadata)
+from app.history_schema import register as register_history_schema
+register_history_schema(Base.metadata)
 
 
 class InstrumentRecord(Base):
@@ -74,6 +88,16 @@ class DataObservation(Base):
     payload: Mapped[dict] = mapped_column(JSON)
 
 
+class DataDownload(Base):
+    """Immutable receipt: original bytes hash, retrieval time and revision IDs."""
+    __tablename__ = 'data_downloads'
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    source_identity: Mapped[str] = mapped_column(String(120), index=True)
+    received_at: Mapped[str] = mapped_column(String(40))
+    payload_hash: Mapped[str] = mapped_column(String(64))
+    observation_ids: Mapped[list] = mapped_column(JSON)
+
+
 class DataRefresh(Base):
     __tablename__ = 'data_refresh'
     access_id: Mapped[str] = mapped_column(String(8), primary_key=True)
@@ -113,12 +137,18 @@ class InstrumentRegistry:
         self.session = session
 
     def list(self, query: str | None = None, offset: int = 0, limit: int = 1000) -> list[Instrument]:
-        rows = self.session.scalars(select(InstrumentRecord).order_by(InstrumentRecord.symbol))
-        items = [Instrument.model_validate(row.payload) for row in rows]
+        statement = select(InstrumentRecord)
         if query:
-            needle=query.upper()
-            items=[item for item in items if any(needle in str(getattr(item, key) or '').upper() for key in ('symbol','venue','currency','isin','cusip','figi','country'))]
-        return items[offset:offset+limit]
+            needle = '%' + query.upper().replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_') + '%'
+            columns = [InstrumentRecord.symbol, InstrumentRecord.venue, InstrumentRecord.currency]
+            columns += [func.json_extract(InstrumentRecord.payload, '$.' + key) for key in ('isin', 'cusip', 'figi', 'country')]
+            statement = statement.where(or_(*(func.upper(column).like(needle, escape='\\') for column in columns)))
+        rows = self.session.scalars(statement.order_by(InstrumentRecord.symbol, InstrumentRecord.id).offset(offset).limit(limit))
+        return [Instrument.model_validate(row.payload) for row in rows]
+
+    def get(self, instrument_id: str) -> Instrument | None:
+        row = self.session.get(InstrumentRecord, instrument_id)
+        return Instrument.model_validate(row.payload) if row else None
 
     def add(self, instrument: Instrument) -> None:
         self.session.add(InstrumentRecord(

@@ -1,4 +1,4 @@
-export type Role={role_id:string;name:string;team:string;mission:string;state:string;llm_required:boolean;permissions:string[]};
+export type Role={role_id:string;name:string;team:string;mission:string;state:string;llm_required:boolean;permissions:string[];enabled?:boolean;current_job?:{id:string;case_id:string;run_key:string;state:string;queued_at:string;started_at:string|null}|null;last_delivery?:{case_id:string;job_id:string;run_key:string;finished_at:string;quality_state:string;evidence_count:number}|null};
 export type Job={id:string;role_id:string;state:string;queued_at:string;finished_at:string|null;error:string|null;duration_ms:number|null;input_hash:string|null;output_hash:string|null;model:string|null;run_key:string};
 export type RuntimeStatus={checked_at:string;active_jobs:number;queue:number;failures:number;roles:number;department_states?:Record<string,string>;last_completed?:Job|null;capacity:{llm:number;quant:number;fetch:number};runtime:{state:string;model:string|null;runtime:string};orders_enabled:false;trading_mode:'PAPER_ONLY'};
 export type ResearchCase={id:string;instrument:{id:string;symbol:string;asset_class:string};question:string;created_at:string};
@@ -8,7 +8,8 @@ export type Evidence={id:string;provider:string;source:string;url:string;retriev
 export type ResearchQuality={state:string;reason?:string;basis?:string;human_review?:string};
 export type StructuredArgument={argument_id?:string;target_bull_argument_id?:string;bull_argument_id?:string;bear_argument_id?:string;thesis?:string;mechanism?:string;assumption?:string;falsification?:string;objection?:string;evidence_gap?:string;change_of_mind?:string;disagreement?:string;limitation?:string;supporting_evidence_ids?:string[];counter_evidence_ids?:string[];evidence_ids?:string[]};
 export type Result={quality?:ResearchQuality;structured?:{arguments?:StructuredArgument[];objections?:StructuredArgument[];findings?:StructuredArgument[];synthesis?:string;conclusion?:string}|null;evidence_pack?:{records:{id:string;evidence_id:string}[]};job_id:string;role_id:string;created_at:string;input_hash:string;opinion:Opinion;claims:Claim[];debate:Record<string,Opinion>;metrics:Record<string,unknown>;validation?:{raw_output_hash:string|null;withheld_passages:{field:string;reason:string;text_hash:string}[]};features:null|{state:string;reason?:string;items:{name:string;value:string;evidence_ids:string[]}[]}};
-export type Dossier=ResearchCase&{research_goal?:string;analysis_depth?:'ordinary'|'deep'|null;quality?:ResearchQuality;status:string;runs?:string[];active_run_key?:string;thesis_version?:number;jobs:Job[];results:Result[];evidence:Evidence[];orders_enabled:false;advisory_only:true};
+export type ResearchWorkflows={evaluated_at:string;advisory_only:true;morning_note:{headline:string;coverage:string;observations:{text:string;evidence_ids:string[]}[]};thesis_tracker:{reason:string;version:number};catalyst_calendar:{reason:string;events:{at:string;title:string;evidence_ids:string[]}[]}};
+export type Dossier=ResearchCase&{workflows?:ResearchWorkflows;research_goal?:string;analysis_depth?:'ordinary'|'deep'|null;quality?:ResearchQuality;status:string;runs?:string[];active_run_key?:string;thesis_version?:number;jobs:Job[];results:Result[];evidence:Evidence[];orders_enabled:false;advisory_only:true};
 
 export function validateStatus(x:unknown):RuntimeStatus{
  if(!x||typeof x!=='object')throw Error('Estado research inválido');const s=x as RuntimeStatus;
@@ -17,7 +18,10 @@ export function validateStatus(x:unknown):RuntimeStatus{
 export function validateDossier(x:unknown):Dossier{
  if(!x||typeof x!=='object')throw Error('Dossier inválido');const d=x as Dossier;
  if(d.orders_enabled!==false||d.advisory_only!==true||!Array.isArray(d.results)||!Array.isArray(d.evidence)||!Array.isArray(d.jobs))throw Error('Dossier inseguro');
- const ids=new Set(d.evidence.map(e=>e.id));for(const r of d.results){if(!r.opinion||!Array.isArray(r.claims)||r.claims.some(c=>typeof c.verified!=='boolean'||!c.evidence_ids.every(id=>ids.has(id))))throw Error('Dossier sin lineage');}return d;
+ const ids=new Set(d.evidence.map(e=>e.id));for(const r of d.results){if(!r.opinion||!Array.isArray(r.claims)||r.claims.some(c=>typeof c.verified!=='boolean'||!c.evidence_ids.every(id=>ids.has(id))))throw Error('Dossier sin lineage');}
+ const w=d.workflows;
+ if(w&&(w.advisory_only!==true||!Number.isFinite(Date.parse(w.evaluated_at))||typeof w.morning_note?.headline!=='string'||typeof w.morning_note.coverage!=='string'||typeof w.thesis_tracker?.reason!=='string'||typeof w.catalyst_calendar?.reason!=='string'||!Array.isArray(w.morning_note.observations)||!Array.isArray(w.catalyst_calendar.events)||w.morning_note.observations.some(c=>typeof c.text!=='string'||!Array.isArray(c.evidence_ids)||!c.evidence_ids.every(id=>ids.has(id)))||w.catalyst_calendar.events.some(e=>typeof e.title!=='string'||!Number.isFinite(Date.parse(e.at))||!Array.isArray(e.evidence_ids)||!e.evidence_ids.every(id=>ids.has(id)))))throw Error('Resumen de research sin evidencia');
+ return d;
 }
 export async function researchRead<T>(path:string,signal?:AbortSignal):Promise<T>{
  const r=await fetch(path,{signal:signal?AbortSignal.any([signal,AbortSignal.timeout(8000)]):AbortSignal.timeout(8000),credentials:'omit',cache:'no-store'});if(!r.ok)throw Error('Research no disponible');return r.json() as Promise<T>;

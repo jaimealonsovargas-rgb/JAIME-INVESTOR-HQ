@@ -1,3 +1,5 @@
+> REFERENCIA FECHADA. Prioridades/estado/autorizaciones vigentes: [plan actual](actual/VISION_Y_ARQUITECTURA.md) y [roadmap](../tasks/ROADMAP.md). P5 fue autorizada posteriormente con mejoras previas; P6 no. El cuerpo conserva la propuesta histórica y no acredita funciones actuales.
+
 # JAIME INVESTOR HQ — Fábrica de estrategias, validación extrema y plataforma para una futura operativa automatizada
 
 > **Tipo de documento:** investigación estratégica y especificación de diseño para revisión por Codex.\

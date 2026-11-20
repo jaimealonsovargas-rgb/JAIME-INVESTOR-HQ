@@ -1,0 +1,20 @@
+{
+  "block": "B1",
+  "closed_on": "2026-10-28",
+  "timezone": "Europe/Madrid",
+  "backend_full_before_final_adjustment": {"passed": 326, "log": "b1-backend-final.log"},
+  "backend_affected_after_final_adjustment": {"passed": 77, "new_regressions": 2, "log": "b1-temporal-final.log"},
+  "test_counts_overlap": true,
+  "frontend": {"passed": 68, "skipped_preexisting": 1, "typecheck": "PASS", "build": "PASS"},
+  "browser_evidence": "b1-ui-verification.json",
+  "migration_evidence": "b1-migration-applied.json",
+  "provider_inventory": "b1-provider-inventory.json",
+  "current_document_link_check": {"documents": 15, "broken_local_links": 0},
+  "git_diff_check": "PASS",
+  "logs_location": "Workspace del chat: work/",
+  "next_block": "B2",
+  "orders_enabled": false,
+  "p4_status": "PARTIAL",
+  "p5_implemented": false,
+  "p6_implemented": false
+}

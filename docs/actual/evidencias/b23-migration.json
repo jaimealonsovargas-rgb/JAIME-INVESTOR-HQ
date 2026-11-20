@@ -1,0 +1,139 @@
+{
+  "at": "2026-10-29T11:42:41.232838+00:00",
+  "schema": "0010_market_data",
+  "backup": "output/b23-before-0010.db",
+  "preserved_tables": 31,
+  "all_preexisting_tables_unchanged": true,
+  "tables": {
+    "agent_jobs": {
+      "rows": 231,
+      "sha256": "c64317de30f881e99673924d3690d4ace601e5013edd82aa20cc860782b9703f"
+    },
+    "agent_results": {
+      "rows": 164,
+      "sha256": "4dd6d629d6f591ffa62a4cad9e715a23c29186d0a925ddee9c442a21a982c9f4"
+    },
+    "agents": {
+      "rows": 30,
+      "sha256": "58bce77a0bfb6d2b3362fb4d64bf357ee84fff17763f92a16391d7a3a9279935"
+    },
+    "audit_events": {
+      "rows": 554,
+      "sha256": "5c3cd9ec52e45f5c5e17f2edbd0c191707b9c78046764167193f368e6aae1ac7"
+    },
+    "autonomy_control": {
+      "rows": 1,
+      "sha256": "be04ac401c19b4bc1ef14ba84c1bb4ac07473fa3b7975074418f3fd8ee732b77"
+    },
+    "autonomy_events": {
+      "rows": 3,
+      "sha256": "bf49c3cf158899971552ddadc2cfcff547f07774fffb63d9f108797644bf4a73"
+    },
+    "data_downloads": {
+      "rows": 46,
+      "sha256": "a01923bf23ed87d841f33bce591a0138bd4559e2ef7d658bd7bad5775a194730"
+    },
+    "data_observations": {
+      "rows": 5594,
+      "sha256": "4b1a3b5c263cddf98c79abf0e3e88a46531f15fe72839291f4cc216cd5e03dab"
+    },
+    "data_quotas": {
+      "rows": 18,
+      "sha256": "4aae6244a08ae8428e5c39cdd7c723dadd0730cd2a7bfda8dac2787fede64619"
+    },
+    "data_records": {
+      "rows": 48,
+      "sha256": "29e3b973cdd4e7afa701313d0b0e898bb23e1a6e692526975c93ce3e73f3cbf5"
+    },
+    "data_refresh": {
+      "rows": 15,
+      "sha256": "11cdd1b2b308e1126c631a788cbedcbeb1d6005ba94f3e4c3c3a0755cd7f2dd6"
+    },
+    "evidence": {
+      "rows": 2107,
+      "sha256": "eaa70de619ae6255eed7edc609de6bfd01d29ea54cd2970ef6eeafd4181f5fa0"
+    },
+    "instrument_aliases": {
+      "rows": 99,
+      "sha256": "d55b025c7082f05f3b9d555c42923562e586c68604db20960037d5dfa14779ae"
+    },
+    "instruments": {
+      "rows": 99,
+      "sha256": "e113b6bed2737e4de32ac6f2d64ab3282bcf7812d1a700241be3086e6b787a68"
+    },
+    "ledger_entries": {
+      "rows": 2,
+      "sha256": "bdfbaa88f3334615f3ae57587d365efd4573ca26ccd9472e5ded52050aceced6"
+    },
+    "ledger_events": {
+      "rows": 1,
+      "sha256": "5b8d5263bb416a805adbf8d7199c5e807aa31052123337e6038f2672fee21cf2"
+    },
+    "portfolios": {
+      "rows": 1,
+      "sha256": "ca67d151d8f2d08142248c2cab70bbde5a1a0eb354380830cefe85b69223c03c"
+    },
+    "research_cases": {
+      "rows": 24,
+      "sha256": "919cfcd8f473a1875ab90fadfaee7a60cec02580f1cbab2f11595b46d383729a"
+    },
+    "research_claims": {
+      "rows": 172,
+      "sha256": "94471e3793f32c7e51124e3df368b9cdd20fc7afe7ab69ec21b531b5f2b9d7c3"
+    },
+    "research_tasks": {
+      "rows": 3,
+      "sha256": "225ba9903511c5ef1ca479e655afd4e661898e98f5342feda115615d467fc402"
+    },
+    "sec_facts": {
+      "rows": 356237,
+      "sha256": "45cdea3b49b64052cb1b767e4ce0c07d25248e5fd0f178913b222dff15fed9f4"
+    },
+    "sec_filings": {
+      "rows": 12994,
+      "sha256": "ff22f73a47d2b9a6c00ce931ad89cb6e78902b493c573d96d6a44cc51eb17f85"
+    },
+    "sec_jobs": {
+      "rows": 2,
+      "sha256": "d54a60781795cd7a4d12685d985847a8c809a857a453be97475e19426cfee734"
+    },
+    "sec_receipts": {
+      "rows": 218,
+      "sha256": "6878f4a37186648325a9055c8c49bed8620a3bfa5d320bf9be3814a87aa8b230"
+    },
+    "sec_snapshots": {
+      "rows": 202,
+      "sha256": "ed2129c33a345783799bf3b78ca58c3a4b57df9b4b57a8b7b7e0071acea4955a"
+    },
+    "sec_tasks": {
+      "rows": 400,
+      "sha256": "bc765cf1bb7eece8cc414d7b7167e62186dedd66d5d3fc4a541be8aca6a31027"
+    },
+    "universe_entities": {
+      "rows": 8023,
+      "sha256": "311312e2de1d892a9b1255f674fb32939498fe77ccc30bde6e30c0325a518f51"
+    },
+    "universe_imports": {
+      "rows": 5,
+      "sha256": "78ed4a961eb5406bd804c62c93f367c7c9c9464ddb9971728655ade407cd293b"
+    },
+    "universe_listings": {
+      "rows": 10430,
+      "sha256": "8575c8d67899bde39316d5ac9aa8f6fdf86711191904a5abfe5c290a46593a88"
+    },
+    "universe_versions": {
+      "rows": 10430,
+      "sha256": "62e5c4ffbe9af229b9b55ab7d13297ddc24315a1aa31c496022237c88e657ecd"
+    },
+    "valuation_snapshots": {
+      "rows": 10,
+      "sha256": "3955ad9f20c1f85b96a68c631d0f58676f578b73f8a2b2a62b43c1288e2082f4"
+    }
+  },
+  "new_tables": {
+    "market_jobs": 0,
+    "market_receipts": 0,
+    "market_bars": 0,
+    "market_endpoint_status": 0
+  }
+}

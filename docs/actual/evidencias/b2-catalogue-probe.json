@@ -1,0 +1,26 @@
+{
+  "import": {
+    "id": "b2-sec-real-20261028",
+    "provider": "SEC",
+    "state": "SUCCEEDED",
+    "started_at": "2026-10-28T08:42:25.351029+00:00",
+    "finished_at": "2026-10-28T08:42:26.274440+00:00",
+    "source": "https://www.sec.gov/files/company_tickers_exchange.json",
+    "payload_hash": "76b92fbacfc1a5a8715a32bb5f923df4c79a8062b615735542081ddff6977b46",
+    "received_at": "2026-10-28T08:42:26.274440+00:00",
+    "listings": 10430,
+    "entities": 8023,
+    "created": 10430,
+    "changed": 10430,
+    "conflicts": 0,
+    "not_observed": 0,
+    "reason": "Cat\u00e1logo registrado; no acredita precios, hist\u00f3ricos ni elegibilidad de inversi\u00f3n."
+  },
+  "summary": {
+    "entities": 8023,
+    "listings": 10430,
+    "versions": 10430,
+    "conflicts": 0,
+    "current_listings": 10430
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-29T11:42:06.557Z",
+  "data": "SYNTHETIC TEST ONLY; separate QA DB; real local frontend/API",
+  "checks": [
+    {
+      "flow": "SEC-has-candidate-not-price",
+      "passed": true
+    },
+    {
+      "flow": "explicit-Alpaca-open",
+      "state": "Última operación IEX\n12,25 USD\nCompra / venta cotizada\nNo disponible / No disponible\nEstado de la observación\nDato antiguo\nSesión regular\nSin comprobar"
+    },
+    {
+      "flow": "responsive",
+      "width": 1920,
+      "overflow": false
+    },
+    {
+      "flow": "responsive",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "flow": "responsive",
+      "width": 800,
+      "overflow": false
+    },
+    {
+      "flow": "responsive",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "flow": "exact-OHLCV-table",
+      "rows": 4
+    },
+    {
+      "flow": "adjusted-series-separate",
+      "passed": true
+    },
+    {
+      "flow": "enqueue-cancel-through-real-API",
+      "passed": true
+    },
+    {
+      "flow": "endpoint-test-vs-real-distinction",
+      "passed": true
+    },
+    {
+      "flow": "disconnected-retry",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

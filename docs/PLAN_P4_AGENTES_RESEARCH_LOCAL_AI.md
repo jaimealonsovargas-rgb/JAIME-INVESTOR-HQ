@@ -1,3 +1,5 @@
+> REFERENCIA FECHADA. Prioridades/estado/autorizaciones vigentes: [plan actual](actual/VISION_Y_ARQUITECTURA.md) y [roadmap](../tasks/ROADMAP.md). P5 fue autorizada posteriormente con mejoras previas; P6 no. El cuerpo conserva la propuesta histórica y no acredita funciones actuales.
+
 # P4 — Plan maestro de agentes, research y IA local
 
 **Autorizado:** 2026-10-16 · **STOP antes de P5**.

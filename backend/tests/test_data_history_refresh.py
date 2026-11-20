@@ -39,7 +39,7 @@ def test_archive_survives_cache_replacement_restart_and_retains_revisions(migrat
         s.execute(delete(DataRecord))
         archive(s, source, cache_key(source), rows)
     with Session(data.engine) as s:
-        restored = read_source(s, data, source)
+        restored = read_source(s, data, source, revisions=True)
         assert {o.id for o in restored} == {o.id for o in rows}
         assert len(list(s.scalars(select(DataObservation)))) == 3
     # Catalog rights or identity changes hide previously stored data immediately.
@@ -149,7 +149,7 @@ def test_refresh_endpoint_reports_disabled_worker_without_network(client):
     response = client.get('/api/data/refresh')
     assert response.status_code == 200
     assert not response.json()['enabled'] and not response.json()['running']
-    assert len(response.json()['sources']) == 36
+    assert len(response.json()['sources']) == 39
     assert client.post('/api/orders').status_code == 403
 
 

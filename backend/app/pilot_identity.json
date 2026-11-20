@@ -1,0 +1,78 @@
+{
+  "version": "pilot-identity-v1",
+  "reviewed_at": "2026-11-07T09:43:27.970298+00:00",
+  "items": [
+    {
+      "cik": "0000320193",
+      "symbol": "AAPL",
+      "sec_listing_id": "dba3ee06718af55b83da5519f58c9650e6917d496d709b228753379ceb13089f",
+      "market_listing_id": "3330aba0785aee192a8df6fabbf539d5258e3464bdd04129c861ee64922332b5",
+      "market_identity_hash": "bc902cc33979e7a6578a4c025af6569a81bea4534b7f16ae065fbb3750c2d130",
+      "sec_identity_hash": "2850bc2a2e96291dd48107530aeffa12a145f2e72bedcc1583179f97cc43f317",
+      "filing": {
+        "cik": "0000320193",
+        "accession": "0000320193-26-000026",
+        "primary": "aapl-20260926.htm",
+        "received_at": "2026-11-04T23:06:05.685300+00:00",
+        "calculation": {
+          "kind": "calculation",
+          "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000026/aapl-20260926_cal.xml",
+          "sha256": "6e8be4c9457c6597dd6a6aea6f344984c7130c53c3cd13aa1c2b01e746b6bbfb"
+        },
+        "instance": {
+          "kind": "instance",
+          "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000026/aapl-20260926_htm.xml",
+          "sha256": "3d931657ceef0a307119d576e020723181dc166b5321b7abd6125ad09ca790ea"
+        }
+      }
+    },
+    {
+      "cik": "0000789019",
+      "symbol": "MSFT",
+      "sec_listing_id": "92b2ed00b486619bc263fab1fac259a2ee72ea611928a266bd28f57c7f6a9c18",
+      "market_listing_id": "7d868c3a117d022831311a932611a0176202f58bb7df96131ee7d711f8ef546b",
+      "market_identity_hash": "7207f8b9f893b190a375e4fe9f1e47ec54b62a1d576226b7b330fc1208635a4c",
+      "sec_identity_hash": "c683d9a1328f19b04df59cc01d5e691115de72b16ae9015b17877d5549696f4a",
+      "filing": {
+        "cik": "0000789019",
+        "accession": "0001193125-26-323660",
+        "primary": "msft-20260630.htm",
+        "received_at": "2026-11-04T23:06:10.397874+00:00",
+        "calculation": {
+          "kind": "schema",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/msft-20260630.xsd",
+          "sha256": "29d4cdf7695b78550142ff145e3981d80637ecb3290383be4fa779d9be3d0512"
+        },
+        "instance": {
+          "kind": "instance",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/msft-20260630_htm.xml",
+          "sha256": "56e56d82ee2d82cb75d37b85df51d4807ffc1e1a3cc4e02ec87513b7574aa886"
+        }
+      }
+    },
+    {
+      "cik": "0000104169",
+      "symbol": "WMT",
+      "sec_listing_id": "815e6fa55e97840d80b05d70ba77bbe2e3b2e62974f2c7084db9e335c7d6dea5",
+      "market_listing_id": "e7ae40f5f17f1ea3b02cab18106f7ff8d323823ac5154e5179097af1ff4564c7",
+      "market_identity_hash": "a31450b8d03b5226f4cbe0c0254048d53bc8ef3c1b9f3a5cd67df3d73bc0b115",
+      "sec_identity_hash": "256a54f77d37a5b68b356a6d3121a56d24b8f509ddbef8cff577175d0cd2fd09",
+      "filing": {
+        "cik": "0000104169",
+        "accession": "0000104169-26-000055",
+        "primary": "wmt-20260131.htm",
+        "received_at": "2026-11-04T23:06:13.108631+00:00",
+        "calculation": {
+          "kind": "calculation",
+          "url": "https://www.sec.gov/Archives/edgar/data/104169/000010416926000055/wmt-20260131_cal.xml",
+          "sha256": "fc75342dbc3c3705b528a4d04a8cab46cecdd078cd58b37cfc5c74f0f986c178"
+        },
+        "instance": {
+          "kind": "instance",
+          "url": "https://www.sec.gov/Archives/edgar/data/104169/000010416926000055/wmt-20260131_htm.xml",
+          "sha256": "07c72faa90cf8515eb1ff1ca264361ca8741c2663202d2f5a25ff9c694f4ef67"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+.storage-budget-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1.2rem 0}
+.storage-budget-grid>div{display:flex;flex-direction:column;gap:.4rem;min-width:0}
+.storage-budget-grid span,.storage-budget-grid small{color:#aeb8bf;font-size:.82rem}
+.storage-budget-grid strong{font-size:1.35rem;font-weight:500;font-variant-numeric:tabular-nums}
+.storage-budget details{margin-top:1rem}
+.storage-budget summary{cursor:pointer}
+.storage-budget p{overflow-wrap:anywhere}
+@media(max-width:600px){.storage-budget-grid{grid-template-columns:1fr}.storage-budget header{flex-wrap:wrap;gap:.8rem}}

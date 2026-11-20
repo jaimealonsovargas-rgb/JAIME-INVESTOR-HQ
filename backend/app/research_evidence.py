@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from decimal import Decimal, localcontext
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from app.database import DataRecord, DataObservation, InstrumentAlias
+from app.database import DataRecord, DataObservation, DataDownload, InstrumentAlias
 from app.data_catalog import CATALOG
 from app.data_contracts import DataResult, Observation
 from app.data_service import cache_key
@@ -17,6 +17,9 @@ def collect(data, case, refresh=False):
         aliases = list(s.scalars(select(InstrumentAlias).where(InstrumentAlias.instrument_id == case['instrument']['id'])))
     identifiers = {(a.provider, a.symbol) for a in aliases}
     sources = {key for key, source in CATALOG.items() if any(provider == source.provider for provider, symbol in identifiers)}
+    issuer = case['instrument'].get('issuer_cik') if case['instrument'].get('issuer_source') else None
+    if issuer:
+        sources.add('A09')
     # Macro reference and already audited public RSS are supplementary, not instrument news.
     sources |= {'A01', 'A20'}
     if case.get('origin', {}).get('trigger_type') == 'SCHEDULED_RESEARCH':
@@ -32,10 +35,13 @@ def collect(data, case, refresh=False):
             source = CATALOG[access]
             if data.initial(source).state != 'NOT_VERIFIED' or not readable(source.rights, local_research=True):
                 continue
-            for obs in read_source(s, data, source, limit=60, local_research=True):
+            for obs in read_source(s, data, source, limit=480 if source.kind=='fundamental_fact' else 60,
+                                   revisions=source.kind=='fundamental_fact', local_research=True):
                 if not readable(obs.rights, local_research=True):
                     continue
                 direct = (obs.provider, obs.series_id) in identifiers or (obs.provider, obs.series_id) == (case['instrument'].get('provider'), case['instrument']['symbol'])
+                direct = direct or bool(issuer and obs.provider=='SEC' and obs.data_kind=='fundamental_fact'
+                                        and obs.metadata.get('cik')==issuer)
                 if not direct and access not in ('A01', 'A20'):
                     continue
                 content = obs.model_dump(mode='json')
@@ -43,7 +49,7 @@ def collect(data, case, refresh=False):
                 content['excerpt'] = (f"{obs.series_id}: {obs.value} {obs.unit}; período {obs.period}." if obs.value is not None else sanitize(obs.metadata.get('title', obs.series_id)))
                 item = {'case_id': case['id'], 'provider': obs.provider, 'source': obs.feed, 'url': obs.source_ref,
                         'retrieved_at': obs.received_at.isoformat(), 'observed_at': obs.observed_at.isoformat(), 'rights': obs.rights.model_dump(mode='json'),
-                        'rights_ok': True, 'freshness': 'STALE' if obs.stale(datetime.now(timezone.utc)) else 'FRESH', 'trust_class': 'UNTRUSTED_CONTENT',
+                        'rights_ok': True, 'freshness': 'STALE' if obs.stale(data.clock()) else 'FRESH', 'trust_class': 'UNTRUSTED_CONTENT',
                         'content': content, 'hash': digest(content), 'provenance': obs.payload_hash, 'scope': 'INSTRUMENT' if direct else 'MACRO_CONTEXT' if access == 'A01' else 'GENERAL_NEWS', 'available': True}
                 item['id'] = digest(item)
                 evidence.append(item)
@@ -66,7 +72,11 @@ def bounded_evidence(evidence):
         len({e.get('observed_at') for e in rows})), default=[])
     direct = sorted(primary, key=lambda e: (e.get('observed_at') or '', e['id']))[-60:]
     remaining = [e for group in groups.values() if group is not primary for e in group]
-    direct += sorted(remaining, key=lambda e: (e.get('observed_at') or '', e['id']))[-2:]
+    # Fundamental concepts are a bundle: retaining only two other concepts
+    # silently destroyed the statements needed by the specialist.
+    fundamentals = [e for e in remaining if e['content'].get('data_kind')=='fundamental_fact']
+    direct += sorted(fundamentals, key=lambda e:(e.get('observed_at') or '',e['id']))[-60:]
+    direct += sorted((e for e in remaining if e not in fundamentals), key=lambda e: (e.get('observed_at') or '', e['id']))[-2:]
     context = sorted((e for e in evidence if e['scope'] != 'INSTRUMENT'),
                      key=lambda e: (e.get('observed_at') or '', e['id']), reverse=True)[:8]
     return direct + context
@@ -146,6 +156,10 @@ def current_evidence(data, items):
             stored = bool(source and (content.get('id'), content.get('payload_hash')) in cache_members.get(source.id, set()))
             stored = stored or bool(archived and source and archived.source_identity == cache_key(source)
                                     and archived.payload.get('payload_hash') == content.get('payload_hash'))
+            if not stored and archived and source and archived.source_identity == cache_key(source):
+                stored = any(content.get('id') in receipt.observation_ids for receipt in session.scalars(
+                    select(DataDownload).where(DataDownload.source_identity == cache_key(source),
+                        DataDownload.payload_hash == content.get('payload_hash'))))
             latest = session.get(DataRecord, 'status:' + source.id) if source else None
             withdrawn = bool(latest and latest.payload.get('http_status') in (403, 404, 410))
             allowed = bool(source and data.initial(source).state == 'NOT_VERIFIED' and readable(source.rights, local_research=True))

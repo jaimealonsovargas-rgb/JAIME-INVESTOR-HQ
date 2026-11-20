@@ -1,45 +1,51 @@
-# Índice — lectura selectiva por fase
+# Índice de JAIME
 
-**VISIÓN RECTORA DE AUTONOMÍA (2026-10-23):** [Realineación a fondo cuantitativo autónomo local](REALINEACION_FONDO_AUTONOMO_2026_10_23.md). Primer subconjunto operativo: [ciclo descriptivo P4](P4_AUTONOMIA_PRIMER_CICLO.md), autorizado posteriormente por el usuario. La oficina supervisa; el reloj backend no requiere UI. Otras rutas y P5/P6 siguen siendo diseño futuro. P4 PARTIAL.
+Actualizado 20-11-2026. Las reglas del proyecto están en AGENTS; la cola única en ROADMAP. Los demás documentos aportan diseño o evidencia fechada, nunca una segunda lista de tareas.
 
-**DOCUMENTO RECTOR VISUAL (2026-10-15):** [especificación consolidada](ESPECIFICACION_DEFINITIVA_2026_10_15.md) · [plan maestro Sims/videowall/agentes](PLAN_MAESTRO_SIMS_VIDEOWALL_AGENTES_INTEGRACIONES.md).
+## Continuidad
 
-**AUTORIZACIÓN VIGENTE (2026-10-16):** P3 está cerrada y aprobada. [P4 autorizado](AUTORIZACION_P4_2026_10_16.md) · [plan maestro P4](PLAN_P4_AGENTES_RESEARCH_LOCAL_AI.md) · [investigación IA local/grounding](INVESTIGACION_P4_ORQUESTACION_IA_LOCAL.md). **STOP ahora antes de P5**.
+[README](../README.md) → [AGENTS](../AGENTS.md) → [STATUS](../STATUS.md) → [ACTUAL](../tasks/ACTUAL.md) → [ROADMAP y esquema](../tasks/ROADMAP.md).
 
-| Fase | Leer primero |
-|---|---|
-| P0 | 01_VISION, 08_ARQUITECTURA, 13_SEGURIDAD, 14_COSTE_CERO, 17_AUDITORIA_PREVIA, 18_MODELOS_Y_TOKENS |
-| P1 | 02_MUNDO_3D, 03_DEPARTAMENTOS, assets/REFERENCIAS |
-| P2 | 04_INSTRUMENTOS, 06_DATOS_APIS, 11_CONTRATOS, 15_FUENTES |
-| P3 | 07_CARTERA_LEDGER, 12_ESQUEMA_DATOS, 20_UI_Y_FLUJOS, evidencias/P3 |
-| P4 | **AUTORIZACION_P4_2026_10_16, PLAN_P4_AGENTES_RESEARCH_LOCAL_AI, INVESTIGACION_P4_ORQUESTACION_IA_LOCAL**, 09_AGENTES, 10_CUANTITATIVO, 06_DATOS_APIS, INTEGRACIONES_TERCEROS_VERIFICACION |
-| P5 (futuro; NO AUTORIZADO) | REALINEACION_FONDO_AUTONOMO_2026_10_23, 07_CARTERA_LEDGER, 10_CUANTITATIVO, 11_CONTRATOS, tasks/P5_QUANT_RIESGO |
-| P6 (futuro; NO AUTORIZADO) | REALINEACION_FONDO_AUTONOMO_2026_10_23, 06_DATOS_APIS, 07_CARTERA_LEDGER, 11_CONTRATOS, 13_SEGURIDAD, tasks/P6_PAPER |
-| P7 | 16_TESTS_ACEPTACION, 17_AUDITORIA_PREVIA, 18_MODELOS_Y_TOKENS |
+[Auditoría de continuidad del 11-11](actual/AUDITORIA_CONTINUIDAD_2026_11_11.md) · [Archivo e inventario de planes sustituidos](archive/2026-11-11-continuidad/README.md).
 
-Siempre leer primero `AGENTS.md`, `STATUS.md` y `tasks/Px_*.md` correspondiente. **No cargar todos los documentos a la vez.**
+[B3.2 completado y evidencia](actual/ENTREGA_B3_2.md) · [Preparación histórica](actual/B3_2_PRIMERA_CAMPANA.md) · [Consulta Alpaca original](actual/B3_2_CONSULTA_ALPACA.md).
 
-## Referencias activas
-- 30 roles y contratos: [09_AGENTES](09_AGENTES.md).
-- Quant y sesgos: [10_CUANTITATIVO](10_CUANTITATIVO.md).
-- Terceros auditados: [INTEGRACIONES_TERCEROS_VERIFICACION](INTEGRACIONES_TERCEROS_VERIFICACION.md).
-- Modelos de Codex/uso de tokens: [18_MODELOS_Y_TOKENS](18_MODELOS_Y_TOKENS.md).
-- Evidencia cierre P3: [evidencias/P3](evidencias/P3/README.md).
+## Diseño de referencia
 
-Los documentos P0-P3 históricos se conservan para auditoría, pero no reabren fases ya cerradas. P4 no autoriza riesgo formal P5 ni ejecución P6.
+- [Minería de estrategias, comparación de cinco repositorios y piloto local](actual/MINERIA_REPOS_2026_11_20.md).
 
-## P4 · estabilización posterior a QA (2026-10-19)
-- [Auditoría de fallos semánticos, watchlist e integraciones](AUDITORIA_P4_CALIDAD_HUD_INTEGRACIONES_2026_10_19.md).
-- [Prompt maestro Codex para corrección por gates](PROMPT_CODEX_P4_ESTABILIZACION_HUD_INTEGRACIONES_2026_10_19.md).
-- [Issue #6 — seguimiento](https://github.com/jaimealonsovargas-rgb/JAIME-INVESTOR-HQ/issues/6).
-- **P4 sigue pendiente de aceptación semántica**; P5/P6 no autorizados. No confundir tests correctos con análisis financiero aceptado.
+- [Arquitectura del circuito](actual/VISION_Y_ARQUITECTURA.md).
+- [Contratos de datos y minería](actual/DATOS_Y_ESTRATEGIAS.md).
+- [Proveedores y cobertura vigente](actual/PROVEEDORES_Y_COBERTURA.md).
+- [Experiencia de producto](actual/EXPERIENCIA_PRODUCTO.md).
+- [Adaptación financiera Anthropic](actual/AGENTES_FINANCIEROS_ANTHROPIC.md).
+- [Day Trader: adaptación por fases](actual/DAY_TRADER_ADAPTACION.md).
+- [Evaluación IBKR](actual/IBKR_TWS_EVALUACION.md) · [Punto técnico](actual/IBKR_PILOTO_PREPARACION.md).
 
-## Requisitos de diseño futuro registrados (2026-10-22)
-- [Realineación hacia research autónomo local](ARQUITECTURA_AUTONOMIA_P4_P5.md): contrato propuesto de eventos/tareas, dependencias y gates; P5/P6 siguen sin autorización.
-- [Plan_JAIME_P5_P6](Plan_JAIME_P5_P6.md): documento aportado por el usuario, no autorización de implementación ni verificación de proveedores.
-- [Profundidad adaptativa y límites de cierre P4](P4_PROFUNDIDAD_Y_CIERRE.md): encaje con los contratos existentes y condiciones para una ejecución más eficiente. **No inicia P5/P6.**
+## Operación
 
-## Realineación documental · 2026-10-23
-- [Contrato de autonomía, dependencias, eventos, readiness, Strategy Factory y PAPER futuro](REALINEACION_FONDO_AUTONOMO_2026_10_23.md).
-- [Visión actualizada](01_VISION.md), [ADR](../DECISIONES.md), [tarea P4](../tasks/P4_RESEARCH_AGENTES.md), [tarea P2 futura](../tasks/P2_DATOS.md), [especificación P5](../tasks/P5_QUANT_RIESGO.md) y [especificación P6](../tasks/P6_PAPER.md).
-- **Actualización 26-10:** primer ciclo mínimo implementado mediante autorización posterior; ver [contrato y límites](P4_AUTONOMIA_PRIMER_CICLO.md). P2 readiness point-in-time y rutas adicionales necesitan otro Goal. **STOP antes de P5/P6**.
+[n8n local](../integrations/n8n/README.md) · [IBKR SDK/piloto](../integrations/ibkr/README.md). Las claves permanecen en el entorno local, no en estos documentos.
+
+## Entregas fechadas — resultados y evidencia, no cola
+
+[B5 riesgo y ciclo de observación](actual/ENTREGA_B5.md).
+
+[B4 validación de estrategias y decisión para riesgo](actual/ENTREGA_B4.md).
+
+[B3.2 primera campaña real retrospectiva](actual/ENTREGA_B3_2.md).
+
+[D3 admisión determinista y manifiestos](actual/ENTREGA_D3_ADMISION.md).
+
+[D2 lotes y límites de derechos](actual/ENTREGA_D2_LOTES.md).
+
+[D1 acceso a datos IBKR](actual/ENTREGA_D1_IBKR_DATOS.md).
+
+[B3.1 núcleo determinista del laboratorio](actual/ENTREGA_B3_1.md).
+
+[B1](actual/ENTREGA_B1.md) · [B2.1 catálogo](actual/ENTREGA_B2_1.md) · [B2.2 SEC](actual/ENTREGA_B2_2.md) · [B2.3 mercado](actual/ENTREGA_B2_3.md) · [Identidad/históricos](actual/ENTREGA_B2_3_IDENTIDAD_HISTORICOS.md) · [Contratos IBKR](actual/ENTREGA_B2_3_CONTRATOS_IBKR.md).
+
+[B2.4 modelos](actual/ENTREGA_B2_4.md) · [Filings/skills/P4](actual/ENTREGA_B2_4_ACTUALIZACION_Y_P4.md) · [B2.5 ciclos](actual/ENTREGA_B2_5.md) · [Almacenamiento](actual/ENTREGA_B2_ALMACENAMIENTO.md) · [Sede aceptada](actual/ENTREGA_VISUAL_SEDE.md).
+
+## Historia
+
+[Auditoría del 27-10](actual/AUDITORIA_2026_10_27.md) · [Archivo anterior](archive/2026-10-27/README.md). Especificaciones antiguas P0–P7 conservadas en [archivo de continuidad](archive/2026-11-11-continuidad/README.md), con enlaces desde tasks/P0–P7.

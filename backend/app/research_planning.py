@@ -1,5 +1,6 @@
 """Objective routing and typed evidence, independent of a generative model."""
 from app.research_contracts import digest, sanitize
+from app.research_fundamentals import coherent_annual_facts
 
 GOALS = {'data_quality', 'macro_reference', 'descriptive_research', 'investable_thesis'}
 
@@ -24,7 +25,11 @@ def role_evidence_gap(role_id, evidence):
         if not macro:
             return 'NO_DATA: no hay series macroeconómicas relevantes para una explicación del instrumento; una referencia de divisas no identifica causas ni régimen macro.'
         return None
-    if role_id in ('fundamental_equity', 'valuation', 'credit_fixed_income'):
+    if role_id == 'fundamental_equity':
+        return None if coherent_annual_facts(evidence) else 'NO_DATA: falta un estado anual coherente del emisor (activos, patrimonio, ingresos y resultado; mismo filing, periodo y divisa).'
+    if role_id == 'valuation':
+        return 'NO_DATA: los hechos contables no bastan para valorar; faltan modelo financiero versionado, supuestos y comparables verificables (B2).'
+    if role_id == 'credit_fixed_income':
         kinds = ({'filing', 'financial_statement'} if role_id != 'credit_fixed_income'
                  else {'bond_terms', 'credit_filing'})
         if not any(e['scope'] == 'INSTRUMENT' and e['rights_ok'] and e.get('available', True)
@@ -66,8 +71,11 @@ def evidence_pack(evidence):
                         'feed': c.get('feed', e['source']), 'venue': c.get('venue'),
                         'provider': e.get('provider'), 'series_id': c.get('series_id'),
                         'period_precision': c.get('period_precision'),
+                        'statement': {k: c.get('metadata', {}).get(k) for k in
+                                      ('cik', 'concept', 'taxonomy', 'start', 'accn', 'filed', 'form', 'publication_precision')}
+                                     if c.get('data_kind') == 'fundamental_fact' else None,
                         'currency': c.get('currency'), 'unit': c.get('unit'),
-                        'observed_at': e.get('observed_at'), 'source': e['source'],
+                        'observed_at': e.get('observed_at'), 'published_at': c.get('published_at'), 'source': e['source'],
                         'rights': e['rights'], 'freshness': e['freshness'],
                         'usable': bool(e['rights_ok'] and e.get('available', True) and e['freshness']=='FRESH'),
                         'value': c.get('value'), 'excerpt': sanitize(c.get('excerpt', '')),

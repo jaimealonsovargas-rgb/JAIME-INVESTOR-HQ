@@ -1,0 +1,3 @@
+# Optional Windows CPU research environment. The JAIME backend uses its existing lock.
+optuna==4.9.0
+pydantic==2.14.1

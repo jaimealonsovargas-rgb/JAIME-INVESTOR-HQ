@@ -2,6 +2,7 @@
 from dataclasses import dataclass, field, replace
 from datetime import datetime, timezone
 from app.data_contracts import Rights, DataKind
+from app import zse
 
 VERIFIED = datetime(2026, 10, 14, tzinfo=timezone.utc)
 
@@ -36,6 +37,8 @@ class Source:
     quota_note: str = 'Presupuesto local conservador; límite oficial no publicado.'
     block: str | None = None
     read_timeout: int = 12
+    data_tier: int = 1
+    quality_flags: tuple[str, ...] = ()
 
     @property
     def implemented(self):
@@ -50,7 +53,7 @@ SOURCES = (
     Source('A06','WORLD_BANK','Banco Mundial','https://api.worldbank.org/v2/country/ES/indicator/NY.GDP.MKTP.CD','worldbank','macro_series','WDI/NY.GDP.MKTP.CD',rights('Banco Mundial · CC BY 4.0','https://datacatalog.worldbank.org/public-licenses'),'https://datahelpdesk.worldbank.org/knowledgebase/articles/889392',country='ES',params={'format':'json','per_page':'5','mrv':'5'}),
     Source('A07','BIS','BIS','https://stats.bis.org/api/v1/data/WS_EER/M.N.B.ES','sdmx_csv','macro_series','WS_EER/M.N.B.ES',rights('BIS estadísticas · atribución','https://data.bis.org/help/legal'),'https://stats.bis.org/api-doc/v2/',country='ES',params={'startPeriod':'2026-07','endPeriod':'2026-09'},headers={'Accept':'text/csv'}),
     Source('A08','TREASURY','Tesoro de Estados Unidos','https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml','treasury','yield_curve','daily_treasury_yield_curve',rights('US Treasury · datos públicos','https://www.copyright.gov/title17/92chap1.html#105'),'https://home.treasury.gov/treasury-daily-interest-rate-xml-feed',country='US',asset_class='SOVEREIGN_BOND',params={'data':'daily_treasury_yield_curve','field_tdr_date_value_month':'202609'}),
-    Source('A09','SEC','SEC EDGAR','https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json','sec','fundamental_fact','companyfacts/CIK0000320193',rights('SEC · datos públicos EDGAR','https://www.sec.gov/about/webmaster-frequently-asked-questions'),'https://www.sec.gov/search-filings/edgar-application-programming-interfaces',country='US',asset_class='EQUITY',credentials=('sec_contact',),auth='sec',limit=2,quota_note='Fair access: 10 req/s; local 2/min.'),
+    Source('A09','SEC','SEC EDGAR','https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json','sec','fundamental_fact','companyfacts/CIK0000320193',rights('SEC · datos públicos EDGAR','https://www.sec.gov/about/webmaster-frequently-asked-questions'),'https://www.sec.gov/search-filings/edgar-application-programming-interfaces',country='US',asset_class='EQUITY',credentials=('sec_contact',),auth='sec',limit=60,quota_note='Fair access: 10 req/s; local compartido 1/s y 60/min.'),
     Source('A10','BLS','BLS v1','https://api.bls.gov/publicAPI/v1/timeseries/data/CUUR0000SA0','bls','macro_series','CUUR0000SA0',rights('BLS · dominio público','https://www.bls.gov/opub/copyright-information.htm'),'https://www.bls.gov/developers/api_FAQs.htm',country='US',limit=20,window=86400,quota_note='25 consultas/día v1; local 20/día.'),
     Source('A11','IMF','FMI DataMapper','https://www.imf.org/external/datamapper/api/v2/NGDP_RPCH/ESP','imf','macro_series','WEO/NGDP_RPCH/ESP',rights('FMI Data · investigación no comercial; atribución','https://www.imf.org/en/about/copyright-and-terms',scope='personal',redistribution=False),'https://www.imf.org/external/datamapper/api/',country='ES',params={'periods':'2024,2025,2026'},quota_note='Consulta selectiva documentada DataMapper; no descarga masiva. SDMX beta separado.'),
     Source('A12','ESMA','ESMA FIRDS índice','https://registers.esma.europa.eu/solr/esma_registers_firds_files/select','firds_index','instrument_metadata','FIRDS/publication_index',rights('ESMA · índice oficial; display pendiente','https://www.esma.europa.eu/document/firds-instructions-access-and-download-full-and-delta-reference-data-files',display=False,storage=False,redistribution=False),'https://www.esma.europa.eu/document/firds-instructions-access-and-download-full-and-delta-reference-data-files',asset_class='MULTI',venue='EU',params={'q':'*','fq':'publication_date:[2026-10-13T00:00:00Z TO 2026-10-13T23:59:59Z]','wt':'xml','start':'0','rows':'3'},quota_note='Índice machine-to-machine oficial, 3 enlaces; ningún ZIP masivo.'),
@@ -111,3 +114,27 @@ CATALOG['A21'] = Source('A21','COINPAPRIKA','CoinPaprika · histórico diario pe
     'https://coinpaprika.com/api/historical-data',asset_class='CRYPTO',venue='AGGREGATED',
     params={'interval':'1d'},ttl=3600,limit=5,
     quota_note='Free: hasta un año diario; HQ revalida 90 días cada hora. Sin horario de publicación certificado. No OHLCV ni ejecución.')
+
+# D038 (D027 in PR #8): permitted project category, not a provider licence.
+CATALOG['A22'] = Source('A22', 'ZSE', 'Bolsa de Zagreb · cierres de Hrvatski Telekom',
+    zse.BASE_URL, 'zse_history', 'market_quote', 'XZAG/HT/CT/historical-close',
+    Rights(license='ZSE §4.4 · histórico para uso personal interno no comercial',
+           source=zse.POLICY, checked_at=datetime(2026,11,4,tzinfo=timezone.utc), scope='personal',
+           access_allowed=True, display_allowed=True, storage_allowed=True, local_research_allowed=True,
+           redistribution_allowed=False, attribution='Zagreb Stock Exchange'),
+    zse.IDENTITY, country='HR', asset_class='EQUITY', venue=zse.MIC,
+    params={'trading_model_id':'CT'}, ttl=21600, limit=1, window=3600,
+    quota_note='Consulta local cada 6 h con el backend activo. Máximo 1/h. Histórico de sesiones anteriores.',
+    quality_flags=('HISTORICAL_EOD','ZSE_TRADED_SESSION'))
+
+# Candidates remain blocked until transport, terms and per-listing identity are verified.
+for ident, provider, terms in (
+    ('C01','YAHOO','https://legal.yahoo.com/us/en/yahoo/terms/otos/index.html'),
+    ('C02','STOOQ','https://stooq.com/t/')):
+    CATALOG[ident] = Source(ident, provider, provider+' · Europa · UNOFFICIAL_SOURCE',
+        None, None, 'market_quote', 'EUROPE_CANDIDATE',
+        Rights(license='Nivel 2 local permitido por política; derechos concretos del proveedor pendientes de comprobación.',
+               source=terms, scope='internal', attribution=provider+' · fuente no oficial'), terms,
+        country='EU',asset_class='EQUITY',venue='UNVERIFIED_LISTING',ttl=86400,limit=1,window=3600,
+        quota_note='Candidato: máximo local 1/h y caché 24 h; no es una cuota garantizada por el proveedor.',
+        block='NOT_IMPLEMENTED',data_tier=2,quality_flags=('UNOFFICIAL_SOURCE',))

@@ -1,4 +1,4 @@
-import { useEffect,useRef } from 'react';
+import { useEffect,useRef,useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchHealth,fetchProviders,type Health } from '../api';
 import { DEPARTMENTS } from './layout';
@@ -8,6 +8,8 @@ import DataQuality from './DataQuality';
 import ResearchPanel from './ResearchPanel';
 import {PortfolioDepartment} from './FinancialHud';
 import './panels.css';
+import PersonInspector from './PersonInspector';
+import {PERSON_ROLES} from './personRoles';
 
 type Status='available'|'no-data'|'stale'|'offline'|'blocked'|'pending'|'error'|'phase-locked';
 const LABELS:Record<Status,string>={available:'Disponible', 'no-data':'Sin datos',stale:'Desactualizado',offline:'Sin conexión',blocked:'Bloqueado',pending:'Comprobando',error:'Error','phase-locked':'NO DISPONIBLE'};
@@ -20,32 +22,47 @@ function HealthDetail({health}:{health:Health}) {return <dl className="health-gr
 function containTabFocus(event: React.KeyboardEvent<HTMLDialogElement>) {
  if(event.key!=='Tab')return;
  const dialog=event.currentTarget;
- const items=Array.from(dialog.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')).filter(item=>item.getClientRects().length>0);
+ const items=Array.from(dialog.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], summary, input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')).filter(item=>item.getClientRects().length>0);
  const first=items[0],last=items.at(-1),active=document.activeElement;
  if(!first){event.preventDefault();dialog.focus();return;}
  if(!dialog.contains(active)||(event.shiftKey?active===first:active===last)){event.preventDefault();(event.shiftKey?last!:first).focus();}
 }
 
-export default function MonitorOverlay({id,onClose}:{id:string;onClose:()=>void}) {
+export default function MonitorOverlay({id,personId,onClose}:{id:string;personId?:string;onClose:()=>void}) {
  const dialog=useRef<HTMLDialogElement>(null),close=useRef<HTMLButtonElement>(null);
- const monitor=MONITOR_DEFINITIONS.find(m=>m.id===id)!;const content=PANEL_CONTENT[id];const financial=['reception','trading','performance'].includes(id);const live=true;
- const health=useQuery({queryKey:['health'],queryFn:({signal})=>fetchHealth(signal),retry:false,refetchInterval:15000,enabled:live});
- const providers=useQuery({queryKey:['providers'],queryFn:({signal})=>fetchProviders(signal),retry:false,refetchInterval:15000,enabled:id==='systems'});
+ const [view,setView]=useState<'person'|'work'|'department'>(personId?'person':'department');
+ const [selectedCase,setSelectedCase]=useState({id:'',run:''});
+ const monitor=MONITOR_DEFINITIONS.find(m=>m.id===id)!;
+ const content=PANEL_CONTENT[id],person=personId?PERSON_ROLES[personId]:undefined;
+ const financial=['reception','trading','performance'].includes(id);
+ const health=useQuery({queryKey:['health'],queryFn:({signal})=>fetchHealth(signal),retry:false,refetchInterval:15000});
+ const providers=useQuery({queryKey:['providers'],queryFn:({signal})=>fetchProviders(signal),retry:false,enabled:id==='systems'&&view==='department'});
  useEffect(()=>{const previous=document.activeElement as HTMLElement|null;const node=dialog.current!;node.showModal();close.current?.focus();return()=>{node.close();if(previous?.isConnected)previous.focus();};},[]);
- const healthy=health.isSuccess&&!health.isError;const stale=healthy&&Date.now()-Date.parse(health.data.checked_at)>60000;
+ const healthy=health.isSuccess&&!health.isError;
+ const stale=healthy&&Date.now()-Date.parse(health.data.checked_at)>60000;
+ const capability=id==='execution'?'Ejecución P6 pendiente; órdenes bloqueadas':id==='risk'?'Riesgo determinista pendiente; análisis P4 parcial':id==='quant'?'Estadística descriptiva disponible; minería P5 pendiente':id==='committee'?'Debate P4 parcial; sin decisión ejecutable':id==='research'?'Investigación P4 parcial; cobertura de empresas limitada':id==='systems'?'Datos P2 y supervisión local implementados':'Contabilidad virtual MASTER implementada';
+ function openCase(caseId:string,runKey:string){setSelectedCase({id:caseId,run:runKey});setView('work');}
  return <dialog ref={dialog} className="monitor-dialog" aria-modal="true" aria-labelledby="panel-title" aria-describedby="panel-description" onKeyDown={containTabFocus} onCancel={e=>{e.preventDefault();onClose();}}>
   <div className="panel-chrome"><span>JAIME INVESTOR HQ <span className="chrome-divider">/</span> {monitor.label}</span><button ref={close} onClick={onClose}>Volver a la oficina <kbd>Esc</kbd></button></div>
-  <header className="panel-header"><div><h2 id="panel-title">{monitor.panel}</h2><p id="panel-description">{content.description}</p></div><div className="panel-status"><StatusBadge status={live?(health.isPending?'pending':health.isError?'offline':stale?'stale':'available'):'phase-locked'}>{live?undefined:`NO DISPONIBLE · ${monitor.phase}`}</StatusBadge><span>PAPER ONLY</span></div></header>
+  <header className="panel-header"><div><h2 id="panel-title">{person?.label??monitor.panel}</h2><p id="panel-description">{person?'Mandato, trabajo y entregas de las especialidades representadas en este puesto.':content.description}</p></div><div className="panel-status"><StatusBadge status={health.isPending?'pending':health.isError?'offline':stale?'stale':'available'}>{health.isPending?'Servicio: comprobando':health.isError?'Servicio: sin conexión':stale?'Servicio: comprobación antigua':'Servicio: conectado'}</StatusBadge><span>PAPER ONLY</span></div></header>
+  <nav className="panel-view-switch" aria-label="Contenido del panel">
+   {person?<button aria-pressed={view==='person'} onClick={()=>setView('person')}>Especialista</button>:null}
+   <button aria-pressed={view==='work'} onClick={()=>setView('work')}>Casos y entregas</button>
+   <button aria-pressed={view==='department'} onClick={()=>setView('department')}>Departamento</button>
+  </nav>
   <div className="panel-body">
-   <ResearchPanel department={id}/>
-   {id==='systems'?<DataQuality/>:null}
-   {financial?<PortfolioDepartment id={id}/>:null}
-   {live?<section className="panel-health" aria-label="Salud real del backend"><div className="section-heading"><h3>Servicio local</h3><button onClick={()=>{void health.refetch();if(id==='systems')void providers.refetch();}} disabled={health.isFetching}>{health.isFetching?'Comprobando…':'Actualizar estado'}</button></div>{healthy?<><HealthDetail health={health.data}/>{stale?<p className="panel-error" role="status">Respuesta desactualizada; no confirma el estado actual del servicio.</p>:null}</>:<p className="panel-error" role="status">{health.isPending?'Comprobando GET /health…':'NO DISPONIBLE: no se pudo verificar el backend. Puedes cerrar el panel y seguir recorriendo la oficina.'}</p>}</section>:null}
-   {id==='reception'?<section className="panel-map"><h3>Nueve departamentos, una planta</h3><ol>{DEPARTMENTS.map(d=><li key={d.id}><span>{d.number}</span><strong>{d.label}</strong><small>{d.use}</small></li>)}</ol><p>El minimapa permite volver a cualquier departamento desde el mundo. NAV y caja proceden exclusivamente del ledger MASTER.</p></section>:null}
-   {id==='systems'?<section className="panel-providers"><h3>Protecciones de ejecución P0</h3><p className="source-note">Fuente: GET /api/providers/status · respuesta del backend P0; no es una prueba de conectividad con el proveedor externo.</p>{providers.isSuccess&&!providers.isError?<table><thead><tr><th scope="col">Proveedor</th><th scope="col">Estado</th><th scope="col">Motivo</th><th scope="col">Verificación externa</th></tr></thead><tbody>{providers.data.map(p=><tr key={p.provider}><th scope="row">{p.provider}</th><td><StatusBadge status="phase-locked">{p.status}</StatusBadge></td><td>{p.reason}</td><td>{p.checked_at?new Date(p.checked_at).toLocaleString('es-ES'):'Sin comprobar'}</td></tr>)}</tbody></table>:<p className="panel-error" role="status">{providers.isPending?'Comprobando proveedores…':'NO DISPONIBLE: no se recibió un contrato válido de proveedores.'}</p>}</section>:null}
-
-   <div className="panel-sections">{content.sections.map(section=><SectionCard key={section.title} {...section}/>)}</div>
+   {view==='person'&&personId?<PersonInspector key={personId} personId={personId} onOpenCase={openCase}/>:null}
+   {view==='work'?<ResearchPanel key={selectedCase.id+selectedCase.run} department={id} initialCaseId={selectedCase.id} initialRun={selectedCase.run} roleIds={person?.roles}/>:null}
+   {view==='department'?<>
+    <section className="department-capability"><h3>Capacidad del departamento</h3><p>{capability}.</p><p>La conexión al servicio indica que el backend responde. Cada fuente, tarea y resultado conserva su propio estado.</p></section>
+    {id==='systems'?<DataQuality/>:null}
+    {financial?<PortfolioDepartment id={id}/>:null}
+    {id==='reception'?<section className="panel-map"><h3>Departamentos</h3><ol>{DEPARTMENTS.map(d=><li key={d.id}><span>{d.number}</span><strong>{d.label}</strong><small>{d.use}</small></li>)}</ol></section>:null}
+    <details className="panel-reference"><summary>Alcance y funciones previstas</summary><div className="panel-sections">{content.sections.map(section=><SectionCard key={section.title} {...section}/>)}</div></details>
+    <details className="panel-reference"><summary>Diagnóstico del servicio</summary><section className="panel-health" aria-label="Salud real del backend"><div className="section-heading"><h3>Servicio local</h3><button onClick={()=>void health.refetch()} disabled={health.isFetching}>Comprobar conexión</button></div>{healthy?<HealthDetail health={health.data}/>:<p className="panel-error" role="status">{health.isPending?'Comprobando…':'No se pudo verificar el servicio local.'}</p>}</section>
+    {id==='systems'?<section className="panel-providers"><h3>Protecciones de ejecución</h3><p>Estado local; no acredita conexión externa.</p>{providers.isSuccess&&!providers.isError?providers.data.map(p=><p key={p.provider}><strong>{p.provider}</strong> · {p.status} · {p.reason}</p>):<p>Sin comprobar</p>}</section>:null}</details>
+   </>:null}
   </div>
-  <footer className="panel-footer"><span>Sesión local · Ninguna operación real</span><span>{live?'Datos locales comprobables':'Datos financieros no conectados'}</span></footer>
+  <footer className="panel-footer"><span>Investigación y capital virtual</span><span>Órdenes deshabilitadas</span></footer>
  </dialog>;
 }

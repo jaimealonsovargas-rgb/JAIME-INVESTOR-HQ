@@ -1,10 +1,10 @@
-import { CanvasTexture, Color, MeshBasicMaterial, MeshPhysicalMaterial, MeshStandardMaterial, RepeatWrapping, SRGBColorSpace, Texture, Vector2 } from 'three';
+import { AdditiveBlending, CanvasTexture, Color, MeshBasicMaterial, MeshPhysicalMaterial, MeshStandardMaterial, RepeatWrapping, ShaderMaterial, SRGBColorSpace, Texture, Vector2 } from 'three';
 
 export function textTexture(title: string, subtitle = '', kind: 'sign' | 'screen' | 'brand' | 'wallbrand' = 'sign') {
   const canvas = document.createElement('canvas');
   canvas.width = 1024; canvas.height = kind === 'screen' ? 576 : kind === 'sign' ? 128 : 256;
   const ctx = canvas.getContext('2d')!;
-  ctx.fillStyle = kind === 'screen' ? '#091827' : '#171c20';
+  ctx.fillStyle = kind === 'screen' ? '#101619' : '#17191b';
   if (kind !== 'sign'&&kind!=='wallbrand') ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = '#ba9a6c';
   if (kind === 'screen') {
@@ -19,7 +19,7 @@ export function textTexture(title: string, subtitle = '', kind: 'sign' | 'screen
     ctx.textAlign = 'center'; ctx.font = '42px Arial'; ctx.fillText(title, 512, 62, 950);
     ctx.fillStyle = '#a99d89'; ctx.font = '19px Arial'; ctx.fillText(subtitle, 512, 100, 950);
   } else if(kind==='wallbrand'){
-    ctx.textAlign='center';ctx.fillStyle='#172b38';ctx.font='130px Arial';ctx.fillText(title,512,150,940);
+    ctx.textAlign='center';ctx.fillStyle='#f3ebd9';ctx.font='130px Arial';ctx.fillText(title,512,150,940);
     ctx.font='30px Arial';ctx.fillText(subtitle,512,220,940);
   } else {
     ctx.textAlign = 'center'; ctx.font = kind === 'brand' ? '58px Arial' : '44px Arial';
@@ -85,11 +85,14 @@ export function makeMaterials(maps: Texture[]) {
   const floorNormal = stoneNormal.clone(); floorNormal.repeat.set(8, 7); floorNormal.needsUpdate = true;
   const wood = new MeshStandardMaterial({ map: woodMap, normalMap: woodNormal, roughnessMap: woodRough, color: '#b28f69', roughness: .58, normalScale: new Vector2(.08, .08) });
   // Acabado de nogal: desaturación del albedo CC0, sin modificar el fichero fuente.
-  wood.onBeforeCompile = shader => { shader.fragmentShader = shader.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.075, 0.042, 0.021), 0.72);'); };
-  wood.customProgramCacheKey = () => 'sims-walnut-v3';
-  const floor=new MeshStandardMaterial({map:floorMap,normalMap:floorNormal,color:'#152638',roughness:.34,metalness:.16,normalScale:new Vector2(.09,.09)});
-  floor.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n diffuseColor.rgb=mix(diffuseColor.rgb,vec3(0.009,0.017,0.029),0.72);');};
-  floor.customProgramCacheKey=()=> 'sims-blue-black-stone-v3';
+  wood.onBeforeCompile = shader => { shader.fragmentShader = shader.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.11, 0.058, 0.025), 0.42);'); };
+  wood.customProgramCacheKey = () => 'hq-walnut-v4';
+  const floor=new MeshStandardMaterial({map:floorMap,normalMap:floorNormal,color:'#171a1d',roughness:.46,metalness:.12,normalScale:new Vector2(.07,.07)});
+  floor.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n diffuseColor.rgb=mix(vec3(dot(diffuseColor.rgb,vec3(0.2126,0.7152,0.0722))),vec3(0.014,0.016,0.018),0.65);');};
+  floor.customProgramCacheKey=()=> 'hq-anthracite-stone-v1';
+  const receptionStone=new MeshStandardMaterial({map:stoneMap,normalMap:stoneNormal,color:'#424548',roughness:.72,metalness:.05,normalScale:new Vector2(.09,.09)});
+  receptionStone.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n diffuseColor.rgb=vec3(dot(diffuseColor.rgb,vec3(0.2126,0.7152,0.0722)));');};
+  receptionStone.customProgramCacheKey=()=> 'hq-reception-charcoal-v1';
   const shadowCanvas = document.createElement('canvas'); shadowCanvas.width = shadowCanvas.height = 128;
   const ctx = shadowCanvas.getContext('2d')!;
   const gradient = ctx.createRadialGradient(64, 64, 8, 64, 64, 62);
@@ -101,18 +104,48 @@ export function makeMaterials(maps: Texture[]) {
     contact: new MeshBasicMaterial({ map: new CanvasTexture(shadowCanvas), transparent: true, depthWrite: false, opacity: .7, polygonOffset: true, polygonOffsetFactor: -1 }),
     stone: new MeshStandardMaterial({ map: stoneMap, normalMap: stoneNormal, color: '#e1dccb', roughnessMap: stoneRough, roughness: .3, metalness: .08, normalScale: new Vector2(.07, .07) }),
     floor,
+    wall: new MeshStandardMaterial({ color: '#25282c', roughness: .72, metalness: .08 }),
+    receptionStone,
     bronze: new MeshStandardMaterial({ color: '#b9915e', metalness: .78, roughness: .28 }),
-    dark: new MeshStandardMaterial({ color: '#151d22', roughness: .43, metalness: .35 }),
+    dark: new MeshStandardMaterial({ color: '#14171a', roughness: .48, metalness: .3 }),
     steel: new MeshStandardMaterial({ color: '#a4a9a7', metalness: .88, roughness: .26 }),
     keys: new MeshStandardMaterial({ map: surfaceTexture('keys'), roughness: .72 }),
     leather: new MeshStandardMaterial({ color: '#252b2d', roughness: .58, bumpMap: fabric, bumpScale: .003 }),
     cognac: new MeshStandardMaterial({ color: '#76513c', roughness: .64, bumpMap: fabric, bumpScale: .003 }),
-    carpet: new MeshStandardMaterial({ color: '#263b4b', roughness: 1, bumpMap: fabric, bumpScale: .006 }),
+    carpet: new MeshStandardMaterial({ color: '#292d31', roughness: .6, metalness: .06, normalMap: floorNormal, normalScale: new Vector2(.045,.045) }),
     cream: new MeshStandardMaterial({ color: '#a7987e', roughness: .82 }),
     ceiling: new MeshStandardMaterial({ color: '#50504c', roughness: .92 }),
     soffit: new MeshStandardMaterial({ color: '#20282d', roughness: 1, metalness: 0 }),
     glass: new MeshPhysicalMaterial({ color: '#e1e8e3', transparent: true, opacity: .085, roughness: .07, metalness: .15, depthWrite: false, side: 2,forceSinglePass:true }),
     light: new MeshBasicMaterial({ color: new Color('#ffe2b5').multiplyScalar(1.1), toneMapped: false }),
+    neon: new MeshBasicMaterial({ color: '#fff82e', toneMapped: false }),
+    // Saturated yellow core and falloff attached to real architectural surfaces.
+    neonWash: new ShaderMaterial({
+      transparent: true, depthWrite: false, blending: AdditiveBlending, toneMapped: false,
+      uniforms: { tint: { value: new Color('#e5ff00') } },
+      vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+      fragmentShader: `varying vec2 vUv; uniform vec3 tint;
+        void main(){
+          float d=abs(vUv.y*2.0-1.0), aa=fwidth(d);
+          float core=1.0-smoothstep(0.07-aa,0.13+aa,d);
+          float glow=exp(-d*5.5)*0.58*(1.0-smoothstep(0.75,1.0,d));
+          float ends=smoothstep(0.0,0.015,vUv.x)*smoothstep(0.0,0.015,1.0-vUv.x);
+          gl_FragColor=vec4(mix(tint,vec3(1.0,0.97,0.02),core),max(core,glow)*ends);
+          #include <colorspace_fragment>
+        }`,
+    }),
+    lightWash: new ShaderMaterial({
+      transparent:true,depthWrite:false,blending:AdditiveBlending,toneMapped:false,
+      uniforms:{tint:{value:new Color('#ffcd83')}},
+      vertexShader:'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+      fragmentShader:`varying vec2 vUv; uniform vec3 tint;
+        void main(){
+          vec2 p=vUv*2.0-1.0;
+          float a=exp(-dot(p,p)*3.5)*(1.0-smoothstep(0.55,1.0,length(p)))*0.18;
+          gl_FragColor=vec4(tint,a);
+          #include <colorspace_fragment>
+        }`,
+    }),
     green: new MeshStandardMaterial({ color: '#233d2c', roughness: .48, side: 2 }),
     greenLight: new MeshStandardMaterial({ color: '#496342', roughness: .57, side: 2 }),
     paper: new MeshStandardMaterial({ color: '#d6d2be', roughness: .95 }),

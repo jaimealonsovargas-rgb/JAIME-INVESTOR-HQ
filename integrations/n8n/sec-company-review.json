@@ -1,0 +1,236 @@
+{
+  "id": "JAIMESecShadowV1",
+  "name": "JAIME · SEC y revisión contable · sombra",
+  "active": false,
+  "nodes": [
+    {
+      "id": "schedule",
+      "name": "Cada seis horas UTC",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 */6 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "manual",
+      "name": "Comprobar ventana actual",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        220
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "submit",
+      "name": "Solicitar ciclo JAIME",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/api/cycles",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ (() => { const start=$now.toUTC().set({hour:Math.floor($now.toUTC().hour/6)*6,minute:0,second:0,millisecond:0}); return {schema_version:1,agenda:'sec-company-review-v1',objective:'SEC_COMPANY_REVIEW',mode:'shadow',event_id:'sec-company-review-v1:'+start.toFormat(\"yyyyMMdd'T'HHmmss'Z'\"),correlation_id:'n8n:'+$execution.id,window_start:start.toISO(),window_end:start.plus({hours:6}).toISO(),budget:{max_sec_tasks:6,max_models:3,max_llm_calls:0,max_cost_eur:0,timeout_seconds:1200} }; })() }}",
+        "options": {
+          "timeout": 15000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "JAIMECycleCredentialV1",
+          "name": "JAIME · ciclos locales"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "wait",
+      "name": "Esperar diez segundos",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        500,
+        100
+      ],
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 10,
+        "unit": "seconds"
+      },
+      "webhookId": "b25-local-wait"
+    },
+    {
+      "id": "poll",
+      "name": "Consultar ciclo JAIME",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        740,
+        100
+      ],
+      "parameters": {
+        "url": "={{ 'http://127.0.0.1:8000/api/cycles/' + $('Solicitar ciclo JAIME').first().json.cycle.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 15000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "JAIMECycleCredentialV1",
+          "name": "JAIME · ciclos locales"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "terminal",
+      "name": "Ciclo terminado",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        980,
+        100
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "is-terminal",
+              "leftValue": "={{ ['SUCCEEDED','PARTIAL','BLOCKED','CANCELLED','TIMED_OUT'].includes($json.state) }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Cada seis horas UTC": {
+      "main": [
+        [
+          {
+            "node": "Solicitar ciclo JAIME",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Comprobar ventana actual": {
+      "main": [
+        [
+          {
+            "node": "Solicitar ciclo JAIME",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Solicitar ciclo JAIME": {
+      "main": [
+        [
+          {
+            "node": "Esperar diez segundos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Esperar diez segundos": {
+      "main": [
+        [
+          {
+            "node": "Consultar ciclo JAIME",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar ciclo JAIME": {
+      "main": [
+        [
+          {
+            "node": "Ciclo terminado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ciclo terminado": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Esperar diez segundos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "UTC",
+    "executionOrder": "v1",
+    "executionTimeout": 1500,
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false
+  },
+  "pinData": {},
+  "tags": []
+}

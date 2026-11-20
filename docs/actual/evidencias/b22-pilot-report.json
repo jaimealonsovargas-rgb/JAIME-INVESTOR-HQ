@@ -1,0 +1,1476 @@
+{
+  "job": {
+    "id": "b22-sec-pilot-review-v1",
+    "state": "SUCCEEDED",
+    "created_at": "2026-10-28T15:41:26.044074+00:00",
+    "updated_at": "2026-10-28T15:51:00.128960+00:00",
+    "manifest": {
+      "version": "sec-pilot-100-v1",
+      "issuers": [
+        {
+          "cik": "0000320193",
+          "name": "Apple Inc.",
+          "symbol": "AAPL",
+          "listing_id": "dba3ee06718af55b83da5519f58c9650e6917d496d709b228753379ceb13089f",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000789019",
+          "name": "MICROSOFT CORP",
+          "symbol": "MSFT",
+          "listing_id": "92b2ed00b486619bc263fab1fac259a2ee72ea611928a266bd28f57c7f6a9c18",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000104169",
+          "name": "Walmart Inc.",
+          "symbol": "WMT",
+          "listing_id": "815e6fa55e97840d80b05d70ba77bbe2e3b2e62974f2c7084db9e335c7d6dea5",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001045810",
+          "name": "NVIDIA CORP",
+          "symbol": "NVDA",
+          "listing_id": "7d130c9049ede9473f4ab02be09561134a9155ff2462b581986796613945fdc5",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001018724",
+          "name": "AMAZON COM INC",
+          "symbol": "AMZN",
+          "listing_id": "28ef973543ce46714ade032f5b2cd18685d80c31dd52151e45812e689bd269e9",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001652044",
+          "name": "Alphabet Inc.",
+          "symbol": "GOOGL",
+          "listing_id": "6108b17fe1a6e1ef01cca2e845704d86affe8fcae7aac5843a489d800f032d25",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001326801",
+          "name": "Meta Platforms, Inc.",
+          "symbol": "META",
+          "listing_id": "577034b9b3ee8e39130b3cc0de35185cc28907f4085ac3030d0c0adb7bafc36a",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001067983",
+          "name": "BERKSHIRE HATHAWAY INC",
+          "symbol": "BRK-B",
+          "listing_id": "478921df363cf4df0525cfbf9976e2ca13a9a4d6bac81dcc8321023a4f865e9d",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000019617",
+          "name": "JPMORGAN CHASE & CO",
+          "symbol": "JPM",
+          "listing_id": "075f31c358e4267a3b6466495caf0a66aba705c1182e9f4089a47a08698acac5",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001403161",
+          "name": "VISA INC.",
+          "symbol": "V",
+          "listing_id": "123a8e22a49f4269e89cdea423d7ec02eaba54bf3065ccb38b99d75611ec9b1d",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001141391",
+          "name": "Mastercard Inc",
+          "symbol": "MA",
+          "listing_id": "2aa3295009bdb717b786f319b36b871347e0ac4eb911a235524be36d558c73f6",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000731766",
+          "name": "UNITEDHEALTH GROUP INC",
+          "symbol": "UNH",
+          "listing_id": "f16fc68b893686ac548ee7a0ed717b3b9dfcf43b759c307fa127f57bc9739dfa",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0002115436",
+          "name": "ExxonMobil Holdings Corp",
+          "symbol": "XOM",
+          "listing_id": "01e8d070e6e15644dafdbbb5a323f8f680c45e8db59b65f8bc85d3a5198d537e",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000200406",
+          "name": "JOHNSON & JOHNSON",
+          "symbol": "JNJ",
+          "listing_id": "8315db542ed8c43da6b88e90421aef312fa754f276b75b5512ae16eb28a6ee45",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000080424",
+          "name": "PROCTER & GAMBLE Co",
+          "symbol": "PG",
+          "listing_id": "c1196711401acec35b46f819c7772c5fd6c50c7bc7771decac5ba234b37092c2",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000354950",
+          "name": "HOME DEPOT, INC.",
+          "symbol": "HD",
+          "listing_id": "6c98a2529d1be62e934ca4bc9e27e7b62b6a972224902ed4104c73c9abad4363",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000909832",
+          "name": "COSTCO WHOLESALE CORP /NEW",
+          "symbol": "COST",
+          "listing_id": "c237e02c9b44f2020be830a9a73216db1c218b95c0ef93c8f5c4c97de4732866",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001551152",
+          "name": "AbbVie Inc.",
+          "symbol": "ABBV",
+          "listing_id": "8fa512ad47f84ccfa42932dfb2a5f4b9264c739bca8395d40cc2e1b00acdc878",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000021344",
+          "name": "COCA COLA CO",
+          "symbol": "KO",
+          "listing_id": "310b1c8bd7fcd77f67c6ac71d7ef7e223efebbb17ae08cb443f56d391d1911aa",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000070858",
+          "name": "BANK OF AMERICA CORP /DE/",
+          "symbol": "BAC",
+          "listing_id": "60c72a195bb088832283f5417db985b0abd6b538c005adf189c055fee39f7390",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000310158",
+          "name": "Merck & Co., Inc.",
+          "symbol": "MRK",
+          "listing_id": "9d961ce723f5c84f1ec270ea4c345ba9c9fdbe04bab57276435a70b281cdb14c",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000093410",
+          "name": "CHEVRON CORP",
+          "symbol": "CVX",
+          "listing_id": "7bca734bc37dd98a7513d1ef1dcedd6b654457602abc6f068cdfcc2bde124cdf",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001108524",
+          "name": "Salesforce, Inc.",
+          "symbol": "CRM",
+          "listing_id": "1e37feb557d0a73d17369c4d665b355142d2121f28bfde225f5bbd979cc2ad24",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000002488",
+          "name": "ADVANCED MICRO DEVICES INC",
+          "symbol": "AMD",
+          "listing_id": "4e84b91a134ae0b4b3aaf4a8ffceb1a0d432e9ab39b9ea5cca338bb653647725",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000077476",
+          "name": "PEPSICO INC",
+          "symbol": "PEP",
+          "listing_id": "af790093cbbfb8a26f4c8083521c19d77d5abd0c9bb0834743521f2c53d4373d",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000097745",
+          "name": "THERMO FISHER SCIENTIFIC INC.",
+          "symbol": "TMO",
+          "listing_id": "815aaa3fec5434e3f4483bd11a38110d76b151ffd6cde70669a9248d71aab401",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000072971",
+          "name": "WELLS FARGO & COMPANY/MN",
+          "symbol": "WFC",
+          "listing_id": "e7b5dfe3066d4d6cc588fd2f63db1f81c71a4b5ed4df9e7f6c9a9bc0ecdd2ecf",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000858877",
+          "name": "CISCO SYSTEMS, INC.",
+          "symbol": "CSCO",
+          "listing_id": "27a9998b616e5a9f12a996be2cafe0fdffa8381859f5fbf367d4ee8209f6be64",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000063908",
+          "name": "MCDONALDS CORP",
+          "symbol": "MCD",
+          "listing_id": "13c4e7309d6cf5cf93a5fdff62a63aeb6d60903dbb748fefcc92bb65665429c5",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000001800",
+          "name": "ABBOTT LABORATORIES",
+          "symbol": "ABT",
+          "listing_id": "bd5b632f11729ffc78de4e5aab132e91c4c6897c02a068bce1d0597548a7f16e",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001744489",
+          "name": "Walt Disney Co",
+          "symbol": "DIS",
+          "listing_id": "4c706a4fb5a943d18464de27cde708595f84cb37d4966a85b432907c91541f4b",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001707925",
+          "name": "LINDE PLC",
+          "symbol": "LIN",
+          "listing_id": "6a9d72920271e7010ad235bcb1912c24744ca0d451d651520dc85708d211526f",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001341439",
+          "name": "ORACLE CORP",
+          "symbol": "ORCL",
+          "listing_id": "98db9851e65c09914e49a4cfa31803a93b96473dd2714e8b16d8e3487432a809",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001467373",
+          "name": "Accenture plc",
+          "symbol": "ACN",
+          "listing_id": "b0526883001a92fe1e0e54eb1bc12a50e1c09458a263408333cda8bc32961806",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000796343",
+          "name": "ADOBE INC.",
+          "symbol": "ADBE",
+          "listing_id": "645edd781d07345cdd6d45410df2dad39729a4686134c0f9e67c1a140d1f3890",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000320187",
+          "name": "NIKE, Inc.",
+          "symbol": "NKE",
+          "listing_id": "e9500e47bfff802453b72d3dc0f8aca2a4747d4b76fffc668c9dd66f415c79bd",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000313616",
+          "name": "DANAHER CORP /DE/",
+          "symbol": "DHR",
+          "listing_id": "0789521401c46f18cc2c29aac8c9625ad3dc7dd4e107bd9ee3888797faabe587",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000097476",
+          "name": "TEXAS INSTRUMENTS INC",
+          "symbol": "TXN",
+          "listing_id": "e9c84a09e9268a5dd85ffc3bfd47aea4a6081b3e8fe7928189474542e4ad02c4",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000804328",
+          "name": "QUALCOMM INC/DE",
+          "symbol": "QCOM",
+          "listing_id": "349d30be1394ddc57bd71b82a53e9721b6fc67bebdb6bbc412990fefe5fd5d4e",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000051143",
+          "name": "INTERNATIONAL BUSINESS MACHINES CORP",
+          "symbol": "IBM",
+          "listing_id": "c09822560b6fb2c9ab2c4b383137ec1ca339aad75a26d10ea8ea8849cea94d9f",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000018230",
+          "name": "CATERPILLAR INC",
+          "symbol": "CAT",
+          "listing_id": "9fdcf72f82742f53f51107f588a4ef22b592bc1b64336f0c9b44f57312b132a1",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000040545",
+          "name": "GENERAL ELECTRIC CO",
+          "symbol": "GE",
+          "listing_id": "bc87ca7cb6fb4d13f993cfac4d22297a73c3f12b0eac4ba2137eeed031ccab22",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000318154",
+          "name": "AMGEN INC",
+          "symbol": "AMGN",
+          "listing_id": "77c637bf634ffeff22dbf5aeb41977e3ae5740ed2ff99714f35e49ac8dfe5a88",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000896878",
+          "name": "INTUIT INC.",
+          "symbol": "INTU",
+          "listing_id": "df8a8e61ae42ba5c42f8bb1ec11e602237c751150b4e9ba768f4df4bff31f912",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000006951",
+          "name": "APPLIED MATERIALS INC /DE",
+          "symbol": "AMAT",
+          "listing_id": "943a8461c801b5d9e5528e7bc8477b323d84c6d9f63b662dd1754b82af1b37f0",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000732712",
+          "name": "VERIZON COMMUNICATIONS INC",
+          "symbol": "VZ",
+          "listing_id": "0744cce6b7ec0f4f37c7fac15ab3be224d0887cbb9bd23304656e28c90e03d1e",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001373715",
+          "name": "ServiceNow, Inc.",
+          "symbol": "NOW",
+          "listing_id": "89bc29b9957dbe8fabaec932ad982167ef240960f75ad10a0f535d1d31e9f5c7",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001035267",
+          "name": "INTUITIVE SURGICAL INC",
+          "symbol": "ISRG",
+          "listing_id": "dde19851629c76026c748a91768602615bdae201d17a1f02a5ba60beec52c49a",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000886982",
+          "name": "GOLDMAN SACHS GROUP INC",
+          "symbol": "GS",
+          "listing_id": "214e0f22d895d9d9e88ed057cd074f7ec64ed930693aae0709882ac88c1e5386",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000064040",
+          "name": "S&P Global Inc.",
+          "symbol": "SPGI",
+          "listing_id": "f319e06611b87657fb2d78a091ccb5d30bc8b2b5f7d7cd0a0fa825c1b5115a35",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000101829",
+          "name": "RTX Corp",
+          "symbol": "RTX",
+          "listing_id": "9ae3e905b97d6aafab9333ece4fedaabe90192c1d77c69ebfb825a21061dc086",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000060667",
+          "name": "LOWES COMPANIES INC",
+          "symbol": "LOW",
+          "listing_id": "3d39cba46afd638e2c618d7483cb8e65c75cb8ee67fcfc1670056ff7440aa7e8",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000078003",
+          "name": "PFIZER INC",
+          "symbol": "PFE",
+          "listing_id": "07e7d0969f3d9696d1d9698c855e9964ad8fa4ed8d20677ede196ae3ea1ba80b",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000100885",
+          "name": "UNION PACIFIC CORP",
+          "symbol": "UNP",
+          "listing_id": "d227628cb5e65fbb2cdcbe55e3c7d020ed247bab14c0633957a4a6447519e0df",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000773840",
+          "name": "HONEYWELL INTERNATIONAL INC",
+          "symbol": "HON",
+          "listing_id": "0c8d60494a5d7911ed9047e1ff92763f313eb25c238da6c02a44e1d937267f23",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001075531",
+          "name": "Booking Holdings Inc.",
+          "symbol": "BKNG",
+          "listing_id": "74883684219a0493d4eb44aca731ef9f3b0646fbe7357a84746aa5a4f87a8a0d",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001163165",
+          "name": "CONOCOPHILLIPS",
+          "symbol": "COP",
+          "listing_id": "0c3f7d05b9c24fbaf86e748806a909b2dbe8b578febe6d3f25875d2efbc98baa",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001090727",
+          "name": "UNITED PARCEL SERVICE INC",
+          "symbol": "UPS",
+          "listing_id": "6d4c0a3d99345aa8a965c4159185279a7e5caa2b9a75d0ad2e488e0ec92fe830",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000936468",
+          "name": "LOCKHEED MARTIN CORP",
+          "symbol": "LMT",
+          "listing_id": "27f9286ba4e21382c045b62912d2e6360f0ceb5773541533968c6ff9bd885cd5",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000829224",
+          "name": "STARBUCKS CORP",
+          "symbol": "SBUX",
+          "listing_id": "c77234ebb6167779eb6c9adc6f460bd5a1cfc30ff502fbe7b473fa000ece4542",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000315189",
+          "name": "DEERE & CO",
+          "symbol": "DE",
+          "listing_id": "3e1d1dd699c75d0ab6966c23c63ff803c34cdd5b775eb831a744856c8b5ae955",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000732717",
+          "name": "AT&T INC.",
+          "symbol": "T",
+          "listing_id": "06fb2b612bc42d2c75e31ca53843d17bd8a8fec02acff3dedb7523bad57dc8d5",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000831001",
+          "name": "CITIGROUP INC",
+          "symbol": "C",
+          "listing_id": "fa587a83e3d0c86f66350dc5b5a1880e056981cd2ccaff63219b346d4f353c91",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0002012383",
+          "name": "BlackRock, Inc.",
+          "symbol": "BLK",
+          "listing_id": "ec089fc9aca357d964deda9c3018efe0f16c3f2d38d053b02e0104b82d64b144",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000008670",
+          "name": "AUTOMATIC DATA PROCESSING INC",
+          "symbol": "ADP",
+          "listing_id": "389016b2077e0979421affe29a7cdc0037026f27bd49b9133910f660f2d8e011",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000882095",
+          "name": "GILEAD SCIENCES, INC.",
+          "symbol": "GILD",
+          "listing_id": "b99446ae1dbf7aab0a7685ed1afb618141d6b55ed3bb1fcf6535ff46b50305e1",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001613103",
+          "name": "Medtronic plc",
+          "symbol": "MDT",
+          "listing_id": "81abb79adcf52cb3a80202cac4af8c461bc26a491260770e89ce23ce9f288d13",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000109198",
+          "name": "TJX COMPANIES INC /DE/",
+          "symbol": "TJX",
+          "listing_id": "5c234d60aecd9472fc9f0de5e84af084dbe5040f190bacc3371f8ae44608350c",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000316709",
+          "name": "SCHWAB CHARLES CORP",
+          "symbol": "SCHW",
+          "listing_id": "da2282f7b7b6ff5fb0e447b9f217c32cc5a18705817d3c698ed0b0b55ccd0bac",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000896159",
+          "name": "Chubb Ltd",
+          "symbol": "CB",
+          "listing_id": "acd52b5755701374d9b2c6ff7b3b351e025cd12b51fdf0b6b1821eb32bf42a54",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000006281",
+          "name": "ANALOG DEVICES INC",
+          "symbol": "ADI",
+          "listing_id": "fc3e3247a00a3820727f8aea04484a0fffd2cb4cf29d396b5d4bf8af695f9578",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001045609",
+          "name": "Prologis, Inc.",
+          "symbol": "PLD",
+          "listing_id": "4a2dde504c0cf35ae913116ccbed96376685d943b3841568e843c63de76fdef3",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001156039",
+          "name": "Elevance Health, Inc.",
+          "symbol": "ELV",
+          "listing_id": "f563b0967e3c152b0d58943abeb31420bb098e89aed5a1ff8f57606e93949799",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000014272",
+          "name": "BRISTOL MYERS SQUIBB CO",
+          "symbol": "BMY",
+          "listing_id": "4ed1620f0a6ef1d106bc126901987d1bf39238d8382d4258475c2d8479760eb7",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000707549",
+          "name": "LAM RESEARCH CORP",
+          "symbol": "LRCX",
+          "listing_id": "da05ccea115ff3ac67d7e10fef93b93d9e9578d9d6c76261e33a07fa9eb44d34",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000723125",
+          "name": "MICRON TECHNOLOGY INC",
+          "symbol": "MU",
+          "listing_id": "0caf07d0341c1f995b22eddc19a13a508b7aa470f1eb8106cf781cfcb8853f16",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000310764",
+          "name": "STRYKER CORP",
+          "symbol": "SYK",
+          "listing_id": "6616ef2a263e646f6a7d09a58488a6a2ef8f79e284ba4737fadd4182c8fdf58a",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001327567",
+          "name": "Palo Alto Networks Inc",
+          "symbol": "PANW",
+          "listing_id": "00155ff79933c0e513bdba779cc033fcbee4dbbe29664263f0dcf8e7c6bd731f",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000092122",
+          "name": "SOUTHERN CO",
+          "symbol": "SO",
+          "listing_id": "2cadbaa1ce8ec2f6bc4a2b6afd69ce937cddc671957154052440485364389b2e",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001326160",
+          "name": "Duke Energy CORP",
+          "symbol": "DUK",
+          "listing_id": "69654b96ff3c025835e172e63cfdfe8e237680972b099a2b62f2d34db5649f4f",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000764180",
+          "name": "ALTRIA GROUP, INC.",
+          "symbol": "MO",
+          "listing_id": "006caf69e7f7126718c0769d11c6b4269836ac0c947fa7a6d9acbd74a526b68f",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000821189",
+          "name": "EOG RESOURCES INC",
+          "symbol": "EOG",
+          "listing_id": "4fec3e7c43dcc5559b4f419737ee9e362e0b18a546afb875c8dafc3f39064263",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000087347",
+          "name": "SLB LIMITED/NV",
+          "symbol": "SLB",
+          "listing_id": "f8d5015ede342d548eb5c891872383fe70acd3c9be5ba17fa5a07e37cfcd78b3",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001555280",
+          "name": "Zoetis Inc.",
+          "symbol": "ZTS",
+          "listing_id": "20246d91e4e953f94c5bb48a661b94c679b3e6e3cc4972ba030e15fe7e7e813c",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001133421",
+          "name": "NORTHROP GRUMMAN CORP /DE/",
+          "symbol": "NOC",
+          "listing_id": "bc4486f772ebe536e944bb8ebc2df9e3796e0c49f40b37c24e09deaa43a7c613",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001156375",
+          "name": "CME GROUP INC.",
+          "symbol": "CME",
+          "listing_id": "ec5d6cae0bdc775568fd68817aef6ffc6760f74f31c264b03d8a8b64bb561b28",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000021665",
+          "name": "COLGATE PALMOLIVE CO",
+          "symbol": "CL",
+          "listing_id": "900f09bb1130ad027206317b39f9596a0ec1c79fcc5280729c789ef8d1e38b87",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001571949",
+          "name": "Intercontinental Exchange, Inc.",
+          "symbol": "ICE",
+          "listing_id": "8f35077b86e58b3514c9e7b9b2b9ea02a29d538335cf9a127d8f06a1f18a56aa",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000089800",
+          "name": "SHERWIN WILLIAMS CO",
+          "symbol": "SHW",
+          "listing_id": "6b0887b33930b70f6463b703dd196b8a18130d97ce8d6d29088d5c9d326af353",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000823768",
+          "name": "WASTE MANAGEMENT INC",
+          "symbol": "WM",
+          "listing_id": "29c6fb69db40bf1161aec9dddf913f785ff41607286b2207871d61aed06dfe67",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001101239",
+          "name": "EQUINIX INC",
+          "symbol": "EQIX",
+          "listing_id": "84da092cded744ee18c0f73456ee64dafdda1d1517ae331ab2072f387a34cfc7",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000319201",
+          "name": "KLA CORP",
+          "symbol": "KLAC",
+          "listing_id": "798dea7d60593ec8e9e046baa054ce4621c9e86eb0525edc2a1dd31f6ba93213",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001048911",
+          "name": "FEDEX CORP",
+          "symbol": "FDX",
+          "listing_id": "819000b20d4e372715549c85fd0bf6eba51c6d5120c4a59d0680ffa11102eff1",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000002969",
+          "name": "Air Products & Chemicals, Inc.",
+          "symbol": "APD",
+          "listing_id": "d717b8503d42b26760a793c693f3b4ab1f0a69de3c15b7bc48c20bd39a732468",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000831259",
+          "name": "FREEPORT-MCMORAN INC",
+          "symbol": "FCX",
+          "listing_id": "0cf3527fc630df49e19cd1f88ec0bee4a20e3e0e188d4e06fc298cd9182e3b78",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000860730",
+          "name": "HCA Healthcare, Inc.",
+          "symbol": "HCA",
+          "listing_id": "4ec04ff715af815b84f54c95264b72c4cbd607d36fbd23c64ea45a37bf23a648",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000032604",
+          "name": "EMERSON ELECTRIC CO",
+          "symbol": "EMR",
+          "listing_id": "dcecb7b16111226422c688ad4ee7b46ca0fd66ed5806dc55d9223a8104aadc29",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0001048286",
+          "name": "MARRIOTT INTERNATIONAL INC /MD/",
+          "symbol": "MAR",
+          "listing_id": "b05108971bbb06e59011f33b42e829f51603fb24e21ac41d9377a5e10d2b2034",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000882835",
+          "name": "ROPER TECHNOLOGIES INC",
+          "symbol": "ROP",
+          "listing_id": "c7abc668fa0c7da30c1cb17c1e8c63e6bc031eb36d17d7de062d23debffb27a3",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        },
+        {
+          "cik": "0000898173",
+          "name": "O REILLY AUTOMOTIVE INC",
+          "symbol": "ORLY",
+          "listing_id": "b49e5e72a9f58e1c1cbf82a27b3bf958232848a55840687758f4f3372e7febc6",
+          "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+        }
+      ],
+      "parser_version": "sec-financials-v1",
+      "metric_denominator": 24,
+      "created_at": "2026-10-28T15:41:26.044074+00:00",
+      "selection": "Muestra t\u00e9cnica por conveniencia; no es un \u00edndice ni una recomendaci\u00f3n de inversi\u00f3n.",
+      "temporal_scope": "Conocimiento local desde la descarga; no universo hist\u00f3rico de mercado."
+    },
+    "total": 200,
+    "completed": 200,
+    "counts": {
+      "PENDING": 0,
+      "RUNNING": 0,
+      "WAITING": 0,
+      "SUCCEEDED": 200,
+      "NO_DATA": 0,
+      "FAILED": 0,
+      "CANCELLED": 0
+    },
+    "current": [],
+    "errors": []
+  },
+  "summary": {
+    "counts": {
+      "issuers_with_facts": 100,
+      "issuers_with_documents": 100,
+      "snapshots": 200,
+      "receipts": 200
+    },
+    "latest_job": {
+      "id": "b22-sec-pilot-review-v1",
+      "state": "SUCCEEDED",
+      "created_at": "2026-10-28T15:41:26.044074+00:00",
+      "updated_at": "2026-10-28T15:51:00.128960+00:00",
+      "manifest": {
+        "version": "sec-pilot-100-v1",
+        "issuers": [
+          {
+            "cik": "0000320193",
+            "name": "Apple Inc.",
+            "symbol": "AAPL",
+            "listing_id": "dba3ee06718af55b83da5519f58c9650e6917d496d709b228753379ceb13089f",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000789019",
+            "name": "MICROSOFT CORP",
+            "symbol": "MSFT",
+            "listing_id": "92b2ed00b486619bc263fab1fac259a2ee72ea611928a266bd28f57c7f6a9c18",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000104169",
+            "name": "Walmart Inc.",
+            "symbol": "WMT",
+            "listing_id": "815e6fa55e97840d80b05d70ba77bbe2e3b2e62974f2c7084db9e335c7d6dea5",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001045810",
+            "name": "NVIDIA CORP",
+            "symbol": "NVDA",
+            "listing_id": "7d130c9049ede9473f4ab02be09561134a9155ff2462b581986796613945fdc5",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001018724",
+            "name": "AMAZON COM INC",
+            "symbol": "AMZN",
+            "listing_id": "28ef973543ce46714ade032f5b2cd18685d80c31dd52151e45812e689bd269e9",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001652044",
+            "name": "Alphabet Inc.",
+            "symbol": "GOOGL",
+            "listing_id": "6108b17fe1a6e1ef01cca2e845704d86affe8fcae7aac5843a489d800f032d25",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001326801",
+            "name": "Meta Platforms, Inc.",
+            "symbol": "META",
+            "listing_id": "577034b9b3ee8e39130b3cc0de35185cc28907f4085ac3030d0c0adb7bafc36a",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001067983",
+            "name": "BERKSHIRE HATHAWAY INC",
+            "symbol": "BRK-B",
+            "listing_id": "478921df363cf4df0525cfbf9976e2ca13a9a4d6bac81dcc8321023a4f865e9d",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000019617",
+            "name": "JPMORGAN CHASE & CO",
+            "symbol": "JPM",
+            "listing_id": "075f31c358e4267a3b6466495caf0a66aba705c1182e9f4089a47a08698acac5",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001403161",
+            "name": "VISA INC.",
+            "symbol": "V",
+            "listing_id": "123a8e22a49f4269e89cdea423d7ec02eaba54bf3065ccb38b99d75611ec9b1d",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001141391",
+            "name": "Mastercard Inc",
+            "symbol": "MA",
+            "listing_id": "2aa3295009bdb717b786f319b36b871347e0ac4eb911a235524be36d558c73f6",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000731766",
+            "name": "UNITEDHEALTH GROUP INC",
+            "symbol": "UNH",
+            "listing_id": "f16fc68b893686ac548ee7a0ed717b3b9dfcf43b759c307fa127f57bc9739dfa",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0002115436",
+            "name": "ExxonMobil Holdings Corp",
+            "symbol": "XOM",
+            "listing_id": "01e8d070e6e15644dafdbbb5a323f8f680c45e8db59b65f8bc85d3a5198d537e",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000200406",
+            "name": "JOHNSON & JOHNSON",
+            "symbol": "JNJ",
+            "listing_id": "8315db542ed8c43da6b88e90421aef312fa754f276b75b5512ae16eb28a6ee45",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000080424",
+            "name": "PROCTER & GAMBLE Co",
+            "symbol": "PG",
+            "listing_id": "c1196711401acec35b46f819c7772c5fd6c50c7bc7771decac5ba234b37092c2",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000354950",
+            "name": "HOME DEPOT, INC.",
+            "symbol": "HD",
+            "listing_id": "6c98a2529d1be62e934ca4bc9e27e7b62b6a972224902ed4104c73c9abad4363",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000909832",
+            "name": "COSTCO WHOLESALE CORP /NEW",
+            "symbol": "COST",
+            "listing_id": "c237e02c9b44f2020be830a9a73216db1c218b95c0ef93c8f5c4c97de4732866",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001551152",
+            "name": "AbbVie Inc.",
+            "symbol": "ABBV",
+            "listing_id": "8fa512ad47f84ccfa42932dfb2a5f4b9264c739bca8395d40cc2e1b00acdc878",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000021344",
+            "name": "COCA COLA CO",
+            "symbol": "KO",
+            "listing_id": "310b1c8bd7fcd77f67c6ac71d7ef7e223efebbb17ae08cb443f56d391d1911aa",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000070858",
+            "name": "BANK OF AMERICA CORP /DE/",
+            "symbol": "BAC",
+            "listing_id": "60c72a195bb088832283f5417db985b0abd6b538c005adf189c055fee39f7390",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000310158",
+            "name": "Merck & Co., Inc.",
+            "symbol": "MRK",
+            "listing_id": "9d961ce723f5c84f1ec270ea4c345ba9c9fdbe04bab57276435a70b281cdb14c",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000093410",
+            "name": "CHEVRON CORP",
+            "symbol": "CVX",
+            "listing_id": "7bca734bc37dd98a7513d1ef1dcedd6b654457602abc6f068cdfcc2bde124cdf",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001108524",
+            "name": "Salesforce, Inc.",
+            "symbol": "CRM",
+            "listing_id": "1e37feb557d0a73d17369c4d665b355142d2121f28bfde225f5bbd979cc2ad24",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000002488",
+            "name": "ADVANCED MICRO DEVICES INC",
+            "symbol": "AMD",
+            "listing_id": "4e84b91a134ae0b4b3aaf4a8ffceb1a0d432e9ab39b9ea5cca338bb653647725",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000077476",
+            "name": "PEPSICO INC",
+            "symbol": "PEP",
+            "listing_id": "af790093cbbfb8a26f4c8083521c19d77d5abd0c9bb0834743521f2c53d4373d",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000097745",
+            "name": "THERMO FISHER SCIENTIFIC INC.",
+            "symbol": "TMO",
+            "listing_id": "815aaa3fec5434e3f4483bd11a38110d76b151ffd6cde70669a9248d71aab401",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000072971",
+            "name": "WELLS FARGO & COMPANY/MN",
+            "symbol": "WFC",
+            "listing_id": "e7b5dfe3066d4d6cc588fd2f63db1f81c71a4b5ed4df9e7f6c9a9bc0ecdd2ecf",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000858877",
+            "name": "CISCO SYSTEMS, INC.",
+            "symbol": "CSCO",
+            "listing_id": "27a9998b616e5a9f12a996be2cafe0fdffa8381859f5fbf367d4ee8209f6be64",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000063908",
+            "name": "MCDONALDS CORP",
+            "symbol": "MCD",
+            "listing_id": "13c4e7309d6cf5cf93a5fdff62a63aeb6d60903dbb748fefcc92bb65665429c5",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000001800",
+            "name": "ABBOTT LABORATORIES",
+            "symbol": "ABT",
+            "listing_id": "bd5b632f11729ffc78de4e5aab132e91c4c6897c02a068bce1d0597548a7f16e",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001744489",
+            "name": "Walt Disney Co",
+            "symbol": "DIS",
+            "listing_id": "4c706a4fb5a943d18464de27cde708595f84cb37d4966a85b432907c91541f4b",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001707925",
+            "name": "LINDE PLC",
+            "symbol": "LIN",
+            "listing_id": "6a9d72920271e7010ad235bcb1912c24744ca0d451d651520dc85708d211526f",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001341439",
+            "name": "ORACLE CORP",
+            "symbol": "ORCL",
+            "listing_id": "98db9851e65c09914e49a4cfa31803a93b96473dd2714e8b16d8e3487432a809",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001467373",
+            "name": "Accenture plc",
+            "symbol": "ACN",
+            "listing_id": "b0526883001a92fe1e0e54eb1bc12a50e1c09458a263408333cda8bc32961806",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000796343",
+            "name": "ADOBE INC.",
+            "symbol": "ADBE",
+            "listing_id": "645edd781d07345cdd6d45410df2dad39729a4686134c0f9e67c1a140d1f3890",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000320187",
+            "name": "NIKE, Inc.",
+            "symbol": "NKE",
+            "listing_id": "e9500e47bfff802453b72d3dc0f8aca2a4747d4b76fffc668c9dd66f415c79bd",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000313616",
+            "name": "DANAHER CORP /DE/",
+            "symbol": "DHR",
+            "listing_id": "0789521401c46f18cc2c29aac8c9625ad3dc7dd4e107bd9ee3888797faabe587",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000097476",
+            "name": "TEXAS INSTRUMENTS INC",
+            "symbol": "TXN",
+            "listing_id": "e9c84a09e9268a5dd85ffc3bfd47aea4a6081b3e8fe7928189474542e4ad02c4",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000804328",
+            "name": "QUALCOMM INC/DE",
+            "symbol": "QCOM",
+            "listing_id": "349d30be1394ddc57bd71b82a53e9721b6fc67bebdb6bbc412990fefe5fd5d4e",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000051143",
+            "name": "INTERNATIONAL BUSINESS MACHINES CORP",
+            "symbol": "IBM",
+            "listing_id": "c09822560b6fb2c9ab2c4b383137ec1ca339aad75a26d10ea8ea8849cea94d9f",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000018230",
+            "name": "CATERPILLAR INC",
+            "symbol": "CAT",
+            "listing_id": "9fdcf72f82742f53f51107f588a4ef22b592bc1b64336f0c9b44f57312b132a1",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000040545",
+            "name": "GENERAL ELECTRIC CO",
+            "symbol": "GE",
+            "listing_id": "bc87ca7cb6fb4d13f993cfac4d22297a73c3f12b0eac4ba2137eeed031ccab22",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000318154",
+            "name": "AMGEN INC",
+            "symbol": "AMGN",
+            "listing_id": "77c637bf634ffeff22dbf5aeb41977e3ae5740ed2ff99714f35e49ac8dfe5a88",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000896878",
+            "name": "INTUIT INC.",
+            "symbol": "INTU",
+            "listing_id": "df8a8e61ae42ba5c42f8bb1ec11e602237c751150b4e9ba768f4df4bff31f912",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000006951",
+            "name": "APPLIED MATERIALS INC /DE",
+            "symbol": "AMAT",
+            "listing_id": "943a8461c801b5d9e5528e7bc8477b323d84c6d9f63b662dd1754b82af1b37f0",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000732712",
+            "name": "VERIZON COMMUNICATIONS INC",
+            "symbol": "VZ",
+            "listing_id": "0744cce6b7ec0f4f37c7fac15ab3be224d0887cbb9bd23304656e28c90e03d1e",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001373715",
+            "name": "ServiceNow, Inc.",
+            "symbol": "NOW",
+            "listing_id": "89bc29b9957dbe8fabaec932ad982167ef240960f75ad10a0f535d1d31e9f5c7",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001035267",
+            "name": "INTUITIVE SURGICAL INC",
+            "symbol": "ISRG",
+            "listing_id": "dde19851629c76026c748a91768602615bdae201d17a1f02a5ba60beec52c49a",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000886982",
+            "name": "GOLDMAN SACHS GROUP INC",
+            "symbol": "GS",
+            "listing_id": "214e0f22d895d9d9e88ed057cd074f7ec64ed930693aae0709882ac88c1e5386",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000064040",
+            "name": "S&P Global Inc.",
+            "symbol": "SPGI",
+            "listing_id": "f319e06611b87657fb2d78a091ccb5d30bc8b2b5f7d7cd0a0fa825c1b5115a35",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000101829",
+            "name": "RTX Corp",
+            "symbol": "RTX",
+            "listing_id": "9ae3e905b97d6aafab9333ece4fedaabe90192c1d77c69ebfb825a21061dc086",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000060667",
+            "name": "LOWES COMPANIES INC",
+            "symbol": "LOW",
+            "listing_id": "3d39cba46afd638e2c618d7483cb8e65c75cb8ee67fcfc1670056ff7440aa7e8",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000078003",
+            "name": "PFIZER INC",
+            "symbol": "PFE",
+            "listing_id": "07e7d0969f3d9696d1d9698c855e9964ad8fa4ed8d20677ede196ae3ea1ba80b",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000100885",
+            "name": "UNION PACIFIC CORP",
+            "symbol": "UNP",
+            "listing_id": "d227628cb5e65fbb2cdcbe55e3c7d020ed247bab14c0633957a4a6447519e0df",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000773840",
+            "name": "HONEYWELL INTERNATIONAL INC",
+            "symbol": "HON",
+            "listing_id": "0c8d60494a5d7911ed9047e1ff92763f313eb25c238da6c02a44e1d937267f23",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001075531",
+            "name": "Booking Holdings Inc.",
+            "symbol": "BKNG",
+            "listing_id": "74883684219a0493d4eb44aca731ef9f3b0646fbe7357a84746aa5a4f87a8a0d",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001163165",
+            "name": "CONOCOPHILLIPS",
+            "symbol": "COP",
+            "listing_id": "0c3f7d05b9c24fbaf86e748806a909b2dbe8b578febe6d3f25875d2efbc98baa",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001090727",
+            "name": "UNITED PARCEL SERVICE INC",
+            "symbol": "UPS",
+            "listing_id": "6d4c0a3d99345aa8a965c4159185279a7e5caa2b9a75d0ad2e488e0ec92fe830",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000936468",
+            "name": "LOCKHEED MARTIN CORP",
+            "symbol": "LMT",
+            "listing_id": "27f9286ba4e21382c045b62912d2e6360f0ceb5773541533968c6ff9bd885cd5",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000829224",
+            "name": "STARBUCKS CORP",
+            "symbol": "SBUX",
+            "listing_id": "c77234ebb6167779eb6c9adc6f460bd5a1cfc30ff502fbe7b473fa000ece4542",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000315189",
+            "name": "DEERE & CO",
+            "symbol": "DE",
+            "listing_id": "3e1d1dd699c75d0ab6966c23c63ff803c34cdd5b775eb831a744856c8b5ae955",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000732717",
+            "name": "AT&T INC.",
+            "symbol": "T",
+            "listing_id": "06fb2b612bc42d2c75e31ca53843d17bd8a8fec02acff3dedb7523bad57dc8d5",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000831001",
+            "name": "CITIGROUP INC",
+            "symbol": "C",
+            "listing_id": "fa587a83e3d0c86f66350dc5b5a1880e056981cd2ccaff63219b346d4f353c91",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0002012383",
+            "name": "BlackRock, Inc.",
+            "symbol": "BLK",
+            "listing_id": "ec089fc9aca357d964deda9c3018efe0f16c3f2d38d053b02e0104b82d64b144",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000008670",
+            "name": "AUTOMATIC DATA PROCESSING INC",
+            "symbol": "ADP",
+            "listing_id": "389016b2077e0979421affe29a7cdc0037026f27bd49b9133910f660f2d8e011",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000882095",
+            "name": "GILEAD SCIENCES, INC.",
+            "symbol": "GILD",
+            "listing_id": "b99446ae1dbf7aab0a7685ed1afb618141d6b55ed3bb1fcf6535ff46b50305e1",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001613103",
+            "name": "Medtronic plc",
+            "symbol": "MDT",
+            "listing_id": "81abb79adcf52cb3a80202cac4af8c461bc26a491260770e89ce23ce9f288d13",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000109198",
+            "name": "TJX COMPANIES INC /DE/",
+            "symbol": "TJX",
+            "listing_id": "5c234d60aecd9472fc9f0de5e84af084dbe5040f190bacc3371f8ae44608350c",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000316709",
+            "name": "SCHWAB CHARLES CORP",
+            "symbol": "SCHW",
+            "listing_id": "da2282f7b7b6ff5fb0e447b9f217c32cc5a18705817d3c698ed0b0b55ccd0bac",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000896159",
+            "name": "Chubb Ltd",
+            "symbol": "CB",
+            "listing_id": "acd52b5755701374d9b2c6ff7b3b351e025cd12b51fdf0b6b1821eb32bf42a54",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000006281",
+            "name": "ANALOG DEVICES INC",
+            "symbol": "ADI",
+            "listing_id": "fc3e3247a00a3820727f8aea04484a0fffd2cb4cf29d396b5d4bf8af695f9578",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001045609",
+            "name": "Prologis, Inc.",
+            "symbol": "PLD",
+            "listing_id": "4a2dde504c0cf35ae913116ccbed96376685d943b3841568e843c63de76fdef3",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001156039",
+            "name": "Elevance Health, Inc.",
+            "symbol": "ELV",
+            "listing_id": "f563b0967e3c152b0d58943abeb31420bb098e89aed5a1ff8f57606e93949799",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000014272",
+            "name": "BRISTOL MYERS SQUIBB CO",
+            "symbol": "BMY",
+            "listing_id": "4ed1620f0a6ef1d106bc126901987d1bf39238d8382d4258475c2d8479760eb7",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000707549",
+            "name": "LAM RESEARCH CORP",
+            "symbol": "LRCX",
+            "listing_id": "da05ccea115ff3ac67d7e10fef93b93d9e9578d9d6c76261e33a07fa9eb44d34",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000723125",
+            "name": "MICRON TECHNOLOGY INC",
+            "symbol": "MU",
+            "listing_id": "0caf07d0341c1f995b22eddc19a13a508b7aa470f1eb8106cf781cfcb8853f16",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000310764",
+            "name": "STRYKER CORP",
+            "symbol": "SYK",
+            "listing_id": "6616ef2a263e646f6a7d09a58488a6a2ef8f79e284ba4737fadd4182c8fdf58a",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001327567",
+            "name": "Palo Alto Networks Inc",
+            "symbol": "PANW",
+            "listing_id": "00155ff79933c0e513bdba779cc033fcbee4dbbe29664263f0dcf8e7c6bd731f",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000092122",
+            "name": "SOUTHERN CO",
+            "symbol": "SO",
+            "listing_id": "2cadbaa1ce8ec2f6bc4a2b6afd69ce937cddc671957154052440485364389b2e",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001326160",
+            "name": "Duke Energy CORP",
+            "symbol": "DUK",
+            "listing_id": "69654b96ff3c025835e172e63cfdfe8e237680972b099a2b62f2d34db5649f4f",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000764180",
+            "name": "ALTRIA GROUP, INC.",
+            "symbol": "MO",
+            "listing_id": "006caf69e7f7126718c0769d11c6b4269836ac0c947fa7a6d9acbd74a526b68f",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000821189",
+            "name": "EOG RESOURCES INC",
+            "symbol": "EOG",
+            "listing_id": "4fec3e7c43dcc5559b4f419737ee9e362e0b18a546afb875c8dafc3f39064263",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000087347",
+            "name": "SLB LIMITED/NV",
+            "symbol": "SLB",
+            "listing_id": "f8d5015ede342d548eb5c891872383fe70acd3c9be5ba17fa5a07e37cfcd78b3",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001555280",
+            "name": "Zoetis Inc.",
+            "symbol": "ZTS",
+            "listing_id": "20246d91e4e953f94c5bb48a661b94c679b3e6e3cc4972ba030e15fe7e7e813c",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001133421",
+            "name": "NORTHROP GRUMMAN CORP /DE/",
+            "symbol": "NOC",
+            "listing_id": "bc4486f772ebe536e944bb8ebc2df9e3796e0c49f40b37c24e09deaa43a7c613",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001156375",
+            "name": "CME GROUP INC.",
+            "symbol": "CME",
+            "listing_id": "ec5d6cae0bdc775568fd68817aef6ffc6760f74f31c264b03d8a8b64bb561b28",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000021665",
+            "name": "COLGATE PALMOLIVE CO",
+            "symbol": "CL",
+            "listing_id": "900f09bb1130ad027206317b39f9596a0ec1c79fcc5280729c789ef8d1e38b87",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001571949",
+            "name": "Intercontinental Exchange, Inc.",
+            "symbol": "ICE",
+            "listing_id": "8f35077b86e58b3514c9e7b9b2b9ea02a29d538335cf9a127d8f06a1f18a56aa",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000089800",
+            "name": "SHERWIN WILLIAMS CO",
+            "symbol": "SHW",
+            "listing_id": "6b0887b33930b70f6463b703dd196b8a18130d97ce8d6d29088d5c9d326af353",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000823768",
+            "name": "WASTE MANAGEMENT INC",
+            "symbol": "WM",
+            "listing_id": "29c6fb69db40bf1161aec9dddf913f785ff41607286b2207871d61aed06dfe67",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001101239",
+            "name": "EQUINIX INC",
+            "symbol": "EQIX",
+            "listing_id": "84da092cded744ee18c0f73456ee64dafdda1d1517ae331ab2072f387a34cfc7",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000319201",
+            "name": "KLA CORP",
+            "symbol": "KLAC",
+            "listing_id": "798dea7d60593ec8e9e046baa054ce4621c9e86eb0525edc2a1dd31f6ba93213",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001048911",
+            "name": "FEDEX CORP",
+            "symbol": "FDX",
+            "listing_id": "819000b20d4e372715549c85fd0bf6eba51c6d5120c4a59d0680ffa11102eff1",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000002969",
+            "name": "Air Products & Chemicals, Inc.",
+            "symbol": "APD",
+            "listing_id": "d717b8503d42b26760a793c693f3b4ab1f0a69de3c15b7bc48c20bd39a732468",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000831259",
+            "name": "FREEPORT-MCMORAN INC",
+            "symbol": "FCX",
+            "listing_id": "0cf3527fc630df49e19cd1f88ec0bee4a20e3e0e188d4e06fc298cd9182e3b78",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000860730",
+            "name": "HCA Healthcare, Inc.",
+            "symbol": "HCA",
+            "listing_id": "4ec04ff715af815b84f54c95264b72c4cbd607d36fbd23c64ea45a37bf23a648",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000032604",
+            "name": "EMERSON ELECTRIC CO",
+            "symbol": "EMR",
+            "listing_id": "dcecb7b16111226422c688ad4ee7b46ca0fd66ed5806dc55d9223a8104aadc29",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0001048286",
+            "name": "MARRIOTT INTERNATIONAL INC /MD/",
+            "symbol": "MAR",
+            "listing_id": "b05108971bbb06e59011f33b42e829f51603fb24e21ac41d9377a5e10d2b2034",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000882835",
+            "name": "ROPER TECHNOLOGIES INC",
+            "symbol": "ROP",
+            "listing_id": "c7abc668fa0c7da30c1cb17c1e8c63e6bc031eb36d17d7de062d23debffb27a3",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          },
+          {
+            "cik": "0000898173",
+            "name": "O REILLY AUTOMOTIVE INC",
+            "symbol": "ORLY",
+            "listing_id": "b49e5e72a9f58e1c1cbf82a27b3bf958232848a55840687758f4f3372e7febc6",
+            "catalogue_seen_at": "2026-10-28T09:10:25.858003+00:00"
+          }
+        ],
+        "parser_version": "sec-financials-v1",
+        "metric_denominator": 24,
+        "created_at": "2026-10-28T15:41:26.044074+00:00",
+        "selection": "Muestra t\u00e9cnica por conveniencia; no es un \u00edndice ni una recomendaci\u00f3n de inversi\u00f3n.",
+        "temporal_scope": "Conocimiento local desde la descarga; no universo hist\u00f3rico de mercado."
+      },
+      "total": 200,
+      "completed": 200,
+      "counts": {
+        "PENDING": 0,
+        "RUNNING": 0,
+        "WAITING": 0,
+        "SUCCEEDED": 200,
+        "NO_DATA": 0,
+        "FAILED": 0,
+        "CANCELLED": 0
+      },
+      "current": [],
+      "errors": []
+    },
+    "metric_denominator": 24,
+    "temporal_scope": "LOCAL_KNOWLEDGE_ONLY",
+    "access": "READY",
+    "worker_running": false,
+    "worker_error": null
+  },
+  "elapsed_seconds": 11.0,
+  "protected_tables_unchanged": true,
+  "protected_table_count": 24
+}

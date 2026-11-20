@@ -1,0 +1,12 @@
+{
+  "schema": "0008_universe_catalogue",
+  "backup": "output/b2-before-0008.db",
+  "all_existing_tables_unchanged": true,
+  "existing_table_count": 21,
+  "new_tables": [
+    "universe_entities",
+    "universe_imports",
+    "universe_listings",
+    "universe_versions"
+  ]
+}

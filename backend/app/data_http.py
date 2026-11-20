@@ -9,6 +9,7 @@ from email.utils import parsedate_to_datetime
 from math import ceil
 from urllib.parse import urlsplit
 import httpx
+from app import zse
 from app.data_catalog import CATALOG, Source
 from app.data_config import DataSettings
 from app.data_windows import request_window
@@ -93,7 +94,8 @@ class SafeDataHttp:
         try:
             self.resolver(urlsplit(source.url).hostname)
             with httpx.Client(transport=self.transport, timeout=httpx.Timeout(source.read_timeout,connect=5), follow_redirects=False, trust_env=False) as client:
-                with client.stream(source.method,source.url,params=params,headers=headers,json=payload) as response:
+                url = zse.request_url(datetime.now(timezone.utc)) if source.id == 'A22' else source.url
+                with client.stream(source.method,url,params=params,headers=headers,json=payload) as response:
                     status=response.status_code
                     if status != 200:
                         retry=response.headers.get('Retry-After','0')

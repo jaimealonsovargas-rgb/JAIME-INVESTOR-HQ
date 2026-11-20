@@ -146,4 +146,4 @@ Fuentes: https://docs.alpaca.markets/us/docs/about-market-data-api ; https://doc
 | frontend/src/api.ts + panel Sistemas local | Validación TS, fuentes/estado reales, sin dashboard de inicio |
 | docs/P2_PROVIDERS_VERIFICACION.md + STATUS.md | Matriz de los 34 candidatos, evidencia verificable, recuento REAL y handoff |
 
-**Regla de ahorro de tokens:** inspeccionar → diff mínimo → tests → gate → STATUS → siguiente. No leer P3–P7 salvo contrato puntual. No rehacer el mundo 3D. Guía de coordinación: [PLAN_EJECUCION_P1_P2.md](PLAN_EJECUCION_P1_P2.md).
+**Regla de ahorro de tokens:** inspeccionar → diff mínimo → tests → gate → STATUS → siguiente. No leer P3–P7 salvo contrato puntual. No rehacer el mundo 3D. Guía de coordinación: [PLAN_EJECUCION_P1_P2.md](archive/2026-10-27/planes/PLAN_EJECUCION_P1_P2.md).

@@ -3,8 +3,13 @@ import { fetchHealth } from './api';
 import { lazy, Suspense } from 'react';
 
 const World = lazy(() => import('./world/World'));
+const AnalystWorkspace = lazy(() => import('./world/AnalystWorkspace'));
+const AssetCenter = lazy(() => import('./world/AssetCenter'));
 
 export function App() {
+  if(new URLSearchParams(window.location.search).has('activos'))return <Suspense fallback={<p role="status">Abriendo centro de activos…</p>}><AssetCenter/></Suspense>;
+  const personId=new URLSearchParams(window.location.search).get('especialista');
+  if(personId)return <Suspense fallback={<p role="status">Abriendo ficha…</p>}><AnalystWorkspace personId={personId}/></Suspense>;
   return new URLSearchParams(window.location.search).has('diagnostico')
     ? <Diagnostics />
     : <Suspense fallback={<div role="status">Preparando oficina 3D…</div>}><World /></Suspense>;
@@ -23,7 +28,7 @@ function Diagnostics() {
       <section aria-labelledby="title">
         <p className="eyebrow">ENTORNO DE COMPROBACIÓN</p>
         <h1 id="title">La base, antes<br />del mundo.</h1>
-        <p className="intro">Comprobación técnica local conservada desde P0. <a href="/">Volver a la oficina 3D</a></p>
+        <p className="intro">Comprobación técnica local. <a href="/">Volver a la oficina 3D</a> · <a href="?especialista=personal-research-1">Abrir análisis empresarial sin 3D</a></p>
         <div className="status" role="status" aria-live="polite">
           <span className={available ? 'dot ready' : 'dot'} aria-hidden="true" />
           <div><strong>{health.isFetching ? 'COMPROBANDO…' : available ? 'BASE LOCAL DISPONIBLE' : 'NO DISPONIBLE'}</strong>
@@ -39,7 +44,7 @@ function Diagnostics() {
         <p><strong>EJECUCIÓN P0</strong><span>NO DISPONIBLE · órdenes bloqueadas. Fuentes P2 en Sistemas.</span></p>
         <p><strong>0 € EN SERVICIOS</strong><span>Ejecución en este ordenador, sin nube.</span></p>
       </aside>
-      <footer>Fase P0 · Sin cotizaciones, actividad de agentes ni saldos simulados. Ledger maestro previsto para P3.</footer>
+      <footer>Diagnóstico de conexión; la cobertura de datos, los trabajos y la cartera se consultan en sus paneles.</footer>
     </main>
   );
 }

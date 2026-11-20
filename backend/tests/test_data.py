@@ -19,6 +19,9 @@ from app.data_service import DataService, select_equivalent
 
 NOW=datetime(2026,10,14,tzinfo=timezone.utc)
 FIXTURES={
+ 'zse_history':{'ErrMsg':'','DualView':False,'DateFromRaw':'2026-09-30','DateToRaw':'2026-10-13',
+                'url':'https://rest.zse.hr/test/security-history/XZAG/HRHT00RA0005/2026-09-30/2026-10-13/json?trading_model_id=CT',
+                'rows':[{'date_yyyy_MM_dd':'2026-10-13','trading_model_id':'CT','security_class_id':'EQTY','num_trades':'2','last_price_n':123.45}]},
  'bde':[{'fechaValor':'2026-09-01T00:00:00Z','valor':'1.234567890123456789','serie':'TEST_ONLY','descripcionCorta':'TEST_ONLY','simbolo':'%'}],
  'ine':[{'COD':'TEST_ONLY','Nombre':'TEST_ONLY','Data':[{'Fecha':1756684800000,'Valor':'2.3','Anyo':2025,'FK_Periodo':9}]}],
  'jsonstat':{'id':['geo','unit','time'],'size':[1,1,1],'dimension':{'geo':{'category':{'index':{'ES':0}}},'unit':{'category':{'index':{'I15':0},'label':{'I15':'index'}}},'time':{'category':{'index':{'2026-09':0}}}},'value':{'0':'103.1'}},
@@ -61,8 +64,72 @@ def test_each_useful_adapter_normalizes_its_response(source):
     assert all(not isinstance(o.value,float) for o in rows)
 
 def test_catalog_counts_do_not_inflate():
-    assert len(CATALOG)==36 and len({s.provider for s in CATALOG.values()})==31
-    assert sum(s.implemented for s in CATALOG.values())==34
+    assert len(CATALOG)==39 and len({s.provider for s in CATALOG.values()})==34
+    assert sum(s.implemented for s in CATALOG.values())==35
+
+@pytest.mark.parametrize('field,bad', [
+    ('date_yyyy_MM_dd','2026-10-14'), ('security_class_id','BOND'), ('trading_model_id','OTC'),
+    ('num_trades','1,2'), ('num_trades',None), ('last_price_n',0), ('last_price_n',None),
+])
+def test_zagreb_rejects_ambiguous_or_unfinished_sessions(field, bad):
+    payload=json.loads(body('zse_history'))
+    payload['rows'][0][field]=bad
+    with pytest.raises(ValueError):
+        parse(CATALOG['A22'],json.dumps(payload).encode(),NOW)
+
+def test_zagreb_identity_trade_and_revision():
+    source=CATALOG['A22']
+    payload=json.loads(body('zse_history'))
+    def read():
+        return parse(source,json.dumps(payload).encode(),NOW)
+    first,=read()
+    assert first.value==Decimal('123.45') and first.currency=='EUR' and not first.execution_eligible
+    assert first.rights.local_research_allowed and not first.rights.redistribution_allowed
+    assert not first.stale(NOW) and first.stale(NOW+timedelta(hours=7))
+    assert first.model_copy(update={'received_at':NOW+timedelta(days=6)}).stale(NOW+timedelta(days=6))
+    row=payload['rows'][0]
+    payload['rows'].append({**row,'date_yyyy_MM_dd':'2026-10-12','num_trades':'0','last_price_n':None})
+    repeat,=read()
+    assert repeat.id==first.id and repeat.payload_hash!=first.payload_hash
+    row['last_price_n']=123.46
+    correction,=read()
+    assert correction.id!=first.id and correction.observation_key==first.observation_key
+    payload['rows'].append(dict(row))
+    with pytest.raises(ValueError,match='SESSION'):
+        read()
+    payload['rows'].pop()
+    payload['url']=payload['url'].replace('HRHT00RA0005','OTHER')
+    with pytest.raises(ValueError,match='IDENTITY'):
+        read()
+
+def test_zagreb_local_versions_rights_and_mock(migrated):
+    from sqlalchemy import select
+    from app.data_history import archive
+    from app.data_service import cache_key
+    from app.universe_store import UniverseStore
+    from app.universe_zse import register_listing, close_detail
+    from app.database import InstrumentRecord
+    source=CATALOG['A22']
+    data=service(migrated,lambda request:httpx.Response(200,content=body('zse_history')))
+    store=UniverseStore(data.engine)
+    result=data.query(source.id)
+    assert not result.real_connection and store.search('HRHT00RA0005')['total']==0
+    obs,=result.observations
+    with Session(data.engine) as session,session.begin():
+        for _ in range(2):
+            register_listing(session,obs)
+            archive(session,source,cache_key(source),[obs])
+            ingest(session,[obs])
+        instrument=session.scalar(select(InstrumentRecord).where(InstrumentRecord.venue=='XZAG'))
+        assert instrument.payload['isin']=='HRHT00RA0005'
+        assert not instrument.payload['provider_capabilities'][0]['broker_paper']
+    listing,=store.search('HRHT00RA0005')['items']
+    assert len(store.detail(listing['id'])['versions'])==1
+    assert close_detail(data,listing,NOW)['price']=='123.45'
+    assert close_detail(data,listing,NOW-timedelta(seconds=1)) is None
+    assert close_detail(data,{**listing,'currency':'USD'},NOW) is None
+    data.settings.data_disabled_sources='A22'
+    assert close_detail(data,listing,NOW) is None
 
 def http(settings,handler):
     return SafeDataHttp(settings,httpx.MockTransport(handler),resolver=lambda _h:None)
@@ -157,7 +224,7 @@ def test_registry_identity_asset_class_and_null_macro(migrated):
 
 def test_quality_does_not_query_or_expose_secrets(client):
     result=client.get('/api/data/quality');assert result.status_code==200
-    assert result.json()['counts']['candidate_access_modes']==36
+    assert result.json()['counts']['candidate_access_modes']==39
     assert result.json()['counts']['verified_connections']==0
     assert client.get('/api/data/sources/https://evil.test').status_code==404
     assert client.post('/api/orders',json={'mode':'LIVE'}).status_code==403

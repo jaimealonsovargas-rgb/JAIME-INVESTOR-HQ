@@ -88,6 +88,8 @@ class Instrument(Contract):
     isin: str | None = None
     cusip: str | None = None
     figi: str | None = None
+    issuer_cik: str | None = Field(default=None, pattern=r'^[0-9]{10}$')
+    issuer_source: str | None = None
     bond_terms: BondTerms | None = None
     provider_capabilities: tuple[ProviderCapability, ...] = ()
     source: str | None = None
@@ -95,6 +97,8 @@ class Instrument(Contract):
 
     @model_validator(mode='after')
     def currency_semantics(self):
+        if self.issuer_cik and (not self.issuer_source or not self.issuer_source.startswith('https://')):
+            raise ValueError('Vínculo de emisor sin procedencia verificable.')
         if self.currency is None and self.asset_class not in (AssetClass.MACRO_SERIES, AssetClass.INDEX):
             raise ValueError('Divisa necesaria para instrumento monetario.')
         if self.currency and self.asset_class != AssetClass.CRYPTO and not re.fullmatch('[A-Z]{3}',self.currency):

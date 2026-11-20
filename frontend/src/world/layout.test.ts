@@ -28,12 +28,15 @@ describe('planta P1.B conforme al plano', () => {
   it('mantiene nueve zonas únicas en las posiciones del documento', () => {
     expect(DEPARTMENTS.map(d => d.id)).toEqual(['research', 'committee', 'trading', 'risk', 'execution', 'quant', 'performance', 'reception', 'systems']);
     expect(new Set(DEPARTMENTS.map(d => d.center.join(','))).size).toBe(9);
-    expect(DEPARTMENTS.map(d => d.center)).toEqual([[-12,0,-10],[0,0,-3],[12,0,-3.7],[9,0,-10],[-12,0,3.6],[0,0,-10],[12,0,3.1],[0,0,3.8],[-12,0,-3.2]].map(([x,y,z])=>[x,y,z+OFFICE_FORWARD]));
+    expect(DEPARTMENTS.map(d => d.center)).toEqual([[-12,0,-10],[0,0,-3],[12,0,-3.7],[12,0,-10],[-12,0,3.6],[0,0,-10],[12,0,3.1],[0,0,3.8],[-12,0,-3.2]].map(([x,y,z])=>[x,y,z+OFFICE_FORWARD]));
     expect(FLOOR.width).toBe(34); expect(FLOOR.depth).toBe(28);
   });
   it('reserva pasos continuos de 2.6 metros entre zonas', () => {
-    // Dos pasillos longitudinales flanquean Comité/Recepción (referencia verde).
-    expect(8.3-5).toBeGreaterThanOrEqual(FLOOR.corridor);
+    // Check actual extents: moving Risk inward used to obstruct the right corridor.
+    for(const id of ['research','systems','execution','risk','trading','performance']){
+      const d=DEPARTMENTS.find(d=>d.id===id)!;
+      expect(Math.abs(d.center[0])-d.size[0]/2-5,`pasillo invadido por ${id}`).toBeGreaterThanOrEqual(FLOOR.corridor);
+    }
     for (const department of DEPARTMENTS) {
       expect(Math.abs(department.center[0]) + department.size[0]/2).toBeLessThan(FLOOR.width / 2);
       expect(Math.abs(department.center[2]) + department.size[1]/2).toBeLessThan(FLOOR.depth / 2);

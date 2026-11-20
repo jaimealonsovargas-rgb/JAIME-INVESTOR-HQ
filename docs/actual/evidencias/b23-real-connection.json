@@ -1,0 +1,159 @@
+{
+  "checked_at": "2026-10-30T08:12:20.249821+00:00",
+  "credentials_present": {
+    "alpaca_api_key": true,
+    "alpaca_secret_key": true,
+    "trading212_api_key": true,
+    "trading212_api_secret": true
+  },
+  "jobs": [
+    {
+      "id": "b23-real-20261030-connection",
+      "state": "SUCCEEDED",
+      "error": null,
+      "progress": {
+        "pages": 3,
+        "bars": 0
+      }
+    },
+    {
+      "id": "b23-real-20261030-catalogue",
+      "state": "SUCCEEDED",
+      "error": null,
+      "progress": {
+        "pages": 1,
+        "bars": 0
+      }
+    },
+    {
+      "id": "b23-real-20261030-aapl-snapshot",
+      "state": "SUCCEEDED",
+      "error": null,
+      "progress": {
+        "pages": 2,
+        "bars": 0
+      }
+    },
+    {
+      "id": "b23-real-20261030-aapl-history",
+      "state": "SUCCEEDED",
+      "error": null,
+      "progress": {
+        "pages": 3,
+        "bars": 21
+      }
+    }
+  ],
+  "sample_listing_id": "3330aba0785aee192a8df6fabbf539d5258e3464bdd04129c861ee64922332b5",
+  "sample": {
+    "quote_state": "STALE",
+    "history_rows": 21,
+    "manifest": {
+      "id": "b23-real-20261030-aapl-history",
+      "start": "2026-09-01",
+      "end": "2026-09-30",
+      "adjustment": "raw",
+      "feed": "iex",
+      "state": "OBSERVED_SESSIONS",
+      "bars": 21,
+      "first_at": "2026-09-01T04:00:00+00:00",
+      "last_at": "2026-09-30T04:00:00+00:00",
+      "received_at": "2026-10-30T08:13:03.509593+00:00",
+      "expected_sessions": 21,
+      "missing_sessions": 0,
+      "unexpected_sessions": 0,
+      "coverage_note": "IEX es un solo mercado. Las ausencias no se rellenan. Acciones corporativas por fecha de proceso, sin certificar exhaustividad. Sin universo histórico ni aceptación para backtest.",
+      "corporate_actions_state": "AVAILABLE",
+      "source": "https://data.alpaca.markets/v2/stocks/AAPL/bars",
+      "receipt_hashes": [
+        "d4a90c32845977b842927b34b1d279eeafa8e4c50943cddd4d88322a2a414067",
+        "4123c57d78c0dba07443c1d80b34df3698e634e401db8b8c5d752922a17da433",
+        "fea17f17380b7eb24c760478974fddd2b3525612ac6076eb0b5bc5ab078d3b08"
+      ],
+      "currency": "USD",
+      "symbol_mapping": "disabled",
+      "temporal_scope": "LOCAL_KNOWLEDGE_ONLY"
+    },
+    "backtest_ready": false
+  },
+  "trading212": {
+    "state": "AVAILABLE_VERIFIED",
+    "http_status": 200,
+    "real_connection": true,
+    "observation_count": 500
+  },
+  "alpaca": {
+    "source": {
+      "state": "READY_TO_FETCH",
+      "feed": "iex",
+      "mode": "PAPER_READ_ONLY",
+      "reason": "Claves presentes; comprueba cada acceso. IEX es cobertura parcial del mercado."
+    },
+    "endpoints": [
+      {
+        "id": "assets",
+        "label": "Catálogo de instrumentos",
+        "state": "AVAILABLE",
+        "checked_at": "2026-10-30T08:12:31.577564+00:00",
+        "reason": "Respuesta validada; acceso comprobado para esta consulta."
+      },
+      {
+        "id": "clock",
+        "label": "Sesión de mercado",
+        "state": "AVAILABLE",
+        "checked_at": "2026-10-30T08:12:51.416695+00:00",
+        "reason": "Respuesta validada; acceso comprobado para esta consulta."
+      },
+      {
+        "id": "calendar",
+        "label": "Calendario bursátil",
+        "state": "AVAILABLE",
+        "checked_at": "2026-10-30T08:12:57.187286+00:00",
+        "reason": "Respuesta validada; acceso comprobado para esta consulta."
+      },
+      {
+        "id": "snapshot",
+        "label": "Último precio IEX",
+        "state": "AVAILABLE",
+        "checked_at": "2026-10-30T08:12:54.670092+00:00",
+        "reason": "Respuesta validada; acceso comprobado para esta consulta."
+      },
+      {
+        "id": "bars",
+        "label": "Históricos diarios IEX",
+        "state": "AVAILABLE",
+        "checked_at": "2026-10-30T08:13:00.396054+00:00",
+        "reason": "Respuesta validada; acceso comprobado para esta consulta."
+      },
+      {
+        "id": "corporate_actions",
+        "label": "Acciones corporativas",
+        "state": "AVAILABLE",
+        "checked_at": "2026-10-30T08:13:03.461222+00:00",
+        "reason": "Respuesta validada; acceso comprobado para esta consulta."
+      },
+      {
+        "id": "account",
+        "label": "Cuenta PAPER",
+        "state": "AVAILABLE",
+        "checked_at": "2026-10-30T08:12:24.486665+00:00",
+        "reason": "Respuesta validada; acceso comprobado para esta consulta."
+      },
+      {
+        "id": "positions",
+        "label": "Posiciones PAPER",
+        "state": "AVAILABLE",
+        "checked_at": "2026-10-30T08:12:27.434659+00:00",
+        "reason": "Respuesta validada; acceso comprobado para esta consulta."
+      }
+    ],
+    "counts": {
+      "assets": 14407,
+      "bars": 21,
+      "bar_sets": 1
+    },
+    "orders_enabled": false,
+    "refresh_mode": "EXPLICIT_REQUESTS",
+    "streaming_enabled": false
+  }
+}

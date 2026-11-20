@@ -1,0 +1,62 @@
+{
+  "at": "2026-10-28T16:17:14.862Z",
+  "data": "REAL_SEC_FINANCIALS_ON_PERSONAL_DB",
+  "checks": [
+    {
+      "flow": "real-company-accounts",
+      "company": "MSFT",
+      "period": "Último ejercicio anual disponible\n\n1 jul 2025 — 30 jun 2026\n\nAbrir 10-K original\n\nPresentado el 29 jul 2026",
+      "core": "6 de 6 magnitudes básicas disponibles. Una ausencia no equivale a cero."
+    },
+    {
+      "flow": "fact-provenance",
+      "text": "Valor exacto\n331839000000 USD\nConcepto SEC\nus-gaap:RevenueFromContractWithCustomerExcludingAssessedTax\nPeriodo\n1 jul 2025 — 30 jun 2026\nDocumento\n0001193125-26-323660 · 10-K\nPresentado\n29 jul 2026\nEvidencia local\nd82eff31916a491387b44e2c90e070fd9551c3587593b6b45fb90fc3e6c21a62"
+    },
+    {
+      "flow": "responsive",
+      "width": 1920,
+      "height": 1080,
+      "overflow": false
+    },
+    {
+      "flow": "responsive",
+      "width": 1366,
+      "height": 900,
+      "overflow": false
+    },
+    {
+      "flow": "responsive",
+      "width": 800,
+      "height": 900,
+      "overflow": false
+    },
+    {
+      "flow": "responsive",
+      "width": 390,
+      "height": 844,
+      "overflow": false
+    },
+    {
+      "flow": "documents-paging",
+      "rows": 25,
+      "link": "https://www.sec.gov/Archives/edgar/data/789019/000119312524204403/d846847d8k.htm"
+    },
+    {
+      "flow": "history",
+      "rows": 25
+    },
+    {
+      "flow": "different-fiscal-year",
+      "period": "Último ejercicio anual disponible\n\n1 feb 2025 — 31 ene 2026\n\nAbrir 10-K original\n\nPresentado el 13 mar 2026"
+    },
+    {
+      "flow": "not-imported-company-empty",
+      "passed": true
+    },
+    {
+      "flow": "financial-offline-retry",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

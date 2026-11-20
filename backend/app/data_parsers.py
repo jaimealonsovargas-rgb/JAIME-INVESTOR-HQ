@@ -12,6 +12,7 @@ from xml.etree import ElementTree as ET
 from app.data_catalog import Source
 from app.data_contracts import Observation
 from app.data_http import FetchError
+from app.data_identity import observation_key, revision_id, publication_bound
 
 UTC=timezone.utc
 
@@ -49,7 +50,7 @@ def safe_xml(raw):
 
 def parse(source: Source, raw: bytes, received: datetime):
     digest=hashlib.sha256(raw).hexdigest();result=[]
-    def emit(period,value,unit,series=None,currency=None,metadata=None,bid=None,ask=None,country=None):
+    def emit(period,value,unit,series=None,currency=None,metadata=None,bid=None,ask=None,country=None,source_ref=None):
         when,precision=period_time(period);series=str(series or source.feed)
         val=number(value)
         if val is None and source.kind not in ('instrument_metadata','news_metadata'):
@@ -59,14 +60,26 @@ def parse(source: Source, raw: bytes, received: datetime):
         if source.parser in ('alpaca','alpha'):flags+=('HISTORICAL_EOD',)
         if source.parser=='paprika_history':flags+=('HISTORICAL_DAILY_SNAPSHOT',)
         flags+=('UNKNOWN_FEED_DELAY',)
+        flags+=source.quality_flags
         if precision!='instant':flags+=('PERIOD_START_NOT_PUBLICATION',)
         fields=dict(provider=source.provider,access_id=source.id,feed=source.feed,series_id=series,data_kind=source.kind,venue=source.venue,country=country or source.country,asset_class=source.asset_class,source_ref=source.url or source.docs,payload_hash=digest,observed_at=when,received_at=received,period=str(period),period_precision=precision,currency=currency,unit=unit,value=val,bid=number(bid),ask=number(ask),metadata={str(k):str(v) for k,v in (metadata or {}).items() if v is not None},delay_seconds=None,stale_after_seconds=source.ttl,rights=source.rights,quality_flags=flags)
         if source.id=='A01':
             fields['unit']='USD/EUR'
             fields['metadata'].update({'base_currency':'EUR','quote_currency':'USD','rate_type':'ECB_REFERENCE'})
-        ident=hashlib.sha256((source.id+series+str(period)+digest).encode()).hexdigest()
-        result.append(Observation(id=ident,**fields))
+        if source_ref is not None:
+            fields['source_ref'] = source_ref
+        obs=Observation(id='pending',**fields)
+        result.append(obs.model_copy(update={'id':revision_id(obs, [source.url,source.params,source.feed,source.rights.model_dump(mode='json')]), 'observation_key':observation_key(obs),
+            'identity_version':2, 'published_at':publication_bound(obs)}))
     parser=source.parser
+    if parser == 'zse_history':
+        from app import zse
+        for day, price, source_ref in zse.historical_closes(raw, received):
+            emit(day, price, 'EUR/share', series=zse.SYMBOL, currency='EUR',
+                 source_ref=source_ref,
+                 metadata={'isin':zse.ISIN, 'symbol':zse.SYMBOL, 'name':zse.NAME,
+                           'type':'ORD-SHARE','trading_model':'CT','adjustment':'AS_TRADED'})
+        return result
     if parser=='rss':
         root=safe_xml(raw)
         seen=set()
@@ -186,8 +199,8 @@ def parse(source: Source, raw: bytes, received: datetime):
             for tag,fact in data['facts'].get('us-gaap',{}).items():
                 if tag not in ('Assets','Revenues','NetIncomeLoss','StockholdersEquity'):continue
                 for unit,rows in fact['units'].items():
-                    for row in rows[-5:]:
-                        emit(row['end'],row['val'],unit,'CIK'+str(data['cik'])+'/us-gaap/'+tag,currency=unit if len(unit)==3 else None,metadata={'start':row.get('start'),'filed':row.get('filed'),'form':row.get('form'),'accn':row['accn'],'frame':row.get('frame'),'label':fact.get('label')})
+                    for row in sorted(rows,key=lambda r:(r.get('filed',''),r['end'],r.get('start','')))[-120:]:
+                        emit(row['end'],row['val'],unit,'CIK'+str(data['cik'])+'/us-gaap/'+tag,currency=unit if len(unit)==3 else None,metadata={'cik':str(data['cik']).zfill(10),'concept':tag,'taxonomy':'us-gaap','start':row.get('start'),'filed':row.get('filed'),'publication_precision':'day_upper_bound','form':row.get('form'),'accn':row['accn'],'frame':row.get('frame'),'label':fact.get('label')})
         elif parser=='kraken':
             if data['error']:raise ValueError('Kraken rechaza consulta.')
             for pair,rows in data['result'].items():

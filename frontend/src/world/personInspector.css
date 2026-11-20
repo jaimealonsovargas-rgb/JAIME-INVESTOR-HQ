@@ -1,0 +1,51 @@
+.person-inspector {--inspector-muted:#b6c1ba;color:#eef2ef;}
+.person-roles {display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;}
+.world .person-roles button[aria-pressed="true"] {background:#e5ff00;color:#182018;border-color:#e5ff00;}
+.person-mandate {max-width:72ch;margin-bottom:32px;}
+.person-inspector h3 {font-size:21px;line-height:1.3;margin:0 0 12px;}
+.person-inspector h4 {font-size:16px;color:#e5ff00;margin:0 0 14px;}
+.person-inspector p {color:var(--inspector-muted);line-height:1.65;margin:10px 0;overflow-wrap:anywhere;}
+.person-capabilities {display:flex;flex-wrap:wrap;gap:8px 24px;font-size:14px;color:#bdc8c0;margin-top:20px;}
+.person-work {display:grid;grid-template-columns:1fr 1fr;gap:28px;border-block:1px solid #354039;padding:26px 0;}
+.person-work section {min-width:0;}
+.person-work .person-state {font-size:21px;color:#f1eee7;margin-bottom:12px;}
+.person-work button {margin-top:12px;white-space:normal!important;}
+.person-diagnostics {margin-top:28px;font-size:14px;color:var(--inspector-muted);}
+.person-diagnostics summary {cursor:pointer;padding:8px 0;color:#d6ded7;}
+.person-diagnostics dl>div {display:grid;grid-template-columns:120px 1fr;gap:12px;}
+.person-diagnostics dd {margin:0;overflow-wrap:anywhere;}
+.person-empty {padding:28px 0;max-width:65ch;}
+.monitor-dialog {background:#14191c;}
+.monitor-dialog :focus-visible {outline:2px solid #e5ff00;outline-offset:4px;}
+.monitor-dialog ::selection {color:#182018;background:#e5ff00;}
+.monitor-dialog input,.monitor-dialog textarea {caret-color:#e5ff00;}
+.panel-body {scrollbar-color:#637067 #14191c;}
+.panel-view-switch {display:flex;flex-wrap:wrap;gap:10px;padding:16px 38px;border-bottom:1px solid #354039;}
+.panel-view-switch button[aria-pressed="true"] {border-color:#e5ff00;color:#e5ff00;}
+.panel-reference {margin-top:30px;color:#b9c5bc;}
+.panel-reference>summary {cursor:pointer;padding:10px 0;}
+.monitor-dialog .panel-header {padding:24px 30px;}
+.monitor-dialog .panel-header h2 {font-size:30px;}
+.monitor-dialog .panel-body {padding:24px 30px;}
+.monitor-dialog .panel-view-switch {padding:12px 30px;}
+.person-roles {margin-bottom:20px;}
+.person-mandate {margin-bottom:24px;}
+@media(max-width:700px){.monitor-dialog .panel-header,.monitor-dialog .panel-body{padding:18px 22px;}.monitor-dialog .panel-header h2{font-size:24px;}.monitor-dialog .panel-header p{font-size:14px;}.monitor-dialog .panel-view-switch{padding:12px 22px;}.person-work{padding:20px 0;}}
+.team-access {display:flex;align-items:center;gap:8px;font-size:13px;color:#d6ded7;}
+.team-access select {font:inherit;max-width:220px;background:#202824;color:#eef2f0;border:1px solid #778b97;padding:7px;}
+@media(max-width:700px){.team-access{font-size:12px;}.team-access select{max-width:155px;}.world-header .world-badges{flex-wrap:wrap;justify-content:flex-end;gap:8px;}}
+@media(max-width:700px){.person-work{grid-template-columns:1fr;gap:28px;}.person-work section+section{border-top:1px solid #354039;padding-top:24px;}.panel-view-switch{padding:12px 22px;}.person-diagnostics dl>div{grid-template-columns:1fr;gap:0;margin-bottom:12px;}.panel-chrome{align-items:flex-start;}.world .monitor-dialog .panel-chrome button{white-space:normal;}}
+.person-model-deliveries{padding:18px 0;border-top:1px solid #53626b;margin-top:18px;}
+.person-model-deliveries ul{padding-left:20px;}.person-model-deliveries li{margin:16px 0;}.person-model-deliveries a{color:#dec49a;text-underline-offset:4px;}.person-model-deliveries p{font-size:13px;line-height:1.5;}.person-model-deliveries a:focus-visible{outline:2px solid #dec49a;outline-offset:4px;}
+
+.person-inspector p{line-height:1.6}.person-mandate{max-width:76ch}
+.person-inspector :is(.person-runtime,.person-explanation){font-size:12px;color:#b9c5bd;margin-top:14px}
+.person-inspector summary{padding:10px 0;min-height:20px;color:#c3cfc5;cursor:pointer}
+.person-capabilities{font-size:12px;gap:8px 18px;margin:6px 0 14px}
+.person-work{padding:22px 0}.person-work section{margin:0}.person-work h4{font-size:13px;font-weight:500;color:#b7c3ba}
+.person-work .person-state{font-size:22px;margin:6px 0 12px}.person-work .person-explanation p{font-size:13px}
+.person-models,.person-diagnostics{border-bottom:1px solid #354039;margin:0;font-size:13px;padding:6px 0}
+.person-model-deliveries{border:0;margin:0;padding:10px 0}.person-model-deliveries h4{font-size:15px;color:#e6ece2}
+.monitor-dialog .person-roles button{font-size:13px;padding:9px 14px}.monitor-dialog .panel-view-switch{gap:6px;border-color:#354039}
+.monitor-dialog .panel-view-switch button{background:transparent;border:0;border-radius:0;font-size:13px;padding:12px 14px;color:#afbeb3}
+.monitor-dialog .panel-view-switch button[aria-pressed="true"]{color:#f0f3e8;box-shadow:inset 0 -2px #e5ff00}

@@ -1,0 +1,161 @@
+{
+  "reason": "Reorganización documental solicitada por el usuario; sin borrar código, datos ni evidencia.",
+  "link_policy": "Relative links relocated to preserve their targets; inactive banner added.",
+  "files": [
+    {
+      "original": "README.md",
+      "original_bytes": 6479,
+      "original_sha256": "2b3228d71bd5f3229e74fd7a8bd9e5317139567e8cd5822e6ccd67b07bca4425",
+      "archive": "docs/archive/2026-11-11-continuidad/README_ANTES.md",
+      "archive_sha256": "a3fe354e42a43783aba8205b9fd2eb622724cb0ea124e6c5033d6959936d75ea",
+      "exact_original": "docs/archive/2026-11-11-continuidad/originals/README.md"
+    },
+    {
+      "original": "AGENTS.md",
+      "original_bytes": 7938,
+      "original_sha256": "ca2b003162115869a0e44cb6a65130d1536c1fea4f7faa53378473a7e90a93b8",
+      "archive": "docs/archive/2026-11-11-continuidad/AGENTS.md",
+      "archive_sha256": "63810de7169256a7f18072d152ad88cb6f485ade25297b158943d61074cd8093"
+    },
+    {
+      "original": "STATUS.md",
+      "original_bytes": 27360,
+      "original_sha256": "4acc0566263d2dbc3cd4cb14ba79f9313aeaa4fbc5bda70df19b32d916d73987",
+      "archive": "docs/archive/2026-11-11-continuidad/STATUS.md",
+      "archive_sha256": "a003d22f6c71de3f7201709d0b5ab973663eda18cc7c34cd0fe48f2ef63f7876"
+    },
+    {
+      "original": "DECISIONES.md",
+      "original_bytes": 11357,
+      "original_sha256": "23eb10fe92e56fc77c3b9559a732702ffbf8a2f0e8363bbdb9962fcc737aef61",
+      "archive": "docs/archive/2026-11-11-continuidad/DECISIONES.md",
+      "archive_sha256": "75405279af4fb6e190e15c4e75714c49e26ed0854ae531d8cf09548f1af2cd3f"
+    },
+    {
+      "original": "CODEX_START_HERE.md",
+      "original_bytes": 1215,
+      "original_sha256": "8a125f1953673b63d2591d7887dfe7f63d4374f2545842700eb628b58c4ce513",
+      "archive": "docs/archive/2026-11-11-continuidad/CODEX_START_HERE.md",
+      "archive_sha256": "ce92c13516c4646de15a01663d3dd59dd16b224d2d81214f3c5a179f7e193d5e"
+    },
+    {
+      "original": "tasks/ACTUAL.md",
+      "original_bytes": 12080,
+      "original_sha256": "dfdc59010eda90187f050cb328fdc235bfa105f1529ea15e98096abdbb30cdfc",
+      "archive": "docs/archive/2026-11-11-continuidad/tasks/ACTUAL.md",
+      "archive_sha256": "9cb7a9361d98a50a737795bb51e061b41fb87dd9c94f3709c8a5a0bf2f1b0d9b"
+    },
+    {
+      "original": "tasks/ROADMAP.md",
+      "original_bytes": 6448,
+      "original_sha256": "814138fbca0ba3e489fafc55be1309f8fedbd903c47adbed0b19c6d610de84d0",
+      "archive": "docs/archive/2026-11-11-continuidad/tasks/ROADMAP.md",
+      "archive_sha256": "8308c1689466080cd125d25b3b5b317f0d4a04d289a16ab24763d7c9cce11b83"
+    },
+    {
+      "original": "docs/00_INDICE.md",
+      "original_bytes": 3458,
+      "original_sha256": "89a8be3491995e30a0c25c3369571058e4aa6842083e50e0c3584f5febc2fdec",
+      "archive": "docs/archive/2026-11-11-continuidad/docs/00_INDICE.md",
+      "archive_sha256": "73798246836a4cc3e9e97c1cc797f5641210d6ed4f9a20a56341a6be8c3ab830"
+    },
+    {
+      "original": "docs/actual/VISION_Y_ARQUITECTURA.md",
+      "original_bytes": 17168,
+      "original_sha256": "cc72d129482b36bbcb42675b239a1ad9292238cd244334ec4287c1271c7b6924",
+      "archive": "docs/archive/2026-11-11-continuidad/docs/actual/VISION_Y_ARQUITECTURA.md",
+      "archive_sha256": "15b24f4b7d65b8a035d81bffd8dfb90758285451f18655d70b2e61c0a3b08dc4"
+    },
+    {
+      "original": "docs/actual/PROVEEDORES_Y_COBERTURA.md",
+      "original_bytes": 9733,
+      "original_sha256": "223cdaccfe1854eae1fe88f598ea61de5f1a53211b434cce90510f81b229440e",
+      "archive": "docs/archive/2026-11-11-continuidad/docs/actual/PROVEEDORES_Y_COBERTURA.md",
+      "archive_sha256": "9f1b208f7459ab349d87c7d87dc45af837bc40972f70dcbc916087181bf33baf"
+    },
+    {
+      "original": "docs/actual/IBKR_TWS_EVALUACION.md",
+      "original_bytes": 9359,
+      "original_sha256": "be1140772503e88244a605124d2d277c3f0031733f77503f947634c41a2603ed",
+      "archive": "docs/archive/2026-11-11-continuidad/docs/actual/IBKR_TWS_EVALUACION.md",
+      "archive_sha256": "5ca142f346d95bebbfe944183622c93baa42a1b9b223019814ab3084b23e3ce3"
+    },
+    {
+      "original": "docs/actual/IBKR_PILOTO_PREPARACION.md",
+      "original_bytes": 4899,
+      "original_sha256": "be0b84065ef043015c24d5116bd77ec872d7fa240723e6fb3630e1b34895e2cc",
+      "archive": "docs/archive/2026-11-11-continuidad/docs/actual/IBKR_PILOTO_PREPARACION.md",
+      "archive_sha256": "16952993a061c8420bb9e5d1219647fab67e9c39f28c877c74a0de1432960ea5"
+    },
+    {
+      "original": "tasks/P0_BASE.md",
+      "original_bytes": 1136,
+      "original_sha256": "99c99de32136b408f70db0966841a5011c17503519cca6bb9ea955c67ad129ff",
+      "archive": "docs/archive/2026-11-11-continuidad/tasks/P0_BASE.md",
+      "archive_sha256": "d0a962951678fd942a9ff486b4bd74c2caae8ec3251bd211941c87ebc03460b3"
+    },
+    {
+      "original": "tasks/P1_OFICINA_3D.md",
+      "original_bytes": 11952,
+      "original_sha256": "0108fe3cdbb1e9394a8fa4457ea492b3371dea60ab181c8cb0b62cc910d1efde",
+      "archive": "docs/archive/2026-11-11-continuidad/tasks/P1_OFICINA_3D.md",
+      "archive_sha256": "81be7e8897ee99386a60b78661aeeedcbeeacb18fe3db1e06afafe24d0f5e0ea"
+    },
+    {
+      "original": "tasks/P2_DATOS.md",
+      "original_bytes": 3908,
+      "original_sha256": "074ad9d515cc3e58fb8ae3d73e0bfbfaf1eeeb6e1d0c02b9a97a656d23d3db46",
+      "archive": "docs/archive/2026-11-11-continuidad/tasks/P2_DATOS.md",
+      "archive_sha256": "34cc4fbc5a9dce3c5e0b456ce68b5f255a52a48b1f456b15f29e1418cf3cfb14"
+    },
+    {
+      "original": "tasks/P3_CARTERA.md",
+      "original_bytes": 1963,
+      "original_sha256": "5615cbc67d3f60d6448632e6ca2c54a0e444521279fc3f301bd5717386df30cc",
+      "archive": "docs/archive/2026-11-11-continuidad/tasks/P3_CARTERA.md",
+      "archive_sha256": "e7fec4522989972fb60658dbddc58c7b5b93639ca67eba432a65e4062ea62f87"
+    },
+    {
+      "original": "tasks/P4_RESEARCH_AGENTES.md",
+      "original_bytes": 6211,
+      "original_sha256": "938e69f556b256db6d874cfc4dce2f8f412f65a4dc38d92f45f5856420bc005c",
+      "archive": "docs/archive/2026-11-11-continuidad/tasks/P4_RESEARCH_AGENTES.md",
+      "archive_sha256": "c3760e9dc6e004b45db40d7b33d7ded5a71d2dce49b28d0f0da6e0f6074bbb83"
+    },
+    {
+      "original": "tasks/P5_QUANT_RIESGO.md",
+      "original_bytes": 4079,
+      "original_sha256": "a055fe04522ab60a1eb268fe5209fadce88749e149eaca34ec4ed1a44f1fbece",
+      "archive": "docs/archive/2026-11-11-continuidad/tasks/P5_QUANT_RIESGO.md",
+      "archive_sha256": "2f9e844bf1c8b2a1b1db9ff932822b241cb4862925de920280d02cb9783da14d"
+    },
+    {
+      "original": "tasks/P6_PAPER.md",
+      "original_bytes": 3206,
+      "original_sha256": "699a63316c3c32717857ea3e863c900f01bd9d86355ccb410ff5c51a313924f1",
+      "archive": "docs/archive/2026-11-11-continuidad/tasks/P6_PAPER.md",
+      "archive_sha256": "060072620cda8dc0a0e7de93365a9b5d0c149239e3bddbbafa1b6f14c2761565"
+    },
+    {
+      "original": "tasks/P7_QA.md",
+      "original_bytes": 657,
+      "original_sha256": "91b6b6f4edd9673cc8010f8bf77063f66a5bc155b2a65afddbe0fd3a4da6ca13",
+      "archive": "docs/archive/2026-11-11-continuidad/tasks/P7_QA.md",
+      "archive_sha256": "2a4a91635e867b357c95b3c6128fa6e2f53bc704e2dab71ff4530ccacee997b9"
+    },
+    {
+      "original": "integrations/ibkr/README.md",
+      "original_bytes": 5073,
+      "original_sha256": "3a8ffb4acb797a159dac5c750ad89b474e605ef7f5db232801c57de1b19d3587",
+      "archive": "docs/archive/2026-11-11-continuidad/integrations/ibkr/README.md",
+      "archive_sha256": "cc7941bd4380febab7306b1df5910143a788cf9e835696d5f069a6435e71293f"
+    },
+    {
+      "original": "docs/actual/ENTREGA_B2_3_CONTRATOS_IBKR.md",
+      "original_bytes": 6824,
+      "original_sha256": "48aa1e31e5a85025a754327259d4b37e53a03703a9023cc45a7f97b810f7205e",
+      "archive": "docs/archive/2026-11-11-continuidad/docs/actual/ENTREGA_B2_3_CONTRATOS_IBKR.md",
+      "archive_sha256": "038f1f2b2b65510a0305bf4b8e8c54a3bbd4131a87683e6e72bc59223ceb63f0"
+    }
+  ]
+}

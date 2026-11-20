@@ -1,0 +1,118 @@
+> ARCHIVO INACTIVO · copia anterior a la auditoría del 11-11-2026. Sus próximos pasos y autorizaciones no gobiernan el trabajo actual. Enlaces relativos reubicados; contenido histórico conservado.
+
+# Decisiones vigentes y registro histórico
+
+
+
+- D044 (11-11-2026, B2.3): tras el piloto TWS, revisión local fijada de contratos contra los vínculos SEC/Alpaca. Informe privado por hash, revisión y bindings versionados, sin fusión automática ni cambios SQLite. USD solo para el contrato observado, con conocimiento desde la revisión; no acredita divisa/identidad histórica. Fallo de evidencia retira confirmación y no promociona readiness. Diagnóstico `daily-trend-data-v2`; IBKR complementa identidad, Alpaca conserva la ruta PAPER de B6. [Entrega](../../actual/ENTREGA_B2_3_CONTRATOS_IBKR.md).
+
+
+
+- D042 (09-11-2026): admisión de captación bajo presupuesto conjunto data/output, margen libre y reserva por unidad; exclusión entre escritores, cola preservada y sin limpieza automática de evidencias. No es cuota del sistema operativo. [Entrega](../../actual/ENTREGA_B2_ALMACENAMIENTO.md).
+
+- D043 (09-11-2026): TWS API/IB Gateway se evalúa como proveedor complementario, con posible piloto de identidad/lectura bajo coste cero. No instalado ni conectado; derechos, elegibilidad y sesión pendientes. No sustituye el núcleo JAIME, SEC ni la ruta Alpaca PAPER autorizada. [Evaluación](docs/actual/IBKR_TWS_EVALUACION.md).
+
+
+
+- D041 (08-11-2026, B2.3): vínculo del piloto basado en catálogo fijado y clase/símbolo/mercado del mismo contexto XBRL SEC, con huellas y fecha de conocimiento; revocable ante cambios y sin fusionar registros. Diagnóstico local `daily-trend-data-v1`, originales y calendario contrastados, sin descargas ni migración. USD solicitado no acredita divisa nativa; 252 sesiones es un mínimo preliminar, nunca aceptación estadística. No se habilita BACKTEST_READY ni ejecución. [Entrega](../../actual/ENTREGA_B2_3_IDENTIDAD_HISTORICOS.md).
+
+
+
+- D040 (06-11-2026, B2.5): n8n Community local es dueño exclusivo de la agenda piloto SEC de seis horas; JAIME conserva intención, cola, checkpoints y límites mediante CycleRequest y migración 0013. Un ciclo por ventana UTC, tres emisores, recuperación idempotente y ninguna orden. El reloj A21 es una agenda distinta. Clave específica de ciclos en `.env` y credencial cifrada en n8n; nodos permitidos limitados. Pausa detiene nuevas solicitudes, cancelación invalida tareas propias en curso. [Entrega y operación](../../actual/ENTREGA_B2_5.md).
+
+
+
+- D038 (04-11-2026; incorpora **D027 de la PR #8**, 03-11): política de datos por niveles. Nivel 1 oficial preferente; Nivel 2 público no oficial (Yahoo/Stooq) para consulta local read-only con UNOFFICIAL_SOURCE, scope=internal, sin redistribución y cuota/caché conservadoras. Nunca sustituir una fuente oficial equivalente; derechos/licencia concretos se verifican por proveedor, no se deducen de accesibilidad. Nivel 3 prohibido intacto. Se conserva D027 local, de contenido diferente.
+
+- D039 (04-11-2026; incorpora **D028 de la PR #8**, 03-11): 39 skills vendoreadas desde commit 41ccf4e41bb0927f4d718e78e1fc01d639b6f53e; inventario/licencias en .agents/skills. Uso P4 de morning-note/thesis-tracker/catalyst-calendar mediante adaptación tipada con evidencia. Sin ejecución de scripts externos, gasto ni autorización nueva P5/P6. Se conserva D028 local y la historia de autorizaciones; esta entrega se limita a B2/P4.
+
+
+
+- D027 (27-10-2026): una ruta de lectura y roadmap B0–B6. Plan vigente en docs/actual; bitácoras/prompts fechados en docs/archive.
+
+- D028: P5 autorizada por el usuario, primero mejoras de datos/producto. STOP P5 anteriores superados; P6 Alpaca PAPER autorizada posteriormente en este chat; LIVE excluido.
+
+- D029: corregir identidad/revisiones/historia/aliases y estados UI antes de escalar. Gate semántico LLM no bloquea el laboratorio determinista.
+
+- D030: modelado, resultados empresariales y revisión de valoración como flujos tipados reutilizando roles; patrones Anthropic adaptados, sin desplegar Claude/servicios de pago.
+
+- D031: preservar stack, oficina, MASTER, derechos, presupuesto y evidencia. Evolución por dominios; ningún borrado de datos/entornos/assets en la reorganización.
+
+- D032: B1 conserva revisiones inmutables y recibos de descarga; as-of local conservador, sin reescribir historia perdida. Migración 0007 aditiva.
+
+- D033: La cobertura actual no basta: cero acciones registradas. B2 prioriza emisor/instrumento/listing, SEC y Alpaca, no más conectores nominales.
+
+- D034: Circuito objetivo acordado: n8n local coordina, JAIME persiste y gobierna, Alpaca PAPER ejecuta tras riesgo. Sin agendas duplicadas ni órdenes desde n8n; coste obligatorio cero.
+
+- D035 (28-10-2026): El directorio SEC se conserva como evidencia de emisor/listado, separado de Instrument y de la cartera. No inferir divisa, clase de valor, delisting, universo histórico o aptitud de estrategia a partir de su presencia. Continuar cuentas/documentos multiemisor en B2.2.
+
+
+
+- D036 (28-10-2026): B2.2 conserva cuentas SEC por emisor/filing/periodo/unidad con snapshots, recibos y cola reanudable. Cuota SEC compartida de 1/s y 60/min; cuadro anual sin mezclar presentaciones, anomalías aisladas, conocimiento local explícito. Divisa contable no acredita instrumento ni órdenes. Próximo B2.3 Alpaca.
+
+
+
+Las decisiones siguientes describen su fecha original. D027–D036 y el mandato vigente prevalecen donde hayan quedado superadas.
+
+
+
+# Registro de decisiones arquitectónicas (ADR simplificado)
+
+- D001: Local-first para 0 EUR obligatorios; no prometer servicio 24/7 con PC apagado.
+
+- D002: React/R3F para 3D + FastAPI para datos y workers + SQLite WAL para persistencia local.
+
+- D003: Maestro de 10.000 EUR virtuales separado de balances de cuentas demo.
+
+- D004: Capacidad por instrumento y proveedor; no confundir investigación con ejecución.
+
+- D005: Sol para implementación incremental; Astra para arquitectura/finanzas/riesgo/auditoría; cambio de modelo manual.
+
+- D006: No se requiere LLM remoto: los trabajos deterministas tienen valor por sí mismos.
+
+- D007: Las imágenes Runway son referencias, no GLB, y deben exportarse antes de uso offline.
+
+- D008: La calidad visual 3D es criterio de aceptación de P1, no deuda técnica aplazada.
+
+- D009: En P6, una orden de estado UNKNOWN nunca se reenvía sin conciliación.
+
+- D010 (P0): Monorepo frontend/ y backend/, scripts Python multiplataforma con validación real en Windows; uv 0.13.0 y npm ci con lockfiles. Python 3.14.x por ser el entorno disponible y probado. No instalar infraestructura ni servicios.
+
+- D011 (P0): La página temporal es una comprobación técnica explícita de P0. No crea una oficina simplificada ni sustituye la entrada 3D exigida para P1. R3F/Drei/Three, Zustand, Tailwind y gráficos se incorporarán al desarrollar sus funciones; no anticipar su stack de assets.
+
+- D012 (P0): Denegación incondicional de órdenes, sin transporte HTTP de ejecución. Settings inmutables rechazan live; guard separado valida bases PAPER/DEMO exactas. Este guard no sustituye la futura verificación de cada petición/redirect, preflight, kill switch e idempotencia de P6.
+
+- D013 (P0): SQLite WAL con Alembic explícito y sin seed. Registro con clave UUID y unicidad symbol/venue/currency. Payload Pydantic versionado por código, Decimal serializado como texto. P2 ampliará el catálogo y normalizará capacidades según necesidades reales.
+
+- D014 (P0): Ningún saldo se crea hasta P3. MASTER, ALPACA_PAPER y T212_DEMO son ámbitos distintos de contrato; no hay suma de cuentas ni NAV provisional.
+
+- D015 (P0): API solo local, hosts y CORS restringidos, access log desactivado. OpenAPI local sin interfaces que descarguen JavaScript de CDNs. Frontend no expone variables de entorno (envPrefix vacío).
+
+- D016 (P1.A–B): R3F 9.8.1 + Three 0.186.1 + Drei 10.7.9 compatibles con React 19.3. Modelado paramétrico original, geometrías fusionadas por material y departamento, seis mapas PBR CC0 locales. No incorporar dependencias gráficas remotas en runtime.
+
+- D017 (P1.A–B): Entrada directa al mundo, diagnóstico P0 conservado por query. Cámaras de inspección de arquitectura; no implementar avatar, colisiones, teletransporte ni paneles antes de aprobación de P1.B. Planta única con pasillos de 2,6 m; techo ocultable solo para ver distribución.
+
+- D018 (P1.A–B): GPU Intel integrada: render bajo demanda en reposo y benchmark explícito de 12 s; dos perfiles con DPR acotado, sombras estáticas y luz compartida. Publicar FPS realmente medidos, nunca sustituirlos por el objetivo del ticket.
+
+- D019 (revisión P1.B): Arquitectura general aprobada por el usuario. Mejorar mobiliario, señalética, skyline y luz mediante cambios locales y recursos procedurales originales. Reservar cámara futura a 2,8–3,8 m de altura y 3–4,5 m detrás; techo a 4,5 m, luminarias por encima de 4,03 m y umbrales libres a 3,99 m. Solo cámaras fijas de inspección; P1.C espera nueva aprobación visual.
+
+
+
+- D020 (2026-10-23, realineación documental): Objetivo rector: organización local de investigación y futura simulación cuantitativa **autónoma mientras el backend esté encendido**; la oficina 3D supervisa y no es el scheduler. No es un chatbot como producto principal ni se promete 24/7 con PC apagado. Ver `docs/REALINEACION_FONDO_AUTONOMO_2026_10_23.md`.
+
+- D021: P2 alimenta P4 y el futuro P5 en paralelo. La aceptación semántica del debate LLM P4 **no es hard blocker arquitectónico** del futuro núcleo P5 determinista. El STOP original de P5/P6 quedó superado por la autorización registrada en D028.
+
+- D022: Mantener `ResearchCase` histórico. Futuro `AutonomyEvent`/`ResearchTask` persistente e idempotente para reloj/datos/eventos y `ResearchRouter` determinista. Propuesta aún no implementada.
+
+- D023: P2 distinguirá readiness `RESEARCH_READY`, `BACKTEST_READY` y `EXECUTION_SIM_READY`, con publicación/available-at, universos históricos, delistings, calendarios, corporate actions y costes según familia; ningún histórico actual se declara listo sin validación.
+
+- D024: Futuro P5 separado del dominio research: StrategyGenome validado, backtest Python, registry/graveyard de todos los trials, genealogía OOS, controles de look-ahead, costes, robustez, PSR/DSR/PBO cuando proceda; LLM opcional para hipótesis y comité de supervivientes.
+
+- D025: Futuro P6 PAPER: TradeIntent no es orden; riesgo determinista y OMS idempotente, InternalPaperBroker primero, reconciliación obligatoria ante UNKNOWN, adapters externos PAPER tras revisión. LIVE requeriría gateway/proceso/autorización independientes. Actualización 27-10: el usuario autoriza implementar P6 con Alpaca PAPER después de los gates previos.
+
+- D026: Proponer ResourceGovernor para 16 GB RAM y perfiles interactivo/investigación/batch; mantener 1 inferencia LLM, 30 roles y 0 EUR. Propuesta no implementada.
+
+
+
+- D037 (29-10-2026, B2.3): integración Alpaca exclusivamente GET PAPER/IEX por solicitudes persistentes. UUID de proveedor separado de emisor SEC; candidato por símbolo/mercado nunca promoción automática. USD solicitado no implica divisa nativa. Raw/ajustado separados, asof=- no PIT, corporate actions por process_date no exhaustividad. Cuenta PAPER aislada de MASTER, sin órdenes. Claves ausentes: aceptación externa, streaming y vínculo adicional pendientes; B2.4 continúa con SEC. Cuota SEC corregida a reserva antes HTTP; estado de calidad solo lectura.
+

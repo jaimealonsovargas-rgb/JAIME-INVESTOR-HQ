@@ -37,3 +37,5 @@ Thumbs.db
 
 /output/
 /data/
+# Instalación y sesiones privadas de TWS; SDK/entorno aislado en .tools/.
+/tws/

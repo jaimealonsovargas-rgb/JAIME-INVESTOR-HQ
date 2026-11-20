@@ -27,6 +27,17 @@ from app.research_service import ResearchService
 from app.research_api import router as research_router
 from app.autonomy_scheduler import AutonomyScheduler
 from app.autonomy_api import router as autonomy_router
+from app.universe_service import UniverseService
+from app.universe_api import router as universe_router
+from app.sec_service import SecService
+from app.sec_api import router as sec_router
+from app.market_service import MarketService
+from app.market_api import router as market_router
+from app.company_service import CompanyService
+from app.company_api import router as company_router
+from app.cycle_service import CycleService
+from app.cycle_api import router as cycle_router
+from app.storage_budget import StorageBlocked, StorageStatus, REASONS as STORAGE_REASONS
 
 
 def create_app(settings: Settings | None = None, data_settings: DataSettings | None = None) -> FastAPI:
@@ -46,8 +57,12 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
             await app.state.research.start(app.state.autonomy.prepare_start)
             app.state.autonomy.start()
             app.state.data_refresh.start()
+            app.state.sec.start()
+            app.state.market.start()
             yield
         finally:
+            await asyncio.to_thread(app.state.market.stop)
+            await asyncio.to_thread(app.state.sec.stop)
             await app.state.autonomy.stop()
             await asyncio.to_thread(app.state.data_refresh.stop)
             await app.state.research.stop()
@@ -58,6 +73,26 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
                   docs_url=None, redoc_url=None)
     app.state.engine = engine
     app.state.data = DataService(engine, data_settings)
+
+    @app.exception_handler(StorageBlocked)
+    async def storage_blocked(_request, error):
+        return JSONResponse(status_code=409, content={'detail': str(error), 'reason': STORAGE_REASONS[error.reason]})
+
+    @app.get('/api/storage/status', response_model=StorageStatus)
+    def storage_status():
+        return app.state.data.storage.status()
+
+    app.state.universe = UniverseService(app.state.data)
+    app.include_router(universe_router(app.state.universe))
+    app.state.sec = SecService(app.state.data)
+    app.include_router(sec_router(app.state.sec))
+    app.state.company_models = CompanyService(app.state.sec)
+    app.include_router(company_router(app.state.company_models))
+    app.state.cycles = CycleService(app.state.sec)
+    app.state.sec.cycle_coordinator = app.state.cycles
+    app.include_router(cycle_router(app.state.cycles))
+    app.state.market = MarketService(app.state.data)
+    app.include_router(market_router(app.state.market))
     app.state.data_refresh = DataRefresher(app.state.data)
     app.state.portfolio = PortfolioService(engine, app.state.data)
     app.state.research = ResearchService(engine, app.state.data, app.state.portfolio)
@@ -68,12 +103,12 @@ def create_app(settings: Settings | None = None, data_settings: DataSettings | N
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["http://127.0.0.1:5173", "http://localhost:5173", "http://127.0.0.1:5174", "http://localhost:5174"],
-        allow_methods=["GET", "POST"], allow_headers=["Accept", "Content-Type", "X-HQ-Research", "Idempotency-Key"], allow_credentials=False,
+        allow_methods=["GET", "POST"], allow_headers=["Accept", "Content-Type", "X-HQ-Research", "X-HQ-Universe", "Idempotency-Key"], allow_credentials=False,
     )
 
     @app.middleware('http')
     async def restrict_research_preflight(request: Request, call_next):
-        if request.method == 'OPTIONS' and request.headers.get('access-control-request-method') == 'POST' and not request.url.path.startswith(('/api/research/', '/api/agent-jobs/')):
+        if request.method == 'OPTIONS' and request.headers.get('access-control-request-method') == 'POST' and not request.url.path.startswith(('/api/research/', '/api/agent-jobs/', '/api/universe/')):
             return JSONResponse(status_code=400, content={'detail': 'WRITE_PREFLIGHT_DENIED'})
         return await call_next(request)
 

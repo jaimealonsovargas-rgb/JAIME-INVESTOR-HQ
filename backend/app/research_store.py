@@ -62,6 +62,39 @@ class ResearchStore:
                 raise KeyError('NOT_FOUND')
             return json.loads(row[0])
 
+    def role_activity(self):
+        """Read-only metadata across the full history, not the latest 500 jobs.
+
+        Source content stays in dossier(), where rights/freshness are rechecked.
+        """
+        with self.connection() as c:
+            active = {role: json.loads(payload) for role, payload in c.execute('''
+                SELECT role_id,payload FROM (
+                    SELECT role_id,payload,ROW_NUMBER() OVER (
+                        PARTITION BY role_id ORDER BY CASE state WHEN 'RUNNING' THEN 0 ELSE 1 END, rowid) AS rank
+                    FROM agent_jobs WHERE state IN ('RUNNING','QUEUED')
+                ) WHERE rank=1''')}
+            delivered = {role: (json.loads(job),json.loads(result)) for role,job,result in c.execute('''
+                SELECT role_id,job,result FROM (
+                    SELECT j.role_id,j.payload AS job,r.payload AS result,
+                        ROW_NUMBER() OVER (PARTITION BY j.role_id ORDER BY r.rowid DESC) AS rank
+                    FROM agent_results r JOIN agent_jobs j ON j.id=r.job_id
+                ) WHERE rank=1''')}
+        output = {}
+        for role in ROLES:
+            current = active.get(role)
+            last = delivered.get(role)
+            citations = [] if not last else [*last[1].get('claims',[]),
+                *((last[1].get('features') or {}).get('items',[]))]
+            output[role] = {
+                'state': current['state'] if current else 'IDLE',
+                'current_job': {k:current.get(k) for k in ('id','case_id','run_key','state','queued_at','started_at')} if current else None,
+                'last_delivery': {'case_id':last[0]['case_id'],'job_id':last[0]['id'],
+                    'run_key':last[0]['run_key'],'finished_at':last[0]['finished_at'],
+                    'quality_state':last[1].get('quality',{}).get('state','PENDING_REVIEW'),
+                    'evidence_count':len({eid for claim in citations for eid in claim.get('evidence_ids',[])})} if last else None}
+        return output
+
     def audit(self, c, event, **fields):
         row = {'id': str(uuid.uuid4()), 'event': event, 'at': utc(), **fields}
         c.execute('INSERT INTO audit_events VALUES (?,?)', (row['id'], canonical(row)))

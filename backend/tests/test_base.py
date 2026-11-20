@@ -24,7 +24,7 @@ def test_health_and_empty_registry(client):
     assert data["trading_mode"] == "PAPER_ONLY"
     assert data["orders_enabled"] is False
     assert data["database"] == "ok"
-    assert data["schema_version"] == "0006_autonomy"
+    assert data["schema_version"] == "0015_history_batches"
     assert datetime.fromisoformat(data["checked_at"]).tzinfo is not None
     assert client.get("/api/instruments").json() == []
 
@@ -117,5 +117,13 @@ def test_decimal_and_quote_provenance():
 
 def test_api_schema_has_typed_contracts(client):
     schema = client.get("/openapi.json").json()
-    assert set(schema["paths"]) == {"/api/agents", "/api/agents/status", "/api/research/cases", "/api/research/cases/{case_id}", "/api/research/cases/{case_id}/run", "/api/research/cases/{case_id}/evidence", "/api/research/cases/{case_id}/results", "/api/agent-jobs/{job_id}", "/api/agent-jobs/{job_id}/cancel", "/health", "/api/providers/status", "/api/instruments", "/api/orders", "/api/data/quality", "/api/data/refresh", "/api/data/sources/{access_id}", "/api/hq/overview", '/api/markets/watchlist', *('/api/portfolio/master/'+p for p in ('summary','positions','ledger','nav/history','performance')), '/api/research/autonomy', '/api/research/autonomy/control', '/api/research/autonomy/tasks/{task_id}/cancel'}
+    assert schema['paths'].pop('/api/storage/status')['get']['responses']['200']['content']['application/json']['schema']['$ref'].endswith('/StorageStatus')
+    cycle_paths = {'/api/cycles','/api/cycles/{ident}','/api/automation/status',
+                   '/api/universe/automation/control','/api/universe/automation/cycles/{ident}/cancel'}
+    assert cycle_paths <= set(schema['paths'])
+    cycle_body = schema['paths']['/api/cycles']['post']['requestBody']['content']['application/json']['schema']
+    assert cycle_body['properties']['mode']['const']=='shadow'
+    assert cycle_body['properties']['budget']['properties']['max_llm_calls']['const']==0
+    schema['paths'] = {k:v for k,v in schema['paths'].items() if k not in cycle_paths}
+    assert set(schema["paths"]) == {*("/api/universe/"+p for p in ('models/recent','issuers/{cik}/model-updates','issuers/{cik}/models','issuers/{cik}/models/{ident}','summary','listings','listings/{ident}','imports/{key}','sync','financials/summary','financials/jobs','financials/jobs/{key}','financials/jobs/{key}/control','issuers/{cik}/financials','issuers/{cik}/documents','issuers/{cik}/facts','market/summary','market/jobs','market/jobs/{key}','market/jobs/{key}/control','listings/{ident}/market')), "/api/agents", "/api/agents/status", "/api/research/cases", "/api/research/cases/{case_id}", "/api/research/cases/{case_id}/run", "/api/research/cases/{case_id}/evidence", "/api/research/cases/{case_id}/results", "/api/agent-jobs/{job_id}", "/api/agent-jobs/{job_id}/cancel", "/health", "/api/providers/status", "/api/instruments", "/api/orders", "/api/data/quality", "/api/data/refresh", "/api/data/sources/{access_id}", "/api/hq/overview", '/api/markets/watchlist', *('/api/portfolio/master/'+p for p in ('summary','positions','ledger','nav/history','performance')), '/api/research/autonomy', '/api/research/autonomy/control', '/api/research/autonomy/tasks/{task_id}/cancel'}
     assert schema["paths"]["/api/orders"]["post"]["responses"]["403"]

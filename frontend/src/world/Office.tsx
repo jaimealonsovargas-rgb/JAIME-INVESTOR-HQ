@@ -8,7 +8,7 @@ import { makeMaterials } from './materials';
 import {type HQOverviewData} from './HQVideowall';
 import VideowallLabels from './VideowallLabels';
 import {MeshBasicMaterial} from 'three';
-import { DEPARTMENTS, OFFICE_FORWARD, QUALITY, VIEWS, type Quality, type View } from './layout';
+import { DEPARTMENTS, OFFICE_FORWARD, QUALITY, VIDEOWALL, VIEWS, type Quality, type View } from './layout';
 import Player from './Player';
 import { ISOMETRIC,type PlayerRuntime } from './navigation';
 import type { Collider } from './collisions';
@@ -17,6 +17,7 @@ import Personnel from './Personnel';
 import {PERSONNEL_COLLIDERS} from './staffLayout';
 import {frameStats} from './frameStats';
 import {batchStaticOffice} from './staticBatches';
+import {retainResource} from './retainedResource';
 import {firstHit,type Collider as WallCollider} from './collisions';
 
 export interface SceneMetrics {
@@ -47,7 +48,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
   const firstFrame = useRef(0);
   const moving=useRef<number[]>([]);
   useEffect(()=>{player.colliders=[...model.userData.colliders,...PERSONNEL_COLLIDERS];window.__HQ_COLLIDERS__=player.colliders;model.getObjectByName('ceiling')?.traverse(o=>{if(o instanceof Mesh)o.castShadow=false;});return()=>{delete window.__HQ_COLLIDERS__;};},[model,player]);
-  useEffect(() => () => {for(const batch of model.userData.batches)batch.dispose();disposeOffice(model, new Set(maps));}, [model]);
+  useEffect(() => retainResource(model, () => {for(const batch of model.userData.batches)batch.dispose();disposeOffice(model, new Set(maps));}), [model]);
 
   useEffect(() => {
     const roof = model.getObjectByName('ceiling'); if (roof) roof.visible = false;
@@ -56,7 +57,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
     const pmrem = new PMREMGenerator(gl);
     const room = new RoomEnvironment();
     const env = pmrem.fromScene(room, .04, .1, 100);
-    scene.environment = env.texture; scene.environmentIntensity = .7;
+    scene.environment = env.texture; scene.environmentIntensity = .48;
     scene.background=new Color('#000000');scene.fog=null;
     room.dispose(); pmrem.dispose();
     return () => { scene.environment = null; scene.background=null; env.dispose(); };
@@ -73,7 +74,7 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
 
   useEffect(()=>{
     model.traverse(object=>{if(!(object instanceof Mesh)||!(object.material instanceof MeshBasicMaterial)||!object.material.name.startsWith('hq:'))return;
-      object.material.map?.dispose();object.material.map=null;object.material.color.set('#081720');object.material.needsUpdate=true;
+      object.material.map?.dispose();object.material.map=null;object.material.color.set('#111517');object.material.needsUpdate=true;
     });invalidate();
   },[model,invalidate]);
 
@@ -114,14 +115,16 @@ export default memo(function Office({ view, quality, measuring, onMetrics, playe
   });
 
   return <>
-    <hemisphereLight args={['#e6e8e3', '#676a70', .95]} />
-    <directionalLight position={[-20, 25, 16]} color="#ffe9c9" intensity={1.9} castShadow
+    <hemisphereLight args={['#eee9de', '#73716d', .65]} />
+    <directionalLight position={[-20, 25, 16]} color="#ffe9c9" intensity={1.5} castShadow
       shadow-mapSize={[QUALITY[quality].shadows, QUALITY[quality].shadows]} shadow-camera-left={-25} shadow-camera-right={25}
       shadow-camera-top={24} shadow-camera-bottom={-24} shadow-camera-near={1} shadow-camera-far={85}
       shadow-normalBias={.035} shadow-bias={-.00015} />
     {lightTargets.map((target,i)=><primitive key={i} object={target} />)}
     <spotLight position={[0, 4.08, 4+OFFICE_FORWARD]} target={lightTargets[0]} color="#ffe0b1" intensity={70} distance={18} decay={2} angle={1.1} penumbra={1} />
     <spotLight position={[0, 4.08, -3+OFFICE_FORWARD]} target={lightTargets[1]} color="#ffe7c6" intensity={70} distance={17} decay={2} angle={1.1} penumbra={1} />
+    {[-6.65,6.65].map(x=><pointLight key={`corridor-${x}`} position={[x,.32,VIDEOWALL.z+.3]} color="#ffdba1" intensity={4} distance={5} decay={2}/>)}
+    {[-3.35,3.35].map(x=><pointLight key={`reception-${x}`} position={[x,2,6.15]} color="#ffe0a1" intensity={4} distance={4.5} decay={2}/>)}
     <primitive object={model} />
     <VideowallLabels overview={overview}/>
     <Player runtime={player} contact={materials.contact}/>

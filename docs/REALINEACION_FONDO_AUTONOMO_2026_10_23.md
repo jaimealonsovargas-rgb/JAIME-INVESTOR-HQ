@@ -1,3 +1,5 @@
+> REFERENCIA FECHADA. Prioridades/estado/autorizaciones vigentes: [plan actual](actual/VISION_Y_ARQUITECTURA.md) y [roadmap](../tasks/ROADMAP.md). P5 fue autorizada posteriormente con mejoras previas; P6 no. El cuerpo conserva la propuesta histórica y no acredita funciones actuales.
+
 # Realineación de JAIME INVESTOR HQ: fondo cuantitativo autónomo local
 
 **Fecha:** 2026-10-23. **Estado:** decisión de arquitectura y plan de trabajo; **NO autoriza código P5/P6 ni órdenes**.

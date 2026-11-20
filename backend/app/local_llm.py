@@ -32,14 +32,14 @@ def model_view(value):
     if isinstance(value, dict):
         if value.get('schema_version') == 'evidence-pack.v1' and isinstance(value.get('records'), list):
             fields = ('scope', 'data_kind', 'provider', 'series_id', 'feed', 'venue',
-                      'currency', 'unit', 'period_precision')
+                      'currency', 'unit', 'period_precision', 'statement')
             sources, identities, records = {}, {}, []
             for row in value['records']:
                 descriptor = {k: row[k] for k in fields if row.get(k) is not None}
                 identity = canonical(descriptor)
                 source_id = identities.setdefault(identity, 'S' + str(len(identities) + 1))
                 sources[source_id] = descriptor
-                records.append({**{k: row.get(k) for k in ('id', 'observed_at', 'usable', 'excerpt')}, 'source_id': source_id})
+                records.append({**{k: row.get(k) for k in ('id', 'observed_at', 'published_at', 'usable', 'excerpt')}, 'source_id': source_id})
             return {'schema_version': 'evidence-pack.compact.v1', 'sources': sources, 'records': records}
         return {k: model_view(v) for k, v in value.items() if k != 'evidence_id'
                 and not (k == 'evidence' and 'evidence_pack' in value)}

@@ -29,8 +29,8 @@ def router(service):
 
     @api.get('/api/agents')
     def agents():
-        jobs = service.store.list('agent_jobs')
-        return [{**role, 'state': next((j['state'] for j in jobs if j['role_id'] == role['role_id']), 'IDLE')} for role in ROLES.values()]
+        activity = service.store.role_activity()
+        return [{**role, **activity[role['role_id']]} for role in ROLES.values()]
 
     @api.get('/api/agents/status')
     async def status():
@@ -47,7 +47,7 @@ def router(service):
     async def create(body: CreateCase, request: Request):
         key = mutation(request)
         with Session(service.store.engine) as session:
-            instrument = next((x for x in InstrumentRegistry(session).list() if str(x.id) == body.instrument_id), None)
+            instrument = InstrumentRegistry(session).get(body.instrument_id)
         if not instrument:
             raise HTTPException(422, 'UNKNOWN_INSTRUMENT')
         return call(service.store.create_case, instrument.model_dump(mode='json'), sanitize(body.question), key, body.research_goal)

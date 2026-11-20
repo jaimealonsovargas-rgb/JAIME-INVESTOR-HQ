@@ -19,6 +19,7 @@ class DataSettings(BaseSettings):
     alpha_vantage_api_key: SecretStr | None = None
     coingecko_demo_api_key: SecretStr | None = None
     openfigi_api_key: SecretStr | None = None
+    alpaca_market_enabled: bool = True
     alpaca_api_key: SecretStr | None = None
     alpaca_secret_key: SecretStr | None = None
     trading212_api_key: SecretStr | None = None

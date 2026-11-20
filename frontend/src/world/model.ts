@@ -115,14 +115,15 @@ function monitor(b: Builder, x: number, z: number, m: Materials, screen: Materia
 function desk(b: Builder, x: number, z: number, m: Materials, screen: Material, facing = 0, dual = false, occupied = true) {
   const t = new Builder('desk');
   t.part(geometry('plane', () => new PlaneGeometry()), m.contact, [0, .032, 0], [3.2, 1.8, 1], [-Math.PI / 2, 0, 0]);
-  t.box([0, .77, 0], [dual ? 2.4 : 1.9, .075, 1.02], m.wood, .045);
+  const width=dual?2.85:2.3;
+  t.box([0, .77, 0], [width, .085, 1.14], m.wood, .045);
   // Tapete, canto fino y bandeja de cableado: detalle real sin otro material/draw call.
   t.box([0,.813,.10],[dual?1.65:1.25,.008,.65],m.leather,.025);
-  t.box([0,.742,.505],[dual?2.3:1.8,.018,.014],m.bronze,.006);
+  t.box([0,.742,.565],[width-.1,.018,.014],m.bronze,.006);
   t.box([0,.60,-.40],[1.15,.12,.16],m.dark,.025);
   for (const side of [-1, 1]) {
-    for (const dz of [-.36,.36]) t.box([side * (dual ? 1.02 : .8), .39, dz], [.045, .7, .045], m.dark, .012);
-    t.box([side * (dual ? 1.02 : .8), .045, 0], [.045, .035, .79], m.dark, .012);
+    for (const dz of [-.4,.4]) t.box([side*(width/2-.18), .39, dz], [.055, .7, .055], m.dark, .012);
+    t.box([side*(width/2-.18), .045, 0], [.055, .035, .87], m.dark, .012);
   }
   t.box([0, .61, -.28], [dual ? 2.0 : 1.65, .18, .035], m.dark);
   if (dual) { monitor(t, -.46, -.26, m, screen); monitor(t, .46, -.26, m, screen); }
@@ -169,11 +170,22 @@ function roomShell(b: Builder, d: Department, m: Materials) {
   for(const x of [-width/2,width/2])b.box([x,.026,0],[.025,.014,depth],m.bronze);
   // Los frentes al pasillo de la referencia roja quedan completamente abiertos.
   function wall(x:number,z:number,w:number,deep:number){
-    b.box([x,.24,z],[w,.48,deep],m.cream);
+    b.box([x,.24,z],[w,.48,deep],m.wall);
     const upper=new Builder('cutaway:'+d.id+':'+x+':'+z);
-    upper.box([x,1.79,z],[w,2.62,deep],m.cream);
+    upper.box([x,1.79,z],[w,2.62,deep],m.wall);
     b.box([x,.13,z],[w,.26,deep+.035],m.dark);
     upper.box([x,3.08,z],[w,.06,deep+.035],m.dark);
+    // Decorative skins follow the cutaway wall and never enter the collision map.
+    const back=w>deep;
+    if(back){
+      const count=Math.ceil(w/1.6), panelWidth=(w-.28)/count;
+      for(let i=0;i<count;i++)upper.part(geometry('box',()=>new BoxGeometry()),m.dark,[x-w/2+.14+panelWidth*(i+.5),1.7,z+deep/2+.008],[panelWidth-.025,2.36,.012]);
+      upper.part(geometry('plane',()=>new PlaneGeometry()),m.neonWash,[x,3.015,z+deep/2+.032],[w-.24,.56,1]);
+      for(const side of [-1,1])upper.part(geometry('plane',()=>new PlaneGeometry()),m.neonWash,[side*(w/2-.24),1.55,z+.155],[2.6,.5,1],[0,0,Math.PI/2]);
+    }else{
+      const inside=x>0?-1:1;
+      upper.part(geometry('plane',()=>new PlaneGeometry()),m.neonWash,[x+inside*(w/2+.032),3.015,z],[deep-.24,.56,1],[0,inside*Math.PI/2,0]);
+    }
     const group=upper.finish();group.userData.cutaway=true;
     group.userData.wall={center:[d.center[0]+x,1.79,d.center[2]+z],half:[w/2,1.31,deep/2],yaw:0,kind:'solid'};
     b.group.add(group);
@@ -209,7 +221,6 @@ function roomShell(b: Builder, d: Department, m: Materials) {
   b.box([0,.12,-depth/2+.11],[width-.2,.18,.04],m.dark);
   for(const side of [-1,1]){
     b.box([side*(width/2-.24),1.55,-depth/2+.12],[.065,2.7,.05],m.dark,.012);
-    b.box([side*(width/2-.24),1.55,-depth/2+.15],[.022,2.6,.012],m.light);
   }
   // Cornisa continua, sombra de separación y apliques cálidos integrados.
   b.box([0,2.43,-depth/2+.13],[width-.45,.025,.09],m.bronze);
@@ -264,15 +275,24 @@ function department(d: Department, m: Materials) {
   b.box([0,2.75,-d.size[1]/2+.105],[d.id==='committee'?4.9:3.3,.52,.035],m.dark,.015);
   const screen = new MeshBasicMaterial({ map: textTexture(d.label, (d.id==='systems'?'Fuentes reales / Data Quality':d.id==='reception'?'Estado local / PAPER ONLY':`NO DISPONIBLE / ${d.phase}`), 'screen'), toneMapped: false });
   if (d.id === 'reception') {
-    b.box([-.6, .37, -.28], [4.8, .74, 1.0], m.stone, .12);
-    b.box([-.6, .79, -.28], [4.92, .09, 1.02], m.wood, .045);
-    b.box([-.6, .08, -.28], [4.58, .06, .95], m.light);
-    for (let i = 0; i < 39; i++) b.box([-2.76 + i * .114, .42, .224], [.035, .61, .025], m.bronze);
-    b.label([-.6, .45, .251], 3.4, .48, 'JAIME INVESTOR', 'H Q  /  PAPER ONLY', 'brand');
-    // Marca de entrada preservada también sobre el fondo arquitectónico.
-    b.label([0,1.94,-2.78],4.2,1,'J A I M E','INVESTOR HQ','wallbrand');
-    for(const side of [-1,1])for(let i=0;i<12;i++)b.box([side*(3.1+i*.1),1.55,-2.76],[.035,2.9,.07],m.wood);
-    plant(b, -3.8, -2.1, m); plant(b, 3.7, -2.1, m);
+    // One centered counter: walnut cap, recessed front and fluted end panels.
+    b.box([0,.39,-.28],[6.08,.72,1.28],m.dark,.045);
+    b.box([0,.79,-.28],[6.3,.10,1.38],m.wood,.045);
+    b.box([0,.44,.369],[3.95,.55,.025],m.wood,.018);
+    b.box([0,.44,.388],[3.8,.49,.018],m.dark,.012);
+    for(const side of [-1,1])for(let i=0;i<10;i++)b.box([side*(2.08+i*.098),.43,.383],[.035,.59,.035],m.bronze);
+    b.box([0,.115,.381],[6.02,.045,.036],m.neon);
+    b.part(geometry('plane',()=>new PlaneGeometry()),m.neonWash,[0,.115,.407],[6.04,.48,1]);
+    b.part(geometry('plane',()=>new PlaneGeometry()),m.lightWash,[0,.031,.3],[7.2,3.1,1],[-Math.PI/2,0,0]);
+    // Full-height stone feature wall framed by walnut fins and warm light.
+    b.box([0,1.53,-2.735],[5.7,2.66,.10],m.receptionStone,.025);
+    b.label([0,1.94,-2.674],4.4,1.1,'J A I M E','INVESTOR HQ','wallbrand');
+    for(const side of [-1,1]){
+      for(let i=0;i<13;i++)b.box([side*(3.03+i*.105),1.55,-2.74],[.046,2.9,.09],m.wood);
+      b.part(geometry('plane',()=>new PlaneGeometry()),m.neonWash,[side*2.9,1.55,-2.66],[2.76,.48,1],[0,0,Math.PI/2]);
+      b.part(geometry('plane',()=>new PlaneGeometry()),m.lightWash,[side*2.65,1.5,-2.671],[.5,2.6,1]);
+    }
+    plant(b,-4,-2.1,m,2.1);plant(b,4,-2.1,m,2.1);
   } else if (d.id === 'committee') {
     const table=new Builder('committee-table');
     table.box([0, .8, -.3], [2.65, .12, 4.6], m.wood, .3);
@@ -328,7 +348,14 @@ function department(d: Department, m: Materials) {
     whiteboard(b,1.8,-2.64,m,'PAPER ONLY / 403');
     plant(b,-3.05,-1.8,m);
   }
-  for(const w of WORKSPACES.filter(w=>w.department===d.id))desk(b,w.x,w.z,m,screen,w.yaw,w.dual,!!w.occupant);
+  for(const w of WORKSPACES.filter(w=>w.department===d.id)){
+    if(d.id==='reception'){
+      monitor(b,w.x,w.z,m,screen,w.yaw);
+      chair(b,w.x,w.z-SEAT_OFFSET,0,m);
+      b.cylinder([-1.25,.89,-.2],.055,.12,m.cream);
+      b.box([1.5,.848,-.05],[.38,.018,.46],m.paper,.008);
+    }else desk(b,w.x,w.z,m,screen,w.yaw,w.dual,!!w.occupant);
+  }
   b.group.userData = { department: d.id, center: d.center, monitor: true, phase: d.phase,sofas:0,portalWidth:4.4 };
   const group = b.finish(); group.position.set(...d.center);
   return group;
@@ -340,18 +367,32 @@ function architecture(m: Materials) {
   for (const x of [-16.85, 16.85]) b.box([x, .008, 0], [.025, .015, 27.7], m.bronze);
   for (const z of [-13.85, 13.85]) b.box([0, .008, z], [33.7, .015, .025], m.bronze);
   for (const x of [-7.9,-5.25,5.25,7.9]) b.box([x,.018,0],[.018,.008,27.5],m.bronze);
-  for(const x of [-6.6,6.6])b.box([x,.021,0],[.018,.012,26],m.light);
+  for(const x of [-7.9,-5.25,5.25,7.9]){
+    b.box([x,.025,0],[.038,.012,26],m.neon);
+    b.part(geometry('plane',()=>new PlaneGeometry()),m.neonWash,[x,.034,0],[26,.7,1],[-Math.PI/2,0,Math.PI/2]);
+  }
   for(let x=-16;x<=16;x+=2)b.box([x,.004,0],[.008,.004,27.6],m.dark);
   for(let z=-12;z<=12;z+=2)b.box([0,.004,z],[33.6,.004,.008],m.dark);
   // Vestíbulo compacto: se libera la circulación frente a los despachos adelantados.
   for(const x of [-15.2,15.2])plant(b,x,12.2,m,1.8);
-  // Bordure crema, abierta al jugador y sin fachadas altas delante de la cámara.
-  b.box([0,.3,-13.7],[34,.6,.18],m.cream);
-  for(const x of [-16.8,16.8])b.box([x,.25,0],[.16,.5,27.4],m.cream);
+  // Anthracite perimeter; original dimensions and collision boundaries are retained.
+  b.box([0,.3,-13.7],[34,.6,.18],m.wall);
+  // Rear wall closes the two corridors below the videowall; warm recessed beacons.
+  b.box([0,1.8,VIDEOWALL.z-.24],[33.6,3.6,.18],m.wall);
+  for(const x of [-6.65,6.65]){
+    b.box([x,.13,VIDEOWALL.z-.11],[.84,.16,.08],m.dark,.015);
+    b.box([x,.14,VIDEOWALL.z-.059],[.7,.045,.024],m.light,.008);
+    b.part(geometry('plane',()=>new PlaneGeometry()),m.lightWash,[x,.35,VIDEOWALL.z-.044],[2.2,1.25,1]);
+    b.part(geometry('plane',()=>new PlaneGeometry()),m.lightWash,[x,.038,VIDEOWALL.z+.85],[2.4,3.3,1],[-Math.PI/2,0,0]);
+  }
+  for(const x of [-16.8,16.8])b.box([x,.25,0],[.16,.5,27.4],m.wall);
   for(const x of [-16.8,16.8]){
-    b.box([x,1.55,0],[.16,3.1,27.4],m.cream);
+    b.box([x,1.55,0],[.16,3.1,27.4],m.wall);
     b.box([x,3.10,0],[.19,.06,27.4],m.dark);
     b.box([x,.13,0],[.19,.26,27.4],m.dark);
+    const inner=x-Math.sign(x)*.1;
+    b.part(geometry('box',()=>new BoxGeometry()),m.neon,[inner,.18,0],[.024,.038,27.2]);
+    b.part(geometry('plane',()=>new PlaneGeometry()),m.neonWash,[inner-Math.sign(x)*.016,.18,0],[27.2,.52,1],[0,-Math.sign(x)*Math.PI/2,0]);
   }
   b.box([0,-.3,0],[34.4,.2,28.4],m.dark);
   const a = b.finish();
@@ -365,7 +406,7 @@ function architecture(m: Materials) {
       roof.box([x, 4.26, z + side * 2.85], [7.72, .02, .03], m.light);
     }
     for (const dx of [-2.8, 2.8]) {
-      roof.box([x + dx, 4.075, z], [.08, .055, 3.7], m.bronze, .025);
+      roof.box([x + dx, 4.075, z], [.08, .055, 3.7], m.dark, .025);
       roof.box([x + dx, 4.043, z], [.055, .009, 3.55], m.light);
       for (const dz of [-1.4, 1.4]) roof.box([x + dx, 4.30, z + dz], [.006, .45, .006], m.dark);
     }

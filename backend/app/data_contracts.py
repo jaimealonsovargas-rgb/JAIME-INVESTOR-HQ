@@ -28,6 +28,8 @@ class Rights(Contract):
 
 class Observation(Contract):
     id: str
+    observation_key: str | None = None
+    identity_version: Literal[1, 2] = 1
     provider: str
     access_id: str
     feed: str
@@ -70,6 +72,10 @@ class Observation(Contract):
         return self
 
     def stale(self, now: datetime) -> bool:
+        if self.provider == 'ZSE' and 'ZSE_TRADED_SESSION' in self.quality_flags:
+            from app.zse import MAX_AGE_DAYS
+            if (now.astimezone(timezone.utc).date() - self.observed_at.date()).days > MAX_AGE_DAYS:
+                return True
         # Re-fetching an old spot quote must never make its market timestamp fresh.
         anchor = self.observed_at if self.data_kind == 'market_quote' and self.period_precision == 'instant' else self.received_at
         return (now - anchor).total_seconds() > self.stale_after_seconds
@@ -88,6 +94,8 @@ class DataResult(Contract):
     observations: tuple[Observation, ...] = ()
 
 class SourceQuality(Contract):
+    data_tier: Literal[1, 2] = 1
+    quality_flags: tuple[str, ...] = ()
     access_id: str
     provider: str
     name: str

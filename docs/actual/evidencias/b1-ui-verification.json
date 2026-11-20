@@ -1,0 +1,65 @@
+{
+  "at": "2026-10-27T22:46:35.594Z",
+  "data": "LOCAL_REVIEW_COPY_NO_EXTERNAL_FETCH",
+  "checks": [
+    {
+      "view": "person",
+      "width": 1920,
+      "height": 1080,
+      "overflow": false,
+      "title": "Análisis empresarial"
+    },
+    {
+      "view": "person",
+      "width": 1366,
+      "height": 768,
+      "overflow": false,
+      "title": "Análisis empresarial"
+    },
+    {
+      "view": "person",
+      "width": 800,
+      "height": 600,
+      "overflow": false,
+      "title": "Análisis empresarial"
+    },
+    {
+      "view": "person",
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "title": "Análisis empresarial"
+    },
+    {
+      "flow": "person-delivery-dossier",
+      "caseSelected": true
+    },
+    {
+      "flow": "focus",
+      "insideDialog": true
+    },
+    {
+      "flow": "offline",
+      "truthful": true
+    },
+    {
+      "flow": "team-directory-escape",
+      "passed": true
+    },
+    {
+      "flow": "closed-market-row",
+      "datesVisible": true,
+      "stale": true
+    },
+    {
+      "flow": "native-npc-click",
+      "title": "Análisis empresarial",
+      "passed": true
+    },
+    {
+      "flow": "camera-released",
+      "released": true
+    }
+  ],
+  "errors": []
+}

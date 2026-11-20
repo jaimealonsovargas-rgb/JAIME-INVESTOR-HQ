@@ -1,9 +1,11 @@
-# Primer mensaje para Codex — copiar y pegar
+# Continuar JAIME
 
-Lee AGENTS.md, CODEX_MASTER_PROMPT.md, docs/00_INDICE.md, docs/17_AUDITORIA_PREVIA.md, docs/18_MODELOS_Y_TOKENS.md, STATUS.md y tasks/P0_BASE.md.
+Leer AGENTS.md → README.md → STATUS.md → tasks/ACTUAL.md. La única cola es tasks/ROADMAP.md. No reconstruir el plan desde mensajes o tickets históricos.
 
-Actúa como arquitecto principal. **Ejecuta únicamente P0**, sin adelantar P1 ni generar una oficina 3D de relleno. Primero inspecciona el entorno local de Windows y verifica que el stack y todas las dependencias elegidas tengan alternativa gratuita legítima. Crea el esqueleto reproducible de frontend React/TypeScript/Vite, backend Python/FastAPI y base de datos SQLite con tests mínimos, .env.example sin secretos, protecciones paper-only y documentación de arranque.
+Revisión 20-11-2026. B5 ha registrado el expediente B4 de BRK.B en el ciclo de n8n. El resultado real es observación. El motor también admite propuestas PAPER revisadas y limita capital, exposición, liquidez y vigencia. **Próxima entrega · B6**, empezando por el contrato de órdenes en un simulador local. B2 y P4 siguen parciales. Schema `0015_history_batches`. [Riesgo B5](docs/actual/ENTREGA_B5.md) · [Validación B4](docs/actual/ENTREGA_B4.md).
 
-Usa la documentación de este repositorio como fuente de requisitos. Comprueba cualquier capacidad externa contra fuentes oficiales antes de afirmarla. No contrates nada, no actives pagos ni ejecutes órdenes reales. Actualiza STATUS.md con archivos creados, comandos exactos para ejecutar, resultados REALES de tests, limitaciones y siguiente paso. **Detente al completar P0 para que pueda revisarlo**.
+P5/P6 Alpaca PAPER autorizadas; LIVE excluido, 0 EUR, órdenes actualmente 403. No reinstalar, repetir bootstrap, modelos o sede. Conservar datos/evidencias/ledger. Los antiguos tickets P0–P7 enlazan a su archivo y no gobiernan autorizaciones.
 
-Modelo recomendado para esta primera fase: **GPT-6 Astra, razonamiento Alto**, seleccionado manualmente en Codex si está disponible.
+[Auditoría de continuidad](docs/actual/AUDITORIA_CONTINUIDAD_2026_11_11.md).
+
+La revisión real está fijada por hash a un paquete privado, con uso personal local y revisión interna de 30 días. Ausencia/manipulación/expiración bloquean nuevos cálculos. El periodo B3.2 está expuesto y no es OOS virgen. Archivo IBKR denegado; diagnóstico legacy Alpaca separado del CLI. El panel de Sistemas muestra el recibo de riesgo de cada ventana nueva.

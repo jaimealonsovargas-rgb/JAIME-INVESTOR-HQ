@@ -11,6 +11,8 @@ import MonitorOverlay from './MonitorOverlay';
 import HQVideowall,{type HQOverviewData} from './HQVideowall';
 import { MONITOR_DEFINITIONS,canInteract } from './terminals';
 import AdaptiveResolution from './AdaptiveResolution';
+import {PERSONNEL} from './staffLayout';
+import {PERSON_ROLES} from './personRoles';
 
 const Office = lazy(() => import('./Office'));
 const INITIAL_CAMERA = { position: VIEWS.interior.position, fov: VIEWS.interior.fov, near: .08, far: 400 };
@@ -26,11 +28,11 @@ class SceneErrorBoundary extends Component<{children: ReactNode}, {failed: boole
 export default function World() {
   const player=useRef(createPlayer()).current;
   const [mode,setMode]=useState<'play'|'inspection'>('play');
-  const [panel,setPanel]=useState<string>();
+  const [panel,setPanel]=useState<{id:string;personId?:string}>();
   const [overview,setOverview]=useState<HQOverviewData>();
   const [near,setNear]=useState<string>();
-  const openPanel=useCallback((id:string)=>{const monitor=MONITOR_DEFINITIONS.find(m=>m.id===id);if(monitor&&canInteract(player,monitor)){player.paused=true;player.speed=0;player.invalidate?.();setPanel(id);}},[player]);
-  const openPersonPanel=useCallback((id:string)=>{if(!MONITOR_DEFINITIONS.some(m=>m.id===id)||player.paused)return;player.paused=true;player.speed=0;player.velocity=0;player.invalidate?.();setPanel(id);},[player]);
+  const openPanel=useCallback((id:string)=>{const monitor=MONITOR_DEFINITIONS.find(m=>m.id===id);if(monitor&&canInteract(player,monitor)){player.paused=true;player.speed=0;player.invalidate?.();setPanel({id});}},[player]);
+  const openPersonPanel=useCallback((personId:string)=>{const person=PERSONNEL.find(p=>p.id===personId);if(!person||player.paused)return;player.paused=true;player.speed=0;player.velocity=0;player.invalidate?.();setPanel({id:person.department,personId});},[player]);
   const closePanel=useCallback(()=>{player.paused=false;player.holdCamera=true;player.invalidate?.();setPanel(undefined);document.querySelector('canvas')?.focus();},[player]);
   player.mode=mode;
   useEffect(()=>{const back=(e:KeyboardEvent)=>{if(e.key==='Escape'&&player.mode==='inspection'){setMode('play');document.querySelector('canvas')?.focus();}};window.addEventListener('keydown',back);return()=>window.removeEventListener('keydown',back);},[player]);
@@ -55,7 +57,7 @@ export default function World() {
     </SceneErrorBoundary>
     <header className="world-header">
       <div className="world-brand"><span>J.</span><div>JAIME INVESTOR HQ<small>INVESTIGACIÓN & CAPITAL VIRTUAL</small></div></div>
-      <div className="world-badges"><span>PAPER ONLY</span><button onClick={() => setInfo(!info)} aria-expanded={info} aria-controls="architecture-info">Sobre esta entrega</button></div>
+      <div className="world-badges"><a href="?activos=1">Centro de activos</a><label className="team-access">Equipo<select aria-label="Abrir ficha de un especialista" value="" onChange={e=>openPersonPanel(e.target.value)}><option value="">Seleccionar especialista</option>{PERSONNEL.map(p=><option key={p.id} value={p.id}>{PERSON_ROLES[p.id].label}</option>)}</select></label><span>PAPER ONLY</span><button onClick={() => setInfo(!info)} aria-expanded={info} aria-controls="architecture-info">Sobre esta entrega</button></div>
     </header>
     {!metrics ? <p className="world-loading" role="status">Preparando materiales y arquitectura…</p> : null}
     <div className="world-caption"><span>SEDE / {mode==='play'?'RECORRIDO':view === 'plan' ? 'PLANTA ÚNICA' : 'INTERIOR'}</span><h1>{mode==='play'?room?.label??'Pasillo principal':VIEWS[view].label}</h1><p>{mode==='play'?room?.use??'Nueve departamentos conectados':view === 'plan' ? '34 × 28 m · Nueve departamentos conectados' : 'Piedra, nogal y luz. Un lugar para pensar.'}</p></div>
@@ -70,7 +72,7 @@ export default function World() {
     <FinancialHud player={player} mode={mode}/>
     <HQVideowall onOverview={setOverview} onPause={paused=>{player.paused=paused;player.speed=0;player.invalidate?.();if(!paused)document.querySelector('canvas')?.focus();}}/>
     {mode==='play'&&near&&!panel?<p className="terminal-prompt">Acércate al agente principal para abrir su panel</p>:null}
-    {panel?<MonitorOverlay id={panel} onClose={closePanel}/>:null}
+    {panel?<MonitorOverlay id={panel.id} personId={panel.personId} onClose={closePanel}/>:null}
     <footer className="world-toolbar">
       <nav aria-label="Cámara"><button aria-pressed={mode==='play'} onClick={()=>{setMode('play');document.querySelector('canvas')?.focus();}}>Recorrer</button>{Object.entries(VIEWS).map(([key, value]) => <button key={key} aria-pressed={mode==='inspection'&&view === key} onClick={() => { setMode('inspection');setView(key as View); setMetrics(m => m ? {...m, samples: 0} : m); }}>{value.label}</button>)}</nav>
       <div className="world-tools"><label>Gráficos <select value={quality} onChange={e => { const next=e.target.value as Quality;setQuality(next);setRenderDpr(QUALITY[next].dpr);setMetrics(m => m ? {...m, samples: 0} : m); }}><option value="balanced">Equilibrado automático</option><option value="fixed">Equilibrado fijo (80 %)</option><option value="detail">Detalle</option></select></label><span className="resolution-status" aria-label="Resolución de la escena 3D">{Math.round(renderDpr*100)} % 3D</span><button disabled={measuring} onClick={() => setMeasuring(true)}>{measuring ? 'Midiendo…' : 'Medir FPS'}</button><output aria-label="Fotogramas por segundo">{metrics && metrics.samples > 10 ? `${measuring ? '' : 'Última: '}${metrics.fps.toFixed(0)} FPS` : 'En reposo'}</output></div>

@@ -27,4 +27,4 @@ Adaptativo: **Recepción 58,37 / Trading 57,70 / Comité 60,00 / Sistemas 59,83 
 
 Después se elimina el alias PCFSoft retirado, manteniendo el mismo modo PCF que Three ya usaba por fallback. [Smoke del build final](smoke-pcf-final.json): **59,74 FPS móviles**, p95 17,8 ms. Las capturas finales corresponden al modo PCF directo. [Pruebas y avisos](pruebas-resumen.json); [equipo](equipo.json). No se compilaron ni ejecutaron suites durante los intervalos; hubo inspección/edición ligera de archivos durante la recuperación.
 
-Las evidencias de [historial](historial/) pertenecen a iteraciones anteriores con otra geometría y/o fondo. No se usan para atribuir mejoras de FPS a esta compilación final.
+Las evidencias de [historial](historial) pertenecen a iteraciones anteriores con otra geometría y/o fondo. No se usan para atribuir mejoras de FPS a esta compilación final.

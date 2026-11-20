@@ -1,0 +1,24 @@
+{
+  "backend_full_suite": {
+    "passed": 412,
+    "warnings": [
+      "preexisting TestClient/httpx deprecation"
+    ]
+  },
+  "backend_final_affected": {
+    "passed": 13,
+    "includes_new_storage_budget_regression": true
+  },
+  "frontend_full_suite": {
+    "passed": 86,
+    "skipped": 1
+  },
+  "frontend_final_affected": {
+    "passed": 10
+  },
+  "typescript_build": "passed",
+  "browser_synthetic_checks": 11,
+  "personal_browser": "passed",
+  "real_alpaca_connection": "NOT_TESTED_NO_CREDENTIALS",
+  "orders_enabled": false
+}

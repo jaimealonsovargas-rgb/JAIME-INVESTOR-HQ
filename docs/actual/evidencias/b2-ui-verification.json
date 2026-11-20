@@ -1,0 +1,56 @@
+{
+  "at": "2026-10-28T08:55:42.462Z",
+  "data": "REAL_SEC_CATALOGUE_ON_REVIEW_COPY",
+  "checks": [
+    {
+      "flow": "real-catalogue",
+      "counts": "8.023 emisores identificados\n10.430 símbolos en el último catálogo\n0 registros con conflicto"
+    },
+    {
+      "flow": "pagination",
+      "passed": true
+    },
+    {
+      "flow": "search-detail",
+      "cik": "CIK 0000320193",
+      "deepLink": true
+    },
+    {
+      "flow": "responsive",
+      "width": 1920,
+      "height": 1080,
+      "overflow": false
+    },
+    {
+      "flow": "responsive",
+      "width": 1366,
+      "height": 900,
+      "overflow": false
+    },
+    {
+      "flow": "responsive",
+      "width": 800,
+      "height": 900,
+      "overflow": false
+    },
+    {
+      "flow": "responsive",
+      "width": 390,
+      "height": 844,
+      "overflow": false
+    },
+    {
+      "flow": "empty-search",
+      "passed": true
+    },
+    {
+      "flow": "incomplete-filter",
+      "rows": 50
+    },
+    {
+      "flow": "offline",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

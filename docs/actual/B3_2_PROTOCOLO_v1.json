@@ -1,0 +1,96 @@
+{
+  "version": "b32-retrospective-protocol-v1",
+  "prepared_at": "2026-11-18T10:45:04Z",
+  "status": "PREPARED_NOT_EXECUTED",
+  "protocol": "RETROSPECTIVE_EXPLORATORY",
+  "runtime_supported": false,
+  "dataset_admitted": false,
+  "trials_executed": 0,
+  "candidate": {
+    "provider": "ALPACA",
+    "feed": "iex",
+    "symbol": "BRK.B",
+    "listing_id": "8a242788067bfd8a37e2ab0f2932c5b54fc534724557a3cf313e80bf20ccf5d3",
+    "provider_asset_id": "71bb19d0-6c5f-4881-9552-33224badd810",
+    "issuer_cik_candidate": "0001067983",
+    "venue_candidate": "NYSE",
+    "target_currency": "USD",
+    "native_currency_verified": false,
+    "selection_basis": "OPERATIONAL_CASE_NOT_RETURN_SCREEN",
+    "selection_timing": "AFTER_HISTORICAL_PERIOD",
+    "frequency": "1Day",
+    "adjustment": "raw",
+    "symbol_mapping_asof": "-"
+  },
+  "window": {
+    "last_session": "2025-12-31",
+    "selection_rule": "LAST_252_REVIEWED_OFFICIAL_SESSIONS_ENDING_ON_LAST_SESSION",
+    "calendar_timezone": "America/New_York",
+    "total_sessions": 252,
+    "common_warmup_sessions": 60,
+    "evaluation_sessions": 192,
+    "first_trade_session_one_based": 61,
+    "missing_session_policy": "REJECT_NO_FILL_NO_SILENT_REPLACEMENT"
+  },
+  "variants": [
+    {"id": "sma20", "family": "SMA_LONG_CASH", "lookback": 20},
+    {"id": "sma40", "family": "SMA_LONG_CASH", "lookback": 40},
+    {"id": "sma60", "family": "SMA_LONG_CASH", "lookback": 60},
+    {"id": "cash", "family": "CASH", "lookback": null},
+    {"id": "buy_hold", "family": "BUY_HOLD", "lookback": null}
+  ],
+  "cost_scenarios": [
+    {"id": "base", "fixed_per_fill": "0", "commission_bps": "1", "slippage_bps": "5"},
+    {"id": "adverse", "fixed_per_fill": "0", "commission_bps": "5", "slippage_bps": "20"}
+  ],
+  "planned_trial_count": 10,
+  "calculation": {
+    "initial_cash": "10000.00",
+    "unit": "USD",
+    "sizing": "WHOLE_SHARES_ALL_IN_NO_LEVERAGE",
+    "signal": "PREVIOUS_CLOSE_STRICTLY_ABOVE_SMA_OF_PREVIOUS_N_CLOSES",
+    "signal_equality": "CASH",
+    "fill_reference": "NEXT_SESSION_IEX_OPEN_PROXY_NOT_EXECUTABLE_QUOTE",
+    "warmup": "ALL_VARIANTS_FLAT_NO_FILLS",
+    "buy_hold_first_trade": "SAME_SESSION_AS_ALL_OTHER_VARIANTS",
+    "costs_apply_on": "EVERY_BUY_AND_SELL",
+    "slippage_includes_spread": true,
+    "fee_rounding": "CENT_HALF_UP",
+    "terminal_valuation": "LAST_CLOSE_MARK_NO_LIQUIDATION",
+    "cash_interest": "0",
+    "taxes_modelled": false,
+    "seed": 0
+  },
+  "outcome_rules": {
+    "metrics": ["NET_RETURN", "MAX_DRAWDOWN", "COMMISSION", "SLIPPAGE_COST", "FILL_COUNT", "TERMINAL_CASH", "TERMINAL_SHARES"],
+    "exploratory_support": "RETURN_ABOVE_BOTH_CONTROLS_AND_DRAWDOWN_NOT_ABOVE_BUY_HOLD_IN_BOTH_COST_SCENARIOS",
+    "preserve_all_trials_including_failures": true,
+    "register_before_calculation": true,
+    "post_result_tuning": false,
+    "claim_point_in_time": false,
+    "claim_out_of_sample": false,
+    "claim_statistical_acceptance": false,
+    "automatic_promotion": false,
+    "execution_ready": false
+  },
+  "data_use": {
+    "rights_status": "RIGHTS_SCOPE_UNRESOLVED",
+    "proposed_max_retention_days": 30,
+    "retention_authorized": false,
+    "retention_implemented": false,
+    "intended_scope": "PRIVATE_LOCAL_PERSONAL_NONCOMMERCIAL",
+    "redistribution": false,
+    "new_download_authorized_by_this_document": false,
+    "required_external_service_cost_eur": "0"
+  },
+  "limitations": [
+    "EX_POST_SINGLE_SURVIVING_ASSET_SELECTION",
+    "CURRENT_REVISED_HISTORY_NOT_PIT_VINTAGES",
+    "IEX_SINGLE_VENUE_NOT_CONSOLIDATED_MARKET",
+    "OPEN_PROXY_NOT_GUARANTEED_FILL",
+    "NO_LIQUIDITY_OR_MARKET_IMPACT_MODEL",
+    "SHORT_EXPLORATORY_WINDOW_NO_OOS",
+    "NO_FX_TAX_OR_CASH_INTEREST_MODEL",
+    "ZERO_CORPORATE_ACTIONS_REQUIRES_EVIDENCE"
+  ]
+}

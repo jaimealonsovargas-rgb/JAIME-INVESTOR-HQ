@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-04T12:23:08.718Z",
+  "title": "Design System: JAIME Investor HQ",
+  "extensions": {
+    "colorMeta": {
+      "led-core": {
+        "role": "primary",
+        "displayName": "Amarillo LED"
+      },
+      "accent-yellow": {
+        "role": "primary",
+        "displayName": "Amarillo de halo, selección y foco"
+      },
+      "warm-wash": {
+        "role": "secondary",
+        "displayName": "Luz cálida local"
+      },
+      "anthracite-wall": {
+        "role": "neutral",
+        "displayName": "Antracita de paredes"
+      },
+      "reception-stone-tint": {
+        "role": "neutral",
+        "displayName": "Tinte de piedra carbón"
+      },
+      "walnut-tint": {
+        "role": "secondary",
+        "displayName": "Tinte de nogal"
+      }
+    },
+    "typographyMeta": {
+      "body": {
+        "displayName": "Cuerpo de lateral",
+        "purpose": "Lectura de métricas y contexto financiero."
+      },
+      "metric": {
+        "displayName": "Valor principal",
+        "purpose": "Patrimonio del lateral; font-variant-numeric: tabular-nums."
+      },
+      "detail": {
+        "displayName": "Detalle",
+        "purpose": "Fuentes y notas bajo demanda."
+      }
+    },
+    "shadows": [
+      {
+        "name": "rail",
+        "value": "0 12px 32px #0004",
+        "purpose": "Separación de los laterales respecto a la escena."
+      },
+      {
+        "name": "monitor-dialog",
+        "value": "0 28px 90px #0008",
+        "purpose": "Elevación del diálogo sobre la oficina."
+      },
+      {
+        "name": "hq-dialog",
+        "value": "0 20px 80px #10202b66",
+        "purpose": "Diálogo del videowall."
+      }
+    ],
+    "motion": [
+      {
+        "name": "office-button",
+        "value": "background 160ms ease, transform 120ms ease",
+        "purpose": "Hover y pulsación; transition:none bajo prefers-reduced-motion:reduce."
+      },
+      {
+        "name": "office-button-active",
+        "value": "scale(.98)",
+        "purpose": "Respuesta de pulsación."
+      },
+      {
+        "name": "terminal-reveal",
+        "value": "180ms ease-out",
+        "purpose": "Animación existente de apertura del diálogo."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "rails-compact",
+        "value": "1279px"
+      },
+      {
+        "name": "header-compact",
+        "value": "1100px"
+      },
+      {
+        "name": "office-mobile",
+        "value": "760px"
+      },
+      {
+        "name": "person-single-column",
+        "value": "700px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Control de oficina",
+      "kind": "button",
+      "refersTo": "office-button",
+      "description": "Acción secundaria sobre la escena.",
+      "html": "<button class=\"ds-office-button\">Volver a la oficina</button>",
+      "css": ".ds-office-button{font:12px system-ui,sans-serif;color:#e8dfd1;background:#181e20ee;border:1px solid #49504d;border-radius:5px;padding:10px 16px;cursor:pointer;transition:background 160ms ease,transform 120ms ease}.ds-office-button:hover{background:#313938}.ds-office-button:focus-visible{outline:2px solid #e5ff00;outline-offset:4px}.ds-office-button:active{transform:scale(.98)}@media(prefers-reduced-motion:reduce){.ds-office-button{transition:none}}"
+    },
+    {
+      "name": "Navegación de vistas",
+      "kind": "nav",
+      "refersTo": "view-active",
+      "description": "Vista seleccionada y cambio de cámara.",
+      "html": "<nav class=\"ds-views\" aria-label=\"Vistas\"><button aria-pressed=\"true\">Recepción</button><button aria-pressed=\"false\">Vista general</button></nav>",
+      "css": ".ds-views{display:flex;gap:5px;flex-wrap:wrap}.ds-views button{font:12px system-ui,sans-serif;background:#181e20ee;color:#e8dfd1;border:1px solid #49504d;border-radius:5px;padding:10px 16px;cursor:pointer;transition:background 160ms ease,transform 120ms ease}.ds-views button:hover{background:#313938}.ds-views button[aria-pressed=true]{background:#e5ff00;color:#171c1c;border-color:#e5ff00}.ds-views button:focus-visible{outline:2px solid #e5ff00;outline-offset:4px}.ds-views button:active{transform:scale(.98)}@media(prefers-reduced-motion:reduce){.ds-views button{transition:none}}"
+    },
+    {
+      "name": "Selector de lateral",
+      "kind": "input",
+      "refersTo": "rail-select",
+      "description": "Control nativo de selección, con foco visible.",
+      "html": "<label class=\"ds-select-label\">Densidad <select class=\"ds-select\" aria-label=\"Densidad\"><option>Compacta</option><option>Normal</option></select></label>",
+      "css": ".ds-select-label{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#b9c1bf;font:12px Arial,sans-serif}.ds-select{background:#1b2022;color:#e2e6e0;border:1px solid #454c4e;border-radius:5px;font:12px Arial,sans-serif;padding:6px;min-height:32px}.ds-select:focus-visible{outline:2px solid #e5ff00;outline-offset:-2px}"
+    },
+    {
+      "name": "Lateral financiero",
+      "kind": "card",
+      "refersTo": "rail",
+      "description": "Contenedor compacto; muestra un estado de ausencia sin datos ficticios.",
+      "html": "<aside class=\"ds-rail\"><header><h2>Cartera</h2><button aria-label=\"Plegar cartera\">−</button></header><div class=\"ds-rail-body\"><p class=\"ds-empty\"><strong>Sin datos</strong>La información disponible se mostrará con su fuente y fecha.</p></div></aside>",
+      "css": ".ds-rail{width:304px;max-width:100%;background:#111517;color:#edf0ed;border:1px solid #393d3f;border-radius:10px;overflow:hidden;box-shadow:0 12px 32px #0004;font:14px/1.5 Arial,\"Segoe UI\",sans-serif}.ds-rail header{display:flex;align-items:center;gap:8px;padding:16px 18px;border-bottom:1px solid #2d3234}.ds-rail h2{font:600 16px/1.3 Arial,sans-serif;margin:0 auto 0 0;color:#f1f1ec}.ds-rail button{width:32px;height:32px;padding:0;border:0;background:transparent;color:#c0c5c4;font-size:22px;cursor:pointer;border-radius:5px}.ds-rail button:hover{background:#313938}.ds-rail button:focus-visible{outline:2px solid #e5ff00;outline-offset:-2px}.ds-rail button:active{transform:scale(.98)}.ds-rail-body{padding:18px}.ds-empty{font-size:13px;line-height:1.65;color:#b7c0be;padding:8px 0;margin:0}.ds-empty strong{display:block;color:#f1f1ec;font-size:17px;font-weight:500}"
+    },
+    {
+      "name": "Detalle financiero",
+      "kind": "custom",
+      "description": "Despliegue nativo para procedencia y explicación.",
+      "html": "<details class=\"ds-details\"><summary>Fuente y explicación</summary><p>Sin datos conectados.</p></details>",
+      "css": ".ds-details{margin-top:16px;border-top:1px solid #303637;font:13px/1.5 Arial,sans-serif;color:#aeb7b5}.ds-details summary{padding:13px 0;min-height:22px;cursor:pointer;color:#c9d0cd}.ds-details[open] summary{color:#f1f3e9}.ds-details summary:focus-visible{outline:2px solid #e5ff00;outline-offset:-2px}.ds-details p{font-size:12px;line-height:1.6;margin:14px 0 0}"
+    },
+    {
+      "name": "Estado de frescura",
+      "kind": "chip",
+      "description": "Estado textual real; los colores acompañan la etiqueta.",
+      "html": "<span class=\"ds-state\">NO_DATA</span>",
+      "css": ".ds-state{font:11px/1.5 Arial,sans-serif;color:#b5bebc;white-space:normal}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Sede financiera oscura y legible",
+    "overview": "La entrada es una oficina 3D real, antracita, con nogal, piedra carbón y luz amarilla incorporada a la arquitectura. El espacio permanece visible entre controles discretos. La recepción combina un mostrador central, frente oscuro, extremos estriados, pared de piedra y listones de nogal; el rótulo JAIME queda integrado en esa pared.\n\nLos paneles presentan primero lo esencial. Procedencia, explicaciones y diagnóstico se consultan al desplegar, sin ocultar estados de ausencia o antigüedad. Esta documentación recoge la sede y sus paneles actuales; no convierte los estilos de otras superficies de la aplicación en una nueva identidad.",
+    "keyCharacteristics": [
+      "Arquitectura antracita con LED amarillo saturado y luz cálida local.",
+      "Nogal, piedra, metal y vidrio como materiales 3D, sin imagen sustitutiva del espacio.",
+      "Datos principales legibles y detalle voluntario mediante controles nativos.",
+      "Nueve departamentos, dieciséis personajes y navegación espacial conservados."
+    ],
+    "rules": [
+      {
+        "name": "The Local Light Rule",
+        "body": "El halo pertenece a una superficie arquitectónica; no aplicar bloom a toda la pantalla.",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "**Do** conservar la entrada 3D, nueve departamentos, dieciséis personajes y controles de navegación.",
+      "**Do** mantener el amarillo saturado en LED, selección y foco, con iluminación cálida localizada.",
+      "**Do** mostrar ausencia, antigüedad, fuente y fecha según los datos disponibles.",
+      "**Do** presentar datos principales antes del detalle desplegable y mantener acceso por teclado.",
+      "**Do** reutilizar geometrías y materiales, con asientos y colisiones coherentes con el mobiliario."
+    ],
+    "donts": [
+      "**Don't** sustituir la oficina por un fondo raster ni añadir bloom de pantalla completa.",
+      "**Don't** convertir el suelo en azul ni blanquear el núcleo amarillo de los LED.",
+      "**Don't** inventar cifras, gráficas, actividad, ejecución o frescura para completar un diseño.",
+      "**Don't** tratar las dimensiones anteriores del mobiliario o la antigua posición de Riesgos como restricciones vigentes.",
+      "**Don't** presentar esta documentación como equivalencia fotográfica, medición de FPS o aceptación financiera."
+    ]
+  }
+}
