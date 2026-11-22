@@ -1,0 +1,110 @@
+{
+  "provenance": "SYNTHETIC_TEST",
+  "clock": "2026-01-08T15:00:00Z",
+  "dossier": {
+    "version": "b4-validation-dossier-v1",
+    "fixture": "SYNTHETIC_TEST",
+    "policy": {
+      "fixture": "B6 simulated handoff only"
+    },
+    "hypotheses": [
+      {
+        "id": "fixture-long",
+        "selected": true,
+        "comparisons": {
+          "base": {},
+          "adverse": {}
+        }
+      }
+    ],
+    "search": {
+      "planned_trials": 1,
+      "recorded_trials": 1,
+      "hypotheses": 1,
+      "scenarios": [
+        "base",
+        "adverse"
+      ]
+    },
+    "trials": [
+      {
+        "fixture": "SYNTHETIC_TEST"
+      }
+    ],
+    "decision": {
+      "status": "CANDIDATES_FOR_REVIEW",
+      "next_action": "REVIEW",
+      "candidate_ids": [
+        "fixture-long"
+      ],
+      "orders_enabled": false,
+      "execution_ready": false
+    },
+    "source": {
+      "review_expires_at": "2026-01-09T15:00:00Z"
+    },
+    "point_in_time": true,
+    "reserved_oos_sessions": 126,
+    "temporal_reasons": [],
+    "instruments": [
+      "listing:SIM-ONLY"
+    ]
+  },
+  "packet": {
+    "version": "paper-risk-inputs-v1",
+    "account": {
+      "domain": "ALPACA_PAPER",
+      "account_ref": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "snapshot_ref": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "currency": "USD",
+      "as_of": "2026-01-08T15:00:00Z",
+      "reconciled": true,
+      "complete": true,
+      "kill_switch": false,
+      "cash": "10000",
+      "session_open_equity": "10000",
+      "high_water_equity": "10000",
+      "turnover_today": "0",
+      "open_orders": 0
+    },
+    "instruments": [
+      {
+        "listing_id": "SIM-ONLY",
+        "issuer": "TEST",
+        "currency": "USD",
+        "sector": "TEST",
+        "factor": "TEST",
+        "eligible": true,
+        "market_open": true,
+        "quote_ref": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "quote_at": "2026-01-08T15:00:00Z",
+        "bid": "9.99",
+        "ask": "10",
+        "liquidity_ref": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "liquidity_at": "2026-01-08T15:00:00Z",
+        "average_daily_shares": "10000",
+        "shares": 0,
+        "pending_buy_shares": 0,
+        "pending_buy_cash": "0",
+        "pending_sell_shares": 0
+      }
+    ],
+    "proposals": [
+      {
+        "candidate_id": "fixture-long",
+        "listing_id": "SIM-ONLY",
+        "side": "BUY",
+        "quantity": 10,
+        "committee_ref": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "committee_approved": true,
+        "approved_at": "2026-01-08T14:59:50Z",
+        "expires_at": "2026-01-08T15:01:00Z",
+        "downside": {
+          "evidence_ref": "1111111111111111111111111111111111111111111111111111111111111111",
+          "invalidation": "9.75",
+          "stressed_exit": "9.50"
+        }
+      }
+    ]
+  }
+}

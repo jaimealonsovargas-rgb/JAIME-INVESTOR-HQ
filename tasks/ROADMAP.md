@@ -1,6 +1,6 @@
 # Hoja de ruta única de JAIME
 
-Revisión 20-11-2026. Esta es la única cola de entregas; [ACTUAL](ACTUAL.md) desarrolla solamente la próxima. [STATUS](../STATUS.md) contiene hechos; [arquitectura](../docs/actual/VISION_Y_ARQUITECTURA.md) contiene diseño. Entregas y documentos históricos no incorporan nuevos «siguientes pasos» a esta cola.
+Revisión 22-11-2026. Esta es la única cola de entregas; [ACTUAL](ACTUAL.md) desarrolla solamente la próxima. [STATUS](../STATUS.md) contiene hechos; [arquitectura](../docs/actual/VISION_Y_ARQUITECTURA.md) contiene diseño. Entregas y documentos históricos no incorporan nuevos «siguientes pasos» a esta cola.
 
 ## Esquema mental
 
@@ -15,7 +15,7 @@ flowchart LR
   P --> R
 ```
 
-El diagrama representa el destino del producto. N/D/R tienen implementación parcial. B3.1 y B3.2 entregaron el laboratorio y una campaña real. B4 validó sus diez ensayos y entregó una decisión de observación. B5 registró esa observación en el ciclo autónomo. Queda B6. D2 entrega captación con fixtures y D3/B3.2 admiten BRK.B/IEX para alcance exploratorio. El archivo de datos IBKR sigue bloqueado.
+El diagrama representa el destino del producto. N/D/R tienen implementación parcial. B3.1 y B3.2 entregaron el laboratorio y una campaña real. B4 validó sus diez ensayos y entregó una decisión de observación. B5 registró esa observación en el ciclo autónomo. B6 ya consume esa decisión en el simulador local. D2 entrega captación con fixtures y D3/B3.2 admiten BRK.B/IEX para alcance exploratorio. El archivo de datos IBKR sigue bloqueado.
 
 ## Estado por bloque
 
@@ -26,7 +26,7 @@ El diagrama representa el destino del producto. N/D/R tienen implementación par
 | B3 laboratorio | **B3.1 y B3.2 completados**. Motor y primera campaña retrospectiva de diez ensayos | Las campañas más amplias requieren nuevos protocolos y datos elegibles |
 | B4 validación | **Entregado**. Contrato temporal, registro completo, costes, pruebas múltiples y selección | Tres variantes reales descartadas y cero sesiones independientes |
 | B5 autonomía/riesgo | **Entregado**. Recibo por ventana, motor determinista y vetos | Observación real. Compra, venta y mantener comprobados con datos de prueba |
-| B6 ejecución | Autorizada para desarrollar, deshabilitada actualmente | RiskGate + OMS + reconciliación antes de PAPER externo |
+| B6 ejecución | **En curso.** Contrato y simulador local verificados | Próximo hito, cola durable de envíos con recuperación e idempotencia |
 
 Los antiguos P0–P7 son dominios/especificaciones archivadas. El desarrollo de P5 se reparte aquí entre B3/B4/riesgo B5; P6 corresponde a B6. No pedir autorizaciones de fase ya dadas. LIVE sigue excluido.
 
@@ -41,7 +41,7 @@ Los antiguos P0–P7 son dominios/especificaciones archivadas. El desarrollo de 
 | 5 · **B3.2 · COMPLETADO** | Primera campaña con datos reales admitidos | [BRK.B/IEX](../docs/actual/ENTREGA_B3_2.md), 252 sesiones, diez ensayos y cero variantes promocionadas; 111 tests y reproducción exacta. Sin PIT/OOS ni ejecución |
 | 6 · **B4 · COMPLETADO** | Validación y selección | Diez ensayos contrastados con la campaña sellada. Tres descartes, 0 OOS, expediente reproducible y 168 pruebas. [Entrega](../docs/actual/ENTREGA_B4.md) |
 | 7 · **B5 · COMPLETADO** | Autonomía y riesgo | Observación real en n8n, deduplicación por ventana y límites de riesgo PAPER. [Entrega](../docs/actual/ENTREGA_B5.md) |
-| 8 · **B6 · SIGUIENTE** | OMS y Alpaca PAPER | Simulador de contrato/fallos → outbox/idempotencia → fills/UNKNOWN/reconciliación → observación PAPER con gates |
+| 8 · **B6 · EN CURSO** | OMS y Alpaca PAPER | [Simulador completado](../docs/actual/ENTREGA_B6_1.md) → **cola durable de envíos** → conciliación de ejecuciones y estados inciertos → apertura controlada a Alpaca PAPER |
 
 Son entregas de producto, no una promesa de una sola sesión por fila. **No hay requisito de terminar todo B2 para avanzar el laboratorio**. B3.2 admite un caso acotado, no toda la cobertura del catálogo. No promocionar estrategias por haber terminado código o admitir un dataset.
 

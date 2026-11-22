@@ -13,9 +13,9 @@ Plataforma local de investigación financiera y futura simulación autónoma PAP
 
 ## Qué existe
 
-Catálogo: 8.023 emisores SEC, 10.430 registros SEC y 14.407 instrumentos Alpaca, más un piloto ZSE. Cuentas/documentos de 100 empresas. Modelos de Apple, Microsoft y Walmart (18 versiones). Series Alpaca de 21 sesiones Apple y 252 BRK.B; esta última admitida para la primera campaña retrospectiva. IBKR: SDK y lectura de tres contratos comprobados, con divisa observada revisada; D1 ya comprobó cinco barras diarias y cotización diferida AAPL, sin archivar precios ni acreditar cobertura universal. n8n: ciclo SEC piloto en sombra, sin circuito completo de inversión.
+Catálogo: 8.023 emisores SEC, 10.430 registros SEC y 14.407 instrumentos Alpaca, más un piloto ZSE. Cuentas/documentos de 100 empresas. Modelos de Apple, Microsoft y Walmart (22 versiones). Series Alpaca de 21 sesiones Apple y 252 BRK.B; esta última admitida para la primera campaña retrospectiva. IBKR: SDK y lectura de tres contratos comprobados, con divisa observada revisada; D1 ya comprobó cinco barras diarias y cotización diferida AAPL, sin archivar precios ni acreditar cobertura universal. n8n: ciclo SEC piloto en sombra, sin circuito completo de inversión.
 
-El laboratorio B3, el selector B4 y el motor de riesgo B5 están implementados. En el primer ciclo real de B5, JAIME registró la observación de BRK.B tras verificar el expediente de las tres hipótesis descartadas. Puedes consultar el motivo y el vencimiento en Sistemas → Casos y entregas. La próxima entrega es B6, empezando por el simulador de órdenes PAPER. P4 sigue PARTIAL. [Entrega B5](docs/actual/ENTREGA_B5.md) · [Validación B4](docs/actual/ENTREGA_B4.md) · [Laboratorio B3.2](docs/actual/ENTREGA_B3_2.md).
+El laboratorio B3, la validación B4 y el riesgo B5 alimentan el primer hito de B6. El simulador local comprueba reservas y recupera órdenes tras perder una respuesta. En la ventana automática del 22 de noviembre, BRK.B produjo cero intenciones. La decisión de B5 se puede consultar en Sistemas → Casos y entregas. El próximo hito es la cola durable de envíos PAPER. P4 sigue PARTIAL. [Simulador B6](docs/actual/ENTREGA_B6_1.md) · [Riesgo B5](docs/actual/ENTREGA_B5.md) · [Validación B4](docs/actual/ENTREGA_B4.md) · [Laboratorio B3.2](docs/actual/ENTREGA_B3_2.md).
 
 ## Proveedores y destino
 

@@ -1,13 +1,13 @@
-# Próxima entrega · B6, simulador de órdenes PAPER
+# Próxima entrega · B6, cola durable de envíos PAPER
 
-20 de noviembre de 2026. B5 ya registra decisiones de riesgo en cada ventana de n8n. La evidencia BRK.B vigente entrega observación. [Entrega B5](../docs/actual/ENTREGA_B5.md) · [Mandato B5 archivado](../docs/archive/2026-11-20-b5/ACTUAL.md) · [Hoja de ruta](ROADMAP.md).
+22 de noviembre de 2026. El simulador local ya identifica cada intención, reserva capital o acciones y recupera los intentos ambiguos. El ciclo real de BRK.B sigue en observación. [Entrega del simulador](../docs/actual/ENTREGA_B6_1.md) · [Mandato anterior](../docs/archive/2026-11-22-b6-simulador/ACTUAL.md) · [Hoja de ruta](ROADMAP.md).
 
-## Primer paso de B6
+## Qué entregar
 
-1. Definir la intención de orden y una clave estable vinculada a una decisión de riesgo, instrumento, lado y cantidad. Comprobar el vencimiento y las reservas al consumir una decisión. El recibo real de observación produce cero intenciones.
-2. Ejercitar un simulador local de broker con aceptación, rechazo, respuesta perdida, duplicado, fill parcial y cancelación. Conservar el identificador de cada intento y distinguir un estado desconocido mientras se reconcilia.
-3. Comprobar que los mismos eventos, repetidos o tras reinicio, producen una sola intención y el mismo estado final. Usar una cuenta de prueba separada de MASTER.
+1. Guardar la intención validada, su reserva y la entrada de envío en una misma transacción. La repetición de un recibo debe recuperar la misma entrada. Una decisión de observación, veto o mantener produce cero envíos.
+2. Incorporar un trabajador local que reclame los envíos pendientes por tiempo limitado. Registrar cada intento y comprobar riesgo y caducidad antes de entregarlo al simulador con su identificador original.
+3. Ensayar caídas antes y después de la entrega, reinicio y dos trabajadores competidores. Si se pierde la respuesta, consultar primero el identificador. Comprobar que un envío ambiguo conserva la reserva y que la recuperación nunca duplica una ejecución.
 
 ## Punto de parada
 
-El primer hito de B6 termina con el contrato y el simulador verificados. Las entregas posteriores cubren la cola durable de envíos, la reconciliación y la apertura controlada a Alpaca PAPER según la hoja de ruta. Siguen vigentes el coste externo de 0 EUR, el bloqueo de LIVE y el 403 del endpoint público de órdenes.
+Este hito termina cuando la cola se recupere por sí sola frente al simulador, con evidencia reproducible de los tres casos y de la integridad de MASTER. La siguiente entrega cubrirá la conciliación de ejecuciones y posiciones. El conector de Alpaca PAPER se habilitará en una entrega posterior, sujeta a los controles de la hoja de ruta. Coste externo de 0 EUR y órdenes públicas con HTTP 403.

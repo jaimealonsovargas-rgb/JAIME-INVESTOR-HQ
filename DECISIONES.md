@@ -1,5 +1,7 @@
 # Decisiones vigentes y registro histórico
 
+- D056 (22-11-2026, B6). El simulador vincula las intenciones al recibo de B5 y comparte sus reservas entre decisiones sobre la misma cuenta y cotizaciones revisadas. Un envío ambiguo conserva la reserva hasta que el bróker ficticio confirma el estado. La identidad de una ejecución impide contabilizarla dos veces al repetir una notificación. El diario vive en una base privada de laboratorio. [Contrato y evidencia](docs/actual/ENTREGA_B6_1.md).
+
 - D055 (20-11-2026, B5). La política PAPER v2 incorpora la estimación de pérdida bajo un precio de salida estresado y la cantidad máxima admisible por ese control. Agrupa tenencias, compras pendientes y propuestas de la misma ventana por instrumento. El primer recibo v1 conserva su huella y vigencia originales. [Criterio y procedencia](docs/actual/DAY_TRADER_ADAPTACION.md).
 
 - D054 (20-11-2026, B5). JAIME guarda la decisión de riesgo y la ventana de n8n en la misma transacción. El expediente y los datos de las propuestas requieren referencias de contenido revisadas. La política PAPER reserva capital y aplica límites antes de cada propuesta. Caducidad, datos insuficientes o exceso de presupuesto producen un veto trazable. Las pruebas positivas usan datos ficticios. [Entrega B5](docs/actual/ENTREGA_B5.md).
