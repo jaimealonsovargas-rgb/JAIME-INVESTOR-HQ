@@ -15,6 +15,12 @@ n8n entregó la ventana del 20 de noviembre de 07:00 a 13:00 de Madrid. A las **
 
 La política v2 reprodujo la misma observación usando el expediente, la ventana y el instante originales. Cambiaron las referencias a la política y el identificador del cálculo. El recibo persistido de v1 sigue siendo el original. El estado de la API expone la política activa y cada decisión conserva la suya. [Estado local](http://127.0.0.1:8000/api/automation/status).
 
+## Comprobación del 22-11-2026
+
+Windows registró un salto de reloj desde las 12:53 del viernes 20 hasta las 16:53 del domingo 22, hora de Madrid. La agenda publicada de n8n tenía la regla `0 0 */6 * * *` en UTC, con política `skip` y margen de 60 s. Al volver el equipo, la próxima ventana quedaba programada para las 19:00 del domingo. Las ventanas omitidas carecen de recibo en JAIME.
+
+A las **16:58 del domingo**, una comprobación manual por la misma entrada de JAIME registró el recibo real de la ventana de 13:00 a 19:00 con la política v2. La decisión fue `OBSERVE / NO_CANDIDATES` y su referencia es `beb94768742399ee965031aa4e4d4e991785923c7832f54e0fca940a1bb3d670`. Al repetir la solicitud JAIME devolvió la misma decisión. La revisión SEC terminó en diez segundos con Apple v8 y Microsoft v6 aprobados y Walmart v8 con pendientes. Se conservaron las huellas de las cuatro tablas de MASTER.
+
 ## Controles PAPER
 
 Se evalúan propuestas largas, por acciones enteras y en una sola divisa por cuenta. Una compra o venta requiere una candidata seleccionada con evidencia temporal independiente, un paquete revisado del comité, cuenta simulada reconciliada, precios vigentes, liquidez y sesión elegible. Las entradas con referencias de contenido incorrectas, expedientes caducados o datos incompletos se detienen con un motivo. Las pruebas favorables de compra y venta usan datos ficticios aislados.

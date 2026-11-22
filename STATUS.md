@@ -1,12 +1,12 @@
 # Estado real de JAIME
 
-Actualizado 20-11-2026, Europe/Madrid. **B5 completado.** El ciclo de n8n verificó el expediente B4 y registró la observación de BRK.B. Cero candidatas y cero órdenes. La decisión identifica el expediente, la política aplicada, la ventana y su vencimiento. [Entrega B5](docs/actual/ENTREGA_B5.md).
+Actualizado 22-11-2026, Europe/Madrid. **B5 completado.** La política PAPER v2 registró la observación de BRK.B en la ventana del domingo, comprobada manualmente tras un salto de reloj del equipo. Cero candidatas y cero órdenes. El flujo de n8n sigue publicado con su horario de seis horas. [Entrega B5 y comprobación del domingo](docs/actual/ENTREGA_B5.md).
 
 | Área | Implementado / comprobado | Falta |
 |---|---|---|
 | Producto | Oficina 3D aceptada; Centro de activos, modelos, calidad y operación | Laboratorio y seguimiento de estrategias junto a sus contratos reales |
 | Catálogo | 8.023 emisores; 10.430 registros SEC, 14.407 Alpaca y 1 ZSE | Cobertura de datos por activo y ampliación de identidad revisada por lotes |
-| Contabilidad | Cuentas/documentos de 100 emisores; Apple v8, Microsoft v6 y Walmart v7, 21 versiones | Ampliar modelos; ratio Walmart pendiente; DCF/consenso/transcript sin inputs suficientes |
+| Contabilidad | Cuentas/documentos de 100 emisores. Apple v8, Microsoft v6 y Walmart v8, 22 versiones | Ampliar modelos, resolver el ratio Walmart y completar las fuentes para DCF, consenso y transcripciones |
 | Precios e históricos | 21 barras Apple y 252 BRK.B/IEX; este último admitido para un ensayo retrospectivo personal local | Cobertura ampliada y admisión por instrumento/periodo/uso; no acreditada a escala de miles |
 | IBKR | D1 acceso acotado conservado; D2 cola durable/transporte aislado probado offline | Archivo real denegado; derechos de cuenta/uso/retención pendientes |
 | Research | 30 roles definidos; ciclo descriptivo y artefactos parciales | P4 PARTIAL; debate/tesis analíticas no aceptados; no bloquean el núcleo B3 |

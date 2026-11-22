@@ -16,6 +16,8 @@ El flujo publicado revisa Apple, Microsoft y Walmart a las **00:00, 06:00, 12:00
 
 Control habitual en [Sistemas → Casos y entregas](http://127.0.0.1:5173/?especialista=personal-systems): pausar nuevas solicitudes, permitirlas de nuevo y cancelar un ciclo activo. Permitir solicitudes no arranca el proceso de n8n. Ambos servicios y el ordenador deben estar encendidos; no se ha creado un servicio de inicio automático de Windows.
 
+Si el reloj del equipo avanza durante una suspensión, comprueba la fecha del último ciclo en Sistemas. La agenda omite las ventanas vencidas. El disparador manual «Comprobar ventana actual» del flujo permite solicitar la vigente y recuperar su recibo si ya existe.
+
 El editor n8n está en `http://127.0.0.1:5678`. Su cuenta local de editor no se ha configurado; el flujo ya está importado y publicado por CLI. La supervisión del piloto se hace desde JAIME. No abrir puertos, túneles ni introducir claves de Alpaca en n8n.
 
 ## Preparación reproducible
