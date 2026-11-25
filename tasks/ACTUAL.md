@@ -1,13 +1,13 @@
-# Próxima entrega · B6, cola durable de envíos PAPER
+# Próxima entrega · B6, conciliación de ejecuciones y posiciones
 
-22 de noviembre de 2026. El simulador local ya identifica cada intención, reserva capital o acciones y recupera los intentos ambiguos. El ciclo real de BRK.B sigue en observación. [Entrega del simulador](../docs/actual/ENTREGA_B6_1.md) · [Mandato anterior](../docs/archive/2026-11-22-b6-simulador/ACTUAL.md) · [Hoja de ruta](ROADMAP.md).
+El simulador conserva las intenciones, las reservas y el historial de envío. La siguiente entrega debe contrastar lo registrado localmente con las ejecuciones y posiciones de la cuenta ficticia. [Cola de envíos](../docs/actual/ENTREGA_B6_2.md) · [Mandato anterior](../docs/archive/2026-11-22-b6-cola/ACTUAL.md) · [Hoja de ruta](ROADMAP.md).
 
 ## Qué entregar
 
-1. Guardar la intención validada, su reserva y la entrada de envío en una misma transacción. La repetición de un recibo debe recuperar la misma entrada. Una decisión de observación, veto o mantener produce cero envíos.
-2. Incorporar un trabajador local que reclame los envíos pendientes por tiempo limitado. Registrar cada intento y comprobar riesgo y caducidad antes de entregarlo al simulador con su identificador original.
-3. Ensayar caídas antes y después de la entrega, reinicio y dos trabajadores competidores. Si se pierde la respuesta, consultar primero el identificador. Comprobar que un envío ambiguo conserva la reserva y que la recuperación nunca duplica una ejecución.
+1. Contrastar las ejecuciones del simulador por identificador y orden. Recuperar notificaciones perdidas y contabilizar una sola vez las repetidas.
+2. Reconstruir las cantidades ejecutadas y las posiciones a partir de la cuenta inicial, incluidas las ejecuciones parciales seguidas de cancelación. Identificar diferencias pendientes de resolver.
+3. Ensayar el reinicio durante la conciliación y la repetición sobre los mismos datos. Documentar los saldos y las diferencias observadas antes y después.
 
 ## Punto de parada
 
-Este hito termina cuando la cola se recupere por sí sola frente al simulador, con evidencia reproducible de los tres casos y de la integridad de MASTER. La siguiente entrega cubrirá la conciliación de ejecuciones y posiciones. El conector de Alpaca PAPER se habilitará en una entrega posterior, sujeta a los controles de la hoja de ruta. Coste externo de 0 EUR y órdenes públicas con HTTP 403.
+El hito termina con evidencia reproducible de la conciliación en la cuenta ficticia y de la integridad de MASTER. La apertura a Alpaca PAPER corresponde a una entrega posterior. Siguen vigentes el coste externo de 0 EUR y el bloqueo HTTP 403 de las órdenes públicas.

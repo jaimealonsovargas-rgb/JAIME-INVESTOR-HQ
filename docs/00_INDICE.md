@@ -28,7 +28,7 @@ Actualizado 20-11-2026. Las reglas del proyecto están en AGENTS; la cola única
 
 ## Entregas fechadas — resultados y evidencia, no cola
 
-[B6, contrato de órdenes y simulador local](actual/ENTREGA_B6_1.md).
+[B6, contrato de órdenes y simulador local](actual/ENTREGA_B6_1.md) · [B6.2, cola durable de envíos PAPER](actual/ENTREGA_B6_2.md).
 
 [B5 riesgo y ciclo de observación](actual/ENTREGA_B5.md).
 

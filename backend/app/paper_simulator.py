@@ -1,4 +1,4 @@
-"""Isolated SQLite lab for the order contract. It has no broker transport or production queue."""
+"""Order contract, reservations and durable dispatch within the isolated PAPER lab."""
 from contextlib import closing, contextmanager
 from datetime import datetime, timezone
 from decimal import Decimal, localcontext
@@ -14,7 +14,7 @@ from app.risk_contracts import Name, Positive, Quantity, RiskInputs
 from app.risk_engine import POLICY_HASH
 
 APP_ID = 0x4A36534D
-FORMAT = 1
+FORMAT = 2
 MAX_ORDERS = 512
 KEY = TypeAdapter(Name)
 PRICE = TypeAdapter(Positive)
@@ -27,6 +27,22 @@ DDL = (
        venue_state TEXT, venue_filled INTEGER NOT NULL DEFAULT 0, venue_value TEXT NOT NULL DEFAULT '0')''',
     '''CREATE TABLE events (event_id TEXT PRIMARY KEY, client_id TEXT NOT NULL REFERENCES intents(client_id),
        action TEXT NOT NULL, payload TEXT NOT NULL, recorded_at TEXT NOT NULL, response TEXT NOT NULL)''',
+)
+
+OUTBOX_DDL = (
+    """CREATE TABLE outbox (
+        client_order_id TEXT PRIMARY KEY REFERENCES intents(client_id),
+        status TEXT NOT NULL DEFAULT 'PENDING' CHECK(status IN ('PENDING','CLAIMED','UNCERTAIN','DONE')),
+        attempts INTEGER NOT NULL DEFAULT 0, next_at TEXT NOT NULL DEFAULT '',
+        owner TEXT, lease_until TEXT,
+        CHECK ((status='CLAIMED') = (owner IS NOT NULL AND lease_until IS NOT NULL))
+    )""",
+    """CREATE TABLE outbox_attempts (
+        event_id TEXT PRIMARY KEY, client_order_id TEXT NOT NULL REFERENCES outbox(client_order_id),
+        attempt INTEGER NOT NULL, worker TEXT NOT NULL, action TEXT NOT NULL,
+        claimed_at TEXT NOT NULL, lease_until TEXT NOT NULL, delivered_at TEXT, finished_at TEXT,
+        disposition TEXT, UNIQUE(client_order_id, attempt)
+    )""",
 )
 
 
@@ -67,9 +83,16 @@ class PaperSimulator:
             app = db.execute('PRAGMA application_id').fetchone()[0]
             version = db.execute('PRAGMA user_version').fetchone()[0]
             if app == 0 and version == 0 and not db.execute('SELECT 1 FROM sqlite_master LIMIT 1').fetchone():
-                for query in DDL:
+                for query in (*DDL, *OUTBOX_DDL):
                     db.execute(query)
                 db.execute(f'PRAGMA application_id={APP_ID}')
+                db.execute(f'PRAGMA user_version={FORMAT}')
+            elif (app, version) == (APP_ID, 1):
+                for query in OUTBOX_DDL:
+                    db.execute(query)
+                db.execute("""INSERT INTO outbox(client_order_id,status)
+                              SELECT client_id, CASE state WHEN 'READY' THEN 'PENDING'
+                                WHEN 'UNKNOWN' THEN 'UNCERTAIN' ELSE 'DONE' END FROM intents""")
                 db.execute(f'PRAGMA user_version={FORMAT}')
             elif (app, version) != (APP_ID, FORMAT):
                 raise ValueError('NOT_A_B6_SIMULATOR_DATABASE')
@@ -159,6 +182,7 @@ class PaperSimulator:
                 expiry = utc(datetime.fromisoformat(spec['expires_at'])).isoformat(timespec='microseconds')
                 db.execute('INSERT INTO intents(client_id,spec,proposal,expires_at,state) VALUES (?,?,?,?,?)',
                            (spec['client_order_id'], canonical(spec), proposal.model_dump_json(), expiry, 'READY'))
+                db.execute('INSERT INTO outbox(client_order_id) VALUES (?)', (spec['client_order_id'],))
                 ids.append(spec['client_order_id'])
             result = admission(record, 'INTENTS_RESERVED' if ids else 'RESERVATIONS_VETO', ids, skipped)
             # A transient reservation veto may be checked again; a successful batch has one immutable receipt.
@@ -181,39 +205,44 @@ class PaperSimulator:
                                         (client_id,))]
 
     def _event(self, client_id, event_id, action, payload):
+        with self.transaction() as db:
+            if db.execute('SELECT 1 FROM outbox_attempts WHERE event_id=?', (event_id,)).fetchone():
+                raise ValueError('SIMULATOR_EVENT_RESERVED_FOR_DISPATCH')
+            return self.record_event(db, client_id, event_id, action, payload, utc(self.clock()))
+
+    def record_event(self, db, client_id, event_id, action, payload, now):
+        """Apply a venue operation and its receipt inside the caller's transaction."""
         KEY.validate_python(event_id, strict=True)
         body = canonical(payload)
-        with self.transaction() as db:
-            previous = db.execute('SELECT * FROM events WHERE event_id=?', (event_id,)).fetchone()
-            if previous:
-                if (previous['client_id'], previous['action'], previous['payload']) != (client_id, action, body):
-                    raise ValueError('SIMULATOR_EVENT_ID_CONFLICT')
-                return json.loads(previous['response'])
-            now = utc(self.clock())
-            self.advance(db, now)
-            row = self.row(db, client_id)
-            if action == 'FILL':
-                reason = self._fill(db, row, payload)
-            elif action == 'FILL_NOTICE':
-                linked = db.execute("SELECT 1 FROM events WHERE event_id=? AND client_id=? AND action='FILL'",
-                                    (payload['execution_id'], client_id)).fetchone()
-                if not linked:
-                    raise ValueError('UNKNOWN_EXECUTION_ID')
-                # A late notification reconciles to the current venue state, including any later cancel.
-                self._publish(db, client_id)
-                reason = 'FILL_REPORTED'
-            elif action == 'SUBMIT':
-                reason = self._submit(db, row, payload['fault'], now)
-            elif action == 'LOOKUP':
-                reason = self._lookup(db, row, payload['fault'], now)
-            else:
-                reason = self._end(db, row, action, payload['fault'])
-            current = public_order(self.row(db, client_id))
-            result = dict(event_id=event_id, action=action, reason=reason, state=current['state'],
-                          filled=current['filled'], filled_value=current['filled_value'], client_order_id=client_id)
-            db.execute('INSERT INTO events VALUES (?,?,?,?,?,?)',
-                       (event_id, client_id, action, body, now.isoformat(), canonical(result)))
-            return result
+        previous = db.execute('SELECT * FROM events WHERE event_id=?', (event_id,)).fetchone()
+        if previous:
+            if (previous['client_id'], previous['action'], previous['payload']) != (client_id, action, body):
+                raise ValueError('SIMULATOR_EVENT_ID_CONFLICT')
+            return json.loads(previous['response'])
+        self.advance(db, now)
+        row = self.row(db, client_id)
+        if action == 'FILL':
+            reason = self._fill(db, row, payload)
+        elif action == 'FILL_NOTICE':
+            linked = db.execute("SELECT 1 FROM events WHERE event_id=? AND client_id=? AND action='FILL'",
+                                (payload['execution_id'], client_id)).fetchone()
+            if not linked:
+                raise ValueError('UNKNOWN_EXECUTION_ID')
+            # A late notification reconciles to the current venue state, including any later cancel.
+            self._publish(db, client_id)
+            reason = 'FILL_REPORTED'
+        elif action == 'SUBMIT':
+            reason = self._submit(db, row, payload['fault'], now)
+        elif action == 'LOOKUP':
+            reason = self._lookup(db, row, payload['fault'], now)
+        else:
+            reason = self._end(db, row, action, payload['fault'])
+        current = public_order(self.row(db, client_id))
+        result = dict(event_id=event_id, action=action, reason=reason, state=current['state'],
+                      filled=current['filled'], filled_value=current['filled_value'], client_order_id=client_id)
+        db.execute('INSERT INTO events VALUES (?,?,?,?,?,?)',
+                   (event_id, client_id, action, body, now.isoformat(), canonical(result)))
+        return result
 
     def submit(self, client_id, attempt_id, fault='OK'):
         if fault not in ('OK', 'REJECT', 'DROP_BEFORE', 'DROP_AFTER'):

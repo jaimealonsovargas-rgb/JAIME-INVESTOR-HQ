@@ -1,5 +1,7 @@
 # Decisiones vigentes y registro histórico
 
+- D057 (22-11-2026, B6.2). JAIME confirma la intención, su reserva y el envío pendiente en una transacción de la base privada del simulador. Cada intento tiene un token y una reclamación de diez segundos. Al caducar la reclamación o perderse la respuesta, el trabajador consulta primero el identificador de la orden. [Cola durable](docs/actual/ENTREGA_B6_2.md).
+
 - D056 (22-11-2026, B6). El simulador vincula las intenciones al recibo de B5 y comparte sus reservas entre decisiones sobre la misma cuenta y cotizaciones revisadas. Un envío ambiguo conserva la reserva hasta que el bróker ficticio confirma el estado. La identidad de una ejecución impide contabilizarla dos veces al repetir una notificación. El diario vive en una base privada de laboratorio. [Contrato y evidencia](docs/actual/ENTREGA_B6_1.md).
 
 - D055 (20-11-2026, B5). La política PAPER v2 incorpora la estimación de pérdida bajo un precio de salida estresado y la cantidad máxima admisible por ese control. Agrupa tenencias, compras pendientes y propuestas de la misma ventana por instrumento. El primer recibo v1 conserva su huella y vigencia originales. [Criterio y procedencia](docs/actual/DAY_TRADER_ADAPTACION.md).

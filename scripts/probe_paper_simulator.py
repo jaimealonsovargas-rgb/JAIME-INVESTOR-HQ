@@ -24,6 +24,12 @@ from app.risk_review import Binding, RiskReview
 from app.storage_budget import MIB, StorageGovernor, StorageSettings
 
 
+def simulator_folder(settings=None):
+    data = Path(make_url((settings or Settings()).database_url).database).resolve().parent
+    output = ROOT / 'output' if data == ROOT / 'data' else data / 'storage-output'
+    return output / 'paper-simulator' / 'reviewed'
+
+
 def check_cycle(cycle='latest', settings=None):
     if cycle != 'latest' and not re.fullmatch('[a-f0-9]{64}', cycle):
         raise ValueError('INVALID_CYCLE_ID')
@@ -40,9 +46,10 @@ def check_cycle(cycle='latest', settings=None):
     if not risk:
         raise ValueError('CYCLE_PREDATES_RISK_RECEIPTS')
     data = path.parent
-    output = ROOT / 'output' if data == ROOT / 'data' else data / 'storage-output'
+    folder = simulator_folder(settings)
+    output = folder.parent.parent
     storage = StorageGovernor(data, output)
-    simulator = PaperSimulator(output / 'paper-simulator' / 'reviewed')
+    simulator = PaperSimulator(folder)
     guard = storage.admission(reserve=MIB, destination='output') if risk.get('outcome') == 'ASSESSED' else nullcontext()
     with guard:
         result = simulator.consume(row[0], risk, RiskReview(storage))
