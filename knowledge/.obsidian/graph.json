@@ -1,0 +1,86 @@
+{
+  "collapse-filter": true,
+  "search": "",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": true,
+  "showOrphans": false,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "path:\"Documentación/\"",
+      "color": {
+        "a": 1,
+        "rgb": 9545929
+      }
+    },
+    {
+      "query": "path:\"Empresas/\"",
+      "color": {
+        "a": 1,
+        "rgb": 6082991
+      }
+    },
+    {
+      "query": "path:\"Estrategias/\"",
+      "color": {
+        "a": 1,
+        "rgb": 15974247
+      }
+    },
+    {
+      "query": "path:\"Pruebas históricas/\"",
+      "color": {
+        "a": 1,
+        "rgb": 7515891
+      }
+    },
+    {
+      "query": "path:\"Riesgo/\"",
+      "color": {
+        "a": 1,
+        "rgb": 16419458
+      }
+    },
+    {
+      "query": "path:\"Integraciones/\"",
+      "color": {
+        "a": 1,
+        "rgb": 6539736
+      }
+    },
+    {
+      "query": "path:\"Hitos/\"",
+      "color": {
+        "a": 1,
+        "rgb": 15770733
+      }
+    },
+    {
+      "query": "path:\"Decisiones/\"",
+      "color": {
+        "a": 1,
+        "rgb": 12950248
+      }
+    },
+    {
+      "query": "path:\"Referencias/\"",
+      "color": {
+        "a": 1,
+        "rgb": 12109944
+      }
+    }
+  ],
+  "collapse-display": true,
+  "showArrow": true,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1,
+  "lineSizeMultiplier": 1,
+  "collapse-forces": true,
+  "centerStrength": 0.5,
+  "repelStrength": 10,
+  "linkStrength": 1,
+  "linkDistance": 170,
+  "scale": 0.6213515037830775,
+  "close": true
+}

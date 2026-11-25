@@ -1,0 +1,16 @@
+{
+  "alwaysUpdateLinks": true,
+  "newLinkFormat": "shortest",
+  "defaultViewMode": "preview",
+  "showInlineTitle": false,
+  "propertiesInDocument": "hidden",
+  "readableLineLength": true,
+  "attachmentFolderPath": "Adjuntos",
+  "userIgnoreFilters": [
+    "/(^|/)(?:data|output|logs|tws|tmp|temp|node_modules|privado|privados|secretos|credenciales|Adjuntos)(/|$)/",
+    "/(^|/)\\.[^/]+(/|$)/",
+    "/\\.(?:log|db|sqlite|sqlite3)(?:-(?:shm|wal))?$/",
+    "/\\.(?:csv|tsv|parquet|jsonl|zip|bak|pem|key|p12|pfx)$/",
+    "/(^|/)(?:secreto|secretos|credencial|credenciales|claves)(?:[._ -]|$)/"
+  ]
+}

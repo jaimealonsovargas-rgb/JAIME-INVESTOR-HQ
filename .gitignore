@@ -39,3 +39,31 @@ Thumbs.db
 /data/
 # Instalación y sesiones privadas de TWS; SDK/entorno aislado en .tools/.
 /tws/
+
+# Bóveda Obsidian: documentación y cuatro ajustes compartidos.
+/knowledge/**
+!/knowledge/**/
+!/knowledge/**/*.md
+!/knowledge/**/*.canvas
+/knowledge/**/.*
+!/knowledge/.obsidian/
+/knowledge/.obsidian/*
+!/knowledge/.obsidian/app.json
+!/knowledge/.obsidian/appearance.json
+!/knowledge/.obsidian/core-plugins.json
+!/knowledge/.obsidian/graph.json
+/knowledge/**/data/
+/knowledge/**/output/
+/knowledge/**/logs/
+/knowledge/**/tws/
+/knowledge/**/tmp/
+/knowledge/**/temp/
+/knowledge/**/node_modules/
+/knowledge/**/privado/
+/knowledge/**/privados/
+/knowledge/**/secretos/
+/knowledge/**/credenciales/
+/knowledge/**/Adjuntos/
+/knowledge/**/credencial*
+/knowledge/**/secreto*
+/knowledge/**/claves.*

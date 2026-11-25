@@ -1,0 +1,31 @@
+{
+	"nodes":[
+		{"id":"39306a8464b7b729","type":"file","file":"Integraciones/SEC y EDGAR.md","x":0,"y":-260,"width":360,"height":190,"color":"#63C9D8"},
+		{"id":"fd2b63ba32bfd99f","type":"file","file":"Integraciones/Alpaca.md","x":0,"y":0,"width":360,"height":190,"color":"#63C9D8"},
+		{"id":"ce1a94ed9370f4e5","type":"file","file":"Integraciones/IBKR.md","x":0,"y":260,"width":360,"height":190,"color":"#63C9D8"},
+		{"id":"dca5c1daf2af6f08","type":"file","file":"Documentación/Almacenamiento y procedencia.md","x":595,"y":0,"width":360,"height":190,"color":"#91A8C9"},
+		{"id":"018eb5db85f23345","type":"file","file":"Pruebas históricas/Campaña retrospectiva B3.2.md","x":1190,"y":0,"width":360,"height":190,"color":"#72AEF3"},
+		{"id":"38fc00c09c6d7080","type":"file","file":"Pruebas históricas/Selección de estrategias B4.md","x":1785,"y":0,"width":360,"height":190,"color":"#72AEF3"},
+		{"id":"472500eaad6c2acd","type":"file","file":"Integraciones/n8n.md","x":0,"y":565,"width":360,"height":190,"color":"#63C9D8"},
+		{"id":"4afe10b387ea5e3a","type":"file","file":"Documentación/Servicios de JAIME.md","x":595,"y":565,"width":360,"height":190,"color":"#91A8C9"},
+		{"id":"24e09ae190d71849","type":"file","file":"Riesgo/Decisión de riesgo B5.md","x":1785,"y":420,"width":360,"height":190,"color":"#FA8A82"},
+		{"id":"b0ce7c78c3c3bc3a","type":"file","file":"Documentación/Oficina y panel de Sistemas.md","x":595,"y":285,"width":360,"height":190,"color":"#91A8C9"},
+		{"id":"53204b47ef5458be","type":"file","file":"Integraciones/Simulador local B6.1.md","x":1785,"y":885,"width":360,"height":190,"color":"#63C9D8"},
+		{"id":"45abd3d1d63da8b4","type":"file","file":"Integraciones/Cola de envíos B6.2.md","x":1190,"y":885,"width":360,"height":190,"color":"#63C9D8"},
+		{"id":"a95323b3ce84b47f","type":"file","file":"Hitos/B6.3 Conciliación del simulador.md","x":595,"y":885,"width":360,"height":190,"color":"#F0A46D"}
+	],
+	"edges":[
+		{"id":"c7d6fd0ab2a2ed86","fromNode":"39306a8464b7b729","fromSide":"right","toNode":"dca5c1daf2af6f08","toSide":"top","fromEnd":"none","toEnd":"arrow","label":"documentos y cuentas"},
+		{"id":"c7567598a251810f","fromNode":"fd2b63ba32bfd99f","fromSide":"right","toNode":"dca5c1daf2af6f08","toSide":"left","fromEnd":"none","toEnd":"arrow","label":"barras IEX"},
+		{"id":"7bf8f969277d65f6","fromNode":"ce1a94ed9370f4e5","fromSide":"right","toNode":"dca5c1daf2af6f08","toSide":"left","fromEnd":"none","toEnd":"arrow","label":"contrato revisado"},
+		{"id":"8f4636dd7d3b8796","fromNode":"dca5c1daf2af6f08","fromSide":"right","toNode":"018eb5db85f23345","toSide":"left","fromEnd":"none","toEnd":"arrow","label":"lote admitido"},
+		{"id":"baa45d24329ce373","fromNode":"018eb5db85f23345","fromSide":"right","toNode":"38fc00c09c6d7080","toSide":"left","fromEnd":"none","toEnd":"arrow","label":"10 ensayos"},
+		{"id":"13d69a57a043ce67","fromNode":"38fc00c09c6d7080","fromSide":"bottom","toNode":"24e09ae190d71849","toSide":"top","fromEnd":"none","toEnd":"arrow","label":"expediente B4"},
+		{"id":"916e1142040ce0a4","fromNode":"472500eaad6c2acd","fromSide":"right","toNode":"4afe10b387ea5e3a","toSide":"left","fromEnd":"none","toEnd":"arrow","label":"ventana SEC"},
+		{"id":"1baa40bdca1a3cd5","fromNode":"4afe10b387ea5e3a","fromSide":"right","toNode":"24e09ae190d71849","toSide":"left","fromEnd":"none","toEnd":"arrow","label":"evaluación por ventana"},
+		{"id":"daf6883efdfa0614","fromNode":"4afe10b387ea5e3a","fromSide":"top","toNode":"b0ce7c78c3c3bc3a","toSide":"bottom","fromEnd":"none","toEnd":"arrow","label":"estado y recibos"},
+		{"id":"a132cff51931bec3","fromNode":"24e09ae190d71849","fromSide":"bottom","toNode":"53204b47ef5458be","toSide":"top","fromEnd":"none","toEnd":"arrow","label":"recibo de riesgo"},
+		{"id":"0d5108afe37e8bd6","fromNode":"53204b47ef5458be","fromSide":"left","toNode":"45abd3d1d63da8b4","toSide":"right","fromEnd":"none","toEnd":"arrow","label":"intención"},
+		{"id":"a71e5f3972b23f33","fromNode":"45abd3d1d63da8b4","fromSide":"left","toNode":"a95323b3ce84b47f","toSide":"right","fromEnd":"none","toEnd":"arrow","label":"a conciliar"}
+	]
+}

@@ -50,3 +50,12 @@ Anthropic: investigación de patrones en `docs/actual/AGENTES_FINANCIEROS_ANTHRO
 Inspeccionar → corrección acotada → pruebas relevantes → revisión funcional/seguridad → evidencia → STATUS/ACTUAL. No confundir tests de ingeniería con aceptación financiera. Mantener un estado actual corto; bitácoras en docs/archive. Documentos antiguos son referencias fechadas, no mandatos nuevos. Verificar fuentes oficiales cuando cambien APIs/licencias; respetar derechos y no publicar datos restringidos.
 
 Preservar código/datos/evidencia del usuario. Limpieza reversible y con inventario; no borrar modelos, entornos, assets o scripts sin probar que sobran. No cambiar dependencias por una reorganización documental. Cada continuación parte de ACTUAL, no de un prompt histórico P0.
+
+## Memoria del proyecto en Obsidian
+
+La bóveda local del proyecto es [knowledge/Inicio.md](knowledge/Inicio.md). Al retomar trabajo, leer las reglas de esta raíz, README, STATUS y la ficha activa en tasks/ACTUAL.md. Usar tasks/ROADMAP.md para la secuencia. Desde Inicio abrir únicamente las notas relacionadas con la entrega. Las decisiones oficiales siguen en DECISIONES.md y las pruebas de cada entrega en docs/actual/.
+
+- Al cerrar una tarea que aporte evidencia, actualizar la ficha existente por título, instrumento, identificador de campaña o decisión. Crear otra solo si responde a una pregunta distinta. Para hechos vigentes usar un título estable en español. Para revisiones fechadas usar AAAA-MM-DD seguido del tema.
+- Registrar fecha con zona cuando proceda, alcance, fuente canónica, ID o huella publicada y limitaciones. Distinguir hipótesis, ensayos sintéticos, resultados de mercado y autorizaciones. Documentar descartes. Enlazar fichas con wikienlaces que expresen una dependencia, una procedencia o un resultado verificable.
+- Guardar en la bóveda únicamente conocimiento derivado. Los originales, bases, cotizaciones, respuestas privadas y credenciales conservan su ubicación. Referenciar entregas cerradas por revisión de Git y documentos vigentes por ruta de la rama. Actualizar Inicio y el mapa de arquitectura cuando cambien el estado o las relaciones.
+- Antes del commit, comprobar enlaces internos, referencias del Canvas, destinos canónicos y títulos duplicados. Revisar la selección con `git diff --cached --check` y `git diff --cached`. Incluir solo las notas, el Canvas y los ajustes compartidos afectados. La disposición de ventanas, marcadores locales y cachés son personales. Hacer el commit en la rama actual. La publicación remota requiere encargo expreso.
