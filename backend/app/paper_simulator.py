@@ -8,17 +8,17 @@ import sqlite3
 
 from pydantic import TypeAdapter
 
-from app.paper_intents import OPEN, basis_of, intent_for, recheck, reviewable, reviewed_packet, utc, verified_receipt
+from app.paper_intents import OPEN, basis_of, decoded, intent_for, public_order, recheck, reviewable, reviewed_packet, utc, verified_receipt
+from app.paper_reconciliation import has_unexplained_difference
+from app.paper_venue import PRICE, UNITS, initialize_venue, settle_fill
 from app.quant_store import canonical, digest
-from app.risk_contracts import Name, Positive, Quantity, RiskInputs
+from app.risk_contracts import Name, RiskInputs
 from app.risk_engine import POLICY_HASH
 
 APP_ID = 0x4A36534D
-FORMAT = 2
+FORMAT = 3
 MAX_ORDERS = 512
 KEY = TypeAdapter(Name)
-PRICE = TypeAdapter(Positive)
-UNITS = TypeAdapter(Quantity)
 DDL = (
     'CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT NOT NULL)',
     'CREATE TABLE admissions (decision_id TEXT PRIMARY KEY, receipt TEXT NOT NULL)',
@@ -46,18 +46,6 @@ OUTBOX_DDL = (
 )
 
 
-def decoded(row):
-    return dict(spec=json.loads(row['spec']), state=row['state'], filled=row['filled'], filled_value=row['filled_value'])
-
-
-def public_order(row):
-    order = decoded(row)
-    spec = order['spec']
-    remaining = spec['quantity'] - order['filled'] if order['state'] in OPEN else 0
-    return dict(**order, reserved_cash=str(Decimal(spec['buffered_unit']) * remaining) if spec['side'] == 'BUY' else '0',
-                reserved_shares=remaining if spec['side'] == 'SELL' else 0)
-
-
 def admission(record, reason, ids=(), skipped=()):
     return dict(domain='LOCAL_SIMULATOR', decision_id=record['decision_id'], reason=reason,
                 client_order_ids=list(ids), skipped=list(skipped), external_orders_enabled=False)
@@ -76,7 +64,8 @@ class PaperSimulator:
                 or any(p.is_symlink() or p.is_junction() for p in (self.path, *self.path.parents))):
             raise ValueError('SIMULATOR_PATH_REDIRECTED')
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        with closing(sqlite3.connect(self.path, timeout=15)) as db, db:
+        with closing(sqlite3.connect(self.path, timeout=15)) as db, db, localcontext() as ctx:
+            ctx.prec = 64
             db.row_factory = sqlite3.Row
             db.execute('PRAGMA foreign_keys=ON')
             db.execute('BEGIN IMMEDIATE')
@@ -87,18 +76,20 @@ class PaperSimulator:
                     db.execute(query)
                 db.execute(f'PRAGMA application_id={APP_ID}')
                 db.execute(f'PRAGMA user_version={FORMAT}')
-            elif (app, version) == (APP_ID, 1):
-                for query in OUTBOX_DDL:
-                    db.execute(query)
-                db.execute("""INSERT INTO outbox(client_order_id,status)
-                              SELECT client_id, CASE state WHEN 'READY' THEN 'PENDING'
-                                WHEN 'UNKNOWN' THEN 'UNCERTAIN' ELSE 'DONE' END FROM intents""")
+            elif app == APP_ID and version in (1, 2):
+                if version == 1:
+                    for query in OUTBOX_DDL:
+                        db.execute(query)
+                    db.execute("""INSERT INTO outbox(client_order_id,status)
+                                  SELECT client_id, CASE state WHEN 'READY' THEN 'PENDING'
+                                    WHEN 'UNKNOWN' THEN 'UNCERTAIN' ELSE 'DONE' END FROM intents""")
+                basis = db.execute("SELECT value FROM meta WHERE key='basis'").fetchone()
+                if basis:
+                    initialize_venue(db, json.loads(basis[0]))
                 db.execute(f'PRAGMA user_version={FORMAT}')
             elif (app, version) != (APP_ID, FORMAT):
                 raise ValueError('NOT_A_B6_SIMULATOR_DATABASE')
-            with localcontext() as ctx:
-                ctx.prec = 64
-                yield db
+            yield db
 
     @staticmethod
     def advance(db, now):
@@ -143,7 +134,7 @@ class PaperSimulator:
             if reason:
                 return admission(record, reason)
             existing = self.existing(db)
-            if any(o['state'] == 'UNKNOWN' for o in existing):
+            if any(o['state'] == 'UNKNOWN' for o in existing) or (saved and has_unexplained_difference(db, json.loads(saved[0]))):
                 return admission(record, 'RECONCILIATION_REQUIRED')
             allowed = {(c['candidate_id'], c['listing_id']): c for c in record['cases']
                        if not c['veto'] and c['decision'] in ('BUY', 'SELL') and c['decision'] == c['requested']}
@@ -189,6 +180,7 @@ class PaperSimulator:
             if ids:
                 if not saved:
                     db.execute("INSERT INTO meta VALUES ('basis',?)", (basis,))
+                    initialize_venue(db, json.loads(basis))
                 db.execute('INSERT INTO admissions VALUES (?,?)', (record['decision_id'], canonical(result)))
             return result
 
@@ -223,14 +215,14 @@ class PaperSimulator:
         row = self.row(db, client_id)
         if action == 'FILL':
             reason = self._fill(db, row, payload)
-        elif action == 'FILL_NOTICE':
+        elif action in ('FILL_NOTICE', 'FILL_RECOVERED'):
             linked = db.execute("SELECT 1 FROM events WHERE event_id=? AND client_id=? AND action='FILL'",
                                 (payload['execution_id'], client_id)).fetchone()
             if not linked:
                 raise ValueError('UNKNOWN_EXECUTION_ID')
             # A late notification reconciles to the current venue state, including any later cancel.
             self._publish(db, client_id)
-            reason = 'FILL_REPORTED'
+            reason = 'FILL_REPORTED' if action == 'FILL_NOTICE' else 'FILL_RECOVERED_FROM_VENUE'
         elif action == 'SUBMIT':
             reason = self._submit(db, row, payload['fault'], now)
         elif action == 'LOOKUP':
@@ -270,8 +262,9 @@ class PaperSimulator:
         result = self._event(client_id, execution_id, 'FILL', dict(quantity=units, price=format(amount.normalize(), 'f')))
         return self.deliver_fill(client_id, execution_id) if deliver else result
 
-    def deliver_fill(self, client_id, execution_id):
-        notice_id = 'notice:' + digest([client_id, execution_id])
+    def deliver_fill(self, client_id, execution_id, *, notice_id=None):
+        if notice_id is None:
+            notice_id = 'notice:' + digest([client_id, execution_id])
         return self._event(client_id, notice_id, 'FILL_NOTICE', dict(execution_id=execution_id))
 
     @staticmethod
@@ -291,6 +284,8 @@ class PaperSimulator:
             db.execute("UPDATE intents SET state='REJECTED' WHERE client_id=?", (key,))
             return 'RISK_POLICY_CHANGED'
         basis = json.loads(db.execute("SELECT value FROM meta WHERE key='basis'").fetchone()[0])
+        if has_unexplained_difference(db, basis):
+            return 'RECONCILIATION_REQUIRED'
         packet = RiskInputs.model_validate(dict(version='paper-risk-inputs-v1', dossier_id=spec['dossier_id'],
                                                 **basis, proposals=[json.loads(row['proposal'])]))
         proposal, = packet.proposals
@@ -353,7 +348,9 @@ class PaperSimulator:
         if total > spec['quantity']:
             raise ValueError('FILL_EXCEEDS_ORDER_QUANTITY')
         state = 'FILLED' if total == spec['quantity'] else 'PARTIALLY_FILLED'
-        value = Decimal(row['venue_value']) + payload['quantity'] * price
+        trade_value = payload['quantity'] * price
+        settle_fill(db, spec, payload['quantity'], trade_value)
+        value = Decimal(row['venue_value']) + trade_value
         db.execute('UPDATE intents SET venue_state=?, venue_filled=?, venue_value=? WHERE client_id=?',
                    (state, total, str(value), row['client_id']))
         return 'FILL_RECORDED_AT_VENUE'

@@ -36,6 +36,7 @@ def test_pre_queue_lab_is_adopted_once(lab, state, expected):
     with closing(sqlite3.connect(sim.path)) as db, db:
         db.execute('DROP TABLE outbox_attempts')
         db.execute('DROP TABLE outbox')
+        db.execute("DELETE FROM meta WHERE key='venue_account'")
         db.execute('PRAGMA user_version=1')
     queue = PaperOutbox(lab.folder, clock=lambda: lab.clock[0])
     entry, = queue.entries()

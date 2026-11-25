@@ -1,0 +1,317 @@
+{
+  "domain": "LOCAL_SIMULATOR",
+  "source": "SYNTHETIC_TEST",
+  "external_orders_enabled": false,
+  "opening": {
+    "account_ref": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "snapshot_ref": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "currency": "USD",
+    "cash": "10000",
+    "positions": {
+      "SIM-ONLY": 0
+    }
+  },
+  "before": {
+    "orders": [
+      {
+        "client_order_id": "j6s-c3834492c180fbf3f9aa169ed396c6be7245aec0",
+        "listing_id": "SIM-ONLY",
+        "side": "BUY",
+        "quantity": 10,
+        "state": "UNKNOWN",
+        "venue_state": "CANCELED",
+        "executions": [
+          {
+            "execution_id": "fill-a",
+            "quantity": 1,
+            "price": "9.98",
+            "booked": true
+          },
+          {
+            "execution_id": "fill-b",
+            "quantity": 2,
+            "price": "9.99",
+            "booked": false
+          },
+          {
+            "execution_id": "fill-c",
+            "quantity": 1,
+            "price": "9.97",
+            "booked": false
+          }
+        ],
+        "local": {
+          "quantity": 1,
+          "value": "9.98"
+        },
+        "booked": {
+          "quantity": 1,
+          "value": "9.98"
+        },
+        "venue": {
+          "quantity": 4,
+          "value": "39.93"
+        },
+        "executed": {
+          "quantity": 4,
+          "value": "39.93"
+        },
+        "reserved_cash": "90.18",
+        "reserved_shares": 0
+      }
+    ],
+    "balances": {
+      "local": {
+        "cash": "9990.02",
+        "positions": {
+          "SIM-ONLY": 1
+        }
+      },
+      "booked": {
+        "cash": "9990.02",
+        "positions": {
+          "SIM-ONLY": 1
+        }
+      },
+      "executed": {
+        "cash": "9960.07",
+        "positions": {
+          "SIM-ONLY": 4
+        }
+      },
+      "venue_orders": {
+        "cash": "9960.07",
+        "positions": {
+          "SIM-ONLY": 4
+        }
+      },
+      "venue": {
+        "cash": "9960.07",
+        "positions": {
+          "SIM-ONLY": 4
+        }
+      }
+    },
+    "differences": [
+      {
+        "client_order_id": "j6s-c3834492c180fbf3f9aa169ed396c6be7245aec0",
+        "code": "MISSING_EXECUTION_RECEIPT",
+        "recoverable": true,
+        "execution_id": "fill-b"
+      },
+      {
+        "client_order_id": "j6s-c3834492c180fbf3f9aa169ed396c6be7245aec0",
+        "code": "MISSING_EXECUTION_RECEIPT",
+        "recoverable": true,
+        "execution_id": "fill-c"
+      },
+      {
+        "client_order_id": "j6s-c3834492c180fbf3f9aa169ed396c6be7245aec0",
+        "code": "ORDER_TOTAL_DIFFERS",
+        "recoverable": true
+      },
+      {
+        "client_order_id": "j6s-c3834492c180fbf3f9aa169ed396c6be7245aec0",
+        "code": "ORDER_LOOKUP_REQUIRED",
+        "recoverable": true
+      }
+    ]
+  },
+  "child_exit": 73,
+  "before_hash": "d238088e3ae36aee91109cd2a49591c886578c34cb74bf39258510304cfa4aa6",
+  "after_crash_hash": "d238088e3ae36aee91109cd2a49591c886578c34cb74bf39258510304cfa4aa6",
+  "recovered": [
+    {
+      "client_order_id": "j6s-c3834492c180fbf3f9aa169ed396c6be7245aec0",
+      "execution_id": "fill-b"
+    },
+    {
+      "client_order_id": "j6s-c3834492c180fbf3f9aa169ed396c6be7245aec0",
+      "execution_id": "fill-c"
+    }
+  ],
+  "after": {
+    "orders": [
+      {
+        "client_order_id": "j6s-c3834492c180fbf3f9aa169ed396c6be7245aec0",
+        "listing_id": "SIM-ONLY",
+        "side": "BUY",
+        "quantity": 10,
+        "state": "CANCELED",
+        "venue_state": "CANCELED",
+        "executions": [
+          {
+            "execution_id": "fill-a",
+            "quantity": 1,
+            "price": "9.98",
+            "booked": true
+          },
+          {
+            "execution_id": "fill-b",
+            "quantity": 2,
+            "price": "9.99",
+            "booked": true
+          },
+          {
+            "execution_id": "fill-c",
+            "quantity": 1,
+            "price": "9.97",
+            "booked": true
+          }
+        ],
+        "local": {
+          "quantity": 4,
+          "value": "39.93"
+        },
+        "booked": {
+          "quantity": 4,
+          "value": "39.93"
+        },
+        "venue": {
+          "quantity": 4,
+          "value": "39.93"
+        },
+        "executed": {
+          "quantity": 4,
+          "value": "39.93"
+        },
+        "reserved_cash": "0",
+        "reserved_shares": 0
+      }
+    ],
+    "balances": {
+      "local": {
+        "cash": "9960.07",
+        "positions": {
+          "SIM-ONLY": 4
+        }
+      },
+      "booked": {
+        "cash": "9960.07",
+        "positions": {
+          "SIM-ONLY": 4
+        }
+      },
+      "executed": {
+        "cash": "9960.07",
+        "positions": {
+          "SIM-ONLY": 4
+        }
+      },
+      "venue_orders": {
+        "cash": "9960.07",
+        "positions": {
+          "SIM-ONLY": 4
+        }
+      },
+      "venue": {
+        "cash": "9960.07",
+        "positions": {
+          "SIM-ONLY": 4
+        }
+      }
+    },
+    "differences": []
+  },
+  "after_hash": "9af036d76e6278259f70613140f9247017ce5bf9872e361f9cdd32f4fd444322",
+  "replay_hash": "9af036d76e6278259f70613140f9247017ce5bf9872e361f9cdd32f4fd444322",
+  "late_notice_hash": "9af036d76e6278259f70613140f9247017ce5bf9872e361f9cdd32f4fd444322",
+  "pending": {
+    "orders": [
+      {
+        "client_order_id": "j6s-c3834492c180fbf3f9aa169ed396c6be7245aec0",
+        "listing_id": "SIM-ONLY",
+        "side": "BUY",
+        "quantity": 10,
+        "state": "CANCELED",
+        "venue_state": "CANCELED",
+        "executions": [
+          {
+            "execution_id": "fill-a",
+            "quantity": 1,
+            "price": "9.98",
+            "booked": true
+          },
+          {
+            "execution_id": "fill-b",
+            "quantity": 2,
+            "price": "9.99",
+            "booked": true
+          },
+          {
+            "execution_id": "fill-c",
+            "quantity": 1,
+            "price": "9.97",
+            "booked": true
+          }
+        ],
+        "local": {
+          "quantity": 4,
+          "value": "39.93"
+        },
+        "booked": {
+          "quantity": 4,
+          "value": "39.93"
+        },
+        "venue": {
+          "quantity": 4,
+          "value": "39.93"
+        },
+        "executed": {
+          "quantity": 4,
+          "value": "39.93"
+        },
+        "reserved_cash": "0",
+        "reserved_shares": 0
+      }
+    ],
+    "balances": {
+      "local": {
+        "cash": "9960.07",
+        "positions": {
+          "SIM-ONLY": 4
+        }
+      },
+      "booked": {
+        "cash": "9960.07",
+        "positions": {
+          "SIM-ONLY": 4
+        }
+      },
+      "executed": {
+        "cash": "9960.07",
+        "positions": {
+          "SIM-ONLY": 4
+        }
+      },
+      "venue_orders": {
+        "cash": "9960.07",
+        "positions": {
+          "SIM-ONLY": 4
+        }
+      },
+      "venue": {
+        "cash": "9960.06",
+        "positions": {
+          "SIM-ONLY": 5
+        }
+      }
+    },
+    "differences": [
+      {
+        "code": "VENUE_CASH_MISMATCH",
+        "recoverable": false,
+        "expected": "9960.07",
+        "actual": "9960.06"
+      },
+      {
+        "code": "VENUE_POSITION_MISMATCH",
+        "recoverable": false,
+        "listing_id": "SIM-ONLY",
+        "expected": 4,
+        "actual": 5
+      }
+    ]
+  },
+  "evidence_hash": "74806b7166fa52786eadb9f89193550c9afb0334a03068de94e40c5a634692bb"
+}

@@ -1,6 +1,7 @@
 """B5 handoff and conservative reservations for the local B6 simulation."""
 from datetime import datetime, timezone
 from decimal import Decimal, localcontext
+import json
 import re
 
 from app.cycle_contracts import window
@@ -9,6 +10,18 @@ from app.risk_engine import POLICY, POLICY_HASH, assess
 
 
 OPEN = {'READY', 'UNKNOWN', 'ACCEPTED', 'PARTIALLY_FILLED'}
+
+
+def decoded(row):
+    return dict(spec=json.loads(row['spec']), state=row['state'], filled=row['filled'], filled_value=row['filled_value'])
+
+
+def public_order(row):
+    order = decoded(row)
+    spec = order['spec']
+    remaining = spec['quantity'] - order['filled'] if order['state'] in OPEN else 0
+    return dict(**order, reserved_cash=str(Decimal(spec['buffered_unit']) * remaining) if spec['side'] == 'BUY' else '0',
+                reserved_shares=remaining if spec['side'] == 'SELL' else 0)
 
 
 def utc(value):

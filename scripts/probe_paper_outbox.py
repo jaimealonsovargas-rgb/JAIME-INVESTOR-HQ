@@ -20,6 +20,7 @@ else:
 
 from app.config import Settings
 from app.paper_outbox import PaperOutbox
+from app.paper_reconciliation import reconcile
 from app.paper_simulator import PaperSimulator
 from app.quant_store import digest
 
@@ -32,6 +33,15 @@ def blocked(error):
 def drain(cycle='latest', worker='local-cli', max_steps=100, settings=None, admission_cache=None):
     # Un recibo ausente, antiguo o inválido no impide recuperar trabajo ya admitido.
     settings = settings or Settings()
+    queue = PaperOutbox(simulator_folder(settings))
+    report = reconcile(queue.sim)
+    differences = report['after']['differences'] if report['after'] else []
+    reconciliation = dict(status=report['status'], snapshot_hash=report['snapshot_hash'],
+                          recovered=report['recovered'], differences=differences)
+    if differences:
+        return dict(domain='LOCAL_SIMULATOR', source='STORED_B5_CYCLE', reconciliation=reconciliation,
+                    admission=blocked(ValueError('RECONCILIATION_REQUIRED')), worked=0, results=[],
+                    entries=queue.entries(), external_orders_enabled=False)
     try:
         selected = cycle
         if admission_cache is not None and cycle == 'latest':
@@ -56,7 +66,6 @@ def drain(cycle='latest', worker='local-cli', max_steps=100, settings=None, admi
                 admission_cache.update(cycle=selected, report=admission)
     except (ValueError, KeyError, OSError, sqlite3.Error) as error:
         admission = blocked(error)
-    queue = PaperOutbox(simulator_folder(settings))
     results = []
     for _ in range(max_steps):
         result = queue.run_once(worker)
@@ -66,7 +75,7 @@ def drain(cycle='latest', worker='local-cli', max_steps=100, settings=None, admi
         # Un envío ambiguo se recupera en otro sondeo, sin bucle apretado de consultas.
         if result.get('state') == 'UNKNOWN':
             break
-    return dict(domain='LOCAL_SIMULATOR', source='STORED_B5_CYCLE', admission=admission,
+    return dict(domain='LOCAL_SIMULATOR', source='STORED_B5_CYCLE', reconciliation=reconciliation, admission=admission,
                 worked=len(results), results=results, entries=queue.entries(), external_orders_enabled=False)
 
 
