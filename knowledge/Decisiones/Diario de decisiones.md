@@ -15,5 +15,6 @@ El registro canónico conserva fecha, identificador y fundamento de cada decisi�
 | 20 nov | D054 y D055 | [[Decisión de riesgo B5]] se confirma con la ventana. La política v2 añade la pérdida bajo estrés por instrumento. |
 | 22 nov | D056 | [[Simulador local B6.1]] conserva las reservas ante un envío ambiguo y deduplica ejecuciones por identidad. |
 | 22 nov | D057 | [[Cola de envíos B6.2]] confirma intención, reserva y envío pendiente en una transacción. |
+| 25 nov | D058 | [[B6.3 Conciliación del simulador]] contrasta ejecuciones y posiciones con el extracto ficticio. Una diferencia pendiente suspende nuevos envíos del trabajador. |
 
 Para documentar un cambio posterior, enlazar su identificador y la entrega que lo prueba. La decisión nueva se registra primero en la fuente correspondiente.

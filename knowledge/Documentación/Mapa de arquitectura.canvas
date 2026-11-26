@@ -26,6 +26,6 @@
 		{"id":"daf6883efdfa0614","fromNode":"4afe10b387ea5e3a","fromSide":"top","toNode":"b0ce7c78c3c3bc3a","toSide":"bottom","fromEnd":"none","toEnd":"arrow","label":"estado y recibos"},
 		{"id":"a132cff51931bec3","fromNode":"24e09ae190d71849","fromSide":"bottom","toNode":"53204b47ef5458be","toSide":"top","fromEnd":"none","toEnd":"arrow","label":"recibo de riesgo"},
 		{"id":"0d5108afe37e8bd6","fromNode":"53204b47ef5458be","fromSide":"left","toNode":"45abd3d1d63da8b4","toSide":"right","fromEnd":"none","toEnd":"arrow","label":"intención"},
-		{"id":"a71e5f3972b23f33","fromNode":"45abd3d1d63da8b4","fromSide":"left","toNode":"a95323b3ce84b47f","toSide":"right","fromEnd":"none","toEnd":"arrow","label":"a conciliar"}
+		{"id":"a71e5f3972b23f33","fromNode":"45abd3d1d63da8b4","fromSide":"left","toNode":"a95323b3ce84b47f","toSide":"right","fromEnd":"none","toEnd":"arrow","label":"ejecuciones y posiciones conciliadas"}
 	]
 }

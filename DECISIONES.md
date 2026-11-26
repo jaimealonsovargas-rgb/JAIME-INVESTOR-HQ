@@ -1,5 +1,7 @@
 # Decisiones vigentes y registro histórico
 
+- D058 (25-11-2026, B6.3). El simulador liquida efectivo y acciones al registrar cada ejecución. JAIME reconstruye el diario por orden e identificador de ejecución y lo compara con el extracto del simulador. Las recuperaciones se confirman juntas. Una diferencia sin respaldo suspende nuevas admisiones y envíos del trabajador y conserva los valores para revisión. [Conciliación y prueba de reinicio](docs/actual/ENTREGA_B6_3.md).
+
 - D057 (22-11-2026, B6.2). JAIME confirma la intención, su reserva y el envío pendiente en una transacción de la base privada del simulador. Cada intento tiene un token y una reclamación de diez segundos. Al caducar la reclamación o perderse la respuesta, el trabajador consulta primero el identificador de la orden. [Cola durable](docs/actual/ENTREGA_B6_2.md).
 
 - D056 (22-11-2026, B6). El simulador vincula las intenciones al recibo de B5 y comparte sus reservas entre decisiones sobre la misma cuenta y cotizaciones revisadas. Un envío ambiguo conserva la reserva hasta que el bróker ficticio confirma el estado. La identidad de una ejecución impide contabilizarla dos veces al repetir una notificación. El diario vive en una base privada de laboratorio. [Contrato y evidencia](docs/actual/ENTREGA_B6_1.md).

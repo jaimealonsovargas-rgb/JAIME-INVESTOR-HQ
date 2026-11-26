@@ -1,6 +1,6 @@
 # Estado real de JAIME
 
-Actualizado 25-11-2026, Europe/Madrid. **B6.2 completado.** A las 13:00, n8n inició el ciclo SEC y B5 registró la observación de BRK.B. El trabajador local comprobó ese recibo con cero intenciones y cero envíos. [Evidencia de la cola](docs/actual/ENTREGA_B6_2.md).
+Actualizado 26-11-2026, Europe/Madrid. **B6.3 completado.** Tras una cancelación parcial y una caída, el simulador recuperó dos avisos y cuadró cuatro acciones y 9.960,07 USD. El recibo real de B5 siguió en observación, con cero intenciones y cero envíos. [Evidencia de la conciliación](docs/actual/ENTREGA_B6_3.md).
 
 | Área | Implementado / comprobado | Falta |
 |---|---|---|
@@ -12,15 +12,17 @@ Actualizado 25-11-2026, Europe/Madrid. **B6.2 completado.** A las 13:00, n8n ini
 | Research | 30 roles definidos; ciclo descriptivo y artefactos parciales | P4 PARTIAL; debate/tesis analíticas no aceptados; no bloquean el núcleo B3 |
 | n8n | Agenda piloto 00/06/12/18 UTC. Riesgo B5 y revisión contable SEC comparten ventana con recuperación por identificador. | Mantener el ordenador y los servicios disponibles para las próximas ventanas |
 | Minería / validación | B3.1, B3.2 y B4 entregados. Diez ensayos reales inventariados, tres variantes descartadas y expediente verificable para riesgo | Ampliar los activos y las hipótesis con muestras independientes admitidas por alcance |
-| Riesgo / ejecución | B5 registra decisiones y vetos por ventana. El simulador B6 reserva efectivo o acciones, distingue respuestas ambiguas y recupera ejecuciones por ID. | Conciliación de ejecuciones y posiciones, seguida de la apertura controlada de Alpaca PAPER |
+| Riesgo / ejecución | B5 registra decisiones y vetos por ventana. B6 concilia órdenes, ejecuciones, efectivo y posiciones del simulador local. El trabajador conserva los descuadres pendientes. | Apertura controlada de Alpaca PAPER |
 
 Base: `0015_history_batches`, ensayada en copia y aplicada; 43 tablas anteriores intactas, integridad correcta y cero fallos FK. Evidencias `output/d2-20261117/{before,rehearsal,applied}.json`. Presupuesto: 4 GiB data, 12 GiB output, 16 GiB conjuntos, 5 GiB libres y reserva por unidad. No limpieza automática de evidencia.
 
 ## Siguiente entrega
 
-**B6 · Conciliación de ejecuciones y posiciones.** El siguiente hito contrasta la cuenta ficticia con las ejecuciones y las posiciones reconstruidas tras un reinicio. [Ficha única](tasks/ACTUAL.md) · [Orden](tasks/ROADMAP.md).
+La siguiente entrega prevista es la apertura controlada de Alpaca PAPER. B6.3 termina en el simulador local. [Ficha única](tasks/ACTUAL.md) · [Orden](tasks/ROADMAP.md).
 
 ## Evidencia y límites
+
+- [25-11 · Conciliación B6.3](docs/actual/ENTREGA_B6_3.md). La repetición y el aviso tardío conservaron el saldo. Una divergencia de una acción y un céntimo en el extracto ficticio quedó identificada para revisión. Pasaron las 926 pruebas del backend y las 115 de interfaz, incluida la lectura HTTP de la sede. La compilación de producción terminó correctamente.
 
 - [25-11 · Cola durable B6.2](docs/actual/ENTREGA_B6_2.md). La intención, su reserva y la entrada de envío se confirman juntas. Una respuesta incierta obliga a consultar el identificador antes de reintentar.
 - [22-11 · Simulador B6](docs/actual/ENTREGA_B6_1.md). La observación real de BRK.B produjo cero intenciones. En el laboratorio, una orden de diez acciones ejecutada parcialmente y cancelada conservó cuatro acciones ejecutadas después del reinicio.
